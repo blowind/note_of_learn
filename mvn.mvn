@@ -1,0 +1,13 @@
+mvn help:system    // 下载maven-help-plugin 包括pom文件和jar文件
+
+mvn clean compile  
+clean告诉Maven清理输出目录target/，compile告诉Maven编译项目主代码
+
+mvn clean test
+执行测试
+
+mvn clean package
+打包文件
+
+mvn clean install
+安装部署

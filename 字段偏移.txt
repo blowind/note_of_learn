@@ -1,0 +1,115 @@
+==================it's sink (sniffer加上12即可)
+1  	00	
+2 3 	Destination address (2 bytes)
+4 5	Link source address (2 bytes)
+6	Message length (1 byte)
+7	Group ID (1 byte)
+8	Active Message handler type (1 byte)
+
+9    	options;
+10      thl;
+11 12   etx;
+13 14   origin;
+15      originSeqNo;
+16 	type;
+17 18 	magic
+***********************************************************************************
+Type is C1:
+  nx_uint8_t type; // 19
+  nx_am_addr_t source;  // 20 21
+  nx_am_addr_t sink; // 22 23
+  nx_uint32_t source_time; // 24 25 26 27
+  nx_uint32_t sink_time; //     28 29 30 31
+  nx_uint16_t seqno;  // 32 33
+  nx_uint16_t period; // 34 35
+  
+  nx_am_addr_t parent; // 36 37
+  nx_uint16_t metric; // 38 39
+  nx_uint8_t  power; // 40 
+  nx_uint32_t task_time; // 41 42 43 44
+  nx_uint32_t task_time_ms; // 45 46 47 48
+  
+  nx_am_addr_t forwarder; // 49 50
+  nx_uint16_t sample_num; // 51 52
+
+
+  nx_uint16_t xxxTemperature; // 53 54
+  nx_uint16_t xxxVoltage; // 55 56
+  nx_uint16_t humidity; // 57 58
+  nx_uint16_t temperature; // 59 60
+  nx_uint16_t photo_active; // 61 62
+  nx_uint16_t total_solar; // 63 64
+  nx_uint64_t co2; // 65 64 ..72
+  
+  nx_am_addr_t mark; // 73 74
+  nx_uint8_t hopcount; // 75 
+  nx_uint8_t pathlen; // 76
+  nx_am_addr_t nodes[MAX_PATHLEN]; //  77 78  ...  95 96
+  
+  co2_time // 97 98 99 100
+
+*********************************************************************************** 
+Type is C2;
+  nx_uint8_t type; // 19
+  nx_am_addr_t source;  // 20 21
+  nx_am_addr_t sink; // 22 23
+  nx_uint32_t source_time; // 24 25 26 27
+  nx_uint32_t sink_time; //     28 29 30 31
+  nx_uint16_t seqno;  // 32 33
+  nx_uint16_t period; // 34 35
+
+  nx_uint8_t nsize; // 36
+	
+  neighbor_info_t nentry[MAX_NSIZE];  // nx_am_addr_t id; // 37 38      43 44    ...  91 92
+                                      // nx_uint8_t rssi; //      39         45    ...     93
+                                      // nx_uint8_t lqi;  //        40         46   ...      94
+                                      // nx_uint16_t etx; //          41 42      47 48 ...     95 96
+  nx_am_addr_t parent; // 97 98
+
+***********************************************************************************  													
+Type is C3:
+  nx_uint8_t type; // 19
+  nx_am_addr_t source;  // 20 21
+  nx_am_addr_t sink; // 22 23
+  nx_uint32_t source_time; // 24 25 26 27
+  nx_uint32_t sink_time; //     28 29 30 31
+  nx_uint16_t seqno;  // 32 33
+  nx_uint16_t period; // 34 35
+  
+  nx_uint32_t radioOnTime; // 36 37 38 39 radio 打开的总时间 (diagnosis 里面更改的）
+  nx_uint32_t receiveCounter; // 40 41 42 43  收到的总包数
+  nx_uint32_t transmitCounter; // 44 45 46 47 发送的时候就成功，不是senddone的成功
+  nx_uint32_t receiveOverflowDropCounter; // 48 49 50 51 接收溢出的总丢包数
+		
+  nx_uint32_t selfTransmitCounter; // 52 53 54 55 节点自身成功的放入传输队列的数据包数目
+  nx_uint32_t transmitNoACKRetransmitCounter; // 56 57 58 59 senddone的时候return=success，但没有收到ACK
+  nx_uint32_t transmitNoACKDropCounter; // 60 61 62 63 senddone的时候，超过了最大重传次数，最后丢掉的数据包
+  nx_uint32_t retransmitCounter; // 64 65	66 67 senddone的时候return！=success
+  nx_uint16_t loopCounter; // 68 69  
+  nx_uint16_t duplicateCounter; // 70 71 节点上重复数据包的个数
+  nx_uint32_t succAckCounter; // 72 73 74 75 senddone里面传输成功的次数
+  nx_uint16_t parentChangeCounter; // 76 77 父节点改变的次数
+  nx_uint32_t taskPostCounter; //   78 79 80 81 sendtask post的次数
+  nx_uint32_t taskExeCounter; //   82 83 84 85  send task执行的次数
+  nx_uint16_t noParentCounter; // 86 87  发送数据包的时候没有找到父节点的次数，同一个数据包多次传输，可能多次没有找到父节点
+  nx_uint32_t taskSendFailCounter; // 88 89 90 91 发送的时候就未成功，send!=SUCCESS不是senddone的时候
+  nx_uint32_t tableEvictCounter; //   92 93 94 95 路由表里面的entry被置换出去的次数
+  nx_uint32_t macIBackOffCounter; //  96 97 98 99 MAC initial backoff
+  nx_uint32_t macCBackOffCounter; //  100 101 102 103 MAC congestion backoff
+
+===================================================
+
+如果有用timesync，则sniffer中
+-17,-16,-15,-14就是其difference的32位值。
+
+
+  nx_ctp_options_t    options; // 21
+  nx_uint8_t          thl;  // 22
+  nx_uint16_t         etx;  // 23 24
+  nx_am_addr_t        origin; // 25 26
+  nx_uint8_t          originSeqNo; // 27
+  nx_collection_id_t  type;  // 28
+#ifdef ENABLE_MAGIC  
+  nx_uint16_t       magic; //DW  29 30
+
+  type    19+12=31
