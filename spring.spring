@@ -1,0 +1,111 @@
+
+/**********************                 源代码中的基本配置：
+
+@component("beanName")       // 声明基本的bean组件，引号内是配置的组件ID
+
+//  自动装备，一般用来构造函数和set函数上，自动生成入参与当前对象的匹配关系
+//  置为false之后，自动装配失败不抛出异常，bean不进行装配，如果代码中没有进行null检查，则运行时出现空指针异常
+@AutoWired(required=false)         
+
+//  同上，不过AutoWired是spring特有注解，Inject更具通用性，来源于JAVA依赖注入规范
+@Inject  
+
+     
+/**********************                 spring动作配置：
+
+@configuration           //  配置spring，创建配置类
+@componentScan(basePackages={"soundsystem", "vedio"})             // 启用组件扫描，参数是要扫描的基础包，可以配多个
+@componentScan(basePackageClasses={CDPlayer.class, DVDPlayer.class})   // 同上，另一种写法
+
+
+
+@Import({CDPlayerConfig.class, CDConfig.class})                          // 使用Import注解导入其他的类，用来进行组合
+@ImportResource("classpath:cd-config.xml")                               // 引入配置在xml文件里的bean元素
+
+
+/**********************                 测试文件中的配置：
+
+@RunWith(SprintJUnit4ClassRunner.class)          // 表明在测试开始的时候自动创建Spring的应用上下文
+//  表示需要在CDPlayerConfig中加载配置，进而通过Component配置引入了bean
+@ContextConfiguration(classes=CDPlayerConfig.class)              
+
+
+
+
+
+
+
+/**********************                      创建配置类                ****************************/
+@configuration           //  配置spring，创建配置类，表明当前的类是一个配置类
+
+
+//  方法返回的对象，注册为Spring应用上下文中的bean
+@bean(name="lonelyHeartsClubBand")
+public CompactDisc sgtPeppers() { return new SgtPeppers(); }
+
+
+
+/**********************                      通过xml装配bean                ****************************/
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="compactDisc" class="soundsystem.SgtPeppers" />               //  除非需要按名字引用bean，否则不需要明确命名
+	
+	<bean id="cdPlayer" class="soundsystem.CDPlayer">
+		<constructor-arg ref="compactDisc" />                    // 将一个ID为compactDisc的bean引用传递到CDPlayer构造器中
+	</bean>
+	
+	<bean id="cdPlayer" class="soundsystem.CDPlayer" c:cd-ref="compactDisc" />   // 功能同上，使用c-命名空间声明，其中cd是形参名
+	<bean id="cdPlayer" class="soundsystem.CDPlayer" c:_0-ref="compactDisc" />   // 功能同上，使用形参位置代替形参名
+	
+	<bean id="compactDisc" class="soundsystem.BlankDisc"
+		<constructor-arg value="123423432421343214" />                           //  将字面量注入到构造器
+		<constructor-arg><null/></constructor-arg>                               // 对于List集合类型的入参，传null
+		<constructor-arg>                                                        // 传List集合入参的另一种方式
+			<list>
+				<value>aaaaaaaaa</value>
+				<value>bbbbbbbb</value>
+				<value>ccccccccc</value>
+			</list>
+		</constructor-arg>
+		
+		<constructor-arg>                                                        // 传Set集合入参的方式
+			<set>
+				<value>aaaaaaaaa</value>
+				<value>bbbbbbbb</value>
+				<value>ccccccccc</value>
+			</set>
+		</constructor-arg>
+		
+		<constructor-arg>                                                        // 传List集合入参的方式，其中元素是其他bean引用
+			<list>
+				<ref bean="sgtPeppers" />
+				<ref bean="whiteAlbum" />
+				<ref bean="revolver" />
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="compactDisc" class="soundsystem.BlankDisc"
+		c:_title="adfadfafdasdfsad"   />                                           //  功能同上，使用c-命名空间模式，title是形参
+	
+	
+	<bean id="cdPlayer" class="soundsystem.CDPlayer">
+		<property name="compactDisc" ref="compactDisc" />                                        // 属性注入
+	</bean>
+	
+	<bean id="cdPlayer" class="soundsystem.CDPlayer" p:compactDisc-ref="compactDisc">     // 功能同上，使用p-命名空间模式
+	
+	
+	
+	<import resource="cd-config.xml"/>                                               //  引入其他xml文件里的bean
+	
+	<context:component-scan>                                                         //  启用组件扫描
+</beans>
+
+
+
+
+默认情况下，Spring中的bean都是单例

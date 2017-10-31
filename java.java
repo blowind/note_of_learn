@@ -343,6 +343,43 @@ public class AdapterMethodIdiom {
 			System.out.print(s + " ");	 //  得到 be to not or be To 
 	}
 }
+
+/****                                      泛型的使用                                     ****/
+/* 定义一个基本泛型，本质上一个泛型类就是定义一个新类，该类生成了一票新方法对泛型T进行处理，与基本类的声明没有本质区别
+   将NewClass<T>当做NewClass看待就好，除了初始化时需要通过<>加一些类型确认之外，与NewClass在使用上没本质区别
+   而诸如List<T>之类的泛型集合，就是在泛型T上加了一票集合操作方法，功能上就是一个List类的功能
+   */
+class Decorate<T> {   // 声明一个支持泛型的新类
+	private T s;
+	public Decorate(T outS) { s = outS; } 
+	public String toString() {   return "Decorate<" + s + ">";   }
+	public void setValue(T t) {  s = t;  }
+}
+//  泛型新类的集合的使用
+public static void main(String[] args) {
+/* 此处初始化时看起来有三层嵌套，其实本质上是一个Decorate<String>对象，
+   简单的看成Decorate即可，明白该对象内部操作String就好                    */
+	List<Decorate<String>> testOne = new ArrayList<Decorate<String>>(  
+												Arrays.asList( new Decorate<String>("I"),   // 元素
+															   new Decorate<String>("II")));
+	System.out.println(testOne);  // 得到  [Decorate<I>, Decorate<II>]
+	
+	/* 注意此处是ArrayList里面存储的元素引用的拷贝，可以理解成所有指向Decorate<String>对象的指针的拷贝  */
+	List<Decorate<String>> testTwo = new ArrayList<Decorate<String>>(testOne);
+	//  修改testTwo集合中的第二个元素位置存储的引用为一个新的对象的引用
+	testTwo.set(1, new Decorate<String>("III"));
+	System.out.println(testTwo);  // 得到 [Decorate<I>, Decorate<III>]
+	System.out.println(testOne);  // 得到 [Decorate<I>, Decorate<II>]
+	
+/*  注意到此处获取了testTwo第一个元素存储的引用，该引用与testOne第一个元素存储的引用一样，
+    即都指向同一个Decorate<String>对象                                                     */
+	Decorate<String> tmp = testTwo.get(0);
+	tmp.setValue("IV");
+	System.out.println(testTwo);   // 得到  [Decorate<IV>, Decorate<III>]
+	System.out.println(testOne);   // 得到  [Decorate<IV>, Decorate<II>]
+
+
+
 /****                                      使用泛型包装类/接口对外提供功能                                     ****/
 import java.util.Arrays;
 /* 注意，此处是泛型类，具体的泛型表示放到类名上，内部的方法就不用再放<T>了 */
@@ -1098,7 +1135,6 @@ class TaskWithResult implements Callable<String> {
 	/* 第一个线程休眠时间最久，尽管每个线程休眠时间不一，第一个线程的get() 依然会阻塞其他线程执行完毕后的结果打印
 		//  Thread.sleep(1000*(10 - id));  
 	*/
-	
 		// TimeUnit.MILLISECONDS.sleep(1000);   //  Java 1.5/6 的新风格
 		}catch(InterruptedException e) {
 			e.printStackTrace();
@@ -1107,7 +1143,6 @@ class TaskWithResult implements Callable<String> {
 	}
 }
 public class CallableDemo {
-
 	public static void main(String[] args) {
 		ExecutorService exec = Executors.newCachedThreadPool();
 		/* Future<T> 用来存储具体的返回结果  */
@@ -1126,11 +1161,212 @@ public class CallableDemo {
 			}catch(ExecutionException e) {
 				e.printStackTrace();
 			}finally{
-				exec.shutdown();
+				exec.shutdown();      //  关闭线程池，不让添加新任务
 			}
 	}
 }
 
+异构任务并行化实现 及 同构任务的并行分解和结果处理
+// 此处实现一个页面渲染程序，在渲染文字和渲染图片之间实现异构并行，对每张图片，实行并行渲染及加载
+//  ExecutorCompletionService 比一般的ExecutorService相当于实现了一个缓存结果的BlockingQueue，用于缓存所有任务线程的返回结果
+//  感觉ExecutorCompletionService 的具体实现是个装饰器，对返回结果进一步进行了封装处理
+public class Renderer {
+	private final ExecutorService executor;
+	Renderer(ExecutorService executor) { this.executor = executor; }      //  需要外部给传入一个线程池
+	void renderPage(charSequence source) {
+		List<ImageInfo> info = scanForImageInfo(source);
+		//  ExecutorCompletionService在构造函数中创建一个Blockingqueue来保存计算完成的结果
+		CompletionService<ImageData> completionService = new ExecutorCompletionService<ImageData>(executor);
+		for(final ImageInfo imageInfo : info)
+			completionService.submit(new Callable<ImageData>() {     // 典型的
+											public ImageData call() { return imageInfo.downloadImage(); }
+										});
+		renderText(source);     //  渲染文字，此处是异构并发
+		try{
+			for(int t=0, n=info.size(); t<n; t++) {
+				Future<ImageData> f = completionService.take(); // 在得出结果之前阻塞，有结果就取出来跑循环，没结果就阻塞等待
+				ImageData imageData = f.get();    //  将得到的结果取出
+				renderImage(imageData);    // 渲染单张图片，此处是同构并发
+			}
+		}catch(InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}catch(ExecutionException e) {
+			throw launderThrowable(e.getCause());
+		}
+	}
+										
+}
+
+构建高效可伸缩的结果缓存
+public class Memoizer<A, V> implements Computable<A, V> {
+	private final ConcurrentHashMap<A, Future<V>> cache = new ConcurrentHashMap<A, Future<V>>();  // 使用并发HashMap
+	private final Computable<A, V> c;
+	public Memoizer(Computable<A, V> c) { this.c =c; }
+	public V compute(final A arg) throws InterruptedException {
+		while(true) {
+			Future<V> f = cache.get(arg);        //  获取HashMap中缓存的 Future<V> 值，若有则直接返回，若没有则返回 null
+			if(f == null) {
+				Callable<V> eval = new Callable<V>() {
+										public V call() throws InterruptedException { return c.compute(arg); }
+										};
+				FutureTask<V> ft = new FutureTask<V>(eval);    //  生成一个带返回结果的Task任务，
+				// 看ft任务在缓存中是否存在，存在则返回相关Future<V>，不存在返回 null，关键是查看key(即arg参数)
+				f = cache.putIfAbsent(arg, ft);     
+				// ft任务不存在，跑线程等出结果，此处调用本来就是外部起了线程在跑，所以用run
+				if(f == null) { f = ft; ft.run() }; 
+			}
+			try{
+				return f.get();
+			}catch(CancellationException e) {
+				cache.remove(arg, f);
+			}catch(ExecutionException e) {
+				throw launderThrowable(e.getCause());
+			}
+		}
+	}
+}
+
+
+5种同步工具类：阻塞队列(BlockingQueue)、闭锁(latch)、阻塞等待返回值的任务(FutureTask)、信号量(Semaphore)、栅栏(Barrier)
+
+闭锁(latch)的使用，通过等待/开闸的操作，使一个或者多个线程等待一组事件发生。
+闭锁状态包括一个计数器，该计数器被初始化为一个正数，表示需要等待的事件数量。
+countDown()方法递减计数器，表示有一个事件发生。计数器值非，await()会一直阻塞到计数器为零，或者线程中断或者线程超时
+public long timeTasks(int nThreads, final Runnable task) throws InterruptedException {
+	final CountDownLatch startGate = new CountDownLatch(1);   //  创建等待计数为1的线程
+	final CountDownLatch endGate = new CountDownLatch(nThreads); // 创建等待计数为nThreads的线程
+	
+	for(int i=0; i<nThreads; i++) {
+		Thread t = new Thread() {    //  起n个线程实例，每个线程实例运行一个task任务
+			public void run() {
+				try {
+					startGate.await();          //  等待本主线程开闸
+					try {
+						task.run();            //   开闸后跑主业务
+					}finally {
+						endGate.countDown();        //  跑完主业务，减掉任务计数，变相通知主线程任务完成
+					}
+				}catch(InterruptedException ignored){
+					
+				}
+			}
+		};
+		t.start();            //  启动线程
+	}
+	long start = System.nanoTime();         //  主线程开闸前记录时间
+	startGate.countDown();                  //  主线程开闸，此时所有等待的任务线程从await()状态往下跑
+	endGate.await();         //  等待最后一个任务线程开闸，即所有任务线程执行完毕，计数器到零后，往下运行
+	long end = System.nanoTime();          //    记录最后一个任务线程执行完毕的时间
+	return end - start;                    //  将所有并行任务线程从启动到结束的运行时间作为结果返回
+}
+
+阻塞等待返回值的任务(FutureTask)，通过Callable实现，相当于可生成结果的Runnable。
+Future.get的行为取决于任务状态，如果任务已经完成，get会立即返回结果，否则get阻塞知道任务完成，或者抛出异常。结果进行跨线程传递
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+//  强制将未检查的Throwable转换为RuntimeException
+public static RuntimeException launderThrowable(Throwable t) {
+	if(t instanceof RuntimeException)
+		return (RuntimeException) t;
+	else if(t instanceof Error) 
+		throw (Error) t;
+	else
+		throw new IllegalStateException("Not unchecked", t);
+}
+public class Preloader {
+	private final Future<ProductInfo> future =  //  创建一个任务，该任务返回ProductInfo对象
+			new Future<productInfo>(new Callable<ProductInfo> {
+				public ProductInfo call() throws DataLoadException {
+					return loadProductInfo();
+				}
+			});
+	private final Thread thread = new Thread(future);   //  启用子线程调用该任务
+	public void start()	 { thread.start(); }            //  提供start()方法给外部启动线程
+	public ProductInfo get() throws DataLoadExceptioin, InterruptedException {
+		try {
+			return future.get();        //  阻塞等待任务在子线程中完成并返回结果ProductInfo对象
+		}catch(ExecutionException e) {
+			Throwable cause = e.getCause();
+			if(cause instanceof DataLoadException)
+				throw (DataLoadException) cause;
+			else
+				throw launderThrowable(cause);
+		}
+	}		
+}
+
+信号量：计数信号量用来控制同时访问某个特定资源的操作数量，或者同时执行某个指定操作的数量。也可以用来实现某种资源池，或者对容器施加边界
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.Semaphore;
+public class BoundedHashSet<T> {  // 实现一个有界的阻塞容器，信号量的计数值会初始化成容器容量的最大值
+	private final Set<T> set;
+	private final Semaphore sem;       //  声明一个信号量变量
+	
+	public BoundedHashSet(int bound) {
+		this.set = Collections.synchronizedSet(new HashSet<T>());   //  装饰模式，将HashSet使用synchronizedSet装饰，支持并发
+		sem = new Semaphore(bound);    //  初始化信号量，有bound个信号量资源
+	}
+	public boolean add(T o) throws InterruptedException {
+		sem.acquire();                //  占用一个信号量资源，如果当前没有信号量资源，则阻塞在此
+		boolean wasAdded = false;
+		try {
+			wasAdded = set.add(o);
+			return wasAdded;             //  将添加结果状态返回
+		}finally {
+			if(!wasAdded)
+				sem.release();         //  如果添加元素失败，释放信号量资源
+		}
+	}
+	public boolean remove(Object o) {
+		boolean wasRemoved = set.remove(o);
+		if(wasRemoved) 
+			sem.release();
+		return wasRemoved;
+	}
+}
+
+栅栏：类似于闭锁，阻塞一组线程知道某个事件发生。栅栏与闭锁的关键区别在于，所有线程必须同时到达栅栏位置，才能继续执行。闭锁用于等待事件，而栅栏用于等待其他线程。
+public class CellularAutomata {
+	private final Board mainBoard;
+	private final CyclicBarrier barrier;
+	private final Worker[] workers;
+	/* 要执行的任务，本任务在线程中执行完毕后，在wait()处等待，直到所有线程执行的任务都到达await()之后，所有线程再往下走 */
+	private class Worker implements Runnable {
+		private final Board board;
+		public Worker(Board board) { this.board = board; }
+		public void run() {
+			while(!board.hasConverged()) {
+				for(int x=0; x<board.getMaxX(); x++)
+					for(int y=0; y<board.getMaxY(); y++)
+						board.setNewValue(x, y, computeValue(x, y);        //  任务的具体工作，根据业务需要实现
+				try {
+					barrier.await();          //  线程集结等待处
+				}catch(InterruptedException e) {
+					return;
+				}catch(BrokenBarrierException e) {
+					return;
+				}
+			}
+		}
+	}
+	public CellularAutomata(Board board) {
+		this.mainBoard = board;
+		int count = Runtime.getRuntime().availableProcessors();  //  获取当前Cpu的个数，作为线程数依据(子问题个数)
+		/****  生成栅栏，第一个参数是集合的线程数，这样await()才知道是否可以开栏，
+		                 第二个参数是栅栏开启后可选执行的子任务线程，用于进行一些收尾工作 ***/
+		this.barrier = new CyclicBarrier(count, new Runnable() { public void run() { mainBoard.commitNewValues(); } });
+		this.workers = new Worker[count];
+		for(int i=0; i<count; i++)
+			workers[i] = new Worker(mainBoard.getSubBoard(count, i));  //  初始化子任务集合
+	}
+	public void start() {
+		for(int i=0; i<workers.length; i++)
+			new Thread(workers[i].start();       //  启动子任务
+		mainBoard.waitForConvergence();
+	}
+}
 
 /****                                               NIO                                        ****/
 NIO中主要Channel的实现：
