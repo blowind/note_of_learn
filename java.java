@@ -980,9 +980,10 @@ public class MyThread extends Thread {
 		//  Thread.currentThread() 获取当前语句所在线程的引用，  getName() 获得线程名（一般new同语句块中的setName中设置）
 		System.out.println("run方法的打印：" + Thread.currentThread().getName());
 		
-		Thread.yield();   //  当前现成放弃CPU资源，让给其他排队的线程，当然可能下个线程还是自身，CPU资源被自己抢到
+		/*  当前现成放弃CPU资源，让给其他排队的线程，当然可能下个线程还是自身，CPU资源被自己抢到。注意本调用不会释放这个线程拥有的锁，因此不要在同步代码块里执行本操作，否则所有等待线程很可能只能本线程能执行，失去调用意义*/
+		Thread.yield();  
 		
-		/* 休眠时外部interrupt中止线程，会让线程产生InterruptedException中断，不论休眠调用前后的interrupt  */
+		/* 休眠时外部interrupt中止线程，会让线程产生InterruptedException中断，不论休眠调用前后的interrupt。进入休眠的线程不会释放其获得的锁。因此尽量避免在同步块内休眠  */
 		Thread.sleep(50000);    
 		/*  通过抛出异常的方法来在代码中中止线程，仅仅在外部调用 mythread.interrupt() 并不必然让线程中止 */
 		if( this.interrupted() ) {
@@ -1647,6 +1648,97 @@ public void pathUsage() {
 	Path p2 = p1.normalize();
 }
 
+
+/****                                               原始IO                                        ****/
+
+带资源的try构造(try with resources) 在try块的参数表中声明流变量，Java 1.7的特性
+// java 1.6之前的写法：
+OutputStream out = null
+try{
+	out = new FileOutputStream("1.txt");
+	doSomething();
+}catch(IOException e) {
+	System.err.println(ex.getMessage());
+}finally{
+	if(out != null) {      //  避免初始化失败等情况下的 NullPointerException
+		try{
+			out.close();
+		}catch(IOException ex) {}   // 一般忽略关闭流时的异常，最多将这个异常记入日志
+	}
+}
+
+// java 1.7的写法
+try(OutputStream out = new FileOutputStream("1.txt")) {   //  Java会对try块参数表中声明的所有AutoCloseable对象自动调用close()
+	doSomething();
+}catch(IOException e) {
+	System.err.println(e.getMessage());
+}
+
+// 从网络中读数据，一般循环读，因为网络不稳定，可能一次不能读取全部数据
+int bytesRead = 0;
+int bytesToRead = 1024;
+byte[] input = new byte[bytesRead];
+while(bytesRead < bytesToRead) {
+	int ret = in.read(input, bytesRead, bytesToRead - bytesRead);
+	if(ret == -1) break;
+	bytesRead += ret;
+}
+
+public void mark(int readAheadLimit)     /* 标记流的当前位置，以便在以后某个时刻，可以用reset()方法把流重置到之前标记的位置
+ 接下来的读取会返回从标记位置开始的数据。从标记处读取和重置的字节数由readAheadLimit确定，重置太远会抛出IOException异常*/
+public void reset() throws IOException
+public boolean markSupported() 
+	
+	
+DataInputStream和DataOutputStream提供了一些方法，可以用二进制格式读/写JAVA的基本数据类型和字符串，接口如下，都是大端模式
+public final void writeBoolean(boolean b) throws IOException
+public final void writeByte(int b) throws IOException
+public final void writeShort(int s) throws IOException
+public final void writeChar(int c) throws IOException
+public final void writeInt(int i) throws IOException
+public final void writeLong(long l) throws IOException
+public final void writeFloat(float f) throws IOException
+public final void writeChars(String s) throws IOException   // 对参数迭代处理，将各个字符按顺序写为2字节的大端Unicode字符
+public final void writeBytes(String s) throws IOException // 迭代处理，只写入每个字符的低字节，可能丢信息，不建议使用
+public final void writeUTF(String s) throws IOException  // 包含字符串长度信息，前两个接口没有
+
+java.io.Reader超类指定读取字符的API，使用Unicode字符
+java.io.Writer超类指定写字符的API，使用Unicode字符
+
+OutputStreamWriter是Write最重要的具体子类，从Java程序接收字符。根据指定的编码方式将这些字符转换成字节，并写入底层输出流
+public OutputStreamWriter(OutputStream out, String encoding) throws UnsupportedEncodingException
+public String getEncoding()
+
+InputStreamReader是Reader最重要的具体子类。从底层输入流读取字节，根据指定的编码方式转为字符，并返回这些字符
+public InputStreamReader(InputStream in, String encoding) throws UnsupportedEncodingException
+
+//  多线程处理压缩文件示例
+public class GZipRunnable implements Runnable {
+	private final File input;
+	public GZipRunnable(File file) {      //  使用File类作为构造函数入参
+		this.input = file;
+	}
+	public void run() {
+		if(!input.getName().endsWith(".gz")) {   // 判断是否.gz结尾
+			File output = new File(input.getParent(), input.getName() + ".gz");         // 生成绝对路径名
+			if(!output.exists()) {           //  压缩文件不存在时才生成
+				try(InputStream in = new BufferedInputStream(new FileInputStream(input));   // java 1.7 的 try resources结构
+					OutputStream out = new BufferedOutputStream(       //  因为后面操作是一字节一字节写入，因此最好加buffer
+										new GZIPOutputStream(
+							             new FileOutputStream(output)));
+					){
+						int b;
+						while((b = in.read()) != -1) out.write(b);
+						out.flush();
+				}catch(IOException e) {
+					e.printStackTrace();
+				}		
+			}
+		}
+	}
+}
+
+
 /****                                               RTTI                                        ****/
 辅助接口和类
 interface HasBattries {}
@@ -1905,3 +1997,16 @@ Arrays.fill(a1, true);    // 使用 true填充整个数组
 String[] a2 = new String[size];
 Arrays.fill(a2, 3, 5, "hello");  // 填充3和4两个位置为 hello
 
+/****                                              JAVA网络编程                                       ****/
+CookieManager manager = new CookieManager();       //  1.6实现了一个CookieHandler的默认子类
+manager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);          //  设置cookie只接受第一坊cookie
+CookieHandler.setDefault(manager);
+
+
+/****                                              JAVA系统属性                                       ****/
+http.keepAlive                       //   [true/false]    启用/禁用HTTP Keep-Alive
+http.maxConnections                  //   [5]    希望同时保持打开的socket数，默认是5
+http.keepAlive.remainingData         //   [false]   在丢弃链接后完成清理
+sun.net.http.errorstream.enableBuffering  //   [false]   尝试缓冲400和500级响应的相对小的错误刘，从而能释放链接，以备稍后使用
+sun.net.http.errorstream.bufferSize       //   [4096]    为缓冲错误流使用的字节数
+sun.net.http.errorstream.timeout     //   [300]     读错误流超时前的毫秒数，默认为300毫秒

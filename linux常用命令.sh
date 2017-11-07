@@ -233,3 +233,14 @@ then
 cd $PATHNAME
 nohup $PNAME >/dev/null  &
 fi
+
+
+chgrp  -R  groupname  filename
+chown  -R  ownername[:groupname]  filename
+chmod  -R  777 filename
+cp src dest
+
+/etc/services   ## 存储了本服务器完整的端口分配表
+/etc/shadow     ## 账号管理的文件
+/etc/group      ## 用户组组名，使用chgrp修改文件所述用户组时，必须是本文件里存在的组名
+/etc/passwd     ## 用户信息，使用chown修改文件所有者时，必须是本文件里存在的用户名

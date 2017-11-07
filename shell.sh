@@ -149,3 +149,35 @@ for((i=1;i<=10;i++));  ###  基本循环条件
 do
 	echo $(expr $i \* 4);
 done;
+
+
+
+
+################################         linux下常用工具说明        ################################ 
+修改用户所能使用的句柄限制，默认值是1024
+
+1. ulimit -a 查看当前用户的文件句柄限制 
+2. 用户级别的句柄数限制修改。  
+修改 /etc/security/limits.conf 增加下面的代码：  
+用户名(或者用*表示所有用户)  soft nofile 65535    
+用户名 hard nofile 65535   
+有两种限制，一种是soft软限制，在数目超过软限制的时候系统会给出warning警告，但是达到hard硬限制的时候系统将拒绝或者异常了。  
+修改之后可能需要重启shell生效。
+3. 系统级别的句柄数限制修改。  
+sysctl -w fs.file-max 65536  
+或者  
+echo "65536" > /proc/sys/fs/file-max  
+两者作用是相同的，前者改内核参数，后者直接作用于内核参数在虚拟文件系统（procfs, psuedo file system）上对应的文件而已。  
+可以用下面的命令查看新的限制  
+sysctl -a | grep fs.file-max  
+或者  
+cat /proc/sys/fs/file-max  
+修改内核参数  
+/etc/sysctl.conf  
+echo "fs.file-max=65536" >> /etc/sysctl.conf  
+sysctl -p  
+查看系统总限制 命令：cat /proc/sys/fs/file-max    
+查看整个系统目前使用的文件句柄数量命令：cat /proc/sys/fs/file-nr   
+查看某个进程开了哪些句柄 ：lsof -p pid    
+某个进程开了几个句柄 ：lsof -p pid |wc -l    
+也可以看到某个目录 /文件被什么进程占用了,显示已打开该目录或文件的所有进程信息 ：lsof path/filename 

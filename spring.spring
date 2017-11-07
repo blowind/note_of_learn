@@ -1,19 +1,35 @@
 
 /**********************                 源代码中的基本配置：
 
-@component("beanName")       // 声明基本的bean组件，引号内是配置的组件ID
+《声明Bean的注解》：以下4种声明等效，一般在 编写功能类 的代码上注解用
+
+@Component("beanName")       // 声明基本的bean组件，引号内是配置的组件ID
+
+@Service					//  在业务逻辑层(service层)使用
+
+@Repository                 //  在数据访问层(Dao层)使用
+
+@Controller                 //  在展现层(MVC->Spring MVC)中使用
+
+
+《注入Bean的注解》: 以下3种声明等效，一般在 使用功能类 的代码上注解用
 
 //  自动装备，一般用来构造函数和set函数上，自动生成入参与当前对象的匹配关系
 //  置为false之后，自动装配失败不抛出异常，bean不进行装配，如果代码中没有进行null检查，则运行时出现空指针异常
 @AutoWired(required=false)         
 
 //  同上，不过AutoWired是spring特有注解，Inject更具通用性，来源于JAVA依赖注入规范
-@Inject  
+@Inject       //  JSR-330提供的注解
+
+@Resource    //  JSR-250提供的注解
 
      
 /**********************                 spring动作配置：
 
 @configuration           //  配置spring，创建配置类
+
+//自动扫描包名下所有@Service, @Component, @Repository, @Controller并注册为类
+@componentScan("com.wisely.highlight_spring4.ch1.di")
 @componentScan(basePackages={"soundsystem", "vedio"})             // 启用组件扫描，参数是要扫描的基础包，可以配多个
 @componentScan(basePackageClasses={CDPlayer.class, DVDPlayer.class})   // 同上，另一种写法
 
@@ -22,6 +38,32 @@
 @Import({CDPlayerConfig.class, CDConfig.class})                          // 使用Import注解导入其他的类，用来进行组合
 @ImportResource("classpath:cd-config.xml")                               // 引入配置在xml文件里的bean元素
 
+
+通过配置区分开发环境/生产环境，没有指定profile的bean始终都会创建，不与激活的profile绑定
+@Configuration
+@Profile("dev")                         // 指定某个bean属于哪个profile，用于在类级别上。表明只有在dev profile激活时才会创建
+public class DevelopmentProfileConfig { 
+	@bean(destroyMethod="shutdown")
+	public DataSource dataSource() {}
+}
+
+@Configuration
+@Profile("prod")                        //  当生产环境的profile文件激活时，才生成本类里面的bean
+public class ProductionProfileConfig {
+	@bean
+	public DataSource dataSource() {}
+}
+
+
+public class DataSourceConfig {                        // 基于类方法的 @profile 注解
+	@bean(destroyMethod="shutdown")
+	@Profile("dev")                           //  基于不同的profile文件，这样可以根据对应生效profile文件配置产生对应的bean
+	public DataSource embeddedDataSource() {}
+	
+	@bean
+	@Profile("prod")
+	public DataSource jndiDataSource() {}
+}
 
 /**********************                 测试文件中的配置：
 
@@ -35,13 +77,27 @@
 
 
 
-/**********************                      创建配置类                ****************************/
+/**********************                      创建配置类/Java配置(推荐)                ****************************/
 @configuration           //  配置spring，创建配置类，表明当前的类是一个配置类
 
 
 //  方法返回的对象，注册为Spring应用上下文中的bean
 @bean(name="lonelyHeartsClubBand")
 public CompactDisc sgtPeppers() { return new SgtPeppers(); }
+
+
+
+
+
+/**********************                     AOP                ****************************/
+
+@Aspect                       // 声明是一个切面
+
+@After                     //  定义建言
+
+@Before                     //  定义建言
+
+@Around                     //  定义建言
 
 
 
