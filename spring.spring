@@ -4,6 +4,7 @@
 《声明Bean的注解》：以下4种声明等效，一般在 编写功能类 的代码上注解用
 
 @Component("beanName")       // 声明基本的bean组件，引号内是配置的组件ID
+@Primary                     // 若多个实现了同一接口的Bean注入时无法选择，则声明时标记为Primary的作为唯一选项
 
 @Service					//  在业务逻辑层(service层)使用
 
@@ -165,3 +166,103 @@ public CompactDisc sgtPeppers() { return new SgtPeppers(); }
 
 
 默认情况下，Spring中的bean都是单例
+
+
+@Bean
+@Primary                                //  标示首选的Bean，在JavaConfig配置里生成多个同类Bean元素时用来进行区分
+public Dessert iceCream() { return new iceCream(); }
+
+@AutoWired
+@Qualifier("iceCream")       //  限定自动装配首选Bean，参数是想要用来注入的Bean的ID，默认是生成Bean对象的方法的首字母小写形式
+public void setDessert(Dessert dessert) { this.dessert = dessert; } 
+
+结合声明时限定效果更佳，不会因为重构了Bean所在的方法而导致自动装配生效，如下：
+@Component
+@Qualifier("cold")                           //   在声明Bean的时候就创建自定义的限定符, AutoWired的地方使用同名限定符
+public class IceCream implements Dessert { ... }
+
+使用自定义的限定符注解
+@Target({ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier
+public @interface Cold {}                        //  创建限定符 Cold
+
+@Target({ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier
+public @interface Creamy {}                     //  创建限定符 Creamy
+
+@Component
+@Cold
+@Creamy                                         //  使用自定义的限定符
+public class IceCream implements Dessert { ... }       
+
+
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)     // 每次注入或者通过Spring应用上下文获取的时候，都会创建一个新的Bean实例
+public class Notepad {... }
+
+@Bean
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)      //  在JavaConfig配置中声明原型范围
+public Notepad notepad() { return new Notepad(); }
+
+
+@Component                                          
+@Scope(value=WebApplicationContext.SCOPE_SESSION,    //  声明会话作用域的Bean，为每个会话创建一个Bean实例
+       proxyMode=ScopedProxyMode.INTERFACES          //  代理要实现ShoppingCart接口，并将调用委托给具体完成购物车会话的实现Bean
+public shoppingCart cart() { ... }
+
+ScopedProxyMode.INTERFACES      //  生成的Bean是一个接口类型定义
+ScopedProxyMode.TARGET_CLASS    //  生成的Bean是一个类类型定义
+
+
+//  注入外部的值(采用配置文件在运行时注入)
+@Configuration
+@PropertySource("classpath:/com/soundsystem/app.properties")       //  声明属性源，引入类路径一个app.properties文件
+public class ExpressiveConfig {
+	@Autowired
+	Environment env;
+	
+	@Bean
+	public BlankDisc disc() {
+		return new BlankDisc(env.getProperty("disc.title"), env.getProperty("disc.artist"));
+	}
+}
+其他重载方法
+int connectionCount = env.getProperty("db.connection.count", Integer.class, 30);
+
+
+//  使用组件扫描和自动装配时注入外部配置文件值的方法
+public BlankDisc( @Value("${disc.title}") String title,          //  属性占位符  基本格式 ${...}
+				  @Value("${disc.artist}") String artist) {
+		this.title = title;
+		this.artist = artist;
+}
+同时必须配置如下方法
+@Bean
+public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+	return new PropertySourcesPlaceholderConfigurer();
+}
+
+/**********************                      SpEL/Spring表达式                ****************************/
+
+
+基本格式：  #{...}
+
+#{3.14}                             //  字面值，就是数字 3.14
+#{'Hello'}                          //   同上，字符串
+#{T(System).currentTimeMillis()}    //  得到计算表达式那一刻的时间毫秒数，T()表达式将java.lang.System视为Java中对应类型
+#{sgtPeppers.artist}                //  引用ID为sgtPeppers的属性artist
+#{systemProperties['disc.title']}   //  通过systemProperties对象引用系统属性
+#{artistSelector.selectArtist()?.toUpperCase()} // 使用Bean对象的方法，注意此处多的?进行类型安全运算，确定前一个方法结果不为NULL
+
+使用T()运算符可以在表达式内部获得一个Class对象，一般用来访问目标类型的静态方法和常量
+T(java.lang.Math).PI             // 访问目标类型的常量
+T(java.lang.Math).random()       // 访问目标类型的静态方法
+
+
+public BlankDisc( @Value("#{systemProperties['disc.title']}") String title,          //  Spring表达式
+				  @Value("#{systemProperties['disc.artist']}") String artist) {
+		this.title = title;
+		this.artist = artist;
+}
