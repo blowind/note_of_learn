@@ -1,5 +1,5 @@
 
-/**********************                 源代码中的基本配置：
+/**********************                 源代码中的基本配置              ****************************/
 
 《声明Bean的注解》：以下4种声明等效，一般在 编写功能类 的代码上注解用
 
@@ -13,50 +13,150 @@
 @Controller                 //  在展现层(MVC->Spring MVC)中使用
 
 
+结合声明时限定效果更佳，不会因为重构了Bean所在的方法而导致自动装配生效，如下：
+@Component
+@Qualifier("cold")                           //   在声明Bean的时候就创建自定义的限定符, AutoWired的地方使用同名限定符
+public class IceCream implements Dessert { ... }
+
+使用自定义的限定符注解
+@Target({ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier
+public @interface Cold {}                        //  创建限定符 Cold
+
+@Target({ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier
+public @interface Creamy {}                     //  创建限定符 Creamy
+
+@Component
+@Cold
+@Creamy                                         //  使用自定义的限定符
+public class IceCream implements Dessert { ... }   
+
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)     // 每次注入或者通过Spring应用上下文获取的时候，都会创建一个新的Bean实例
+public class Notepad {... }
+
+
+@Component                                          
+@Scope(value=WebApplicationContext.SCOPE_SESSION,    //  声明会话作用域的Bean，为每个会话创建一个Bean实例
+       proxyMode=ScopedProxyMode.INTERFACES          //  代理要实现ShoppingCart接口，并将调用委托给具体完成购物车会话的实现Bean
+public shoppingCart cart() { ... }
+
+ScopedProxyMode.INTERFACES      //  生成的Bean是一个接口类型定义
+ScopedProxyMode.TARGET_CLASS    //  生成的Bean是一个类类型定义
+
+
+//  注入外部的值(采用配置文件在运行时注入)
+@Configuration
+@PropertySource("classpath:/com/soundsystem/app.properties")       //  声明属性源，引入类路径一个app.properties文件
+public class ExpressiveConfig {
+	@Autowired
+	Environment env;
+	
+	@Bean
+	public BlankDisc disc() {
+		return new BlankDisc(env.getProperty("disc.title"), env.getProperty("disc.artist"));
+	}
+}
+其他重载方法
+int connectionCount = env.getProperty("db.connection.count", Integer.class, 30);
+
+
 《注入Bean的注解》: 以下3种声明等效，一般在 使用功能类 的代码上注解用
 
 //  自动装备，一般用来构造函数和set函数上，自动生成入参与当前对象的匹配关系
-//  置为false之后，自动装配失败不抛出异常，bean不进行装配，如果代码中没有进行null检查，则运行时出现空指针异常
+//  置为false之后，自动装配失败不抛出异常，bean不进行装配，如果代码中没有进行null检查，则运行时出现空指针异常，默认是true
 @AutoWired(required=false)         
 
+@AutoWired
+@Qualifier("iceCream")       //  限定自动装配首选Bean，参数是想要用来注入的Bean的ID，默认是生成Bean对象的方法的首字母小写形式
+public void setDessert(Dessert dessert) { this.dessert = dessert; } 
+
+默认情况下，Spring中的bean都是单例
+
+@Bean
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)      //  在JavaConfig配置中声明原型范围
+public Notepad notepad() { return new Notepad(); }
+
+
 //  同上，不过AutoWired是spring特有注解，Inject更具通用性，来源于JAVA依赖注入规范
-@Inject       //  JSR-330提供的注解
+@Inject       //  JSR-330提供的注解  import javax.inject.Inject;
 
 @Resource    //  JSR-250提供的注解
 
      
-/**********************                 spring动作配置：
+/**********************                      创建配置类/Java配置(推荐)                ****************************/
 
-@configuration           //  配置spring，创建配置类
+=====================        自动扫描的方式，需要结合前面的业务代码显示注解             ========================
 
-//自动扫描包名下所有@Service, @Component, @Repository, @Controller并注册为类
+@configuration           //  配置spring，创建配置类，表明当前的类是个配置类，与业务逻辑无关
+
+// 自动扫描包名下所有 @Service, @Component, @Repository, @Controller 并注册为bean,自动扫描结合前面的注解可以构成完整的DI功能
 @componentScan("com.wisely.highlight_spring4.ch1.di")
+
 @componentScan(basePackages={"soundsystem", "vedio"})             // 启用组件扫描，参数是要扫描的基础包，可以配多个
-@componentScan(basePackageClasses={CDPlayer.class, DVDPlayer.class})   // 同上，另一种写法
+
+@componentScan(basePackageClasses={CDPlayer.class, DVDPlayer.class})   // 同上，会扫描这些类所在的包，得到其中声明的bean，更优的方案是包中创建空标记接口，此处标记接口，因为该接口永不使用，不存在重构后变更的情况
 
 
 
-@Import({CDPlayerConfig.class, CDConfig.class})                          // 使用Import注解导入其他的类，用来进行组合
-@ImportResource("classpath:cd-config.xml")                               // 引入配置在xml文件里的bean元素
+=======================        Java代码显示配置的方式 JavaConfig，不需要业务代码有任何注解          ======================
+
+@configuration           //  配置spring，创建配置类，表明当前的类是一个配置类
+
+//  方法返回的对象，注册为Spring应用上下文中的bean，因为是在JavaConfig文件中，因此与业务代码不相关
+@bean(name="lonelyHeartsClubBand")
+public CompactDisc sgtPeppers() { return new SgtPeppers(); }
+
+
+@Bean
+@Primary                                //  标示首选的Bean，在JavaConfig配置里生成多个同类Bean元素时用来进行区分
+public Dessert iceCream() { return new iceCream(); }
+
+
+//  使用组件扫描和自动装配时注入外部配置文件值的方法
+public BlankDisc( @Value("${disc.title}") String title,          //  属性占位符  基本格式 ${...}
+				  @Value("${disc.artist}") String artist) {
+		this.title = title;
+		this.artist = artist;
+}
+同时必须配置如下方法
+@Bean
+public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+	return new PropertySourcesPlaceholderConfigurer();
+}
+
+
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
+
+@Import({CDPlayerConfig.class, CDConfig.class})     // 使用Import注解导入其他配置类声明的bean，用来进行组合生成最终的JavaConfig配置文件
+@ImportResource("classpath:cd-config.xml")          // 引入配置在xml文件里的bean元素
 
 
 通过配置区分开发环境/生产环境，没有指定profile的bean始终都会创建，不与激活的profile绑定
+指定类中的bean属于哪个profile，用于在类级别上。
+
+// 基于类的 @profile 注解  Spring 3.1特性
 @Configuration
-@Profile("dev")                         // 指定某个bean属于哪个profile，用于在类级别上。表明只有在dev profile激活时才会创建
+@Profile("dev")                          //   开发环境的profile文件激活时，才生成本类里面的bean
 public class DevelopmentProfileConfig { 
 	@bean(destroyMethod="shutdown")
 	public DataSource dataSource() {}
 }
 
 @Configuration
-@Profile("prod")                        //  当生产环境的profile文件激活时，才生成本类里面的bean
+@Profile("prod")                        //   生产环境的profile文件激活时，才生成本类里面的bean
 public class ProductionProfileConfig {
 	@bean
 	public DataSource dataSource() {}
 }
 
 
-public class DataSourceConfig {                        // 基于类方法的 @profile 注解
+// 基于方法的 @profile 注解
+public class DataSourceConfig {                        
 	@bean(destroyMethod="shutdown")
 	@Profile("dev")                           //  基于不同的profile文件，这样可以根据对应生效profile文件配置产生对应的bean
 	public DataSource embeddedDataSource() {}
@@ -66,25 +166,28 @@ public class DataSourceConfig {                        // 基于类方法的 @profile 
 	public DataSource jndiDataSource() {}
 }
 
-/**********************                 测试文件中的配置：
 
-@RunWith(SprintJUnit4ClassRunner.class)          // 表明在测试开始的时候自动创建Spring的应用上下文
+@Bean
+@Conditional(MagicExistsCondition.class)        //  条件话创建bean，条件为true时创建
+public MagicBean magicBean() { return new MagicBean(); }
+
+
+
+@Configuration
+@EnableAspectJAutoProxy                        //  启动AspectJ自动代理
+@ComponentScan
+public class ConcertConfig {
+	@Bean
+	public Audience audience{} { return new Audience(); }
+}
+
+             
+/**********************                      测试文件中的配置                ****************************/
+
+@RunWith(SpringJUnit4ClassRunner.class)          // 表明在测试开始的时候自动创建Spring的应用上下文
 //  表示需要在CDPlayerConfig中加载配置，进而通过Component配置引入了bean
-@ContextConfiguration(classes=CDPlayerConfig.class)              
-
-
-
-
-
-
-
-/**********************                      创建配置类/Java配置(推荐)                ****************************/
-@configuration           //  配置spring，创建配置类，表明当前的类是一个配置类
-
-
-//  方法返回的对象，注册为Spring应用上下文中的bean
-@bean(name="lonelyHeartsClubBand")
-public CompactDisc sgtPeppers() { return new SgtPeppers(); }
+@ContextConfiguration(classes=CDPlayerConfig.class)      
+@ActiveProfiles("dev")                             //  制定测试环境激活的profile
 
 
 
@@ -100,6 +203,69 @@ public CompactDisc sgtPeppers() { return new SgtPeppers(); }
 
 @Around                     //  定义建言
 
+
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+
+@Aspect
+public class Audience {
+	@Before("execution(** concert.Performance.perform(..))")       // 通知方法在目标方法调用之前执行
+	public void silenceCellPhones() {
+		System.out.println("Silencing cell phones");
+	}
+	
+	@AfterReturning("execution(** concert.Performance.perform(..))")  // 通知方法在目标方法返回后调用
+	public void applause() {
+		System.out.println("CLAP CLAP CLAP!!!");
+	}
+	
+	@AfterThrowing("execution(** concert.Performance.perform(..))")  //  通知方法在目标方法抛出异常后调用
+	public void demandRefund() {
+		System.out.println("Demanding a refund");
+	}
+	
+	@After                 // 通知方法在目标方法返回或抛出异常后调用
+}
+
+减少重复的写法
+@Aspect
+public class Audience {
+	@Pointcut("execution(** concert.Performance.perform(..))")         // 定义命名的切点，新增了一个标记函数，无实际内容
+	public void performance() {}
+	
+	@Before("performance()")
+	public void silenceCellPhones() {
+		System.out.println("Silencing cell phones");
+	}
+	
+	@AfterReturning("performance()")
+	public void applause() {
+		System.out.println("CLAP CLAP CLAP!!!");
+	}
+}
+
+使用Around的写法
+@Aspect
+public class Audience {
+	@Pointcut("execution(** concert.Performance.perform(..))") 
+	public void performance() {}
+	
+	@Around("performance()")                                     // 对原有方法进行了完整的环绕，参数不可少，方法调用不可少
+	public void watchPerformance(ProceedingJoinPoint jp) {
+		try {
+			System.out.println("Silencing cell phones");
+			jp.proceed();
+			System.out.println("CLAP CLAP CLAP!!!");
+		} catch(Throwable e) {
+			System.out.println("Demanding a refund");
+		}
+	}
+}
 
 
 /**********************                      通过xml装配bean                ****************************/
@@ -165,84 +331,6 @@ public CompactDisc sgtPeppers() { return new SgtPeppers(); }
 
 
 
-默认情况下，Spring中的bean都是单例
-
-
-@Bean
-@Primary                                //  标示首选的Bean，在JavaConfig配置里生成多个同类Bean元素时用来进行区分
-public Dessert iceCream() { return new iceCream(); }
-
-@AutoWired
-@Qualifier("iceCream")       //  限定自动装配首选Bean，参数是想要用来注入的Bean的ID，默认是生成Bean对象的方法的首字母小写形式
-public void setDessert(Dessert dessert) { this.dessert = dessert; } 
-
-结合声明时限定效果更佳，不会因为重构了Bean所在的方法而导致自动装配生效，如下：
-@Component
-@Qualifier("cold")                           //   在声明Bean的时候就创建自定义的限定符, AutoWired的地方使用同名限定符
-public class IceCream implements Dessert { ... }
-
-使用自定义的限定符注解
-@Target({ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-@Qualifier
-public @interface Cold {}                        //  创建限定符 Cold
-
-@Target({ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-@Qualifier
-public @interface Creamy {}                     //  创建限定符 Creamy
-
-@Component
-@Cold
-@Creamy                                         //  使用自定义的限定符
-public class IceCream implements Dessert { ... }       
-
-
-@Component
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)     // 每次注入或者通过Spring应用上下文获取的时候，都会创建一个新的Bean实例
-public class Notepad {... }
-
-@Bean
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)      //  在JavaConfig配置中声明原型范围
-public Notepad notepad() { return new Notepad(); }
-
-
-@Component                                          
-@Scope(value=WebApplicationContext.SCOPE_SESSION,    //  声明会话作用域的Bean，为每个会话创建一个Bean实例
-       proxyMode=ScopedProxyMode.INTERFACES          //  代理要实现ShoppingCart接口，并将调用委托给具体完成购物车会话的实现Bean
-public shoppingCart cart() { ... }
-
-ScopedProxyMode.INTERFACES      //  生成的Bean是一个接口类型定义
-ScopedProxyMode.TARGET_CLASS    //  生成的Bean是一个类类型定义
-
-
-//  注入外部的值(采用配置文件在运行时注入)
-@Configuration
-@PropertySource("classpath:/com/soundsystem/app.properties")       //  声明属性源，引入类路径一个app.properties文件
-public class ExpressiveConfig {
-	@Autowired
-	Environment env;
-	
-	@Bean
-	public BlankDisc disc() {
-		return new BlankDisc(env.getProperty("disc.title"), env.getProperty("disc.artist"));
-	}
-}
-其他重载方法
-int connectionCount = env.getProperty("db.connection.count", Integer.class, 30);
-
-
-//  使用组件扫描和自动装配时注入外部配置文件值的方法
-public BlankDisc( @Value("${disc.title}") String title,          //  属性占位符  基本格式 ${...}
-				  @Value("${disc.artist}") String artist) {
-		this.title = title;
-		this.artist = artist;
-}
-同时必须配置如下方法
-@Bean
-public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
-	return new PropertySourcesPlaceholderConfigurer();
-}
 
 /**********************                      SpEL/Spring表达式                ****************************/
 
@@ -266,3 +354,97 @@ public BlankDisc( @Value("#{systemProperties['disc.title']}") String title,     
 		this.title = title;
 		this.artist = artist;
 }
+
+
+/**********************                 常用注解说明              ****************************/
+
+@Controller             用于注解后端handler控制器，处理业务逻辑并产生模型和视图
+//   org.springframework.stereotype.Controller
+
+
+@RequestMapping      用来映射请求到url地址
+//   org.springframework.web.bind.annotation.RequestMapping
+@RequestMapping(value="/hello", method=RequestMethod.GET)
+
+
+@RequestParam        用于将指定的请求参数赋值给方法中的形参，可以通过defaultValue指定前端未传入相关参数值时给方法形参填入的默认值
+//  org.springframework.web.bind.annotation.RequestParam
+@RequestParam(value="loginname", defaultValue="admin")
+
+
+@PathVariable          用于将请求URL中的占位参数对应的值，填入映射方法的入参，建议路径中标识符名与参数名一致
+//  org.springframework.web.bind.annotation.PathVariable   
+@RequestMapping(value="/userInfo/{userId}")
+public void showUserInfo(@PathVariable Integer userId)
+
+
+@RequestHeader        用于将请求头信息区数据映射到功能处理方法的参数上
+//  org.springframework.web.bind.annotation.RequestHeader 
+@RequestMapping(value="/testHeader")
+public void requestHeaderTest(@RequestHeader("User-Agent") String userAgent)
+
+
+@CookieValue         用于将请求的Cookie数据映射到方法的参数上
+//  org.springframework.web.bind.annotation.CookieValue
+@RequestMapping(value="/testCookie")
+public void cookieValueTest(@CookieValue(value="JSESSIONID", defaultValue="") String sessionId)
+
+
+@SessionAttributes       允许有选择的指定Model中的那些属性需要抓存到HttpSession对象中，本注解只能声明在类上，不能声明在方法中
+//  org.springframework.web.bind.annotation.SessionAttributes
+@Controller
+@SessionAttributes("user")    将Model中属性名为user的属性放入HttpSession对象中，比如使用/login页面登录后执行 model.addAttribute添加"user"属性后，该属性同时被放入Session会话，整个交互过程中都可以使用
+或者
+@SessionAttributes(types={User.class, Dept.class}, value={"user", "dept"})   types指定放入HttpSession当中的对象类型
+
+
+@ModelAttribute      该注解修改的方法会先于RequestMapping修饰的方法之前调用，可以用于在映射方法调用前对Model进行处理，被其注解的方法会在Controller每个方法被执行前执行，因此Controller映射到多个不同的Url时要谨慎
+
+//  使用@ModelAttribute 注释的value属性，来指定model属性的名称，model属性的值就是方法的返回值，相当于在映射方法被调用前，就生成并配置完model的属性和值
+@ModelAttribute("loginname")
+public String userModel1(@RequestParam("loginname") String loginname) {
+	return loginname;
+}
+
+//  使用@ModelAttribute 注释void返回值的方法，则所有操作有注解函数自己处理，如果要使用Model则自己添加相关参数
+@ModelAttribute
+public void userModel2(@RequestParam("loginname") String loginname, Model model) {
+	model.addAttribute("loginname", loginname);
+}
+
+//  使用@ModelAttribute 注释返回具体类的方法
+@ModelAttribute                     
+public User userModel3(@RequestParam("loginname") String loginname) {
+	return find(loginname);   //  model属性名称没有被指定，由返回类型隐含表示，例如此处是"user"
+}
+
+//  @ModelAttribute和@RequestMapping一起使用
+@RequestMapping(value="/login4")
+@ModelAttribute(value="username")
+public String login4() {
+	return "admin";         返回值不是看错一个视图名称，而是model键对应的值，视图名称是url里的"login4"，model的键是注解里的"username"
+}
+
+
+@RequestBody     用来处理请求中 application/json, application/xml等格式的数据，在底层自动进行Java对象和（json对象、xml文档的转换）
+//   org.springframework.web.bind.annotation.RequestBody
+@RequestMapping(value="/testRequestBody")
+public void setJson(@RequestBody Book book) {   //  自动将请求里的json数据映射置入Book对象中的属性
+	...
+}
+
+@ResponseBody    用于将Controller方法返回的对象转换为指定格式，写入Response对象的body数据区
+//   org.springframework.web.bind.annotation.ResponseBody
+@RequestMapping(value="/testResponseBody")
+@ResponseBody
+public Object getJson() {
+	List<Book> list = new ArrayList<Book>();
+	list.add(new Book(1, "bookname1"));
+	return list;
+}
+
+
+使用 Jaxb2RootElementHttpMessageConverter转换器在xml格式的数据和Java对象之间转换 
+@XmlRootElement   用于注解XML文档的根元素，在Java中基本上用来注解类
+@XmlElement       用于注解xml中的element，在Java中基本上用来注解类的属性变量的set方法
+
