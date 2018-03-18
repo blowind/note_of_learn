@@ -2010,3 +2010,25 @@ http.keepAlive.remainingData         //   [false]   在丢弃链接后完成清理
 sun.net.http.errorstream.enableBuffering  //   [false]   尝试缓冲400和500级响应的相对小的错误刘，从而能释放链接，以备稍后使用
 sun.net.http.errorstream.bufferSize       //   [4096]    为缓冲错误流使用的字节数
 sun.net.http.errorstream.timeout     //   [300]     读错误流超时前的毫秒数，默认为300毫秒
+
+
+/****                                      java 8 函数式编程                                       ****/
+long count = allArtists.stream().filter(artist -> artist.isFrom("London")).count();   //  将列表转为streasm
+
+//  调用Stream类的静态方法生成stream流，然后通过collect方法转换成List
+List<String> collected = Stream.of("a", "b", "c").collect(Collectors.toList());   
+
+//  使用map方法依次操作流的每个元素后再输出成List
+List<String> collected = Stream.of("a", "b", "hello").map(string -> string.toUpperCase()).collect(Collectors.toList());
+
+//  使用filter过滤流中符合条件的数据
+List<String> collected = Stream.of("a", "1bc", "abc1").filter(value -> isDigit(value.charAt(0))).collect(Collectors.toList());
+
+//  合并多个stream
+List<Integer> together = Stream.of(Arrays.asList(1, 2), Arrays.asList(3, 4)).flatMap(numbers -> numbers.stream()).collect(Collectors.toList());
+
+//   通过传入Comparator对象查找最小元素，同理还有max方法
+Track shortestTrank = tracks.stream().min(Comparator.comparing(track -> track.getLength())).get();
+
+//  使用reduce进行累积操作
+int count = Stream.of(1, 2, 3).reduce(0, (acc, element) -> acc + element);
