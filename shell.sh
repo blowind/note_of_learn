@@ -181,3 +181,15 @@ sysctl -p
 查看某个进程开了哪些句柄 ：lsof -p pid    
 某个进程开了几个句柄 ：lsof -p pid |wc -l    
 也可以看到某个目录 /文件被什么进程占用了,显示已打开该目录或文件的所有进程信息 ：lsof path/filename 
+
+
+
+--查看系统默认的最大文件句柄数，系统默认是1024
+ulimit -n
+
+----查看当前进程打开了多少句柄数
+lsof -n|awk '{print $2}'|sort|uniq -c|sort -nr|more
+
+
+---查看当前系统一个进程支持打开最大文件句柄数
+cat /proc/sys/fs/file-max

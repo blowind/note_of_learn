@@ -181,6 +181,12 @@ public class ConcertConfig {
 	public Audience audience{} { return new Audience(); }
 }
 
+
+@PostConstruct //@PostConstruct修饰的方法会在服务器加载Servle的时候运行，并且只会被服务器执行一次。PostConstruct在构造函数之后执行,init()方法之前执行
+public void init() {
+logUtil = this;
+logUtil.logService = this.logService;
+}
              
 /**********************                      测试文件中的配置                ****************************/
 
@@ -448,3 +454,41 @@ public Object getJson() {
 @XmlRootElement   用于注解XML文档的根元素，在Java中基本上用来注解类
 @XmlElement       用于注解xml中的element，在Java中基本上用来注解类的属性变量的set方法
 
+
+//  数据库配置相关的一票JAVA对象的注解
+
+@Repository      注解数据库基本配置
+
+@Inject        搭配@Repository使用，注解该类的构造器，创建对象时自动获得JdbcOperations对象
+
+
+@Query    在使用Spring Data JPA技术时，在DAO类的方法上使用的注释，用于指定SQL语句
+@Query("select s from Spitter s where s.email like '%gmail.com'")
+List<Spitter> findAllGmailSpitters();
+
+
+//  JAP实体类常用的注解            import javax.persistence.*;
+
+@Entity　标记类。将领域对象标注为一个实体，表示需要保存到数据库中。
+
+@Table　标记类。用name属性指定对应的表。
+@Table(name="table_name")
+
+@Id　标记类中的域。表示对应的字段是表的主键。
+
+@GeneratedValue　标记类中的域。主键的产生策略，例如默认的 GenerationType.AUTO
+@GeneratedValue(strategy=GenerationType.AUTO)
+
+@Column　标记类中的域。用name属性指定对应表中的列名，nullable指定是否可以为空，length指定列的长度。
+@Column(name="col_name",nullable=true,length=32)
+
+@Temporal  标记类中的域。指定时间类型，数据库对时间的类型有严格的划分。
+@Temporal(TemporalType.Date)
+
+@Version   标记类中的域。“提交版本必须大于记录当前版本才能执行更新”的乐观锁策略。
+
+@Transient　标记类中的域。让变量不要持久化到数据库中
+
+@Enumerated　标记类中的域。使用枚举。@Enumerated(EnumType.STRING)表示使用枚举的值，@Enumerated(EnumType.ORDINAL)表示使用枚举值的索引。　　　
+
+@Lob　标记类中的域。处理大文本和二进制数据。

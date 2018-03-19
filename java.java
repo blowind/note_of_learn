@@ -1132,7 +1132,7 @@ class TaskWithResult implements Callable<String> {
 	/* 线程调用的 call() 方法是有返回类型的，与接口里指明的泛型一致 */
 	public String call() {
 		try	{
-			Thread.sleep(1000*id);  //  由于get() 的阻塞效果，虽然所有线程一起启动，但是会产生隔一秒依次显示的效果
+			Thread.sleep(1000*id);  //  由于 get() 的阻塞效果，虽然所有线程一起启动，但是会产生隔一秒依次显示的效果
 	/* 第一个线程休眠时间最久，尽管每个线程休眠时间不一，第一个线程的get() 依然会阻塞其他线程执行完毕后的结果打印
 		//  Thread.sleep(1000*(10 - id));  
 	*/
