@@ -2032,3 +2032,64 @@ Track shortestTrank = tracks.stream().min(Comparator.comparing(track -> track.ge
 
 //  使用reduce进行累积操作
 int count = Stream.of(1, 2, 3).reduce(0, (acc, element) -> acc + element);
+
+
+Optional的使用： 该对象相当于一个值的容器
+Optional<String> a = Optional.of("a");   
+assertEquals("a", a.get());            //  可以通过get方法获取容器中的值
+
+Optional emptyOptional = Optional.empty();           //  通过工厂方法得到为空的Optional对象
+Optional alsoEmpty = Optional.ofNullable(null);      //  讲空值转换成Optional对象，最终效果同上
+
+assertFalse(emptyOptional.isPresent());       //     isPresent() 方法判断Optional对象中是否有值
+assertTrue(a.isPresent());                    //   同上
+
+assertEquals("b", emptyOptional.orElse("b"));          //   orElse() 方法在Optional为空时提供备选值
+assertEquals("c", emptyOptional.orElseGet(() -> "c"));   //  为空时接受一个Supplier对象并调用
+
+
+方法引用：主要用做lambda表达式所在地方的简写     标准语法为  Classname::methodName
+artist  ->  artist.getName()      形如左边的lambda表达式可以简写成，注意此处没有小括号       Artist::getName  
+(name, nationality) -> new Artist(name, nationality)  构造函数lambda表达式简写    Artist::new
+
+List<Integer> numbers = Arrays.asList(1, 2 ,3 ,4);
+List<Integer> sameOrder = numbers.stream().collect(Collectors.toList());       //  流保持原有顺序
+
+Set<Integer> numbers = new HashSet<Integer>(Arrays.asList(4, 3, 2, 1));
+List<Integer> sameOrder = numbers.stream().sorted().collect(Collectors.toList());  //  通过排序使无序变有序
+
+
+【使用收集器】
+1、转换成指定集合
+除了Collectors传统的toList(),  toSet(),  还有  toCollection(),  toMap()   例如：
+numbers.stream().collect(Collectors.toCollection(TreeSet::new));          //  指定生成的集合的类型，此处为TreeSet
+
+
+2、转换成值
+public Optional<Artist> biggestGroup(Stream<Artist> artists) {
+	Function<Artist, Long> getCount = artist -> artist.getMembers().count(); //   生成一个函数接口对象
+	return artists.collect(maxBy(comparing(getCount)));    //  将比较器传入 maxBy 收集器
+}
+
+public double averageNumberOfTracks(List<Album> albums) {
+	//  使用收集器averagingInt计算平均值
+	return albums.stream().collect(averagingInt(album -> album.getTrackList().size())); 
+	//  还可以使用 summingInt 求和
+}
+
+3、数据分块（只能根据true或者false分成两组）
+// 使用Predicate对象判断一个元素应该属于哪个部分，并根据布尔值返回一个Map到列表
+public Map<Boolean, List<Artist>> bandsAndSolo(Stream<Artist> artists) {
+	return artists.collect(partitioningBy(artist -> artisit.isSolo()));
+	// 等价于  return artists.collect(partitioningBy(Artist::isSolo));
+}
+
+4、数据分组
+//  根据主唱对专辑分组，groupingBy 收集器根据接受一个分类函数，用来对数据进行分组
+public Map<Artist, List<Album>> albumsByArtist(Stream<Album> albums) {
+	return albums.collect(groupingBy(album -> album.getMainMusician()));
+}
+
+5、字符串
+//  提取所有艺术家的名字并作为一个[]框起来、并用逗号分隔的字符串返回
+String result = artists.stream().map(Artist::getName()).collect(Collectors.joining(", ", "[", "]"));
