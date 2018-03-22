@@ -2027,10 +2027,75 @@ List<String> collected = Stream.of("a", "1bc", "abc1").filter(value -> isDigit(v
 //  合并多个stream
 List<Integer> together = Stream.of(Arrays.asList(1, 2), Arrays.asList(3, 4)).flatMap(numbers -> numbers.stream()).collect(Collectors.toList());
 
-//   通过传入Comparator对象查找最小元素，同理还有max方法
+//   通过传入Comparator函数接口查找最小元素，同理还有max方法
 Track shortestTrank = tracks.stream().min(Comparator.comparing(track -> track.getLength())).get();
 
 //  使用reduce进行累积操作
+int count = Stream.of(1, 2, 3).reduce(0, (acc, element) -> acc + element);
+
+//  对整形，长整形，双浮点行调用对应的函数接口提高效率，
+//  诸如此处输出的IntStream对象还包含了额外的summaryStatistics()方法，可以进行方便的统计处理
+IntSummaryStatistics trackLengthStats = album.getTracks().mapToInt(track -> track.getLength()).summaryStatistics();
+
+
+@FunctionInterface
+//  每个用作函数接口的接口（即调用lambda表达式的函数设计时声明的类型），都应该添加这个注释声明
+
+
+默认方法： 
+1、当具体实现类中存在方法与接口中默认方法签名相同的冲突时，优先选择实现类中的方法，
+2、默认方法的优先级与虚方法类似
+
+public interface Parent {
+	public void message(String body);
+	
+	public default void welcome() {  message("Parent: Hi!"); }     //  此处在父接口里面声明了默认方法
+	
+	public String getLastMessage();
+}
+
+@Test
+public void parentDefaultUsed() {
+	Parent parent = new ParentImpl();              //  此处调用接口的具体实现类生成对象
+	parent.welcome();                   //    对象自然能使用接口中定义的默认方法
+}
+
+public interface Child extends  Parent {      //  子接口覆盖了父接口的默认方法
+	@Override
+	public default void welcome() {  message("Child: Hi!"); }
+}
+
+@Test
+public void childOverrideDefault() {
+	Child child = new ChildImpl();          //  此处调用子接口的具体实现类生成对象
+	child.welcome();                         //  对象默认能使用接口中覆盖过的默认方法
+}
+
+多接口继承中方法签名冲突时，默认编译错误，可以通过类中实现冲突方法解决这个问题
+public interface Jukebox {
+	public default String rock() {
+		return "... all over the world!";
+	}
+}
+
+public interface Carriage {
+	public default String rock() {
+		return "... from side to side";
+	}
+}
+
+public class MusicalCarriage implements Carriage, Jukebox {
+	@Override
+	public String rock() {
+		return Carriage.super.rock();     //  增强的super语法，指明使用接口Carriage中定义的默认方法
+	}
+}
+
+默认方法的三定律：
+1. 类胜于接口。如果在继承链中有方法体或抽象的方法声明，那么就可以忽略接口中定义的方法。
+2. 子类胜于父类。如果一个接口继承了另一个接口，且两个接口都定义了一个默认方法，那么子类中定义的方法胜出。
+3. 没有规则三。如果上面两条规则不适用，子类要么需要实现该方法，要么将该方法声明为抽象方法。
+int count = Stream.of(1, 2, 3).reduce(0, (acc, element) -> acc + element);
 int count = Stream.of(1, 2, 3).reduce(0, (acc, element) -> acc + element);
 
 
@@ -2093,3 +2158,32 @@ public Map<Artist, List<Album>> albumsByArtist(Stream<Album> albums) {
 5、字符串
 //  提取所有艺术家的名字并作为一个[]框起来、并用逗号分隔的字符串返回
 String result = artists.stream().map(Artist::getName()).collect(Collectors.joining(", ", "[", "]"));
+
+6、组合收集器
+public Map<Artist, Long> numberOfAlbums(Stream<Album> albums) {
+	//  使用收集器counting() 对 groupingBy()收集器 分块的内容进一步处理，得到每个艺术家专辑的数量
+	return albums.collect(groupingBy(album -> album.getMainMusician(), counting()));
+}
+
+public Map<Artist, List<String>> nameOfAlbums(Stream<Album> albums) {
+	//  使用收集器 mapping() 对 groupingBy()收集器 分块的内容进一步处理，得到每个艺术家专辑名字的列表
+	return albums.collect(groupingBy(Album::getMainMusician, mapping(Album::getName, toList())));
+}
+
+// 下面是lambda表达式给 Map 操作带来的一些语法糖
+
+//  Map作为本地缓存使用，有键值对时直接返回，无键值对查找填入并返回的的场景
+//  当前可以使用 computeIfPresent 直接实现
+Map<String, String> artistCache = new HashMap<>();
+artistCache.computeIfPresent(name, this::readArtistFromDB);  // 此处调用本地封装类中的 readArtistFromDB 方法
+
+//  Map中value为List，计算List元素做统计分析的场景
+Map<Artist, Integer> countOfAlbums = new HashMap<>();
+albumsByArtist.forEach( (artist, albums) -> { countOfAlbums.put(artist, albums.size()); } );
+
+//  并行化数组操作
+public static double[] parallelInitialize(int size) {
+	double[] values = new double[size];
+	Arrays.parallelSetAll(values, i -> i);
+	return values;
+}

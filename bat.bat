@@ -9,3 +9,6 @@ netstat -an
 
 查看并过滤端口
 netstat -an | findstr "8080"
+
+清除缓存域名
+ipconfig /flushdns

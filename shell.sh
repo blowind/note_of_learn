@@ -187,9 +187,16 @@ sysctl -p
 --查看系统默认的最大文件句柄数，系统默认是1024
 ulimit -n
 
-----查看当前进程打开了多少句柄数
+----查看当前进程打开了多少句柄数（list open files）
 lsof -n|awk '{print $2}'|sort|uniq -c|sort -nr|more
 
 
 ---查看当前系统一个进程支持打开最大文件句柄数
 cat /proc/sys/fs/file-max
+
+---- 查看进程打开的端口信息
+ ##  -t 仅显示tcp相关选项，-u 仅显示udp相关选项，-n 拒绝显示别名，尽量用数字显示，-l 仅列出有在listen的服务状态， -p 显示建立相关链接的程序名
+netstat -tunlp | grep 端口号   
+
+---- 查看当前机器访问的本地DNS
+cat /etc/resolv.conf

@@ -1,0 +1,2 @@
+curl "http://www.baidu.com" -HI                 ##  查看返回的HTTP BODY
+curl "http://www.baidu.com" -I                  ##  查看返回的HTTP头
