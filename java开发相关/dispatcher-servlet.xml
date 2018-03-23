@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+            http://www.springframework.org/schema/context 
+            http://www.springframework.org/schema/context/spring-context-4.0.xsd
+            http://www.springframework.org/schema/aop 
+            http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+            http://www.springframework.org/schema/tx 
+            http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+            http://www.springframework.org/schema/mvc 
+            http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+            http://www.springframework.org/schema/context 
+            http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+			
+	<!-- 
+	本文件是spring mvc上下文加载的bean文件，主要配置每个servlet相关的bean，例如视图解析器，拦截器，文件上传解析器 
+	可以通过web.xml里 DispatcherServlet 参数 init-param contextConfigLocation 指定，
+	如果不指定，则名字必须为本文件名 dispatcher-servlet.xml 并且必须放在 web.xml 相同的路径下
+	-->
+			
+</beans>

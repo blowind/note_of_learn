@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+		 version="3.0">
+		 
+		 
+	<!-- 上下文参数，这类配置重在	  -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:applicationContext.xml</param-value>
+	</context-param>
+	
+	
+	
+	<!-- 
+	【作用及关联】
+	加载 Spring 配置文件并生成相应上下文
+	ContextLoaderListener 监听容器初始化事件，初始化一个根上下文 applicationContext ，即《Spring的上下文》
+	该上下文会根据 context-param 配置指向的 bean 文件生成加载所有 bean 并作为其上下文
+
+	1、对于一个web应用，web容器提供一个全局context供其使用，这个context就是 servletContext ，为其后续的spring IoC容器提供宿主环境。
+	
+	2、web容器启动时会触发容器初始化事件， ContextLoaderListener 会监听这个事件，初始化一个根上下文即 WebApplicationContext
+	   实现类为 XmlWebApplicationContext ，这个就是Spring的IoC容器，
+	   spring以 org.springframework.web.context.WebApplicationContext 的 ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE 变量值作为key 
+	   将前述 WebApplicationContext 存储到 servletContext 中
+	-->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	
+	<!-- 
+	【作用及关联】
+	加载 Spring mvc 配置文件并生成相应的上下文，通过其下的 init-param 指定
+	
+	3、 DispatcherServlet 在初始化会建立自己的IoC容器用以持有Spring mvc相关的 bean ，它在建立的时候会通过
+	org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE 为key从 servletContext 
+	中获取根上下文作为自己上下文的父上下文，它的实现类也是 XmlWebApplicationContext 	
+	在建立之后会以和自己 servlet-name 便签有关的名称存储在 servletContext 中（例如示例情况选择的key就是 hessianServlet），
+	这样每个servlet就拥有自己独立的bean及根上下文共享的bean
+	-->
+	<servlet>
+		<servlet-name>hessianServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/hessian-spring.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+ 	<servlet-mapping>
+ 		<servlet-name>hessianServlet</servlet-name>
+ 		<url-pattern>/*</url-pattern>
+ 	</servlet-mapping>
+		 
+ </web-app>

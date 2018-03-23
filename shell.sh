@@ -182,10 +182,48 @@ sysctl -p
 某个进程开了几个句柄 ：lsof -p pid |wc -l    
 也可以看到某个目录 /文件被什么进程占用了,显示已打开该目录或文件的所有进程信息 ：lsof path/filename 
 
-
+-- 查看当前系统的限制 
+[root@tw-service ~]# ulimit -a
+core file size          (blocks, -c) 0
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 31236
+max locked memory       (kbytes, -l) 64
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 1024               ###  Linux操作系统对一个进程打开的文件句柄数量的限制
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+stack size              (kbytes, -s) 8192
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 31236
+virtual memory          (kbytes, -v) unlimited
+file locks                      (-x) unlimited
 
 --查看系统默认的最大文件句柄数，系统默认是1024
 ulimit -n
+
+-- 修改当前环境最大文件句柄数为65535，包括软限制和硬限制，修改的数值只对当前登录用户的目前使用环境有效,系统重启或者用户退出后就会失效
+ulimit -SHn 65535
+
+-- 查看整个系统显示句柄数的配置文件
+cat /proc/sys/fs/file-max           ##  测试环境中返回 792132
+
+-- 查看整个系统当前使用的文件句柄数量
+cat /proc/sys/fs/file-nr
+
+-- 通过配置修改最大文件句柄数，修改后root用户立即生效(方法一)
+在 /etc/sysctl.conf  文件中添加  ulimit -SHn 65535  ,但是该方法对普通用户的 ulimit -a 无效，只是/proc/sys/fs/file-max的值变了
+
+-- 过配置修改最大文件句柄数(方法二)
+在 /etc/security/limits.conf 文件中添加
+* soft nofile 32768
+* hard nofile 65536
+将文件句柄限制统一改成软32768，硬65536。配置文件最前面的是指domain，设置为星号代表全局，另外你也可以针对不同的用户做出不同的限制
+注意：这个当中的硬限制是实际的限制，而软限制，是warnning限制，只会做出warning；其实ulimit命令本身就有分软硬设置，加-H就是硬，加-S就是软
+默认显示的是软限制，如果运行ulimit命令修改的时候没有加上的话，就是两个参数一起改变
+
 
 ----查看当前进程打开了多少句柄数（list open files）
 lsof -n|awk '{print $2}'|sort|uniq -c|sort -nr|more
@@ -200,3 +238,6 @@ netstat -tunlp | grep 端口号
 
 ---- 查看当前机器访问的本地DNS
 cat /etc/resolv.conf
+
+----  清空域名缓存
+service nscd restart
