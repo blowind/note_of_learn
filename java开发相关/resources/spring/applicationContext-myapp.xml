@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+             http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+         <!-- ######################   配置 DataSource 的基本方式  #################### -->
+
+	<!-- 通过指定具体的类来配置 DataSource ，此处选用apache中的BasicDataSource -->	
+	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource" >
+		<!-- 基本属性 包括驱动类、 url、username、password -->
+		<property name="driverClassName" value="${myappname.jdbc.driver}"/>
+		<property name="url" value="${myappname.jdbc.url}" />
+		<property name="username" value="${myappname.jdbc.username}" />
+		<property name="password" value="${myappname.jdbc.password}" />
+		<property name="defaultAutoCommit" value="false" />
+	   
+		<!-- 配置MySQL线程池初始化大小、最小、最大 -->
+		<property name="initialSize" value="${myappname.jdbc.initialPoolSize}" />
+		<property name="minIdle" value="${myappname.jdbc.minPoolSize}" />
+		<property name="maxActive" value="${myappname.jdbc.maxPoolSize}" />
+		
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+		
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" /><!--空闲时是否进行验证，检查对象是否有效 -->
+		<property name="testOnBorrow" value="false" /><!--取得对象时是否进行验证，检查对象是否有效 -->
+		<property name="testOnReturn" value="false" /><!--返回对象时是否进行验证 -->
+    </bean>
+	
+	<!-- 使用JNDI来配置dataSource -->
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>java:comp/env/jdbc/c2c</value>
+		</property>
+	</bean>
+	
+	<bean class="com.calanger.common.test.MockJndiContext">
+		<property name="jndiObjects">
+			<map>
+				<entry key="java:comp/env/jdbc/c2c" value-ref="driverManagerDataSource" />
+			</map>
+		</property>
+	</bean>
+	  
+	<bean name="driverManagerDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>com.mysql.jdbc.Driver</value>
+		</property>
+		<property name="url">
+			<value>jdbc:mysql://localhost:3306/c2c?useUnicode=true&amp;characterEncoding=UTF-8</value>
+		</property>
+		<property name="username">
+			<value>c2c</value>
+		</property>
+		<property name="password">
+			<value>123456</value>
+		</property>
+	</bean>
+	
+	
+	<!-- 集成myBaits框架,配置sqlSessionFatory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 配置资源池 -->
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="cn.kd.exchange.dto" />
+		<!-- myBatis本身相关的配制 -->
+		<property name="configLocation" value="classpath:/spring/mybatisConfig.xml" />
+		<!-- 所有对象和关系表的mapper配置所在位置 -->
+		<property name="mapperLocations" value="classpath:/mybatis/*mapper.xml" />
+		<property name="configurationProperties">
+			<props>
+				<prop key="dialect">mysql</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		 <!-- dao目录下存放的全部是接口，每个接口对应一个同名的mapper xml映射文件，接口中放置所有数据库调用方法 -->
+		<property name="basePackage" value="cn.kd.exchange.job.dao" />
+		<!-- 前述所有接口类上的注解类原型声明 -->
+		<property name="annotationClass" value="cn.kd.exchange.framework.annotation.MyBatisRepository" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+	
+</beans>
