@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd  
+           http://www.springframework.org/schema/context  
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd">  
+    <context:annotation-config />  
+  
+    <bean id="userservice" class="com.test.UserServiceImplement">  
+        <property name="s">  
+            <set>  
+                <value>SetValue1</value>  
+                <value>SetValue2</value>  
+                <value>SetValue3</value>  
+            </set>  
+        </property>  
+  
+        <property name="m">  
+            <map>  
+                <entry key="MapKey1" value="MapValue1"></entry>  
+                <entry key="MapKey2" value="MapValue2"></entry>  
+                <entry key="MapKey3" value="MapValue3"></entry>  
+            </map>  
+        </property>  
+  
+        <property name="p">  
+            <props>  
+                <prop key="PropertiesKey1">PropertiesValue1</prop>  
+                <prop key="PropertiesKey2">PropertiesValue2</prop>  
+                <prop key="PropertiesKey3">PropertiesValue3</prop>  
+            </props>  
+        </property>  
+  
+        <property name="l">  
+            <list>  
+                <value>ListValue1</value>  
+                <value>ListValue2</value>  
+                <value>ListValue3</value>  
+            </list>  
+        </property>  
+    </bean>  
+</beans>

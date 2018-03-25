@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+				"-//mybatis.org//DTD Mapper 3.0//EN"
+				"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="web.mapper.POJOMapper">	
+
+	<!-- 由于在 sqlSessionFactory 这个 bean 中配置了 typeAliasesPackage ，因此此处可以直接使用类名，省略包名  -->
+	<resultMap id="POJOMap" type="POJOModel">
+		<id property="id" column="id"/>
+		<result property="userName" column="user_name"/>
+		<result property="userPassword" column="user_password"/>
+		<result property="userEmail" column="user_email"/>
+		<result property="userInfo" column="user_info"/>
+		<result property="headImg" column="head_img" jdbcType="BLOB"/>
+		<result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<select id="selectById" resultMap="POJOMap">
+		select * from sys_user where id = #{id}
+	</select>
+</mapper>

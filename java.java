@@ -2187,3 +2187,12 @@ public static double[] parallelInitialize(int size) {
 	Arrays.parallelSetAll(values, i -> i);
 	return values;
 }
+
+串行计算曲目长度
+public int serialArraySum() {
+	return albums.stream().flatMap(Album::getTracks).mapToInt(Track::getLength).sum();
+}
+并行计算曲目长度
+public int parallelArraySum() {
+	return albums.parallelStream().flatMap(Album::getTracks).mapToInt(Track::getLength).sum();
+}
