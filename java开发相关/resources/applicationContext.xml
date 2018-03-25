@@ -41,7 +41,7 @@
 	<!-- 也可以通过下面的方式加载配置文件 -->
 	<!-- <context:property-placeholder location="db.properties"/> -->
 	
-	<import resource="classpath:spring/applicationContext.xml" />
+	<import resource="classpath:spring/applicationContext-mvc.xml" />
 	<import resource="classpath:spring/hessian-spring-client.xml" />
 	<import resource="classpath:spring/new-mq-consumer.xml" />
 	<import resource="classpath:spring/redisConfig.xml" />

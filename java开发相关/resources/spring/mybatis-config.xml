@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration  
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-config.dtd"> 
+  
+ 
+<!-- 本文章仅配置mybatis包运行相关的环境设置，具体与业务相关的mybatis语句不放入本文档 -->
+<configuration> 
+
+<settings>
+		<!-- 使用slf4j记录 mybatis运行过程中的日志，此配置指定self4j的配置文件 -->
+		<setting name="logImpl" value="LOG4J"/>
+		
+		<!-- 配置mybatis自动将 _ 分隔的数据库列名转换为驼峰形式的 DAO层 POJO 的属性名，自动映射 -->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		
+		<!-- 对支持主键自增的数据库，强制 JDBC 支持生成的键并将主键id返回到原操作对象中。 需要适合的驱动。 如果设置为 true 则这个设置强制生成的键被使用, 尽管一些驱动拒绝兼 容但仍然有效(比如 Derby) --> 
+	    <setting name="useGeneratedKeys" value="true"/>
+		
+		<!-- 这个配置使全局的映射器启用或禁用缓存 -->  
+	    <setting name="cacheEnabled" value="true" />  
+		
+		<!-- 对于未知的SQL查询，允许返回不同的结果集以达到通用的效果 -->      
+	    <setting name="multipleResultSetsEnabled" value="true"/> 
+		
+		<!-- 配置默认的执行器。SIMPLE 执行器没有什么特别之处。REUSE 执行器重用预处理语句。BATCH 执行器重用语句和批量更新 --> 
+	    <setting name="defaultExecutorType" value="REUSE" />  
+		
+		<!-- 全局启用或禁用延迟加载。当禁用时，所有关联对象都会即时加载。 -->  
+	    <setting name="lazyLoadingEnabled" value="false" />  
+		<setting name="aggressiveLazyLoading" value="true"/>
+		
+		<!-- 设置超时时间，它决定驱动等待一个数据库响应的时间。 -->  
+	    <setting name="defaultStatementTimeout" value="25000" /> 
+	</settings>
+
+</configuration>
