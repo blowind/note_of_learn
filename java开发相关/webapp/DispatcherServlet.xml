@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
-    xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xmlns:p="http://www.springframework.org/schema/p" 
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+	   xmlns:tx="http://www.springframework.org/schema/tx"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
             http://www.springframework.org/schema/context 
@@ -21,6 +24,15 @@
 	可以通过web.xml里 DispatcherServlet 参数 init-param contextConfigLocation 指定，
 	如果不指定，则名字必须为本文件名 dispatcher-servlet.xml 并且必须放在 web.xml 相同的路径下
 	-->
+	
+	<!-- 设置控制器的包名，自动递归扫描的路径查找旗下  -->
+	<context:component-scan base-package="web.controller" />
+	<!-- 在前述配置指定的路径下扫描注册 @Controller 注解的 bean 对象 -->
+	<mvc:annotation-driven/>
+	<!-- 指示需要单独处理的静态资源，这些资源不经过 DispatcherServlet ，
+	     此处第一个配置指示/css下的所有文件课件，第二个允许显示所有.html文件  -->
+	<mvc:resources mapping="/css/**" location="/css/" />
+	<mvc:resources mapping="/*.html" location="/" />
 	
 			
 </beans>

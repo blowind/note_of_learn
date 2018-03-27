@@ -61,16 +61,21 @@
 	这样每个servlet就拥有自己独立的bean及根上下文共享的bean
 	-->
 	<servlet>
-		<servlet-name>hessianServlet</servlet-name>
+		<!-- 默认未指定配置文件时，此处的 servlet-name 用作同目录下 mvc bean 配置文件的文件名，命名规范 servlet-name-servlet.xml -->
+		<servlet-name>DispatcherServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
+		<!--  使用参数指定 dispatcher servlet 的配置文件，则相关的mvc bean不必放在web.xml目录下的 servlet-name-servlet.xml文件中
+		<init-param> 
 			<param-name>contextConfigLocation</param-name>
 			<param-value>classpath:spring/hessian-spring.xml</param-value>
+			或者
+			<param-value>/WEB-INF/config/myservlet-spring.xml</param-value>
 		</init-param>
+		-->
 		<load-on-startup>1</load-on-startup>
 	</servlet>
  	<servlet-mapping>
- 		<servlet-name>hessianServlet</servlet-name>
+ 		<servlet-name>DispatcherServlet</servlet-name>
  		<url-pattern>/*</url-pattern>
  	</servlet-mapping>
 		 

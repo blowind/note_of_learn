@@ -18,7 +18,7 @@
 	名字可以加上业务的特点，保证与<context-param>中指定的名字一致即可
 	 -->
 	 
-	 <!-- 配置Spring自动扫描类， 配置数据库相关的 service bean ，多个扫描路径可以通过逗号分隔 -->
+	 <!-- 配置Spring自动扫描服务类的路径，配置数据库相关的 service bean (须有@Service注解) ，多个扫描路径可以通过逗号分隔 -->
 	<context:component-scan base-package="*.web.service.impl" />
 	 
 	<!-- 批量设置各配置文件的路径  -->
@@ -49,6 +49,43 @@
 	<import resource="classpath:spring/new-mq-consumer.xml" />
 	<import resource="classpath:spring/redisConfig.xml" />
 	<import resource="classpath:spring/scheduledConfig.xml" />
+	
+	
+	<!-- ######################   Bean 配置知识点总结  #################### -->
+	
+	<!--
+	Bean配置中id和name的区别:
+	id和name都是spring 容器中中bean 的唯一标识符，
+	id命名格式必须符合XML ID属性的命名规范 。
+	name: 可以用特殊字符，并且一个bean可以用多个名称：name=“bean1,bean2,bean3”,用逗号或者分号或者空格隔开。
+	如果没有id，则name的第一个名称默认是id 
+	
+	同一个spring配置文件中，bean的 id、name是不能够重复的，否则spring容器启动时会报错。 	如果一个spring容器从多个配置文件中加载配置信息，则多个配置文件中是允许有同名bean的，并且后面加载的配置文件的中的bean定义会覆盖前面加载的同名bean
+	-->
+
+	
+	<!-- 通过工厂方法 newCachedTreadPool 来实例化 java.util.concurrent.Executors 
+	     指定销毁方法，Spring会在销毁改bean时调用 shutdown 方法 -->
+	<bean id="executorService" class="java.util.concurrent.Executors" factory-method="newCachedTreadPool" destroy-method="shutdown" />
+	
+	<!-- 使用bean对象类的构造函数生成bean，其中name部分是形参属性名，value部分是实参的值，类中必须有签名一致的构造函数
+		 对于设置对象的情况，可以使用 ref 指定该类型的一个 bean 的 id 作为入参
+		  -->
+	<bean name="featureProduct" class="springintro.bean.Product">
+		<constructor-arg name="name" value="Ultimate Olive Oil"/>
+		<constructor-arg name="description" value="The purest Olive Oil"/>
+		<constructor-arg name="price" value="9.95"/>
+		<constructor-arg name="address" ref="addressBeanId"/>
+	</bean>
+	
+	<!-- 使用bean对象类的setter方法生成bean并设置属性值，传值和传引用依然适用  -->
+	<bean id="customer" class="springintro.bean.Customer">
+		<property name="firstName" value="Junior"/>
+		<property name="lastName"  value="Moore"/>
+		<property name="myProduct" ref="featureProduct"/>
+	</bean>
+	
+	
 	
 	
 	<!-- ######################   配置 DataSource 的基本方式  #################### -->
