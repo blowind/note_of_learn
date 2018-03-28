@@ -72,11 +72,37 @@
 			<param-value>/WEB-INF/config/myservlet-spring.xml</param-value>
 		</init-param>
 		-->
+		
+		<!--  缺省情况下spring mvc 将加载 当前系统中所有实现了HandlerMapping接口的bean，
+			  此处置为false时，spring mvc将查找名 为“handlerMapping”的bean并作为当前系统中唯一的handlermapping。
+			  如果没有定义handlerMapping的话，则spring mvc将按照org.springframework.web.servlet.DispatcherServlet
+			  所在目录下的 DispatcherServlet.properties中所定义的org.springframework.web.servlet.HandlerMapping
+			  的内容来加载缺省的handlerMapping
+		<init-param>   
+			<param-name>detectAllHandlerMappings</param-name>  
+			<param-value>false</param-value>  
+		</init-param>
+		-->
+		
+		<!--  作用和detectAllHandlerMappings类似，只不过作用对象为handlerAdapter
+		<init-param>   
+			<param-name>detectAllHandlerAdapters</param-name>  
+			<param-value>false</param-value>  
+		</init-param>  
+		-->
+		
+		<!-- 当属性detectAllViewResolvers设置为false时，spring mvc将查找名为viewResolver的bean 来作为当前唯一的ViewResolver 
+		<init-param>  
+			<param-name>detectAllViewResolvers</param-name>  
+			<param-value>false</param-value>  
+		</init-param> 
+		-->
 		<load-on-startup>1</load-on-startup>
 	</servlet>
  	<servlet-mapping>
  		<servlet-name>DispatcherServlet</servlet-name>
- 		<url-pattern>/*</url-pattern>
+		<!-- 此处配置 /* 将匹配所有请求而导致所有jsp和静态内容都无法正常显示，而 / 只匹配缺省的servlet -->
+ 		<url-pattern>/</url-pattern>
  	</servlet-mapping>
 		 
  </web-app>

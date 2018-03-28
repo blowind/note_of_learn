@@ -5,3 +5,8 @@ git clone http://git.forexdaily.cn/hope/admin.git
 git add .
 git commit -m "first add"
 git push
+
+
+git status  ##  查看当前未commit的文件的状态
+
+git diff  filename  ##  查看当前未commit的文件与库上文件的差异

@@ -24,15 +24,104 @@
 	可以通过web.xml里 DispatcherServlet 参数 init-param contextConfigLocation 指定，
 	如果不指定，则名字必须为本文件名 dispatcher-servlet.xml 并且必须放在 web.xml 相同的路径下
 	-->
-	
+
 	<!-- 设置控制器的包名，自动递归扫描的路径查找旗下  -->
 	<context:component-scan base-package="web.controller" />
-	<!-- 在前述配置指定的路径下扫描注册 @Controller 注解的 bean 对象 -->
+	
+	<!-- ######################   mvc 标记的5种方法作用及内涵解释  #################### -->
+	
+	<!-- 在前述配置指定的路径下扫描注册 @Controller 注解的 bean 对象 
+	     实际做的动作：
+		 1、注册 DefaultAnnotationHandlerMapping 和 AnnotationMethodHandlerAdapter 两个bean，
+		    及一系列缺省的messageconverter(需要classpath中有相应的lib包的支持)。
+	-->
 	<mvc:annotation-driven/>
-	<!-- 指示需要单独处理的静态资源，这些资源不经过 DispatcherServlet ，
-	     此处第一个配置指示/css下的所有文件课件，第二个允许显示所有.html文件  -->
+	<!-- 实际执行的动作就是生成如下的 bean： 
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="order" value="0" />
+	</bean>
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="webBindingInitializer">
+			<bean class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+				<property name="conversionService" ref="conversion-service" />
+				<property name="validator" ref="validator" />
+			</bean>
+		</property>
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+	<bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+	-->
+	
+	<!-- 注解自驱动加载时，额外添加新的 messageConverter ，需 spring 3.1 之后的版本才支持 -->
+	<mvc:annotation-driven>  
+		<mvc:message-converters>  
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter" />  
+			<bean class="org.springframework.http.converter.ResourceHttpMessageConverter" />  
+			<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />  
+		</mvc:message-converters>  
+	</mvc:annotation-driven>  
+
+	<!-- 注册HandlerInterceptors 或 WebRequestInterceptors 拦截器来拦截request请求 -->
+	<mvc:interceptors>  
+		<mvc:interceptor>  
+			<mvc:mapping path="/*" />  
+			<bean class="net.zhepu.web.interceptor.Testinterceptor" />  
+		</mvc:interceptor>  
+	</mvc:interceptors>  
+	
+	<!--  将指定路径的请求直接转到对应的view上，而不需要特定的Controller来处理请求。  -->
+	<mvc:view-controller path="/hello/*" view-name="helloWorld"/>  
+	
+	<!-- 将指定URL 的匹配模式来访问静态文件，指示需要单独处理的静态资源，这些资源不经过 DispatcherServlet ，
+	<!-- 指示/css下的所有文件可见   -->
 	<mvc:resources mapping="/css/**" location="/css/" />
+	<!--  允许显示所有.html文件  -->
 	<mvc:resources mapping="/*.html" location="/" />
+	<!-- 表示将/WEB-INF/js/目录映射到/js/目录，cache超时时间为3600秒。 
+		 jsp中引用 js/helloWorld.js 实际上指向的是 /WEB-INF/js/helloWorld.js -->
+	<mvc:resources mapping="/js/**" location="/WEB-INF/js/" cache-period="3600"/>  
+	
+	
+	
+	<!-- ######################   配置 视图解析器  #################### -->
+	
+	<!-- InternalResourceViewResolver为UrlBasedViewResolver的子类，它将 InternalResourceView 作为缺省的View类，
+		 如果当前classpath中有jstl的jar包时则使用JstlView作为缺省的view来渲染结果
+		InternalResourceViewResolver还提供了 alwaysInclude 属性来要求返回的结果使用 include 方式而不是 forward 方式，
+		注意：InternalResourceViewResolver必须总是赋予最低的优先级（最大的order值），
+			  因为不管返回什么视图名称，它都将解析视图。
+		      如果它的优先级高于其它解析器的优先级的话，它将使得其它具有较低优先级的解析器没有机会解析视图	-->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+		<property name="order" value="2" />
+	</bean>
+	
+	<!-- 意义同上，UrlBasedViewResolver将使用JstlView对象来渲染结果，并将handler method返回的modelAndView基础上， 
+		 加上目录前缀/WEB-INF/jsp/和文件名称后缀.jsp。
+		 例如结果返回的viewName为helloworld，则对应的实际jsp为/WEB-INF/jsp/helloworld.jsp   -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">  
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />  
+		<property name="prefix" value="/WEB-INF/jsp/" />  
+		<property name="suffix" value=".jsp" />  
+	</bean> 
+	
+	<!-- 当返回的viewName的前缀为forward：时，spring mvc将结果通过forward的方式转到对应的视图， 
+			例如forward:helloworld。这也是spring mvc缺省的使用模式。
+		当返回的viewName的前缀为redirect：时，spring mvc将结果通过redirect的方式转到对应的视图。
+			例如redirect:helloworld  -->
+	
+	
 	
 	
 	<!-- 添加过滤器，用来对传入的参数进行过滤处理，具体哪些入参会进行过滤根据实现bean的泛型类型进行匹配 -->
@@ -81,6 +170,12 @@
                 </bean>
             </set>
         </property>
+    </bean>
+	
+	<!--  指定配置文件的文件并加载，当前知道的该配置文件可以给 validator 验证器使用  -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<!-- 此处精确到文件名，只是不带后缀，后缀为 .properties -->
+        <property name="basename" value="/WEB-INF/resource/validator/messages" />
     </bean>
 	
 			

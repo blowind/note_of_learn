@@ -60,6 +60,17 @@ for line in fileinput.input(inplace=True):
 	num = fileinput.lineno()
 	print '%-40s # %2i' % (line, num)
 	
+result = {}          ###  统计文件中某个特殊字段的出现的次数
+for line in fileinput.input("./data.txt"):
+	line = line.strip()
+	out = line.split("/")
+	if result.has_key(out[3]):             ## 此处统计的是第4个字段(下标是3)
+		result[out[3]] = result[out[3]] + 1
+	else: 
+		result[out[3]] = 1
+	print out[3]
+print result.items()
+	
 
 	###  就是数学意义上的集合，不包含重复元素
 a = set([1, 2, 3])   ## 集合，因为集合是可变的，所以不能作为字典的键

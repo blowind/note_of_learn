@@ -72,6 +72,15 @@ public class ArticleController extends PaginationController {
 		model隐含填充了命令对象以及标注了@ModelAttribute字段的存取器被调用所返回的值
 ***/
 	
+	/*
+		value:  表示需要匹配的url的格式。
+		method: 表示所需处理请求的http 协议(如get,post,put,delete等)，可选值为RequestMethod这个enum的值。
+		params: 格式为”paramname=paramvalue” 或 “paramname!=paramvalue”。不带参数则表示paramvalue可以为任意值。
+				如params =  {"param1=1","param2!=2","param3"},表示对应的url必须包括param1,param2,param3三个参数，
+				其中param1的值必须为1，param2的值不能为2，param3的值可以为任意值。
+		headers:用来限定对应的reqeust请求的headers中必须包括的内容，例如 headers={"Connection=keep-alive"}, 
+				表示请求头中的connection的值必须为keep-alive。
+	*/
 	/* 指定本方法映射的路径及HTTP请求方法，可以用,分隔的大括号指定多个HTTP请求方法，仅一个HTTP方法时无需花括号  */
 	@RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})    
     public String index(@ModelAttribute("q") Article q, @RequestParam(defaultValue = "1") int pageNumber, Model model) {
@@ -90,6 +99,7 @@ public class ArticleController extends PaginationController {
         return "/article/index";
     }
 	
+	/*  @RequestMapping 参数中的url，除了常规的url外，也可以使用url template来定义形成类似REST请求的url  */
 	@RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
     public String update(Article article, @PathVariable int id, @RequestParam("picFile") MultipartFile picFile, String redirectUrl, RedirectAttributes redirectAttributes) {
         Map<String, String> result = UpYunUtils.upload(picFile, "/article");
