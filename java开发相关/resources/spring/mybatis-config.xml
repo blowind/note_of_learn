@@ -33,5 +33,21 @@
 		<!-- 设置超时时间，它决定驱动等待一个数据库响应的时间。 -->  
 	    <setting name="defaultStatementTimeout" value="25000" /> 
 	</settings>
+	
+	<!--配置DVO(Data Value Object)的别名，这样在具体的mapper.xml中就不用写model对象的全路径名-->
+	<typeAliases>
+		<package name="com.java.code.model"/>
+	</typeAliases>
+	
+	<!-- 使用spring框架之后，是在sqlSessionFactory对象的mapperLocations属性中指定mapper.xml的位置，因此下面这种配置仅在纯mybatis环境下使用 
+	-->
+	<!--
+	<mappers>
+		单个mapper.xml文件的配置
+		<mapper resource="com/zxf/simple/mapper/CountryMapper.xml"/>
+		多个mapper.xml文件的配置可以集中存放并指定，注意此处是mapper.xml的点分路径，而不是接口对象的路径
+		<package name="com.zxf.zxfbatis.simple.mapper"/>
+	</mappers>
+	-->
 
 </configuration>

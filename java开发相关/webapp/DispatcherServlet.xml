@@ -34,5 +34,54 @@
 	<mvc:resources mapping="/css/**" location="/css/" />
 	<mvc:resources mapping="/*.html" location="/" />
 	
+	
+	<!-- 添加过滤器，用来对传入的参数进行过滤处理，具体哪些入参会进行过滤根据实现bean的泛型类型进行匹配 -->
+	<mvc:annotation-driven conversion-service="conversionService" />
+	<!-- 使用工厂方法生成所有过滤器的bean，供前述mvc注解驱动扫描 -->
+	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+			<!-- 此处列出所有的过滤器bean -->
+            <list>
+				<!-- 列出本地具体过滤器bean的实现类，若通过构造函数初始化bean，则写明入参，也可以通过setter初始化 -->
+                <bean class="converter.StringToLocalDateConverter">
+                    <constructor-arg type="java.lang.String" value="MM-dd-yyyy" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+	
+	
+	<!-- 添加格式化转换器，也是用来处理入参，但是限制入参只能是String类型，转换结果类型可以通过接口的泛型指定 
+		 本工厂bean可以用formatters属性注册formatter，同时用converters属性注册converter-->
+	<context:component-scan base-package="formatter"/>
+    <mvc:annotation-driven conversion-service="conversionService"/>
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="formatters">
+			
+            <!-- 指定格式化器 -->
+			<set>
+                <bean class="formatter.LocalDateFormatter">
+                    <constructor-arg type="java.lang.String" value="MM-dd-yyyy"/>
+                </bean>
+            </set>
+        </property>
+ 		<!-- <property name="converters">
+				<list><bean /></list>
+			 </property>  -->
+    </bean>
+	
+	<!-- 使用Registrar注册formatter，由于所有的formatter对象都会在 MyFormatterRegistrar 实现中放入，
+	     因此不需要 component-scan，此种写法只是省掉了xml里面的扫描配置，formatter实现类LocalDateFormatter不能省略 -->
+	<mvc:annotation-driven conversion-service="conversionService"/>
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="formatterRegistrars">
+            <set>
+                <bean class="formatter.MyFormatterRegistrar">
+                    <constructor-arg type="java.lang.String" value="MM-dd-yyyy"/>
+                </bean>
+            </set>
+        </property>
+    </bean>
+	
 			
 </beans>

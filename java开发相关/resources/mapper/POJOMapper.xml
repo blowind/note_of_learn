@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+				"-//mybatis.org//DTD Mapper 3.0//EN"
+				"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+				
+				
+<!-- 注意此处namespace很重要，指明了java代码中对应的接口类的全限定名 -->
+<mapper namespace="com.zxf.zxfbatis.simple.mapper.UserMapper">		
+
+	<!-- type 指明结果对应的model中的POJO对象 -->
+	<resultMap id="userMap" type="com.zxf.zxfbatis.simple.model.SysUser">
+		<id property="id" column="id"/>
+		<result property="userName" column="user_name"/>
+		<result property="userPassword" column="user_password"/>
+		<result property="userEmail" column="user_email"/>
+		<result property="userInfo" column="user_info"/>
+		<result property="headImg" column="head_img" jdbcType="BLOB"/>
+		<result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- resultMap 指向前述id，表明返回结果的映射关系 -->
+	<select id="selectById" resultMap="userMap">
+		select * from sys_user where id = #{id}
+	</select>
+	
+	<select id="selectAll" resultType="com.zxf.zxfbatis.simple.model.SysUser">
+		select id,
+			user_name userName,
+			user_password userPassword,
+			user_email userEmail,
+			user_info userInfo,
+			head_img headImg,
+			create_time createTime
+		from sys_user
+	</select>
+	
+	<insert id="insert3">
+		insert into sys_user(
+			user_name, user_password, user_email,
+			user_info, head_img, create_time
+		)values(
+			#{userName}, #{userPassword}, #{userEmail},
+			#{userInfo}, #{headImg, jdbcType=BLOB},
+			#{createTime, jdbcType=TIMESTAMP}
+		)
+		<!-- 返回主键ID到插入对象中的一种方法，此处使用的是MySQL的语法 -->
+		<selectKey keyColumn="id" resultType="long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<select id="selectByUser" resultType="com.zxf.zxfbatis.simple.model.SysUser">
+		select id, user_name, user_password, user_email, user_info, head_img,
+		create_time
+		from sys_user
+		<!-- 通过where标签去掉开头可能多余的and或者or，本质是用choose-when实现，默认支持 -->
+		<where>
+			<if test="userName != null and userName != ''">
+				<bind name="userNameLike" value="'%' + userName + '%'"/>
+				and user_name like #{userNameLike}
+			</if>
+			<if test="userEmail != null and userEmail != ''">
+				and user_email = #{userEmail}
+			</if>
+		</where>
+	</select>
+	
+	<update id="updateByIdSelective">
+		update sys_user
+		<!-- 通过set标签去掉结尾可能多余的, 本质是用choose-when实现 -->
+		<set>
+		<if test="userName != null and userName != ''">
+			user_name = #{userName},
+		</if>
+		<if test="userPassword != null and userPassword != ''">
+			user_password = #{userPassword},
+		</if>
+		id = #{id}
+		</set>
+		where id = #{id}
+	</update>
+	
+	<select id="selectByIdOrUserName" resultType="com.zxf.zxfbatis.simple.model.SysUser">
+		select id, user_name, user_password, user_email, user_info, head_img, create_time
+		from sys_user
+		<where>
+		<!-- 使用choose-when根据传入参数选择合适的取值条件是，when条件成立的放入，仅在无任何when成立时执行otherwise -->
+			<choose>
+				<when test="id != null">
+					and id = #{id}
+				</when>
+				<when test="userName != null and userName != ''">
+					and user_name = #{userName}
+				</when>
+				<otherwise>
+					and 1 = 2
+				</otherwise>
+			</choose>
+		</where>
+	</select>
+	
+	<!-- 此处由于外部配置了 mapUnderscoreToCamelCase ，因此可以省略通过别名映射对象属性的工作 -->
+	<select id="selectByIdList" resultType="com.zxf.zxfbatis.simple.model.SysUser">
+		SELECT id, user_name, user_password, user_email, user_info, head_img, create_time
+		FROM sys_user
+		where id IN
+		<!-- 通过foreach范围查找 -->
+		<foreach collection="list" open="(" close=")" separator="," item="id" index="i">
+			#{id}
+		</foreach>
+	</select>
+	
+	<insert id="insertList" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_user(
+		user_name, user_password, user_email,
+		user_info, head_img, create_time
+		)VALUES
+		<foreach collection="list" item="user" separator=",">
+			(
+			#{user.userName}, #{user.userPassword}, #{user.userEmail},
+			#{user.userInfo}, #{user.headImg, jdbcType=BLOB},
+			#{user.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+	
+	<update id="updateByMap">
+		update sys_user
+		SET
+		<foreach collection="_parameter" item="val" index="key" separator=",">
+			${key} = #{val}
+		</foreach>
+		where id = #{id}
+	</update>
+		
+</mapper>
