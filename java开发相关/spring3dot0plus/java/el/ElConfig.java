@@ -16,7 +16,7 @@ import org.apache.commons.io.IOUtils;
 @PropertySource("classpath:/test.properties")  /*  注入配置文件 */
 public class ElConfig {
     /* 注入普通字符串 */
-    @Value("I lvoe you!")
+    @Value("I love you!")
     private String normal;
 
     /* 注入操作系统属性 */
