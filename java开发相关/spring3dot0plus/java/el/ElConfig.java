@@ -15,6 +15,8 @@ import org.apache.commons.io.IOUtils;
 @ComponentScan("com.zxf.el")
 @PropertySource("classpath:/test.properties")  /*  注入配置文件 */
 public class ElConfig {
+	/*  ################   字符串不能注入static变量，只能是本地局部变量(可以是final)   ################  */
+	
     /* 注入普通字符串 */
     @Value("I love you!")
     private String normal;

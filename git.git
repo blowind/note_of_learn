@@ -10,3 +10,9 @@ git push
 git status  ##  查看当前未commit的文件的状态
 
 git diff  filename  ##  查看当前未commit的文件与库上文件的差异
+
+git log --stat  ##  查看最近上库记录
+
+git show <commit-hashId>      ##   便可以显示某次提交的修改内容
+
+git show <commit-hashId> filename  ##  显示某次提交的某个内容的修改信息
