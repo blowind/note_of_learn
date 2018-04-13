@@ -3,7 +3,15 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 		 version="3.0">
-		 
+
+	<!-- 在Web容器启动时，web.xml的加载顺序一般是这样的: context-param ->listener -> filter -> servlet   -->
+	
+	<!-- 以下内容配置时可选	  -->
+	<web-app>    
+		<display-name>定义了WEB应用的名字</display-name>    
+		<description>声明WEB应用的描述信息</description>
+	</web-app>
+
 		 
 	<!-- 上下文参数，这类配置重在	  -->
 	<context-param>
@@ -11,27 +19,25 @@
 		<param-value>classpath*:applicationContext.xml</param-value>
 	</context-param>
 	
+
+
+	<!-- 当配置了多个监听器时，监听器的执行先后顺序是按照web.xml里面定义的先后顺序来执行的 -->
 	
-	<!-- 添加编码过滤器，强制所有进入文本都按照 UTF-8 编码 -->
-	<filter>
-		<filter-name>encodingFilter</filter-name>
-		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-			<init-param>
-			  <param-name>encoding</param-name>
-			  <param-value>UTF-8</param-value>
-			</init-param>
-			<init-param>
-			  <param-name>forceEncoding</param-name>
-			  <param-value>true</param-value>
-			</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>encodingFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	
-	
-	
+	<!-- 	
+	Servlet API中定义了8个监听器接口，用于监听ServletContext、HttpSession、ServletRequest对象的生命周期事件以及对象属性改变事件：
+	1、javax.servlet.ServletContextListener               Servlet上下文对象初始化或者销毁时通知回调，必配web.xml
+	2、javax.servlet.ServletContextAttributeListener      Servlet上下文属性列表发生变化时通知回调，必配web.xml
+	3、javax.servlet.http.HttpSessionListener             Session创建或者销毁时通知回调，必配web.xml
+	4、javax.servlet.http.HttpSessionActivationListener   实现本接口的对象，绑定到Session中，在Session被钝化或者激活时，对象通知回调，必配web.xml
+	5、javax.servlet.http.HttpSessionAttributeListener    Session属性列表发生改变时得到通知，必配web.xml
+	6、javax.servlet.http.HttpSessionBindingListener      实现接口的对象绑定到Session或者从Session删除时通知回调，监控的是整个类作为Session键值对中的值增删时的变化，无需单独配置
+	7、javax.servlet.ServletRequestListener               request对象初始化或者销毁时通知回调，必配web.xml
+	8、javax.servlet.ServletRequestAttributeListener      request对象属性发生改变时通知回调，必配web.xml
+ 	-->
+
+	<listener>
+		<listener-class>org.zxf.MyServletContextListener</listener-class>
+	</listener>
 	<!-- 
 	【作用及关联】
 	加载 Spring 配置文件并生成相应上下文
@@ -48,6 +54,47 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+
+
+
+	<!-- 	当请求资源匹配多个 filter-mapping 时，filter 拦截资源是按照 filter-mapping 配置节出现的顺序来依次调用 doFilter() 方法的 -->
+	
+	<!-- 添加编码过滤器，强制所有进入文本都按照 UTF-8 编码 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+		  <param-name>encoding</param-name>
+		  <param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+		  <param-name>forceEncoding</param-name>
+		  <param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+    <!-- 自己实现的类似功能的过滤器 -->
+	<filter>
+		<filter-name>urlFilter</filter-name>
+		<filter-class>web.filter.UrlFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>urlFilter</filter-name>
+		<!-- 指定需要过滤的url的类型 -->
+		<url-pattern>/*</url-pattern>
+		<!-- 指定需要过滤的servlet名字 -->
+		<servlet-name>*</servlet-name>
+		<!-- 指定过滤的场景，默认不配置时为REQUEST -->
+		<dispatcher>REQUEST</dispatcher>    <!-- 匹配直接访问情况 -->
+		<dispatcher>INCLUDE</dispatcher>    <!-- 匹配通过 RequestDispatcher.include() 方法访问场景 -->
+		<dispatcher>FORWARD</dispatcher>    <!-- 匹配通过 RequestDispatcher.forward() 方法访问场景 -->
+		<dispatcher>ERROR</dispatcher>      <!-- 匹配目标资源通过声明式异常处理机制调用场景 -->
+	</filter-mapping>
+
 	
 	
 	<!-- 
@@ -97,7 +144,7 @@
 			<param-value>false</param-value>  
 		</init-param> 
 		-->
-		<load-on-startup>1</load-on-startup>
+		<load-on-startup>1</load-on-startup>   <!-- 有本配置的是自启动servlet -->
 	</servlet>
  	<servlet-mapping>
  		<servlet-name>DispatcherServlet</servlet-name>

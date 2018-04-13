@@ -70,13 +70,38 @@
 		</mvc:message-converters>  
 	</mvc:annotation-driven>  
 
+
+
 	<!-- 注册HandlerInterceptors 或 WebRequestInterceptors 拦截器来拦截request请求 -->
 	<mvc:interceptors>  
-		<mvc:interceptor>  
+		<mvc:interceptor> 
+			<!-- 在外部指定Interceptor Bean匹配的路径，这样在实现中就不需要判断url了，此处匹配所有请求 -->
 			<mvc:mapping path="/*" />  
-			<bean class="net.zhepu.web.interceptor.Testinterceptor" />  
+			<bean class="com.spring.handler.TimeBasedAccessInterceptor">
+				<property name="openingTime" value="9" />    
+	    		<property name="closingTime" value="12" />  
+			</bean>  
 		</mvc:interceptor>  
 	</mvc:interceptors>  
+
+	<!-- 拦截器配置的第二种方法 -->
+	<bean id="timeBasedAccessInterceptor" class="com.spring.handler.TimeBasedAccessInterceptor">    
+	    <property name="openingTime" value="9" />    
+	    <property name="closingTime" value="12" />    
+	    <!-- 拦截路径是 user.do 请求参数包含 action=reg 的请求 -->
+	    <property name="mappingURL" value=".*/user\.do\?action=reg.*" />    
+	</bean>   
+	<!-- 注册拦截器配置  -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">    
+	    <property name="interceptors">    
+	        <list>    
+	            <ref bean="timeBasedAccessInterceptor"/>    
+	        </list>    
+	    </property>    
+	</bean> 
+
+
+
 	
 	<!--  将指定路径的请求直接转到对应的view上，而不需要特定的Controller来处理请求。  -->
 	<mvc:view-controller path="/hello/*" view-name="helloWorld"/>  
