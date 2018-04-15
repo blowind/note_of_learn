@@ -101,6 +101,7 @@ public class ArticleController extends PaginationController {
 	
 	/*  @RequestMapping 参数中的url，除了常规的url外，也可以使用url template来定义形成类似REST请求的url  */
 	@RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
+	/*  注意使用路径变量功能时，形参中的变量名id必须与url中花括号的变量名id一致，类型可以不是字符串 */
     public String update(Article article, @PathVariable int id, @RequestParam("picFile") MultipartFile picFile, String redirectUrl, RedirectAttributes redirectAttributes) {
         Map<String, String> result = UpYunUtils.upload(picFile, "/article");
         if ("000".equals(result.get("code"))) {
@@ -120,10 +121,24 @@ public class ArticleController extends PaginationController {
 
         articleBO.update(article, id);
 		
-		/* 通过flash属性给重定向的页面带信息 */
+		/* 通过flash属性给重定向的页面带信息，一般的 model.addAttribute 方法并不能给重定向的网页带信息，而forward转发信息可以 */
 		redirectAttributes.addFlashAttribute("message", "There are some info to pass")
 
+		/*  注意转发和重定向的区别：
+			转发比重定向快，因为重定向会先返回给浏览器让浏览器重新发送请求，但重定向有以下好处：
+			1、可以重定下到外部网站；
+			2、重定向后的网页网址变成新的网址(此处为/detail)，这样不会因为刷新导致数据重复提交；
+		*/
         return "redirect:/detail/" + id;
     }
 	
+	@RequestMapping(value = "/detail/{id}")
+	public String viewDetail(@PathVariable Long id, Model model) {
+		/* 获取之前必然有add或者update参数在后端插入文章 */
+		Article article = articleBO.get(id);
+		model.addAttribute("article", article);
+		/* 对应有一个 ArticleDetail.jsp 或者 ArticleDetail.ftl 的页面文件用于显示 */
+		return "ArticleDetail";
+		
+	}
 }

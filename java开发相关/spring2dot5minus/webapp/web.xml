@@ -144,7 +144,8 @@
 			<param-value>false</param-value>  
 		</init-param> 
 		-->
-		<load-on-startup>1</load-on-startup>   <!-- 有本配置的是自启动servlet -->
+		<!-- 有本配置的是自启动servlet，即配置的话在应用程序启动时装载servlet，若不配置，则在该servlet第一次请求时加载 -->
+		<load-on-startup>1</load-on-startup>   
 	</servlet>
  	<servlet-mapping>
  		<servlet-name>DispatcherServlet</servlet-name>

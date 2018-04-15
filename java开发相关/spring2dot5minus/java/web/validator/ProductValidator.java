@@ -9,6 +9,7 @@ import org.springframework.validation.Validator;
 
 import web.model.Product;
 
+/*  对于新项目，推荐使用JSR 303 的验证器而不是此处Spring框架的Validation验证器  */
 public class ProductValidator implements Validator {
 
 	/*   设置需要验证的类类型，对于需要验证的类返回true  */
@@ -27,6 +28,7 @@ public class ProductValidator implements Validator {
         
         BigDecimal price = product.getPrice();
         if (price != null && price.compareTo(BigDecimal.ZERO) < 0) {
+			/*  第一个参数填写异常的字段名，第二个参数填写异常说明  */
             errors.rejectValue("price", "price.negative");
         }
         LocalDate productionDate = product.getProductionDate();
