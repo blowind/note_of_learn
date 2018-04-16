@@ -9,6 +9,8 @@ import org.springframework.validation.Validator;
 
 import web.model.Product;
 
+/*  验证器必须配合Controller控制器和其中的参数BindingResult进行使用，具体内容参看ValidatorController实现
+    其中最关键的validate方法返回一个包含错误信息的字符串列表，若返回一个空列表，则表示输入合法 */
 /*  对于新项目，推荐使用JSR 303 的验证器而不是此处Spring框架的Validation验证器  */
 public class ProductValidator implements Validator {
 
@@ -28,7 +30,7 @@ public class ProductValidator implements Validator {
         
         BigDecimal price = product.getPrice();
         if (price != null && price.compareTo(BigDecimal.ZERO) < 0) {
-			/*  第一个参数填写异常的字段名，第二个参数填写异常说明  */
+			/*  第一个参数填写异常的属性名，第二个参数填写message.properties文件中错误信息键值对的键  */
             errors.rejectValue("price", "price.negative");
         }
         LocalDate productionDate = product.getProductionDate();

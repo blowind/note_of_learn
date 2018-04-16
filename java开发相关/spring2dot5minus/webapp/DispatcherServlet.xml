@@ -151,14 +151,14 @@
 	<!-- Converter和Formatter都是用在请求中的数据绑定上，Converter是通用组件，可以在应用程序的任意层使用，Formatter是专为Web层设计的，对Spring MVC中表单的输入，推荐使用Formatter而不是Converter -->
 	<!-- 对于Converter/Formatter 和 Validator验证器混用的情况，在调用Controller期间，会先使用Converter/Formatter将输入字符串转换成模型对象中的field值，转换成功后，继而调用Validator，因为Validator针对的是对象级别 -->
 
-	<!-- 添加过滤器，用来对传入的参数进行过滤处理，具体哪些入参会进行过滤根据实现bean的泛型类型进行匹配 -->
+	<!-- 添加转换器，用来对传入的参数进行过滤处理，具体哪些入参会进行过滤根据实现bean的泛型类型进行匹配 -->
 	<mvc:annotation-driven conversion-service="conversionService" />
-	<!-- 使用工厂方法生成所有过滤器的bean，供前述mvc注解驱动扫描 -->
+	<!-- 使用工厂方法生成所有转换器的bean，供前述mvc注解驱动扫描 -->
 	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
-			<!-- 此处列出所有的过滤器bean -->
+			<!-- 此处列出所有的转换器bean -->
             <list>
-				<!-- 列出本地具体过滤器bean的实现类，若通过构造函数初始化bean，则写明入参，也可以通过setter初始化 -->
+				<!-- 列出本地具体转换器bean的实现类，若通过构造函数初始化bean，则写明入参，也可以通过setter初始化 -->
                 <bean class="converter.StringToLocalDateConverter">
                     <constructor-arg type="java.lang.String" value="MM-dd-yyyy" />
                 </bean>

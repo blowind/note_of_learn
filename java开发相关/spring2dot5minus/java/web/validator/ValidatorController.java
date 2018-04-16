@@ -13,10 +13,10 @@ import web.model.Product;
 import web.validator.ProductValidator;
 
 @Controller
-public class ProductController {
+public class ValidatorController {
 
     private static final Log logger = LogFactory
-            .getLog(ProductController.class);
+            .getLog(ValidatorController.class);
 
     @RequestMapping(value = "/add-product")
     public String inputProduct(Model model) {
@@ -32,7 +32,6 @@ public class ProductController {
 		/*  此处使用的 bindingResult ，可能在前面已经接受过 converter 或者 formatter 的检验，此处进一步添加 validator 可能检测出来的错误 */
         productValidator.validate(product, bindingResult);
 
-		
         if (bindingResult.hasErrors()) {
             FieldError fieldError = bindingResult.getFieldError();
             logger.debug("Code:" + fieldError.getCode() + ", field:"
@@ -57,10 +56,17 @@ public class ProductController {
 	
 	
 	/*  使用验证器的第三种方法  */
-	/*  使用  javax.validation.Valid  对要验证的对象参数进行注解  */
+	/*  使用  javax.validation.Valid  对要验证的对象参数进行注解，Model对象里面需配合进行注解，详见ModelProduct  */
     @RequestMapping(value = "/save-product")
     public String saveProduct(@Valid @ModelAttribute Product product, BindingResult bindingResult, Model model) {
-		...
+		if(bindingResult.hasErrors()) {
+			FieldError fieldError = bindingResult.getFieldError();
+            logger.debug("Code:" + fieldError.getCode() + ", object:" + fieldError.getObjectName() + ", field:" + fieldError.getField());
+            return "ProductForm";
+		}
+		//save product here
+		model.addAttribute("product", product);
+        return "ProductDetails";
 	}
 	
 	
