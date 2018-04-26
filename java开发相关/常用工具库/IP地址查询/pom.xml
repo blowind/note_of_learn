@@ -1,0 +1,6 @@
+<!-- https://mvnrepository.com/artifact/com.github.jarod/qqwry-java -->
+<dependency>
+	<groupId>com.github.jarod</groupId>
+	<artifactId>qqwry-java</artifactId>
+	<version>0.7.1</version>
+</dependency>
