@@ -67,6 +67,13 @@ sed -n '190,196p' song.txt        ### 查看文件song.txt的第190到196行
 8、系统
 uname -a  ## 查看内核/操作系统/CPU信息
 
+## 查看具体的系统版本
+lsb_release -a                  ## 方法一：centos亲测无效
+cat /etc/redhat-release         ## 方法二：centos亲测有效
+rpm -q centos-release 或者 rpm -q redhat-release    ## 方法三：根据对应系统选择对应命令，centos亲测有效
+cat /proc/version               ## 查看当前centos 版本与redhat对应的版本的命令
+
+
 head -n 1 /etc/issue       ## 查看issue文件的第一行，即操作系统版本
 
 cat /proc/cpuinfo         ##  查看CPU信息
@@ -168,6 +175,8 @@ ps -ef               ##  查看所有进程
 
 top                  ##  实时显示进程状态
 
+top -H -p 32381      ##  查看进程32381中各个线程资源占用情况
+
 pmap -d  5647        ##  查看进程5647的内存占用情况
 
 13、用户
@@ -242,6 +251,9 @@ sha224sum
 sha256sum   abc.txt  ## sha256校验和
 sha384sum
 sha512sum
+
+% gpg --import KEYS           ##  KEYS 文件需要专门下载
+% gpg --verify downloaded_file.asc downloaded_file   ##  asc文件需要专门下载
 
 19、分割文件
 split -b 10m info.log.2018-04-28 -d -a 3 log0428_

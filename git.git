@@ -16,3 +16,46 @@ git log --stat  ##  查看最近上库记录
 git show <commit-hashId>      ##   便可以显示某次提交的修改内容
 
 git show <commit-hashId> filename  ##  显示某次提交的某个内容的修改信息
+
+
+git log --pretty=oneline 文件名   ##  查看某个文件的所有历史修改记录，包括提交形成的哈希值
+
+git show 356f6def9d3fb7f3b9032ff5aa4b9110d4cca87e   ##  显示该hash值下文件修改记录
+
+
+git reset --hard    ##   清除本地修改
+
+
+
+【从命令行创建一个新的仓库】
+
+touch README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin http://47.96.13.113:3000/eoe/exchange_au.git
+git push -u origin master
+
+
+【创建git分支】
+git checkout master                ## 本地切换到主干
+git pull                           ## 将本地主干更新到最新
+git checkout -b  exchange_au       ## 从当前本地主干拉分支 exchange_au 并切换到该分支
+git push origin exchagne_au        ## 将新建的分支 exchagne_au 推送到远端
+git branch --set-upstream-to=origin/exchange_au     ## 将本地的 exchange_au 关联要远端的 exchange_au
+git pull
+
+
+【删除git分支】
+
+git branch -a        ##  显示当前所有分支
+###  可以看到本地有 exchange_au 和 master 两个分支，远程有remotes/origin/exchange_au和remotes/origin/master两个分支
+* exchange_au
+  master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/exchange_au
+  remotes/origin/master
+  
+git push origin --delete exchange_au           ## 删除远程分支 remotes/origin/exchange_au
+git checkout master                            ## 本地切换到master分支
+git branch -d exchange_au                      ## 删除本地的exchange_au分支
