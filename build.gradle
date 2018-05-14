@@ -1,0 +1,54 @@
+///////////////////////////////////////   命令行操作   //////////////////////////////////////////////
+
+gradle tasks --all     // 列出一个build.gradle脚本中所有可用task名
+
+gradle properties   // 列出所有配置属性
+
+gradle yG0 gT   // 驼峰命名的缩略task名写法
+
+gradle -x  yayGradle0  // 指定不执行的task
+
+gradle -i    // 设置执行打印级别为INFO
+
+gradle -q    //  静默执行，除了异常和打印其他都不显示
+
+gradle -s    // 执行异常时打印调用栈
+
+gradle -b    //  指定执行的build文件，非默认的build.gradle时使用
+
+gradle --offline   //  执行离线依赖，仅在本地仓库寻找依赖包
+
+gradle -Dmyprop=myvalue   //  指定编译时的JVM参数 
+
+gradle --daemon   // 启动编译影子进程用于主流gradle依赖包到内存，减少每次编译加载时间  
+
+gradle --stop     //  停止影子进程
+
+///////////////////////////////////////   脚本编写   //////////////////////////////////////////////
+
+
+// 建立一个task任务，命名为helloWorld
+task helloWorld {
+	doLast {              //  指定task中最后执行的动作
+		println 'Hello world!'
+	}
+}
+
+
+task startSession << {  //  doLast的简写方式
+	chant()
+}
+
+def chant() {       //  定义本地函数
+	ant.echo(message: 'Repeat after me...')  // 使用ant的打印功能
+}
+
+3.times {   //  使用groovy的循环功能，执行3次，参数 it 表示第几次执行
+	task "yayGradle$it" << {
+		println 'Gradle rocks'
+	}
+}
+
+yayGradle0.denpendsOn startSession              //  指定依赖task
+yayGradle2.denpendsOn yayGradle1, yayGradle0    //  指定多个依赖task
+task groupTherapy(denpendsOn: yayGradle2) {}
