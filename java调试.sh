@@ -1,4 +1,10 @@
 
+# 未使用manifest指定主类时运行使用命令行打出来的jar包，其中 com.manning.gia.todo.ToDoApp是main所在package路径和主类
+java -cp .\build\libs\todo-app.jar com.manning.gia.todo.ToDoApp
+
+# gradle编译时使用jar manifest指定过主类的运行方式
+java -jar todo-app-customized-0.1.jar
+
 #  设置堆Heap最大值20MB和最小值20MB，当堆内存溢出时，生成dump文件
 $ java -Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError -jar Main.jar
 

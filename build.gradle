@@ -24,6 +24,8 @@ gradle --daemon   // 启动编译影子进程用于主流gradle依赖包到内�
 
 gradle --stop     //  停止影子进程
 
+gradle build    // 编译java程序命令，需要应用java插件
+
 ///////////////////////////////////////   脚本编写   //////////////////////////////////////////////
 
 
@@ -52,3 +54,47 @@ def chant() {       //  定义本地函数
 yayGradle0.denpendsOn startSession              //  指定依赖task
 yayGradle2.denpendsOn yayGradle1, yayGradle0    //  指定多个依赖task
 task groupTherapy(denpendsOn: yayGradle2) {}
+
+
+///////////////////////////////////////   完整示例   //////////////////////////////////////////////
+
+apply plugin: 'java' // 指定使用java插件进行编译
+apply plugin: 'war'  // 指定编译web程序war包，由于本插件会顺带引入java，因此可以省略java插件
+apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'     //  引入gretty插件，类似jetty
+
+version = 0.1      //  指定当前jar包版本
+sourceCompatibility = 1.6      //  指定jdk版本
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']      //  指定源代码的路径为src，而不是约定的 src/main/java
+        }
+    }
+    test {
+    	java {
+    		srcDirs = ['test']    //  指定测试代码路径为test，而不是约定的 src/test/java
+    	}
+    }
+}
+
+buildDir = 'out'                 //  指定代码输出目录是 out 而不是约定的  build
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.manning.gia.todo.ToDoApp'        //  指定main方法所在类
+    }
+}
+
+repositories {              //  指定仓库
+    mavenCentral()          //  此处指定maven官方仓库
+}
+
+dependencies {
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'           // 指定依赖包
+
+    providedCompile 'javax.servlet:servlet-api:2.5',              // 指定编译依赖包，仅在编译时使用，并不放入war包，执行时由运行时容器提供
+                    'javax.servlet.jsp:jsp-api:2.1'
+    runtime 'javax.servlet:jstl:1.1.2',                           // 指定运行依赖包，在执行时依赖，因此会放入war包
+            'taglibs:standard:1.1.2'
+}

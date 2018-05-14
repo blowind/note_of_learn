@@ -152,5 +152,21 @@
 		<!-- 此处配置 /* 将匹配所有请求而导致所有jsp和静态内容都无法正常显示，而 / 只匹配缺省的servlet -->
  		<url-pattern>/</url-pattern>
  	</servlet-mapping>
+	
+	
+	<!-- 不常用功能 -->
+	<!-- 部署描述符中只能有一个jsp-config元素 -->
+	<jsp-config>
+		<!-- 关闭一个应用程序中的所有JSP页面的脚本元素 -->
+		<jsp-property-group>
+			<url-pattern>*.jsp</url-pattern>
+			<scripting-invalid>true</scripting-invalid>
+		</jsp-property-group>
+		<!-- 在指定的JSP页面中禁用EL计算 -->
+		<jsp-property-group>
+			<url-pattern>/noEL.jsp</url-pattern>
+			<el-ignored>true</el-ignored>
+		</jsp-property-group>
+	</jsp-config>
 		 
  </web-app>
