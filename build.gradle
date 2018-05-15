@@ -16,6 +16,8 @@ gradle -s    // 执行异常时打印调用栈
 
 gradle -b    //  指定执行的build文件，非默认的build.gradle时使用
 
+gradle -P    //  指定运行project的属性
+
 gradle --offline   //  执行离线依赖，仅在本地仓库寻找依赖包
 
 gradle -Dmyprop=myvalue   //  指定编译时的JVM参数 
@@ -26,13 +28,30 @@ gradle --stop     //  停止影子进程
 
 gradle build    // 编译java程序命令，需要应用java插件
 
+gradle appRun   //  使用jetty插件运行时的命令
+
 ///////////////////////////////////////   脚本编写   //////////////////////////////////////////////
 
+setDescription("myProject")    //  设置全局project的描述属性
 
-// 建立一个task任务，命名为helloWorld
-task helloWorld {
+
+// 建立一个task任务，命名为helloWorld，group指定本task所属的群组，description指定功能描述
+task helloWorld(group: 'testFirst', description: 'Test basic function') {
+	doFirst {
+		println 'first'
+	}
 	doLast {              //  指定task中最后执行的动作
 		println 'Hello world!'
+	}
+}
+
+helloWorld.doFirst { print 'second' }  // 追加doFirst操作，比之前的first先执行
+
+task printVersion {
+	group = 'versioning'    // 通过Setter方法指定group和description
+	description = 'Prints project version.'
+	doLast {
+		logger.quiet "Version: $version"
 	}
 }
 
@@ -43,6 +62,7 @@ task startSession << {  //  doLast的简写方式
 
 def chant() {       //  定义本地函数
 	ant.echo(message: 'Repeat after me...')  // 使用ant的打印功能
+	logger.quiet "log by slf4j"              // 使用自带的slf4j打印
 }
 
 3.times {   //  使用groovy的循环功能，执行3次，参数 it 表示第几次执行
@@ -55,6 +75,98 @@ yayGradle0.denpendsOn startSession              //  指定依赖task
 yayGradle2.denpendsOn yayGradle1, yayGradle0    //  指定多个依赖task
 task groupTherapy(denpendsOn: yayGradle2) {}
 
+task first << { println "first" }
+task second << { println "second" }
+task printVersion(depensOn: [second, first]) << {   // 指定多个依赖task
+	logger.quiet "Version: $version"
+}
+
+first.finalizedBy second     // 指定必须指定的task，一般用来清理资源，此处指定first执行后必须执行second
+
+
+// 使用ext名空间新增属性的三种方式
+project.ext.myProp = 'myValue'     // 方式一
+
+ext {                              // 方式二
+	someOtherProp = 123      
+}
+
+assert myProp == 'myValue'  // 使用新增的project的属性
+println project.someOtherProp
+ext.someOtherProp = 567     //  修改project属性值
+
+// 方式三：使用 gradle.properties文件 例如文件内容为 exampleProp = myValue 时，使用方法如下
+assert project.exampleProp == 'myValue'
+
+
+
+
+///////////////////////////////////////   gradle wrapper相关   //////////////////////////////////////////////
+
+配置：
+
+task wrapper(type: Wrapper) {
+	// 指定gradle版本
+	gradleVersion = '4.7'
+	// 指定wrapper所在地址
+	distributionUrl = 'http://myenterprise.com/gradle/dists'
+	// 指定wrapper在本机解压的相对$GRADLE_HOME目录，
+	distributionPath = 'gradle-dists'
+}
+
+
+命令：
+gradle wrapper
+
+///////////////////////////////////////   版本打印task示例   //////////////////////////////////////////////
+
+ext.versionFile = file('version.properties')
+
+task loadVersion {       // 这种task是配置task，会在配置阶段执行
+    project.version = readVersion()
+}
+
+ProjectVersion readVersion() {
+    logger.quiet 'Reading the version file.'
+
+    if (!versionFile.exists()) {
+        throw new GradleException("Required version file does not exist: $versionFile.canonicalPath")
+    }
+
+    Properties versionProps = new Properties()
+
+    versionFile.withInputStream { 
+    	stream -> versionProps.load(stream)
+    }
+
+    new ProjectVersion(versionProps.major.toInteger(), versionProps.minor.toInteger(), versionProps.release.toBoolean())
+}
+
+task printVersion << {
+    logger.quiet "Version: $version"
+}
+
+class ProjectVersion {
+    Integer major
+    Integer minor
+    Boolean release
+
+    ProjectVersion(Integer major, Integer minor) {
+        this.major = major
+        this.minor = minor
+        this.release = Boolean.FALSE
+    }
+
+    ProjectVersion(Integer major, Integer minor, Boolean release) {
+        this(major, minor)
+        this.release = release
+    }
+
+    @Override
+    String toString() {
+        "$major.$minor${release ? '' : '-SNAPSHOT'}"
+    }
+}
 
 ///////////////////////////////////////   完整示例   //////////////////////////////////////////////
 
@@ -62,18 +174,24 @@ apply plugin: 'java' // 指定使用java插件进行编译
 apply plugin: 'war'  // 指定编译web程序war包，由于本插件会顺带引入java，因此可以省略java插件
 apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'     //  引入gretty插件，类似jetty
 
+apply plugin: 'jetty'
+
+
 version = 0.1      //  指定当前jar包版本
-sourceCompatibility = 1.6      //  指定jdk版本
+sourceCompatibility = 1.8      //  指定jdk版本
+targetCompatibility = 1.8      //
 
 sourceSets {
+	//  指定源代码的路径为buiild.gradle同路径下的src，而不是约定的 src/main/java
     main {
         java {
-            srcDirs = ['src']      //  指定源代码的路径为src，而不是约定的 src/main/java
+            srcDirs = ['src']      
         }
     }
+    //  指定测试代码路径为buiild.gradle同路径下的test，而不是约定的 src/test/java
     test {
     	java {
-    		srcDirs = ['test']    //  指定测试代码路径为test，而不是约定的 src/test/java
+    		srcDirs = ['test']    
     	}
     }
 }
@@ -84,6 +202,26 @@ jar {
     manifest {
         attributes 'Main-Class': 'com.manning.gia.todo.ToDoApp'        //  指定main方法所在类
     }
+}
+
+//  修改WEB-INF等相关父目录为buiild.gradle同路径下的webfiles，默认是 src/main/webapp
+webAppDirName = 'webfiles'
+
+war {
+	//  指定css等静态文件所在的目录
+	from 'static'
+} 
+
+//  引入jetty插件后，指定运行端口和上下文路径
+jettyRun {
+	httpPort = 9090
+	contextPath = 'todo'
+}
+
+//  引入gretty插件后，指定运行端口和上下文路径
+gretty {
+	port = 8081
+	contextPath = 'MyWebApp'
 }
 
 repositories {              //  指定仓库
