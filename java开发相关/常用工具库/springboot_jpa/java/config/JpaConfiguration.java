@@ -19,11 +19,25 @@ import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.
 @Configuration
 @EnableJpaRepositories("com.zxf.bootdata")
 public class JpaConfiguration {
+	
+	/******  使用application.properties配置默认DataSource参数后，本文件内容可以为空，全部使用默认值  ******/
+	
+	
 //    @Bean
 //    public DataSource dataSource() {
 //        return new EmbeddedDatabaseBuilder().setType(H2).build();
 //        }
 //    }
+
+	@Bean
+    public JpaVendorAdapter jpaVendorAdapter() {
+        HibernateJpaVendorAdapter hjva = new HibernateJpaVendorAdapter();
+        hjva.setShowSql(false);
+        hjva.setGenerateDdl(true);
+        hjva.setDatabase(Database.MYSQL);
+//      hjva.setDatabase(Database.H2);
+        return hjva;
+    }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, JpaVendorAdapter jpaVendorAdapter) {
@@ -33,16 +47,6 @@ public class JpaConfiguration {
         // 此处扫描的包已经要包括dao和model，不然会报Not a managed type异常
         lef.setPackagesToScan("com.zxf.bootdata");
         return lef;
-    }
-
-    @Bean
-    public JpaVendorAdapter jpaVendorAdapter() {
-        HibernateJpaVendorAdapter hjva = new HibernateJpaVendorAdapter();
-        hjva.setShowSql(false);
-        hjva.setGenerateDdl(true);
-//        hjva.setDatabase(Database.H2);
-        hjva.setDatabase(Database.MYSQL);
-        return hjva;
     }
 
     @Bean

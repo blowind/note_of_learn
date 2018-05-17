@@ -8,7 +8,10 @@ chcp 437
 netstat -an
 
 查看并过滤端口
-netstat -an | findstr "8080"
+netstat -ano | findstr "8080"
+
+根据进程号查看进程详细信息
+tasklist | findstr "11234"
 
 清除缓存域名
 ipconfig /flushdns

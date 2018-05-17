@@ -231,6 +231,10 @@ repositories {              //  指定仓库
 dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'           // 指定依赖包
 
+    compile files('lib/ojdbc-14.jar')                 //  加载项目下libs目录下的ojdbc-14.jar包
+    compile fileTree(dir:'libs', include:['*.jar'])   //  加载项目下libs目录下所有jar包
+
+
     providedCompile 'javax.servlet:servlet-api:2.5',              // 指定编译依赖包，仅在编译时使用，并不放入war包，执行时由运行时容器提供
                     'javax.servlet.jsp:jsp-api:2.1'
     runtime 'javax.servlet:jstl:1.1.2',                           // 指定运行依赖包，在执行时依赖，因此会放入war包

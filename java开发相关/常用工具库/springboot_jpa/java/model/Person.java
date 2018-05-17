@@ -11,6 +11,7 @@ import javax.persistence.Id;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Entity
+@NamedQuery(name = "Person.findByName", query = "select p from Person p where p.name=?1")
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
