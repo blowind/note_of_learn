@@ -73,6 +73,10 @@ cat /etc/redhat-release         ## 方法二：centos亲测有效
 rpm -q centos-release 或者 rpm -q redhat-release    ## 方法三：根据对应系统选择对应命令，centos亲测有效
 cat /proc/version               ## 查看当前centos 版本与redhat对应的版本的命令
 
+## 查看有几个逻辑CPU，以及CPU型号
+cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c 
+      8  Intel(R) Xeon(R) CPU E5620  @ 2.40GHz
+
 
 head -n 1 /etc/issue       ## 查看issue文件的第一行，即操作系统版本
 
@@ -219,6 +223,12 @@ cp 文件复制相关
 cp [-adfilprsu] src1,src2,...dest    ###  将多个源文件拷贝到目的文件夹
 
 17、使用 tar 压缩/解压文件
+
+
+18、查看随机信息
+
+head -n 1 /dev/random         ##  查看融合了时间seed的真随机信息，出信息要融合时间，因此两个随机信息之间有时间间隔
+head -n 1 /dev/urandom        ##  查看伪随机信息，不融入时间，因此实时出
 
 
 -c: 建立压缩档案

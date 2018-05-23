@@ -31,3 +31,33 @@ $ java -XX:MetaspaceSize=8M  -XX:MaxMetaspaceSize=8M  -jar Main.jar
 #  查看堆栈dump文件，[]里面是可选参数
 $ jhat  [-J-Xmx2048m]  [-port 7000]  java_pid16456.hprof  
 
+
+#  将pid为11951的java进程的heap以二进制的格式dump到session.bin文件中
+$ jmap -dump:format=b,file=/root/session.bin  11951
+
+#  查看11851 java进程中各个内存占用情况
+#  其中：
+#  [C is a char[]
+#  [S is a short[]
+#  [I is a int[]
+#  [B is a byte[]
+#  [[I is a int[][]
+$ jmap -histo 11951
+
+ num     #instances         #bytes  class name
+----------------------------------------------
+   1:        115423      289196816  [B
+   2:        216777      105718392  [C
+   3:        129251        6857256  [Ljava.lang.Object;
+   4:        202671        4864104  java.lang.String
+   5:        121098        2906352  java.util.ArrayList
+   6:         87825        2810400  java.util.HashMap$Node
+   7:          7799        2612960  [I
+   8:         33348        1600704  java.nio.HeapByteBuffer
+   9:         62877        1509048  java.util.Collections$UnmodifiableRandomAccessList
+
+   
+   
+   
+##  在*inx系统上使用快速返回的伪随机数运行java程序，注意其中的./不能少   
+-Djava.security.egd=file:/dev/./urandom
