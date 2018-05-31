@@ -51,6 +51,12 @@ public class JpaConfiguration {
 
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+		/*  JPA数据访问技术  */
         return new JpaTransactionManager(entityManagerFactory);
+		
+		// return new DataSourceTransactionManager(entityManagerFactory);  //  JDBC数据访问技术
+		// return new HibernateTransactionManager(entityManagerFactory);       //  Hibernate数据访问技术
+		// return new JdoTransactionManager(entityManagerFactory);             //  JDO数据访问技术
+		// return new JtaTransactionManager(entityManagerFactory);             //  分布式事务数据访问技术
     }
 }
