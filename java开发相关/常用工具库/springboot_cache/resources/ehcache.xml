@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+	<cache name="people"
+				 maxElementsInMemory="1000"
+				 eternal="false"
+				 overflowToDisk="true"
+				 timeToIdleSeconds="1800"
+				 timeToLiveSeconds="3600"
+				 memoryStoreEvictionPolicy="LFU"/>
+</ehcache>
+

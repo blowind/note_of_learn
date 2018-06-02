@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 import static com.zxf.bootdata.specs.CustomerSpecs.*;
 
 @SpringBootApplication
+@EnableJpaRepositories
 public class BootdataApplication {
 
 	public static void main(String[] args) {
@@ -23,11 +25,11 @@ public class BootdataApplication {
 	@Bean
 	public CommandLineRunner demo(PersonRepository repository) {
 		return (args) -> {
-			repository.save(new Person("a", 10, "杭州", new Date()));
-			repository.save(new Person("b", 20, "合肥", new Date()));
-			repository.save(new Person("c", 30, "南京", new Date()));
+			repository.save(new Person("a", 10, "鏉窞", new Date()));
+			repository.save(new Person("b", 20, "鍚堣偉", new Date()));
+			repository.save(new Person("c", 30, "鍗椾含", new Date()));
 
-			/* 使用JpaRepository接口默认的findAll方法查询  */
+			/* 浣跨敤JpaRepository鎺ュ彛榛樿鐨刦indAll鏂规硶鏌ヨ  */
 			for(Person person : repository.findAll()) {
 				System.out.println(person.toString());
 			}
@@ -44,7 +46,7 @@ public class BootdataApplication {
 					});
 
 			System.out.println("==============split================");
-			/* 使用JpaSpecificationExecutor接口的spec方式查询 */
+			/* 浣跨敤JpaSpecificationExecutor鎺ュ彛鐨剆pec鏂瑰紡鏌ヨ */
 			List<Person> people = repository.findAll(personFromHangzhou());
 			for(Person p : people) {
 				System.out.println(p);
