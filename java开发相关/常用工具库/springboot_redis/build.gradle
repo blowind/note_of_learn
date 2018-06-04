@@ -27,5 +27,8 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-redis',
 			"org.projectlombok:lombok:1.16.20")
+	// 使用默认配置时不需要本文件，仅在想配置config文件时引入
+	compile group: 'redis.clients', name: 'jedis', version: '2.9.0'
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

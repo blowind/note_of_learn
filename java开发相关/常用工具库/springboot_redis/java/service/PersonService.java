@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class PersonService {
-	/* 注入spring boot已经配置好的StringRedisTemplate bean */
+	/* 注入spring boot已经配置好的StringRedisTemplate bean，这个类仅适合string类型的key/value */
 	@Autowired
 	StringRedisTemplate stringRedisTemplate;
 
