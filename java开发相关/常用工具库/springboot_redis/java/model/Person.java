@@ -15,6 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+// 注意此处Serializable不能少，除非在template配置时显示指定序列化对象，否则所有放到redis里面的对象都要实现本接口
 public class Person implements Serializable {
 
 	private String id;

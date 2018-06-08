@@ -25,6 +25,8 @@ git show 356f6def9d3fb7f3b9032ff5aa4b9110d4cca87e   ##  显示该hash值下文�
 
 git reset --hard    ##   清除本地修改
 
+git checkout -b feature_name        ## 切换本地到 feature_name 分支
+
 
 
 【从命令行创建一个新的仓库】

@@ -26,9 +26,11 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-redis',
-			"org.projectlombok:lombok:1.16.20")
-	// Ê¹ÓÃÄ¬ÈÏÅäÖÃÊ±²»ĞèÒª±¾ÎÄ¼ş£¬½öÔÚÏëÅäÖÃconfigÎÄ¼şÊ±ÒıÈë
+			"org.projectlombok:lombok:1.16.22")
+	// ä½¿ç”¨é»˜è®¤é…ç½®æ—¶ä¸éœ€è¦æœ¬æ–‡ä»¶ï¼Œä»…åœ¨æƒ³é…ç½®configæ–‡ä»¶æ—¶å¼•å…¥
 	compile group: 'redis.clients', name: 'jedis', version: '2.9.0'
+	// ä½¿ç”¨jsonä½œä¸ºrediså­˜å‚¨åºåˆ—åŒ–ç±»æ—¶ï¼Œå¼•å…¥æœ¬æ¨¡å—
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.5'
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

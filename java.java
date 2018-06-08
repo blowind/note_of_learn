@@ -2011,8 +2011,25 @@ sun.net.http.errorstream.enableBuffering  //   [false]   ³¢ÊÔ»º³å400ºÍ500¼¶ÏìÓ¦µ
 sun.net.http.errorstream.bufferSize       //   [4096]    Îª»º³å´íÎóÁ÷Ê¹ÓÃµÄ×Ö½ÚÊı
 sun.net.http.errorstream.timeout     //   [300]     ¶Á´íÎóÁ÷³¬Ê±Ç°µÄºÁÃëÊı£¬Ä¬ÈÏÎª300ºÁÃë
 
+/**********************************************************************************************************************/
+/****                                      java 8 º¯ÊıÊ½±à³Ì£¨lambda±í´ïÊ½£©                                       ****/
+/**********************************************************************************************************************/
 
-/****                                      java 8 º¯ÊıÊ½±à³Ì                                       ****/
+Ò»°ãĞÎÊ½£º"   ²ÎÊıÁĞ±í  ->   º¯ÊıÌå     " ÆäÖĞ->ÓÃÓÚ·Ö¸ô²ÎÊıÁĞ±íÓëº¯ÊıÌå£¬²ÎÊıÀàĞÍÒ»°ã¿ÉÒÔÊ¡ÂÔ£¬javac×Ô¼º½øĞĞÀàĞÍÍÆ¶Ï£¬Å¼¶û²»ÄÜÍÆ¶ÏÊ±ÒªÖ¸Ã÷£¬lambda±í´ïÊ½³£¼ûÊ¾ÀıÈçÏÂ£º
+Runnable  noArguments = () -> System.out.println("hello lambda");
+ActionListener oneArgument = event -> System.out.println("button clicked");
+Runnable multiStatement = () -> {
+									System.out.println("hello");
+									System.out.println(" lambda");
+};
+BinaryOperator<Long> add = (x, y) -> x + y;
+BinaryOperator<Long> addExplicit = (Long x, Long y) -> x + y;
+
+
+¶èĞÔÇóÖµ·½·¨£º ÓÃÓÚÉèÖÃ¹ıÂËÌõ¼ş£¬³£¼ûµÄÓĞ       filter, of, map, flatMap, min, max
+¼°ÔçÇóÖµ·½·¨£º ÓÃÀ´Ö´ĞĞ¾ßÌå¹ıÂËÌõ¼ş²¢Êä³ö½á¹û   count, collect, get, reduce
+
+
 long count = allArtists.stream().filter(artist -> artist.isFrom("London")).count();   //  ½«ÁĞ±í×ªÎªstreasm
 
 //  µ÷ÓÃStreamÀàµÄ¾²Ì¬·½·¨Éú³ÉstreamÁ÷£¬È»ºóÍ¨¹ıcollect·½·¨×ª»»³ÉList
@@ -2024,13 +2041,13 @@ List<String> collected = Stream.of("a", "b", "hello").map(string -> string.toUpp
 //  Ê¹ÓÃfilter¹ıÂËÁ÷ÖĞ·ûºÏÌõ¼şµÄÊı¾İ
 List<String> collected = Stream.of("a", "1bc", "abc1").filter(value -> isDigit(value.charAt(0))).collect(Collectors.toList());
 
-//  ºÏ²¢¶à¸östream
+//  ºÏ²¢¶à¸östream£¬flatMap·½·¨µÄº¯Êı½Ó¿ÚÓëmapÒ»Ñù£¬¶¼ÊÇFunction½Ó¿Ú£¬²»¹ı·½·¨µÄ·µ»ØÖµÏŞÖÆÎªStreamÀàĞÍ
 List<Integer> together = Stream.of(Arrays.asList(1, 2), Arrays.asList(3, 4)).flatMap(numbers -> numbers.stream()).collect(Collectors.toList());
 
 //   Í¨¹ı´«ÈëComparatorº¯Êı½Ó¿Ú²éÕÒ×îĞ¡ÔªËØ£¬Í¬Àí»¹ÓĞmax·½·¨
 Track shortestTrank = tracks.stream().min(Comparator.comparing(track -> track.getLength())).get();
 
-//  Ê¹ÓÃreduce½øĞĞÀÛ»ı²Ù×÷
+//  Ê¹ÓÃreduce½øĞĞÀÛ»ı²Ù×÷£¬Á½¸ö²ÎÊı£¬µÚÒ»¸ö²ÎÊıÊÇ³õÊ¼Öµ£¬µÚ¶ş¸ö²ÎÊıÊÇÒ»¸ölambda±í´ïÊ½
 int count = Stream.of(1, 2, 3).reduce(0, (acc, element) -> acc + element);
 
 //  ¶ÔÕûĞÎ£¬³¤ÕûĞÎ£¬Ë«¸¡µãĞĞµ÷ÓÃ¶ÔÓ¦µÄº¯Êı½Ó¿ÚÌá¸ßĞ§ÂÊ£¬

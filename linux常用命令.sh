@@ -288,6 +288,12 @@ date +%s       ## 以时间戳来显示当前时间  1527165067
 21、查看当前用户的计划任务
 crontab -l 
 
+22、centos禁用本地部分端口扫描功能
+
+yum install iptables-services   ##  centos 7 需要安装iptables服务
+
+
+
 
 
                    ##################    例子shell小程序           #############
