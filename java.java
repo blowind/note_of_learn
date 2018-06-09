@@ -2055,6 +2055,75 @@ int count = Stream.of(1, 2, 3).reduce(0, (acc, element) -> acc + element);
 IntSummaryStatistics trackLengthStats = album.getTracks().mapToInt(track -> track.getLength()).summaryStatistics();
 
 
+public class StringExercises {
+	/**  计算一个字符串中小写字母的个数 **/
+	public static int countLowercaseLetters(String string) {
+		return (int) string.chars().filter(Character::isLowerCase).count();
+	}
+	/**  在一个字符串列表中，找出包含最多小写字母的字符串。对于空列表，返回 Optional<String> 对象 **/
+	public static Optional<String> mostLowercaseString(List<String> strings) {
+		return strings.stream().max(Comparator.comparing(StringExercises::countLowercaseLetters));
+	}
+
+	public static void main(String[] argv) {
+		List<String> list = Arrays.asList("a", "ab", "abc", "abcd");
+		System.out.println(StringExercises.mostLowercaseString(list));
+	}
+}
+
+/**  使用reduce实现map的功能   **/
+public class MapUsingReduce {
+
+    public static <I, O> List<O> map(Stream<I> stream, Function<I, O> mapper) {
+        return stream.reduce(new ArrayList<O>(), (acc, x) -> {
+        	// We are copying data from acc to new list instance. It is very inefficient,
+        	// but contract of Stream.reduce method requires that accumulator function does
+        	// not mutate its arguments.
+        	// Stream.collect method could be used to implement more efficient mutable reduction,
+        	// but this exercise asks to use reduce method.
+        	List<O> newAcc = new ArrayList<>(acc);
+        	newAcc.add(mapper.apply(x));
+            return newAcc;
+        }, (List<O> left, List<O> right) -> {
+        	// We are copying left to new list to avoid mutating it. 
+        	List<O> newLeft = new ArrayList<>(left);
+        	newLeft.addAll(right);
+            return newLeft;
+        });
+    }
+}
+
+/**  使用reduce实现filter的功能  **/
+public class FilterUsingReduce {
+
+    public static <I> List<I> filter(Stream<I> stream, Predicate<I> predicate) {
+        List<I> initial = new ArrayList<>();
+        return stream.reduce(initial,
+                             (List<I> acc, I x) -> {
+                                if (predicate.test(x)) {
+                                	// We are copying data from acc to new list instance. It is very inefficient,
+                                	// but contract of Stream.reduce method requires that accumulator function does
+                                	// not mutate its arguments.
+                                	// Stream.collect method could be used to implement more efficient mutable reduction,
+                                	// but this exercise asks to use reduce method explicitly.
+                                	List<I> newAcc = new ArrayList<>(acc);
+                                    newAcc.add(x);
+                                    return newAcc;
+                                } else {
+                                	return acc;
+                                }
+                             },
+                             FilterUsingReduce::combineLists);
+    }
+    private static <I> List<I> combineLists(List<I> left, List<I> right) {
+    	// We are copying left to new list to avoid mutating it. 
+    	List<I> newLeft = new ArrayList<>(left);
+    	newLeft.addAll(right);
+        return newLeft;
+    }
+}
+
+
 @FunctionInterface
 //  每个用作函数接口的接口（即调用lambda表达式的函数设计时声明的类型），都应该添加这个注释声明
 
