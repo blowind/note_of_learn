@@ -2025,6 +2025,14 @@ Runnable multiStatement = () -> {
 BinaryOperator<Long> add = (x, y) -> x + y;
 BinaryOperator<Long> addExplicit = (Long x, Long y) -> x + y;
 
+接口                     参数                   返回类型
+Predicate<T>              T                      boolean
+Consumer<T>               T                      void
+Function<T,R>             T                      R
+Supplier<T>              None                    T
+UnaryOperator<T>          T                      T
+BinaryOperator<T>       (T,T)                    T
+
 
 惰性求值方法： 用于设置过滤条件，常见的有       filter, of, map, flatMap, min, max
 及早求值方法： 用来执行具体过滤条件并输出结果   count, collect, get, reduce, forEach
