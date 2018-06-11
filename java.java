@@ -2027,7 +2027,7 @@ BinaryOperator<Long> addExplicit = (Long x, Long y) -> x + y;
 
 
 惰性求值方法： 用于设置过滤条件，常见的有       filter, of, map, flatMap, min, max
-及早求值方法： 用来执行具体过滤条件并输出结果   count, collect, get, reduce
+及早求值方法： 用来执行具体过滤条件并输出结果   count, collect, get, reduce, forEach
 
 
 long count = allArtists.stream().filter(artist -> artist.isFrom("London")).count();   //  将列表转为streasm
@@ -2130,7 +2130,7 @@ public class FilterUsingReduce {
 
 默认方法： 
 1、当具体实现类中存在方法与接口中默认方法签名相同的冲突时，优先选择实现类中的方法，
-2、默认方法的优先级与虚方法类似
+2、默认方法的优先级与虚方法类似，即具体实现类没有Override接口中的默认方法时，实现类对象调用时使用接口默认方法，若Override接口中的默认方法，则使用实现类中的方法
 
 public interface Parent {
 	public void message(String body);
@@ -2146,6 +2146,7 @@ public void parentDefaultUsed() {
 	parent.welcome();                   //    对象自然能使用接口中定义的默认方法
 }
 
+/* 注意此处是接口继承 */
 public interface Child extends  Parent {      //  子接口覆盖了父接口的默认方法
 	@Override
 	public default void welcome() {  message("Child: Hi!"); }
@@ -2170,6 +2171,7 @@ public interface Carriage {
 	}
 }
 
+// 语法 InterfaceName.super指向继承自父接口的方法
 public class MusicalCarriage implements Carriage, Jukebox {
 	@Override
 	public String rock() {
@@ -2182,7 +2184,20 @@ public class MusicalCarriage implements Carriage, Jukebox {
 2. 子类胜于父类。如果一个接口继承了另一个接口，且两个接口都定义了一个默认方法，那么子类中定义的方法胜出。
 3. 没有规则三。如果上面两条规则不适用，子类要么需要实现该方法，要么将该方法声明为抽象方法。
 int count = Stream.of(1, 2, 3).reduce(0, (acc, element) -> acc + element);
-int count = Stream.of(1, 2, 3).reduce(0, (acc, element) -> acc + element);
+
+
+public interface Performance {
+	public String getName();
+
+	public Stream<Artist> getMusicians();
+
+	/**
+	 *  添加 getAllMusicians 方法，该方法返回包含所有艺术家名字的 Stream ，如果对象是乐队，则返回乐队名和每个乐队成员的名字
+	 */
+	public default Stream<Artist> getAllMusicians() {
+		return getMusicians().flatMap(artist -> Stream.concat(Stream.of(artist), artist.getMembers()));
+	}
+}
 
 
 Optional的使用： 该对象相当于一个值的容器
@@ -2199,6 +2214,45 @@ assertEquals("b", emptyOptional.orElse("b"));          //   orElse() 方法在Optio
 assertEquals("c", emptyOptional.orElseGet(() -> "c"));   //  为空时接受一个Supplier对象并调用
 
 
+/* 使用Optional改造已有的方法  */
+public class Artists {
+	private List<Artist> artists;
+	public Artists(List<Artist> artists) {
+		this.artists = artists;
+	}
+//	public Artist getArtist(int index) {
+//		if(index < 0 || index >= artists.size()) {
+//			indexExcetipn(index);
+//		}
+//		return artists.get(index);
+//	}
+
+//	public void indexExcetipn(int index) {
+//		throw new IllegalArgumentException(index + "doesn't correspond to an Artist");
+//	}
+//
+//	public String getArtistName(int index) {
+//		try{
+//			Artist artist = getArtist(index);
+//			return artist.getName();
+//		}catch (IllegalArgumentException e) {
+//			return "unknown";
+//		}
+//	}
+	public Optional<Artist> getArtist(int index) {
+		if(index < 0 || index >= artists.size()) {
+			return Optional.empty();
+		}else{
+			return Optional.of(artists.get(index));
+		}
+	}
+	public String getArtistName(int index) {
+		Optional<Artist> artist = getArtist(index);
+		return artist.map(Artist::getName).orElse("unknown");
+	}
+}
+
+
 方法引用：主要用做lambda表达式所在地方的简写     标准语法为  Classname::methodName
 artist  ->  artist.getName()      形如左边的lambda表达式可以简写成，注意此处没有小括号       Artist::getName  
 (name, nationality) -> new Artist(name, nationality)  构造函数lambda表达式简写    Artist::new
@@ -2212,11 +2266,12 @@ List<Integer> sameOrder = numbers.stream().sorted().collect(Collectors.toList())
 
 【使用收集器】
 1、转换成指定集合
-除了Collectors传统的toList(),  toSet(),  还有  toCollection(),  toMap()   例如：
+//  除了Collectors传统的toList(),  toSet(),  还有  toCollection(),  toMap()   
+例如：
 numbers.stream().collect(Collectors.toCollection(TreeSet::new));          //  指定生成的集合的类型，此处为TreeSet
 
 
-2、转换成值
+2、转换成值   maxBy,  minBy,   averagingInt,   summingInt
 public Optional<Artist> biggestGroup(Stream<Artist> artists) {
 	Function<Artist, Long> getCount = artist -> artist.getMembers().count(); //   生成一个函数接口对象
 	return artists.collect(maxBy(comparing(getCount)));    //  将比较器传入 maxBy 收集器
@@ -2261,9 +2316,10 @@ public Map<Artist, List<String>> nameOfAlbums(Stream<Album> albums) {
 //  Map作为本地缓存使用，有键值对时直接返回，无键值对查找填入并返回的的场景
 //  当前可以使用 computeIfPresent 直接实现
 Map<String, String> artistCache = new HashMap<>();
-artistCache.computeIfPresent(name, this::readArtistFromDB);  // 此处调用本地封装类中的 readArtistFromDB 方法
+// 此处调用本地封装类中的 readArtistFromDB 方法，然后将readArtistFromDB方法返回结果放入Map并作为computeIfAbsent结果返回
+artistCache.computeIfAbsent(name, this::readArtistFromDB);  
 
-//  Map中value为List，计算List元素做统计分析的场景
+//  Map中value为List，计算List元素做统计分析的场景，forEach接收一个BiConsumer对象，该对象接受两个参数，返回void
 Map<Artist, Integer> countOfAlbums = new HashMap<>();
 albumsByArtist.forEach( (artist, albums) -> { countOfAlbums.put(artist, albums.size()); } );
 
@@ -2281,4 +2337,57 @@ public int serialArraySum() {
 并行计算曲目长度
 public int parallelArraySum() {
 	return albums.parallelStream().flatMap(Album::getTracks).mapToInt(Track::getLength).sum();
+}
+
+并行化数组操作，这类操作都在工具类Arrays中
+@Test
+public void parallelaaa() {
+	int[] values = new int[11];
+	/* 将数组中每个元素的值设置为其下标值 */
+	Arrays.parallelSetAll(values, i -> i);
+	for(int a : values) {
+		System.out.print(a + " ");
+	}
+	System.out.println();
+	
+	/* 将数组中当前元素与前一个元素进行处理，此处将两个元素相加后将结果存入当前元素所在位置 */
+	Arrays.parallelPrefix(values, (x, y) -> x + y);
+	for(int a : values) {
+		System.out.print(a + " ");
+	}
+	System.out.println();
+	
+	int[] unsorted = new int[10];
+	Random r = new Random();
+	for(int i=0; i<10; i++) {
+		unsorted[i] = r.nextInt(100);
+	}
+	for(int a : unsorted) {
+		System.out.print(a + " ");
+	}
+	System.out.println();
+	/*  将数组元素排序后写回原数组  */
+	Arrays.parallelSort(unsorted);
+	for(int a : unsorted) {
+		System.out.print(a + " ");
+	}
+}
+
+计算简单的滑动平均数，例如，对于数组values，计算滑动窗口为3的平均数，即窗口内数据之和除以3的均值
+@Test
+public void simpleMovingAverage() {
+	double[] values = {0, 1, 2, 3, 4, 3.5};
+	int n = 3;
+	double[] sums = Arrays.copyOf(values, values.length);
+	//  执行并行操作，sums中保存了两两求和结果 0.0 1.0 3.0 6.0 10.0 13.5
+	Arrays.parallelPrefix(sums, Double::sum);     
+	int start = n - 1;
+	double[] ret = IntStream.range(start, sums.length)  // 取得下标范围 2,3,4,5，此处与sums无关，取范围的静态方法
+			.mapToDouble(i -> {
+				double prefix = i == start ? 0 : sums[i - n];  // 此处判断过滤掉下标2边界情况
+				return (sums[i] - prefix) / n;     //  sum当前位置是累加和，减去往前数第3个位置存储的累加和
+			}).toArray();          //  将结果从流转换为数据
+	for(double a : ret) {
+		System.out.print(a + " ");  // 得到  1.0 2.0 3.0 3.5 
+	}
 }
