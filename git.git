@@ -1,6 +1,8 @@
 
 git clone http://git.forexdaily.cn/hope/admin.git
 
+git remove -v  ##  查看当前远程仓库的地址
+
 
 git add .
 git commit -m "first add"
@@ -9,7 +11,9 @@ git push
 
 git status  ##  查看当前未commit的文件的状态
 
-git diff  filename  ##  查看当前未commit的文件与库上文件的差异
+git diff  filename  ##   查看"修改未添加" 与 "修改已添加" 之间的差异，带文件名时查看当前未commit的文件与库上文件的差异
+
+git diff --cached   ##  查看"修改已添加" 与 "提交" 之间的差异
 
 git log --stat  ##  查看最近上库记录
 
@@ -26,6 +30,16 @@ git show 356f6def9d3fb7f3b9032ff5aa4b9110d4cca87e   ##  显示该hash值下文�
 git reset --hard    ##   清除本地修改
 
 git checkout -b feature_name        ## 切换本地到 feature_name 分支
+
+
+
+设置用户名和邮箱
+git config --global user.name "username"
+git config --global user.email "email"
+
+查看设置结果
+git config user.name
+git config user.email
 
 
 
@@ -61,3 +75,11 @@ git branch -a        ##  显示当前所有分支
 git push origin --delete exchange_au           ## 删除远程分支 remotes/origin/exchange_au
 git checkout master                            ## 本地切换到master分支
 git branch -d exchange_au                      ## 删除本地的exchange_au分支
+
+
+【提示出错信息：fatal: remote origin already exists.】
+1、先输入$ git remote rm origin
+2、再输入$ git remote add origin http://47.98.142.23/eoe2.0/server/eoe-service-basic.git 就不会报错了！
+3、如果输入$ git remote rm origin 还是报错的话，error: Could not remove config section 'remote.origin'.我们需要修改gitconfig文件的内容
+4、找到你的github的安装路径，我的是C:\Users\ASUS\AppData\Local\GitHub\PortableGit_ca477551eeb4aea0e4ae9fcd3358bd96720bb5c8\etc
+ 5、找到一个名为gitconfig的文件，打开它把里面的[remote "origin"]那一行删掉就好了！
