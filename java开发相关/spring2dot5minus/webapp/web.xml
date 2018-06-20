@@ -152,6 +152,12 @@
 		<!-- 此处配置 /* 将匹配所有请求而导致所有jsp和静态内容都无法正常显示，而 / 只匹配缺省的servlet -->
  		<url-pattern>/</url-pattern>
  	</servlet-mapping>
+
+ 	<!--  指定图标映射关系，需要配合DispatcherServlet.xml中的mvc:resources mapping使用  -->
+ 	<servlet-mapping>
+	    <servlet-name>default</servlet-name>
+	    <url-pattern>*.ico</url-pattern>
+  	</servlet-mapping>
 	
 	
 	<!-- 不常用功能 -->

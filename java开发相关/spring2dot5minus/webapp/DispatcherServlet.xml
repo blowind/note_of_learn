@@ -60,6 +60,16 @@
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 	<bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
 	-->
+
+	<!--
+	在springMVC-servlet.xml中配置<mvc:default-servlet-handler />后，会在Spring MVC上下文中定义一个org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler，它会像一个检查员，对进入DispatcherServlet的URL进行筛查，如果发现是静态资源的请求，就将该请求转由Web应用服务器默认的Servlet处理，如果不是静态资源的请求，才由DispatcherServlet继续处理。
+	一般Web应用服务器默认的Servlet名称是"default"，因此DefaultServletHttpRequestHandler可以找到它。如果你所有的Web应用服务器的默认Servlet名称不是"default"，则需要通过default-servlet-name属性显示指定：
+	<mvc:default-servlet-handler default-servlet-name="所使用的Web服务器默认使用的Servlet名称" />
+	-->
+	<mvc:default-servlet-handler />
+
+	<!--  指定项目图标favicon.ico，要配合web.xml里面的ico mapping使用  -->
+	<mvc:resources mapping="/favicon.ico" location="/images/favicon.ico" order="0"/>
 	
 	<!-- 注解自驱动加载时，额外添加新的 messageConverter ，需 spring 3.1 之后的版本才支持 -->
 	<mvc:annotation-driven>  
