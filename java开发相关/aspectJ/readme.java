@@ -21,6 +21,9 @@ call(void Point.setx(int)) || call(void Line.setP1(Point)  //  使用 && , || , ! 
 /*  切点的模糊匹配定义  */	
 call(void Figure.make*(..))         //  定义一个切点，Figure类/接口中以make开头的任意参数的方法，其返回值是void
 call(public * Figure.*(..))         //  定义一个切点，指向Figure类/接口的所有公共方法
+execution(public !static * *(..))   //  定义一个切点，指向公有非静态方法的执行
+call(void m()) && withincode(void m())   //  定义一个在m()函数递归调用时的切点
+execution(void m()) && withincode(void m())   //  定义m()函数的执行  等同于 execution(void m())
 cflow(move())                       //  使用cflow定义切点，指向所有move切点开始调用和返回之间的点
 
 // 方法调用举例：此处指向Point类的setX和setY方法调用
@@ -50,6 +53,15 @@ pointcut move() :
 	call(void Point.setX(int))              ||
 	call(void Line.setP1(int));
 	
+// 一参的setter，参数p与右侧p变量名一致
+pointcut setter(Point p): target(p) && (call(void setX(int)) || call(void setY(int)));
+// 一参的testEquality，参数p与右侧args中的p一致，表明是equals的入参类型为Point的p
+pointcut testEquality(Point p): target(Point) && args(p) && call(boolean equals(Object));
+// 同时使用两个Point时，需要在右侧参数名上明确指定
+pointcut testEquality(Point p1, Point p2): target(p1) && args(p2) && call(boolean equals(Object));
+// 另一种场景，当二参数是int类型时
+pointcut setter(Point p, int newval): target(p) && args(newval) && (call(void setX(int)) || call(void setY(int)));
+	
 	
                        /******************               Advice举例                  ******************/
 					   
@@ -57,6 +69,25 @@ pointcut move() :
 before(): move() {
 	Sysout.out.println("about to move");
 }
+
+// 带参数的匿名advice
+before(Point p, int x): target(p) && args(x) && call(void setX(int)) {
+  if (!p.assertX(x)) return;
+}
+
+// 带参数的匿名advice，此处处理包括正常返回和异常返回的情况
+after(Point p, int x): target(p) && args(x) && call(void setX(int)) {
+  if (!p.assertX(x)) throw new PostConditionViolation();
+}
+// 处理正常返回的情况，注意此处参数的位置
+after(Point p) returning(int x): target(p) && call(int getX()) {
+  System.out.println("Returning int value " + x + " for p = " + p);
+}
+// 处理异常返回的情况，此处处理调用时抛出Exception类型异常的情况，建言处理完毕后，会抛出处理过的异常给正常代码流程继续处理
+after() throwing(Exception e): target(Point) && call(void setX(int)) {
+  System.out.println(e);
+}
+
 // after原语定义move()调用后的建言，包括正常return和异常exception返回，此处使用正常return
 after() returning: move() {
     System.out.println("just successfully moved");
@@ -69,7 +100,6 @@ after(FigureElement fe, int x, int y) returning:
         && args(x, y) {
     System.out.println(fe + " moved to (" + x + ", " + y + ")");
 }
-
 //  上述建言的另一种写法，将Pointcut先提炼简化后再使用
 pointcut setXY(FigureElement fe, int x, int y):
     call(void FigureElement.setXY(int, int))
@@ -87,6 +117,13 @@ aspect SimpleTracing {
     before(): tracedCall() {
         System.out.println("Entering: " + thisJoinPoint);  // 输出： Entering: call(void FigureElement.draw(GraphicsContext))
     }
+}
+
+// 使用proceed特殊函数，此处截取替换切点，然后通过proceed特殊函数继续执行切点的后续动作
+void around(Point p, int x): target(p) && args(x) && call(void setX(int)) {
+    if (p.assertX(x)) 
+		proceed(p, x);
+    p.releaseResources();
 }
 
                     /******************               Inter-type declarations内部变量声明                  ******************/
