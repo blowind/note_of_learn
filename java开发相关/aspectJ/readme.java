@@ -3,14 +3,14 @@
 
 /*
 pointcut ÖĞµÄjoin pointsÖ÷Òª°üÀ¨ÈçÏÂ¼¸ÖÖ: 
-	1¡¢·½·¨µ÷ÓÃ£º                           call(void Point.setX(int))
-	2¡¢·½·¨Ö´ĞĞ£º                           execution(void Point.setX(int))
+	1¡¢·½·¨µ÷ÓÃ£¬ÇĞµãÊÇÍâ²ãµ÷ÓÃ·½·¨µÄµØ·½£º call(void Point.setX(int))
+	2¡¢·½·¨Ö´ĞĞ£¬ÇĞµãÊÇÄÚ²ã·½·¨Ö´ĞĞµÄµØ·½£º execution(void Point.setX(int))
 	3¡¢¶ÔÏó³õÊ¼»¯£º
 	4¡¢¹¹Ôìº¯ÊıÖ´ĞĞ£º                       call(*.new(int, int))
 	5¡¢Óò±äÁ¿ÒıÓÃ£º
 	6¡¢Òì³£´¦Àí£º                           handler(ArrayOutOfBoundsException)
 	7¡¢µ±Ç°ÔËĞĞµÄ¶ÔÏóÊôÓÚSomeTypeÀà         this(SomeType)
-	8¡¢±»µ÷ÓÃµÄ¶ÔÏóÊôÓÚSomeTypeÀà           target(SomeType)
+	8¡¢µ÷ÓÃÇĞµã·½·¨µÄ¶ÔÏóÊôÓÚSomeTypeÀà     target(SomeType)
 	9¡¢Ö´ĞĞµÄ´úÂëÎ»ÓÚMyClassÀàÄÚ²¿          within(MyClass)
 	10¡¢Î»ÓÚTestÀàmain·½·¨µ÷ÓÃµÄ¿ØÖÆÁ÷ÖĞ    cflow(call(void Test.main()))
 */
@@ -32,6 +32,8 @@ call(* *.*(..))               //   ÎŞÂÛĞŞÊÎ·û¡¢·µ»ØÀàĞÍ¡¢Àà¡¢·½·¨ÃûÒÔ¼°·½·¨µÄ²ÎÊ
 call(* *(..))                 //   Í¬ÉÏ£¬ÁíÒ»ÖÖĞ´·¨
 call(* mypackage..*.*(..))    //   ²¶»ñmypackage°üºÍ×Ó°üÄÚµÄÈÎºÎ·½·¨ÉÏµÄÁ¬½Óµã
 call(* MyClass+.*(..))        //   ²¶»ñMyClassºÍÈÎºÎ×ÓÀàÖĞµÄÈÎºÎ·½·¨ÉÏµÄÁ¬½Óµã
+
+×¢Òâ£¬·½·¨µÄĞŞÊÎ·û£¬ÒªÃ´Ö¸Ã÷ÈçpublicÖ®Àà£¬ÒªÃ´Ê¡ÂÔ±íÊ¾ËùÓĞĞŞÊÎ·û¶¼¿É£¬²»ÄÜÓÃ*±íÊ¾È«²¿ĞŞÊÎ·û
 
 // ·½·¨µ÷ÓÃ¾ÙÀı£º´Ë´¦Ö¸ÏòPointÀàµÄsetXºÍsetY·½·¨µ÷ÓÃ
 pointcut setter(): target(Point) && (call(void setX(int)) || call(void setY(int)));
@@ -60,9 +62,10 @@ pointcut move() :
 	call(void Point.setX(int))              ||
 	call(void Line.setP1(int));
 	
-// Ò»²ÎµÄsetter£¬²ÎÊıpÓëÓÒ²àp±äÁ¿ÃûÒ»ÖÂ
+// Ò»²ÎµÄsetter£¬²ÎÊıpÓëÓÒ²àp±äÁ¿ÃûÒ»ÖÂ£¬×¢ÒâÖ´ĞĞÇĞµãµÄµ÷ÓÃ¶ÔÏóµÄÀàĞÍPointÆäÊµÒÑÖªµÄ£¬ÒòÎªÒªĞ´ÔÚ×ó²àµÄ²ÎÊıÀàĞÍÉÏ
 pointcut setter(Point p): target(p) && (call(void setX(int)) || call(void setY(int)));
 // Ò»²ÎµÄtestEquality£¬²ÎÊıpÓëÓÒ²àargsÖĞµÄpÒ»ÖÂ£¬±íÃ÷ÊÇequalsµÄÈë²ÎÀàĞÍÎªPointµÄp
+// ×¢ÒâËùÓĞ²ÎÊı¶¼ÊÇÖ¸Ïòcall/executionÕâÀàÇĞµãËùº¬·½·¨µÄ²ÎÊı
 pointcut testEquality(Point p): target(Point) && args(p) && call(boolean equals(Object));
 // Í¬Ê±Ê¹ÓÃÁ½¸öPointÊ±£¬ĞèÒªÔÚÓÒ²à²ÎÊıÃûÉÏÃ÷È·Ö¸¶¨
 pointcut testEquality(Point p1, Point p2): target(p1) && args(p2) && call(boolean equals(Object));
@@ -82,11 +85,11 @@ before(Point p, int x): target(p) && args(x) && call(void setX(int)) {
   if (!p.assertX(x)) return;
 }
 
-// ´ø²ÎÊıµÄÄäÃûadvice£¬´Ë´¦´¦Àí°üÀ¨Õı³£·µ»ØºÍÒì³£·µ»ØµÄÇé¿ö
+// ´ø²ÎÊıµÄÄäÃûadvice£¬´Ë´¦´¦Àí°üÀ¨Õı³£·µ»ØºÍÒì³£·µ»ØµÄÇé¿ö£¬pÖ¸Ïòµ÷ÓÃgetXº¯ÊıµÄPoint¶ÔÏó£¬xÖ¸ÏòsetXµÄÈë²Î
 after(Point p, int x): target(p) && args(x) && call(void setX(int)) {
   if (!p.assertX(x)) throw new PostConditionViolation();
 }
-// ´¦ÀíÕı³£·µ»ØµÄÇé¿ö£¬×¢Òâ´Ë´¦²ÎÊıµÄÎ»ÖÃ
+// ´¦ÀíÕı³£·µ»ØµÄÇé¿ö£¬×¢Òâ´Ë´¦²ÎÊıµÄÎ»ÖÃ£¬pÖ¸Ïòµ÷ÓÃgetXº¯ÊıµÄPoint¶ÔÏó£¬xÖ¸ÏògetXµÄ·µ»ØÖµ
 after(Point p) returning(int x): target(p) && call(int getX()) {
   System.out.println("Returning int value " + x + " for p = " + p);
 }
@@ -226,7 +229,8 @@ aspect SetsInRotateCounting {
 
 //  ÇĞÃæµÄÊäÈë¼ì²éÓÃ·¨(Í¬Àí¿ÉÒÔ½øĞĞÊä³ö¼ì²é)£¬¿ÉÒÔ¾«È·¿ØÖÆ²»Í¬ÀàµÄÏà¹Ø·½·¨
 aspect PointBoundsChecking {
-
+	/* ×¢Òâ²ÎÊı²¿·Ö£¬pointcutºÍadviceÖĞËùÓĞÃ°ºÅ:×ó²àµÄ²ÎÊı¶¼´øÓĞÀàĞÍĞŞÊÎ·û£¬¶øÓÒ²àargsÖĞ²»´ø£¬
+	   ²»Ê¹ÓÃpointcutÌá´¿µÄÖ±½ÓÄ£Ê½Ò²ÊÇÈç´Ë  */
     pointcut setX(int x):
         (call(void FigureElement.setXY(int, int)) && args(x, *))
         || (call(void Point.setX(int)) && args(x));
