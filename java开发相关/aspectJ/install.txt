@@ -1,0 +1,16 @@
+1、到aspectj官网下载安装包，当前最新版本是：aspectj-1.9.1.jar，一路next安装即可，默认安装到C盘根目录下；
+
+2、在CLASSPATH环境变量下添加： c:\aspectj1.9\lib\aspectjrt.jar 用于命令行下编译
+   在PATH环境变量下添加： c:\aspectj1.9\bin   用户命令行下运行
+
+3、在IDEA中 Setting -> Plugins 分别选中如下插件进行激活
+	（1）Spring AOP/@AspectJ
+	（2）AspectJ Support
+	
+4、在IDEA中添加编译依赖库 Project Structure -> Libraries -> + -> 选中之前安装目录的c:\aspectj1.9\lib\aspectjrt.jar -> OK
+
+5、修改编译器 Setting -> Java Compiler 
+	右侧 Use compiler 选择 Ajc
+	     Path to Ajc compiler 选择 C:\aspectj1.9\lib\aspectjtools.jar
+		 
+6、完毕，可以使用aspectj了。

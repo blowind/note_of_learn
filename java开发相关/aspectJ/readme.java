@@ -26,6 +26,13 @@ call(void m()) && withincode(void m())   //  定义一个在m()函数递归调用时的切点
 execution(void m()) && withincode(void m())   //  定义m()函数的执行  等同于 execution(void m())
 cflow(move())                       //  使用cflow定义切点，指向所有move切点开始调用和返回之间的点
 
+// 无论修饰符、返回类型、类和方法名是什么，并且参数包含一个单值、后接任意数量任意类型的参数，都会捕获方法上的连接点
+call(* *.*(*, ..))   
+call(* *.*(..))               //   无论修饰符、返回类型、类、方法名以及方法的参数个数与类型是什么，都会捕获方法上的连接点
+call(* *(..))                 //   同上，另一种写法
+call(* mypackage..*.*(..))    //   捕获mypackage包和子包内的任何方法上的连接点
+call(* MyClass+.*(..))        //   捕获MyClass和任何子类中的任何方法上的连接点
+
 // 方法调用举例：此处指向Point类的setX和setY方法调用
 pointcut setter(): target(Point) && (call(void setX(int)) || call(void setY(int)));
 
@@ -109,7 +116,14 @@ after(FigureElement fe, int x, int y) returning: setXY(fe, x, y) {
     System.out.println(fe + " moved to (" + x + ", " + y + ").");
 }
 
-// 使用thisJoinPoint特殊变量
+// 使用 thisJoinPoint 特殊变量，该变量收集了切点相关的各方面信息
+//  thisJoinPoint.getArgs()   获取切点的参数
+//  thisJoinPoint.getStaticPart()  切点静态信息，例如行号，静态签名，更快捷的方式是 thisJoinPointStaticPart 变量
+//  thisJoinPointStaticPart == thisJoinPoint.getStaticPart()
+//  thisJoinPoint.getKind() == thisJoinPointStaticPart.getKind()
+//  thisJoinPoint.getSignature() == thisJoinPointStaticPart.getSignature()
+//  thisJoinPoint.getSourceLocation() == thisJoinPointStaticPart.getSourceLocation()
+
 aspect SimpleTracing {
     pointcut tracedCall():
         call(void FigureElement.draw(GraphicsContext));
@@ -117,6 +131,10 @@ aspect SimpleTracing {
     before(): tracedCall() {
         System.out.println("Entering: " + thisJoinPoint);  // 输出： Entering: call(void FigureElement.draw(GraphicsContext))
     }
+}
+// thisJoinPointStaticPart 包含整个切点闭包的静态信息
+before() : execution (* *(..)) {
+	System.err.println(thisEnclosingJoinPointStaticPart.getSourceLocation())
 }
 
 // 使用proceed特殊函数，此处截取替换切点，然后通过proceed特殊函数继续执行切点的后续动作
@@ -127,6 +145,31 @@ void around(Point p, int x): target(p) && args(x) && call(void setX(int)) {
 }
 
                     /******************               Inter-type declarations内部变量声明                  ******************/
+// 在aspect内部声明Server类新增一个域变量disabled并且初始化为false，
+// disabled变量仅在本aspect内部可见，对Server类和其他切面都不可见
+private boolean Server.disabled = false;
+
+// 对外可见的声明，若Point类有同名变量，则编译错误
+public int Point.x = 0;
+
+// 声明Point类的getX()方法，对外可见，因此如果Point有同名方法，会产生编译错误
+public int Point.getX() { return this.x; }
+
+//  声明Point类实现Comparable接口，若Point类本身定义了和Comparable接口同名的方法，则报错
+declare parents: Point implements Comparable;
+
+//  声明类继承
+declare parents: Point extends GeometricObject;
+
+//  原则上切面内只能声明一个类型作为目标内部类，但是如下方式可以规避该限制，即通过声明一个标记内部接口来实现多个内共用切面
+aspect A {
+	private interface HasName {}
+	declare parents: (Point || Line || Square) implements HasName;
+
+	private String HasName.name;
+	public  String HasName.getName()  { return name; }
+}
+					
 // 给已有类的新增内部变量，此处给Point新增observers变量，该变量用于存储监控Point变化的Screen对象
 // 这种监控关系完全不需要在Point类和Screen类里面编写相关处理代码，所有具体关联处理全部放入本Aspect定义
 aspect PointObserving {
@@ -153,8 +196,9 @@ aspect PointObserving {
     }
 }
 
-                        /******************               Aspects定义                  ******************/
-// aspect切面的实例化都由AspectJ处理，默认是单例的，因此可以有局部变量和非静态函数的使用
+                         /******************               Aspects定义                  ******************/
+
+						 // aspect切面的实例化都由AspectJ处理，默认是单例的，因此可以有局部变量和非静态函数的使用
 aspect Logging {
     OutputStream logStream = System.err;
 
