@@ -9,11 +9,20 @@ pointcut 中的join points主要包括如下几种:
 	4、构造函数执行：                       call(*.new(int, int))
 	5、域变量引用：
 	6、异常处理：                           handler(ArrayOutOfBoundsException)
-	7、当前运行的对象属于SomeType类         this(SomeType)
-	8、调用切点方法的对象属于SomeType类     target(SomeType)
+	7、当前运行的对象属于MyClass类          this(varName)     注意括号内是变量名，类型在:左侧pointcut签名中指明
+	8、调用切点方法的对象属于MyClass类      target(varName)   注意括号内是变量名，类型在:左侧pointcut签名中指明
 	9、执行的代码位于MyClass类内部          within(MyClass)
 	10、位于Test类main方法调用的控制流中    cflow(call(void Test.main()))
 */
+
+/*
+ *  注意，this具体指向哪一个对象取决于连接点的位置，
+ *  在call中由于切点位于业务代码中方法调用点，此时this指向业务类对象
+ *  在execution中由于切点位于服务类代码中方法定义点，此时this指向服务类对象，与此时call - target在切点捕获的对象是一样的
+ *  如下所示即此处所述使用this和target捕获到同一个对象的情况
+ *   pointcut executionAndThisPointcut(Service service):execution(void Test3.Service.test(..)) && this(service);
+ *   pointcut executionAndTargetPointcut(Service service):execution(void Test3.Service.test(..)) && target(service);
+ */
 
 call(void Point.setX(int)   //  定义对Point类的一参数setX函数的调用为切点
 call(void Point.setx(int)) || call(void Line.setP1(Point)  //  使用 && , || , ! 组合切点，各切点可以属于不同的类
@@ -72,6 +81,35 @@ pointcut testEquality(Point p1, Point p2): target(p1) && args(p2) && call(boolea
 // 另一种场景，当二参数是int类型时
 pointcut setter(Point p, int newval): target(p) && args(newval) && (call(void setX(int)) || call(void setY(int)));
 	
+//  捕获构造方法的调用
+//  在把一个类实例化成一个对象时，具有new关键字的call(Signature)切入点会捕获连接点
+pointcut [切入点名字](<要捕获的参数>): call(<修饰符> 类名.new(参数列表))
+
+//  捕获构造方法的执行
+//  在执行类的构造函数时，具有new关键字的execution(Signature)切入点会捕获连接点
+pointcut [切入点名字](<要捕获的参数>): execution(<修饰符> 类名.new(参数列表))
+
+//  捕获对象初始化
+//  （1）initialization(Signature)切入点必须包含new关键字；
+//  （2）initialization(Signature)切入点捕获连接点发生在任何超类的初始化之后，以及从构造方法返回之前；
+//  （3）Signature必须解析成特定类的构造方法，而不是简单的方法；
+//  （4）initialization(Signature)切入点提供了编译时检查，用于检查构造方法是否正在被引用；
+//  （5）由于AspectJ编译器中的限制，当与around()通知关联时，不能使用initialization(Signature)切入点
+pointcut [切入点名字](<要捕获的参数>): initialization(<修饰符> 类名.new(参数列表))
+
+//  捕获对象的预先初始化
+//  （1）preinitialization(Signature)切入点必须包含new关键字；
+//  （2）preinitialization(Signature)切入点捕获连接点发生在进入构造方法之后，以及调用任何超类构造方法之前。
+//  （3）Signature必须解析成一个构造方法。
+//  （4）preinitialization(Signature)切入点提供了编译时检查，用于检查构造方法是否正在被引用；
+//  （5）由于AspectJ编译器中的限制，当与around()通知关联时，不能使用preinitialization(Signature)切入点
+pointcut [切入点名字](<要捕获的参数>): preinitialization(<修饰符> 类名.new(参数列表))
+
+//  捕获类的初始化
+//  （1）对staticinitialization(TypePattern)切入点使用的环境有一些限制，
+//       首先，没有父对象触发类的初始化，所以没有this引用；另外，也不涉及目标对象，故没有target目标引用；
+//  （2）TypePattern可以包含通配符，用于选择一系列不同的类。
+pointcut [切入点名字](<要捕获的参数>): staticinitialization(类名)
 	
                        /******************               Advice举例                  ******************/
 					   
@@ -311,3 +349,18 @@ aspect FaultHandler {
 		reportFault();
 	}
 }
+
+#####  异常捕获切面
+注意点：
+1、hander(异常类)捕获的连接点是catch语句。也就是在程序捕捉异常的地方捕获连接点，而不是在引发异常的地方。
+2、此处的异常类为Throwable及其子类。
+3、handler(异常类)只能使用before()指定前置通知，不支持其他形式的通知。/4、此处的异常类也可以使用通配符，用于选择不同类上的一系列连接点。
+   4.1 mypackage..*   捕获mypackage包及其子包中的类的连接点
+   4.2 MyClass+	      捕获MyClass类及其任何子类中的连接点
+   
+#####  捕获类和对象构造上的连接点
+1、捕获构造方法的调用（用call(Signature)切入点，带有额外的new关键字作为签名的一部分)
+2、捕获构造方法的执行（用execution(Signature)切入点，带有额外的new关键字作为签名的一部分）
+3、捕获对象初始化（用initialization(Signature)切入点）
+4、捕获对象预先初始化（用preinitialization(Signature)切入点）
+5、捕获类的初始化（用staticinitialization(TypePattern)切入点）。
