@@ -110,6 +110,52 @@ pointcut [ÇÐÈëµãÃû×Ö](<Òª²¶»ñµÄ²ÎÊý>): preinitialization(<ÐÞÊÎ·û> ÀàÃû.new(²ÎÊýÁ
 //       Ê×ÏÈ£¬Ã»ÓÐ¸¸¶ÔÏó´¥·¢ÀàµÄ³õÊ¼»¯£¬ËùÒÔÃ»ÓÐthisÒýÓÃ£»ÁíÍâ£¬Ò²²»Éæ¼°Ä¿±ê¶ÔÏó£¬¹ÊÃ»ÓÐtargetÄ¿±êÒýÓÃ£»
 //  £¨2£©TypePattern¿ÉÒÔ°üº¬Í¨Åä·û£¬ÓÃÓÚÑ¡ÔñÒ»ÏµÁÐ²»Í¬µÄÀà¡£
 pointcut [ÇÐÈëµãÃû×Ö](<Òª²¶»ñµÄ²ÎÊý>): staticinitialization(ÀàÃû)
+
+
+//  ²¶»ñµÄÊôÐÔµÄ·ÃÎÊ   ¡¾×¢Òâ´Ë¹¦ÄÜÈÝÒ×ÆÆ»µÀàµÄ·â×°£¬¼´ÕâÖÖÇÐÃæ¿ÉÒÔ·ÃÎÊµ½protectedºÍprivateÐÞÊÎµÄ±äÁ¿¡¿
+//  £¨1£©get(Signature)ÇÐÈëµã»á²¶»ñ¶ÔÊôÐÔµÄÖ±½Ó·ÃÎÊ£¬²»½ö½öÖ»»á²¶»ñ¶ÔÊôÐÔgetter·ÃÎÊÆ÷·½·¨µÄµ÷ÓÃ¡£
+//  £¨2£©get(Signature)ÇÐÈëµã²»ÄÜ²¶»ñ¶Ô³£Á¿µÄ·ÃÎÊ¡£´Ë´¦³£Á¿Ö¸finalÖ¸¶¨µÄÄÇÖÖ
+//  £¨3£©Signature±ØÐë½âÎö³ÉÌØ¶¨ÀàµÄÊôÐÔ¡£
+//  £¨4£©Signature¿ÉÒÔ°üº¬Í¨Åä·û£¬ÓÃÓÚÑ¡Ôñ²»Í¬ÊôÐÔÉÏµÄÒ»ÏµÁÐÁ¬½Óµã¡£
+pointcut [ÇÐÈëµãÃû×Ö](ÏëÒª²¶»ñµÄ²ÎÊý): get(<¿ÉÑ¡µÄÐÞÊÎ·û> ÊôÐÔÀàÐÍ ÀàÃû.ÊôÐÔÃû)
+
+//  ²¶»ñ¶ÔÊôÐÔµÄÐÞ¸Ä
+//  £¨1£©set(Signature)ÇÐÈëµãÔÚÐÞ¸ÄÊôÐÔÊ±´¥·¢¡£
+//  £¨2£©Signature±ØÐë½âÎö³ÉÌØ¶¨ÀàµÄÊôÐÔ¡£
+//  £¨3£©Signature¿ÉÒÔ°üº¬Í¨Åä·û£¬ÓÃÓÚÑ¡Ôñ²»Í¬ÊôÐÔÉÏµÄÒ»ÏµÁÐÁ¬½Óµã¡£
+pointcut [ÇÐÈëµãÃû×Ö](Òª»ñÈ¡µÄ²ÎÊý): set(<¿ÉÑ¡µÄÐÞÊÎ·û> ÊôÐÔÀàÐÍ ÀàÃû.ÊôÐÔÃû)
+
+
+//  ÏÞÖÆÁ¬½ÓµãµÄ×÷ÓÃÓò
+//  within¿ÉÒÔÖ¸¶¨ÇÐÈëµãµÄ×÷ÓÃÓòÔÚ°üÖÐ»òÕßÀàÖÐ
+//  withincode¿ÉÒÔÍ¨¹ý·½·¨Ç©ÃûÏÞÖÆÁ¬½ÓµãµÄ×÷ÓÃÓòÔÚ·½·¨ÖÐ
+//  £¨1£©within(TypePattern)ÇÐÈëµã²¶»ñÖ¸¶¨Àà×÷ÓÃÓòÖÐµÄËùÓÐÁ¬½Óµã¡£
+//  £¨2£©within(TypePattern)ÇÐÈëµã¼«ÉÙµ¥¶ÀÊ¹ÓÃ£¬ËüÍ¨³£ÓëÆäËûÇÐÈëµã½áºÏÊ¹ÓÃ£¬ÓÃÓÚ¼õÉÙ½«Òª²¶»ñÁ¬½Óµã¡£
+//  £¨3£©within(TypePattern)¿ÉÒÔ°üº¬Í¨Åä·û£¬ÓÃÓÚÑ¡Ôñ²»Í¬ÀàÉÏµÄÒ»ÏµÁÐÁ¬½Óµã¡£
+pointcut [ÇÐÈëµãÃû×Ö](ÏëÒª»ñÈ¡µÄ²ÎÊý): within(ÀàÃû)
+
+//  Ê¹ÓÃwithincode(Signature)ÇÐÈëµãÀ´²¶»ñÓëÌØ¶¨Ç©ÃûÆ¥ÅäµÄ·½·¨ÄÚµÄËùÓÐÁ¬½Óµã
+//  £¨1£©withincode(Signature)ÇÐÈëµãÖ¸¶¨ÁËÌØ¶¨·½·¨×÷ÓÃÓòÄÚµÄËùÓÐÁ¬½Óµã¡£
+//  £¨2£©withincode(Signature)ÇÐÈëµãºÜÉÙµ¥¶ÀÊ¹ÓÃ¡£Ò»°ãÓëÆäËûÇÐÈëµã½áºÏÊ¹ÓÃ£¬ÓÃÓÚ¼õÉÙ½«Òª²¶»ñÁ¬½Óµã¡£
+//  £¨3£©Signature¿ÉÒÔ°üº¬Í¨Åä·û£¬ÓÃÓÚÑ¡Ôñ¿çÔ½²»Í¬Àà²»Í¬·½·¨ÉÏµÄÒ»ÏµÁÐÁ¬½Óµã¡£
+//  £¨4£©withincodeÓëwithinµÄÇø±ð¾ÍÊÇwithincodeÓÃÓÚÖ¸¶¨·½·¨£¬¶øwithinÓÃÓÚÖ¸¶¨Àà¡£
+pointcut [ÇÐÈëµãÃû×Ö](Òª»ñÈ¡µÄ²ÎÊý): withincode(<¿ÉÑ¡µÄÐÞÊÎ·û> ÀàÃû.·½·¨Ãû(²ÎÊýÁÐ±í))
+
+
+//  ²¶»ñ»ùÓÚ¿ØÖÆÁ÷³ÌµÄÁ¬½Óµã
+//  cflowÓëcflowbelowÌá¹©ÁËÒ»ÖÖ²¶»ñÒ»¸öpointcut¿ØÖÆÁ÷ÖÐËùÓÐÁ¬½ÓµãµÄ¹¦ÄÜ¡£
+//  ²¶»ñÔÚ³ÌÐò¿ØÖÆÁ÷³ÌÄÚÓöµ½µÄËùÓÐÁ¬½Óµã£¬ÕâÐ©Á¬½Óµã¶¼ÔÚÄ³Ò»¸öÌØ¶¨µÄÁ¬½ÓµãÖ®ºó£¬¿ÉÒÔ¿¼ÂÇÊ¹ÓÃcflow¡£
+//  ³ÌÐò¿ØÖÆÁ÷¾ÍÊÇ³ÌÐòÖ´ÐÐ¹ý³ÌÖÐµÄÃ¿Ò»ÐÐ´úÂë£¬×¼È·µÄËµÊÇÃ¿ÐÐ´úÂë±àÒëºóµÄ×Ö½ÚÂë¡£
+//Ò»¸ö·½·¨µÄ¿ØÖÆÁ÷°üÀ¨·½·¨ÖÐµÄÃ¿Ò»ÐÐ´úÂë£¬°üÀ¨¶ÔÆäËû·½·¨µÄµ÷ÓÃ£¬²»¹ÜÕâ¸öµ÷ÓÃ²ã´ÎÓÐ¶àÉî£¬¶¼ÊôÓÚ¸Ã·½·¨µÄ¿ØÖÆÁ÷£¬Ö±µ½·½·¨·µ»Ø¡£
+//  ÔÚcflow(Pointcut)Ö¸¶¨µÄÁ¬½Óµã¿ØÖÆÁ÷³ÌÄÚ£¬ÈÎºÎÓöµ½µÄÁ¬½Óµã¶¼»á´¥·¢cflow(Pointcut)ÇÐÈëµã£¬²¢µ÷ÓÃ¹ØÁªµÄÍ¨Öª
+// £¨1£©cflow(Pointcut)ÇÐÈëµã²¶»ñÔÚ³õÊ¼ÌØ¶¨µÄÁ¬½Óµã³ÌÐò¿ØÖÆÁ÷ÄÚÓöµ½µÄËùÓÐÁ¬½Óµã£¬Õâ¸ö³õÊ¼Á¬½ÓµãÊÇÍ¨¹ýÁíÒ»¸öÇÐÈëµãÑ¡ÔñµÄ¡£
+// £¨2£©²¶»ñµÄÁ¬½Óµã°üÀ¨³õÊ¼Á¬½Óµã¡£
+// £¨3£©cflow(Pointcut)µÄÊµÏÖ·½Ê½»áÔì³É´óÁ¿µÄÏµÍ³¿ªÏú£¬ÔÚ¿ÉÄÜµÄµØ·½£¬ÓÅÏÈ¿¼ÂÇÊ¹ÓÃwithincode(Signature)¶ø²»ÊÇcflow(Pointcut)¡£
+pointcut [ÇÐÈëµãÃû×Ö](ÏëÒª²¶»ñµÄ²ÎÊý): cflow(ÁíÒ»¸öpointcut)
+
+//  cflowbelowÓëcflowµÄÓÃ·¨ÊÇÒ»ÑùµÄ£¬Î¨Ò»µÄÇø±ðÊÇcflowbelow²»°üÀ¨³õÊ¼Á¬½Óµã£¬¶øcflow°üÀ¨³õÊ¼Á¬½Óµã
+
+
 	
                        /******************               Advice¾ÙÀý                  ******************/
 					   

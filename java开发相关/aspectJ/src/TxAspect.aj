@@ -151,4 +151,79 @@ public aspect TxAspect {
 		System.out.println("***************结束分割线**************");
 	}
 
+	/*******         捕获属性上的连接点           ******/
+
+//	pointcut getNamePointcut(): get(String Service4.*name);
+//
+//	before():getNamePointcut(){
+//		System.out.println("================分割线================");
+//		System.out.println("Signature: " + thisJoinPoint.getSignature());
+//		System.out.println("Source Line: " + thisJoinPoint.getSourceLocation());
+//		System.out.println("***************结束分割线**************");
+//	}
+//
+//	after() returning(String value):getNamePointcut(){
+//		System.out.println("================get分割线================");
+//		System.out.println("Signature: " + thisJoinPoint.getSignature());
+//		System.out.println("Source Line: " + thisJoinPoint.getSourceLocation());
+//		System.out.println("访问的属性值是：" + value);
+//		System.out.println("***************结束get分割线**************");
+//	}
+//
+//	pointcut setNamePointcut(String v): set(String Service4.*name) && args(v);
+//
+//	before(String v): setNamePointcut(v){
+//		System.out.println("================set分割线================");
+//		System.out.println("Signature: " + thisJoinPoint.getSignature());
+//		System.out.println("Source Line: " + thisJoinPoint.getSourceLocation());
+//		System.out.println("Value: " + v);
+//		System.out.println("***************结束set分割线**************");
+//	}
+
+	pointcut withinService(): within(Service5);
+
+	before(): withinService(){
+		System.out.println("================within分割线================");
+		System.out.println(thisJoinPoint.getKind());
+		System.out.println("Signature: " + thisJoinPoint.getSignature());
+		System.out.println("Source Line: " + thisJoinPoint.getSourceLocation());
+	}
+
+	// 要运行此处要屏蔽本此处所有切点定义，因为其他切点与此处重复定义，此外加切点的地方要排除切面定义本身，否则执行时报错
+//	pointcut withinService2(): within(com.zxf.aspectj.*) && !within(TxAspect);
+//
+//	before(): withinService2(){
+//		System.out.println("================within分割线================");
+//		System.out.println(thisJoinPoint.getKind());
+//		System.out.println("Signature: " + thisJoinPoint.getSignature());
+//		System.out.println("Source Line: " + thisJoinPoint.getSourceLocation());
+//	}
+
+	/* 捕获main方法里面的所有连接点 */
+//	pointcut withinCodePointcut(): withincode(* Main.main(*));
+//
+//	before(): withinCodePointcut(){
+//		System.out.println("================withincode分割线================");
+//		System.out.println(thisJoinPoint.getKind());
+//		System.out.println("Signature: " + thisJoinPoint.getSignature());
+//		System.out.println("Source Line: " + thisJoinPoint.getSourceLocation());
+//	}
+
+
+	/**
+	 * 通过指定cflow(call(* A.methodA()))来捕获对A.methodA()方法调用控制流程内的所有连接点。
+	 * 另外通过!within(CFlowAspect)排除了切面本身的连接点，
+	 * 如果不这么做，会得到一个栈溢出的错误结果，这是因为我们的切面织入了methodA方法，那么切面自然也是methodA方法的一部分，
+	 * 如果切面自己织入自己，就会无限递归下去，最后导致栈溢出
+	 **/
+	pointcut cflowPointcut(): cflow(call(public static void Service6A.methodA())) && !within(TxAspect);
+	/*  cflowbelow与cflow的用法是一样的，唯一的区别是cflowbelow不包括初始连接点，而cflow包括初始连接点  */
+//	pointcut cflowPointcut(): cflowbelow(call(public static void Service6A.methodA())) && !within(TxAspect);
+
+	before(): cflowPointcut(){
+		System.out.println("================分割线================");
+		System.out.println(thisJoinPoint);
+	}
+
+
 }
