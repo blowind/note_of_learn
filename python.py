@@ -136,6 +136,24 @@ s['x'] = s['x'].append('d')
 
 
 
+
+### redis模块安装： 1、python安装目录Scripts下执行 .\easy_install.exe pip 安装pip； 2、Scripts目录下 .\pip2.7.exe install redis 安装redis模块
+import redis
+import fileinput
+
+type=2
+pool = redis.ConnectionPool(host='47.75.92.78', port=6379, db=0, password='7wtRY33AoWuun2pCLQ')
+# host='localhost', port=6379, db=0, password=None, socket_timeout=None, connection_pool=None, charset='utf-8', errors='strict', unix_socket_path=Non
+r = redis.Redis(connection_pool=pool)
+print "start"
+for line in fileinput.input("./mobile.txt"):
+	line = line.strip()
+	print 'insert: ' + line
+	if len(line) > 0 :
+		r.hset('mobile:type', line + ':' + str(type), '222222')
+
+
+
 		     ###############           注意事项               #################	
 
 

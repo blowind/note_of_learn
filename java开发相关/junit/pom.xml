@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+				 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.junit</groupId>
+	<artifactId>mytest</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<!--分析结果输出文档格式指定，此处分别输出html和xml格式的文档，在target/site目录下-->
+					<formats>
+						<format>html</format>
+						<format>xml</format>
+					</formats>
+					<check>
+						<!--校验失败则中止.即为true时如果校验失败则打包执行失败,反之则只是打出告警日志-->
+						<haltOnFailure>true</haltOnFailure>
+						<!--每个类的分支覆盖率-->
+						<branchRate>85</branchRate>
+						<!--每个类的代码行覆盖率-->
+						<lineRate>85</lineRate>
+						<!--整体的分支覆盖率-->
+						<totalBranchRate>85</totalBranchRate>
+						<!--整体的代码行覆盖率-->
+						<totalLineRate>85</totalLineRate>
+						<!--每个包的分支行覆盖率-->
+						<packageBranchRate>85</packageBranchRate>
+						<!--每个包的代码行覆盖率-->
+						<packageLineRate>85</packageLineRate>
+						<regexes>
+							<!--通过表达式设定覆盖率伐值-->
+							<regex>
+								<pattern>com.junit.*</pattern>
+								<branchRate>90</branchRate>
+								<lineRate>60</lineRate>
+							</regex>
+						</regexes>
+					</check>
+
+					<!--忽略列表.根据class文件路径进行匹配，当前好像不生效-->
+					<instrumentation>
+						<ignores>
+							<!--经过修改的 cobertura， 支持方法级别的过滤 -->
+							<ignore>getOriginal*</ignore>
+							<!--以上修改指的是过滤项目中所有类中的方法名中含有 main 的方法 -->
+						</ignores>
+
+						<excludes>
+							<exclude>com/junit/impl/ErrorResponse.class</exclude>
+						</excludes>
+					</instrumentation>
+				</configuration>
+				<!--此处配合前面的check配置做命令绑定，此处设置在打包前做校验-->
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<phase>prepare-package</phase>
+					</execution>
+				</executions>
+				<!--<executions>-->
+					<!--<execution>-->
+						<!--<phase>package</phase>-->
+						<!--<goals>-->
+							<!--<goal>cobertura</goal>-->
+						<!--</goals>-->
+					<!--</execution>-->
+				<!--</executions>-->
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+
+</project>
