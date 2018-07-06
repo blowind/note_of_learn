@@ -293,6 +293,14 @@ crontab -l
 yum install iptables-services   ##  centos 7 需要安装iptables服务
 
 
+23、查看linux系统网络流量
+ifstat
+
+
+24、查看yum安装的软件包信息
+yum info nginx  ## 查看nginx安装信息
+
+
 
 
 
