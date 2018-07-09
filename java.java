@@ -2279,6 +2279,15 @@ List<Integer> sameOrder = numbers.stream().sorted().collect(Collectors.toList())
 numbers.stream().collect(Collectors.toCollection(TreeSet::new));          //  指定生成的集合的类型，此处为TreeSet
 
 
+emps = IntStream.range(0, 10).mapToObj(x -> new Emp(x % 3, x % 5 == 0 ? null : "name" + x)).toArray(Emp[]::new);
+Stream.of(emps).collect(Collectors.toMap(Emp::getId, Emp::getName,(k,v)->v));
+Stream.of(emps).collect(Collector.of(HashMap::new, 
+                                     (m,emp) -> m.put(emp.getId(),emp.getName()), 
+									 (k,v) -> { k.putAll(v); return k; },       // 此处为了防止parallel下数据丢失，非parallel下(k,v)->v即可
+									 Characteristics.IDENTITY_FINISH));
+Stream.of(emps).collect(HashMap::new, (m, emp) -> m.put(emp.getId(), emp.getName()), HashMap::putAll);
+
+
 2、转换成值   maxBy,  minBy,   averagingInt,   summingInt
 public Optional<Artist> biggestGroup(Stream<Artist> artists) {
 	Function<Artist, Long> getCount = artist -> artist.getMembers().count(); //   生成一个函数接口对象
