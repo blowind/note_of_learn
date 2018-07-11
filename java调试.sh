@@ -61,3 +61,6 @@ $ jmap -histo 11951
    
 ##  在*inx系统上使用快速返回的伪随机数运行java程序，注意其中的./不能少   
 -Djava.security.egd=file:/dev/./urandom
+
+
+jps | grep Bootstrap      ## 查看Tomtcat的JVM上是否还有保留的tomcat进程

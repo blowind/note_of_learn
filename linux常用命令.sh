@@ -198,11 +198,25 @@ crontab -l             ## 查看当前用户的计划任务
 
 13、服务
 chkconfig --list          ## 列出所有系统服务
-
 chkconfig --list | grep on   ## 列出所有启动的系统服务
+chkconfig --level 2345 tomcat on  ## 在2,3,4,5四个层级上开机自启动tomcat（要求rpm安装）
 
-14、程序
-rpm -qa    ## 查看所有安装的软件包
+14、编写tomcat开机自启动脚本tomcat
+1、脚本内容如下：
+==============================================
+#!/bin/sh
+JAVA_HOME=/usr/java/jdk1.8.04-28
+CATALINA_HOME=/mnt/apache-tomcat-9.0.1
+export JAVA_HOME CATALINA_HOME
+exec $CATALINA_HOME/bin/catalina.sh $*
+==============================================
+2、修改tomcat脚本权限和属组
+chown root.root tomcat
+chmod 755 tomcat
+3、将tomcat脚本复制到/etc/rc.d/init.d/目录下
+4、设置tomcat服务自动启动和停止
+chkconfig --level 2345 tomcat on
+
 
 
 15、cut命令
@@ -299,6 +313,22 @@ ifstat
 
 24、查看yum安装的软件包信息
 yum info nginx  ## 查看nginx安装信息
+
+24、rpm软件包安装相关命令
+rpm -qa    ## 查看所有安装的软件包
+rpm -qa | grep tomcat   ## 查看所有tomcat的rpm安装信息
+rpm -e tomcat --nodeps   ## 删除tomcat安装包，不检查相关依赖
+rpm -ivh --nodeps --prefix /usr/local  tomcat-9.noarch.rpm    ## 不检查依赖的安装tomcat-9.noarch.rpm包，安装到/usr/local目录下
+
+25、添加用户和用户组
+groupadd  nobody       ## 添加nobody用户组
+##  添加用户tomcat，将tomcat的用户shell设置为/sbin/nologin,  home目录为/opt/tomcat/temp, 群组为nobody
+useradd -s /sbin/nologin  -d /opt/tomcat/temp  -c 'Tomcat User' -g nobody tomcat
+
+
+26、杀死进程
+kill -TERM 5166  ## 杀死pid为5166的进程
+kill -KILL 5166  ## 杀死pid为5166的进程
 
 
 
