@@ -118,31 +118,33 @@ hdparm -i /dev/hda          ## 查看磁盘参数(仅适用于IDE设备)
 
 dmesg | grep IDE              ##  查看启动时IDE设备检测状况
 
-11、网络
+11、网络netstat
 ifconfig            ## 查看所有网络接口的属性
-
 ifconfig eth0       ## 查看网卡eth0的信息，包括本机地址，掩码，广播地址，MAC地址，MTU等
-
 ping -b 206.168.112.127   ## 针对上面找出的广播地址进行ping操作，可以得到局域网内所有其他机器的地址
 
 iptables -L         ##  查看防火墙设置
 
-route -n            ## 查看路由表
-
-netstat -lntp       ##  查看所有监听端口
-
-netstat -antp       ##  查看所有已建立的连接
-
-netstat -s          ##  查看网络统计信息
-
+route -n        ## 查看路由表
+netstat -lntp   ##  查看所有监听端口
+netstat -antp   ##  查看所有已建立的连接
+netstat -s      ##  查看网络统计信息
 netstat -ni     ## -i提供网络接口的信息：一般为eth0, lo(loopback) -n标志输出数值地址，而不是把输出反向解析成名字 
-
 netstat -nr     ## -r展示路由表
-
 netstat -a      ##  查看套接字情况
+netstat -a -tcp ##  查看所有激活(-a)的tcp连接情况
 
 
-用linux设置iptables做网关，进行port forward
+12、iptables
+
+iptables -t nat -L      ##  查看iptables功能是否使能
+
+### 将所有目的IP是192.168.1.100，端口是80的tcp包重定向到8080端口
+iptables -t nat -I PREROUTING -p tcp --dst 192.168.1.100 --dport 80 -j REDIRECT --to-ports 8080
+iptables -t nat -I OUTPUT -p tcp --dst 192.168.1.100 --dport 80 -j REDIRECT --to-ports 8080
+
+
+用linux设置iptables做网关，进行port forward端口转发
 基本信息：
 web site ip port: 192.168.12.50 80 (windows IIS server  or linux apache)
 gateway public ip(eth0): 210.211.22.20, private ip(eth1): 192.168.12.10 (centos 5.2)
@@ -202,7 +204,7 @@ chkconfig --list | grep on   ## 列出所有启动的系统服务
 chkconfig --level 2345 tomcat on  ## 在2,3,4,5四个层级上开机自启动tomcat（要求rpm安装）
 
 14、编写tomcat开机自启动脚本tomcat
-1、脚本内容如下：
+1）、脚本内容如下：
 ==============================================
 #!/bin/sh
 JAVA_HOME=/usr/java/jdk1.8.04-28
@@ -210,11 +212,11 @@ CATALINA_HOME=/mnt/apache-tomcat-9.0.1
 export JAVA_HOME CATALINA_HOME
 exec $CATALINA_HOME/bin/catalina.sh $*
 ==============================================
-2、修改tomcat脚本权限和属组
+2）、修改tomcat脚本权限和属组
 chown root.root tomcat
 chmod 755 tomcat
-3、将tomcat脚本复制到/etc/rc.d/init.d/目录下
-4、设置tomcat服务自动启动和停止
+3）、将tomcat脚本复制到/etc/rc.d/init.d/目录下
+4）、设置tomcat服务自动启动和停止
 chkconfig --level 2345 tomcat on
 
 

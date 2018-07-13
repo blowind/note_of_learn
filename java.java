@@ -26,6 +26,14 @@ List<StringAddress> list = new ArrayList<StringAddress>(Collections.nCopies(4, n
 Collections.fill(list, new StringAddress("World"));
 
 
+字符串首字母大写写法
+public static String captureName(String name) {
+	char[] cs = name.toCharArray();
+	cs[0] -= 32;
+	return String.valueOf(cs);
+}
+
+
 @SuppressWarning "unchecked"   //  屏蔽编译告警，使用在尽量小的单位上，例如 如果仅对方法屏蔽，就不要将词标签放到类之前
 
 /****                                               容器                                        ****/

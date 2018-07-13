@@ -1,0 +1,113 @@
+共用tomcat二进制包但是应用独立（各自起JVM）的部署方法
+1、创建项目文件相关的目录，如/opt/tomcat-instance/helloword，在其下创建目录conf, logs, temp, webapps, work, bin
+2、将发行目录($CATALINA_HOME)下conf文件内容拷贝到上一步创建的项目conf目录下
+3、在项目bin目录下创建启动脚本start.sh，内容如下
+	#!/bin/sh
+	set CATALINA_BASE="/opt/tomcat-instance/helloword"
+	set CATALINA_HOME="/opt/tomcat"          ## tomcat安装包所在目录（发行目录）
+	export CATALINA_BASE CATALINA_HOME
+	$CATALINA_HOME/bin/catalina.sh start
+4、修改start.sh脚本权限
+   chmod 755 start.sh
+
+
+
+<!-- 设置tomcat运行的jvm的配置参数，一般配置在catalina.sh文件中，共用发行目录时，配置在$CATALINA_BASE/bin/start.sh文件中并export出来 -->
+
+JAVA_OPTS="-server -Djava.security.egd=file:/dev/./urandom"
+<!-- 以调试模式启动tomcat，可以用8000端口通过IDE连接JPAD远程调试客户端进行调试 -->
+JAVA_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"
+<!-- 在同一台机器通过jmx远程客户单连接到tomcat来进行管理或监控 -->
+JAVA_OPTS="-Dcom.sun.management.jmxremote=true \
+           -Dcom.sun.management.jmxremote.ssl=false \
+           -Dcom.sun.management.jmxremote.authenticate=false"
+<!-- 在另一台机器上用tcp 8008端口连接tomcat JVM进行远程管理和监控 -->
+JAVA_OPTS="-Dcom.sun.management.jmxremote.port=8008 \
+           -Dcom.sun.management.jmxremote=true \
+           -Dcom.sun.management.jmxremote.ssl=false \
+           -Dcom.sun.management.jmxremote.authenticate=false"
+
+参数说明：
+-Xms384M                    设置JVM启动时堆栈内存的大小
+-Xmx384M                    设置JVM可扩展的最大堆栈内存
+-Djava.awt.headless=true    运行在没有图形显示所安装的软件的情况下运行jvm
+-Djava.security.debug=all   打开所有调试输出
+-enableassertions           启用assertion检查
+-verbose:gc                 启用verbose gc调试输出
+-Dfile.encoding=UTF-8       设置tomcat使用的默认文件编码规则
+
+
+
+
+<!-- ---------------------- 使用容器的领域功能和UserDatabaseRealm配置限定访问用户 ----------------------- -->
+<!-- server.xml里面的配置 -->
+<Realm className="org.apache.catalina.realm.LockOutRealm">
+<!-- This Realm uses the UserDatabase configured in the global JNDI
+	  resources under the key "UserDatabase".  Any edits
+	  that are performed against this UserDatabase are immediately
+	  available for use by the Realm.  -->
+      <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+             resourceName="UserDatabase"/>
+</Realm>
+
+<!-- tomcat-users.xml里面的配置 -->
+<tomcat-users xmlns="http://tomcat.apache.org/xml"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+              version="1.0">
+    <role rolename="tomcat"/>
+    <role rolename="role1"/>
+    <user username="tomcat" password="<must-be-changed>" roles="tomcat"/>
+    <user username="both" password="<must-be-changed>" roles="tomcat,role1"/>
+    <user username="role1" password="<must-be-changed>" roles="role1"/>        
+</tomcat-users>
+
+
+
+<!-- ---------------------- 使用容器的领域功能和JDBCRealm配置限定访问用户 ----------------------- -->
+
+<!-- 数据库建表SQL -->
+create table users (
+  user_name         varchar(15) not null primary key,
+  user_pass         varchar(15) not null
+);
+
+create table user_roles (
+  user_name         varchar(15) not null,
+  role_name         varchar(15) not null,
+  primary key (user_name, role_name)
+);
+
+<!-- server.xml里面的配置 -->
+<Realm className="org.apache.catalina.realm.JDBCRealm"
+	   driverName="com.mysql.jdbc.Driver"
+	   connectionURL="jdbc:mysql://localhost/authority?user=dbuser&amp;password=dbpass"
+	   connectionName="dbuser"
+	   connectionPassword="dbpass"
+	   userTable="users" userNameCol="user_name" userCredCol="user_pass"
+	   userRoleTable="user_roles" roleNameCol="role_name" />
+
+
+
+<!-- ---------------------- 使用容器的领域功能和JNDIRealm配置限定访问用户 ----------------------- -->
+<!-- server.xml里面的配置 -->
+<Realm className="org.apache.catalina.realm.JNDIRealm"
+	   connectionURL="ldap://ldap.groovywigs.com:389"
+	   connectionPassword="ldappassword"
+	   userPattern="uid={0},ou=people,dc=groovywigs,dc=com"
+	   roleBase="ou=groups,dc=groovywigs,dc=com"
+	   roleName="cn"
+	   roleSearch="(uniqueMember={0})" />
+
+
+<!-- ---------------------- 使用容器的领域功能和JAASRealm配置限定访问用户 ----------------------- -->
+
+
+<!-- 最大线程数，最小空闲线程数，最大空闲线程数 -->
+<!-- proxyPort设置代理端口是80，处理的是通过iptables将80端口的tcp请求转发到8080这种情况，因为是iptables转发，站在tomcat角度他接收的所有请求都来自8080端口，因此它是8080端口上打开web服务连接，会在url中加上8080端口，此处设置消除此种追加 -->
+<!-- proxyName指定显示在客户端url的内容 -->
+<Connector port="8081" maxHttpHeaderSize="8192" protocol="HTTP/1.1"
+	       proxyPort="80" proxyName="hostname.example.com"
+	       maxThreads="150" minSpareThreads="25" maxSpareThreads="75"  
+	       enableLookups="false" redirectPort="8443" acceptCount="100"
+	       connectionTimeout="20000" disableUploadTimeout="true" />
