@@ -76,6 +76,12 @@ git push origin --delete exchange_au           ## 删除远程分支 remotes/ori
 git checkout master                            ## 本地切换到master分支
 git branch -d exchange_au                      ## 删除本地的exchange_au分支
 
+【删除提交到本地的修改】
+git checkout .          #本地所有修改的。没有的提交的，都返回到原来的状态
+git stash               #把所有没有提交的修改暂存到stash里面。可用git stash pop回复。
+git reset --hard HASH   #返回到某个节点，不保留修改。
+git reset --soft HASH   #返回到某个节点。保留修改
+
 
 【提示出错信息：fatal: remote origin already exists.】
 1、先输入$ git remote rm origin

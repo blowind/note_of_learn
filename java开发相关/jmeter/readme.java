@@ -27,6 +27,7 @@ log.info("numSig: {}", numSig);
 //props.put("number", num); 
 //props.put("numberSig", numSig);
 
+// 跨线程有效，需在用户定义变量里先定义
 JMeterUtils.setProperty("number", num);
 JMeterUtils.setProperty("numberSig", numSig);
 
