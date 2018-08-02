@@ -3,6 +3,7 @@ package com.zxf.bootredis.service;
 import com.zxf.bootredis.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Repository;
 
@@ -66,6 +67,20 @@ public class PersonService {
 	public Book getJacksonValue(String key) {
 		ValueOperations<String, Book> operations = templateJackson.opsForValue();
 		return operations.get(key);
+	}
+
+	/**************        串行化批量操作示例        *********/
+
+	/**	添加zset的pipeline操作  **/
+	public void processBatchedCmd() {
+		List<Integer> testData = Arrays.asList(1, 2, 3, 4, 5, 6);
+		stringRedisTemplate.executePipelined((RedisConnection connection) -> {
+			connection.zRemRange("zsetKey".getBytes(), 0, 100);
+			for(Integer i : testData) {
+				connection.zAdd("zsetKey".getBytes(), i, String.valueOf(i).getBytes());
+			}
+			return null;
+		});
 	}
 
 
