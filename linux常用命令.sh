@@ -336,6 +336,10 @@ kill -TERM 5166  ## 杀死pid为5166的进程
 kill -KILL 5166  ## 杀死pid为5166的进程
 
 
+27、建立软链接
+ln -s abc cde  ## 建立abc的软链接
+
+
 
 
 
