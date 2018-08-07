@@ -1,7 +1,7 @@
 
 
 
-                              /****************    处理json字符串   ****************/  
+                              /****************    通过java代码处理json字符串   ****************/  
 							  
 /* 方法一：将alibaba的fastjson-1.2.44.jar包放到apache-jmeter-4.0\lib\ext目录下，重启jmeter
 **         (相比在跟路径里Add directory or jar to classpath的好处是重启后仍然有效，坏处是lib目录越来越臃肿)
@@ -100,6 +100,34 @@ ResponseCode=500;        //  设置BeanShell Sampler返回码，默认是200
 ResponseMessage="test ResponseMessage set";   // 设置BeanShell Sampler返回消息，默认是OK
 isSucces=false;                               // 设置BeanShell Sampler返回状态
 SampleResult.setResponseData("Hello, Jmeter");   // 设置BeanShell Sampler的Response Data值
+
+
+								/****************     提取器extractor   ****************/
+【JSON Extractor】
+1、选默认Main sample only；
+2、Names ofcreated variables：提取后保存内容的变量，合理变量名即可
+3、JSON Path expressions: 抽取json的表达式
+   对如下格式的jsont提取isRegistered的值，提取表达式为 $.data.isRegistered
+   {"code":0, "msg":"success", "data":{"isRegistered":true}}
+   对数组形式的json，提取表达式为$.data[0].name
+   {"code":0, "msg":"success", "data":{[{"name":"xiaoming"}, {"name":"daming"}]}
+4、Match No. 选取所有匹配中的第几个结果返回，一般不填
+5、
+6、匹配失败时填充的默认值，一般不填
+
+【Regular Expression Extractor】建议非json格式时使用
+1、Apply to默认选Main sample only；
+2、Field to check默认选Body；
+3、Names ofcreated variables：提取后保存内容的变量，合理变量名即可，例如 cur_token
+4、Regular Expression: 匹配的正则表达式，例如 \"token\":\"(.*)\" 匹配 "token":"xxxx" 这种形式
+5、Template选取的群组编号，一般为 $1$
+6、Match No.  选取所有匹配中的第几个结果返回，一般不填
+7、Default Value 匹配失败时填充的默认值，一般不填
+
+备注： 正则表达式有群主概念，因此有默认后缀获取群组结果，有如下几种形式：
+1、 cur_token_g(变量名带_g)形式，表示全部匹配的内容，前述为 "token":"xxxx"
+1、 cur_token_g1(变量名带_g1)形式，表示内部()内匹配的内容，前述为  xxxx
+
 
 
                               /****************      控制器Controller   ****************/
