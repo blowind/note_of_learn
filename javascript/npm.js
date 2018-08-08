@@ -28,6 +28,27 @@ npm install 模块 --save-dev  // 安装好后写入package.json的devDepencies�
 npm rebuild bcrypt --update-binary  // 更新bcrypt模块的二进制文件
 
 
+// 初始化一个包并生成package.json文件
+npm init
+
+
+// 创建维护账号
+npm aduser
+
+// 发布包
+npm publish
+// 取消发布
+npm unpublish
+
+
+// 创建全局连接，在本地目录的node_modules子目录中创建一个纸箱全局安装包的符号链接
+npm link express  
+// 得到 ./node_modules/express -> /usr/lib/node_modules/express
+
+// 将本地的包链接到全局
+npm link
+
+
 // 查看包的镜像源
 npm get registry
 // 结果：https://registry.npmjs.org/
@@ -36,3 +57,16 @@ npm get registry
 npm config set registry http://registry.npm.taobao.org/
 // 恢复默认镜像源
 npm config set registry https://registry.npmjs.org/
+
+
+
+/************************          安装包说明         ************************/
+npm install -g supervisor        // 安装代码变更监控包，在运行的js源代码文件发生变更后重新加载
+$ supervisor app.js               // 使用方法
+
+npm install -g node-inspector    //  安装node脚本网页调试器
+// 使用方法
+$ node --debug-brk=5858 debug.js   // 连接要debug.js脚本的调试服务器
+$ node-inspector          // 启动node-inspector
+
+在浏览器中打开 http://127.0.0.1:8080/debug?port=5858
