@@ -121,6 +121,144 @@ server.on('request', function(req, res) {
 });
 server.listen(3000);
 
+============= 分割线 ===========
+
+http.ServerRequest  HTTP请求信息，一般由http.Server的request事件发送，一般包含请求头和请求体，提供以下几个事件
+1、data 当请求体数据到来时触发，提供一个chunk参数，表示接收到的数据（请求头由于较短基本是实时可以获取）
+2、end  当请求体数据传输完成时触发，此后不会有数据到来
+3、close 当请求结束时触发。不同于end，如果用户强制终止传输，也还是调用close
+
+ServerRequest属性：
+complete   客户端请求是否已经发送完成
+httpVersion   HTTP协议版本，通常是1.0或1.1
+method        HTTP请求方法，诸如GET、POST
+url           请求的原始路径  如 /static/image/x.jpg
+headers       HTTP请求头
+trailers      HTTP请求尾
+connection    当前HTTP连接套接字，为net.Socket的实例
+client        client属性的别名
+
+http.ServerResponse  HTTP请求应答，有三个重要的成员函数用来返回响应头、响应内容以及结束请求
+1、response.writeHead(statusCode, [headers])  headers是类似关联数组的对象，表示响应头的每个属性值
+2、response.write(data, [encoding])   发送响应内容，data是Buffer或字符串，如果是字符串要指定encoding编码
+3、response.end([data], [encoding])   结束响应，必须显示调用，否则客户端永远处于等待状态
+
+
+【处理GET请求中的内容】
+使用 url.parse 解析请求中原始的path为一个对象，一般GET请求用此方式获取请求参数
+
+var http = require('http');
+var url = require('url');
+var util = require('util');
+
+http.createServer(function(req, res) {
+	res.writeHead(200, {'Content-Type': 'text/plain'});
+	res.end(util.inspect(url.parse(req.url, true)));
+}).listen(3000);
+
+对 http://127.0.0.1:3000/user?name=byvoid&email=byvoid@byvoid.com ，解析成
+{	search: '?name=byvoid&email=byvoid@byvoid.com',
+	query: { name: 'byvoid', email: 'byvoid@byvoid.com' },
+	pathname: '/user',
+	path: '/user?name=byvoid&email=byvoid@byvoid.com',
+	href: '/user?name=byvoid&email=byvoid@byvoid.com'  }
+
+【处理POST请求中的内容】此处只是原理示例，本实现有严重的效率和安全问题
+var http = require('http')
+var querystring = require('querystring');
+var util = require('util');
+
+http.createServer(function(req, res) {
+	var post = '';
+	req.on('data', function(chunk) {
+		post += chunk;
+	});
+	req.on('end', function() {
+		post = querystring.parse(post);
+		res.end(util.inspect(post))
+	});
+}).listen(3000);
+
+
+============= 分割线 ===========
+
+HTTP客户端方法使用
+
+http.request(options, callback)  发起HTTP请求，option类似关联数组的对象，表示请求的参数
+options常用参数如下：
+1、host  域名或者IP
+2、port  端口
+3、method  请求方法，默认GET
+4、path   请求相对于根的路径，默认是/，包含QueryString即请求参数
+5、headers  请求头的内容，为一个关联数组对象
+
+http.get(options, callback)   相对request更精简的GET请求方法
+
+var http = require('http');
+var querystring = require('querystring');
+
+var contents = querystring.stringify({
+	name: 'zxf',
+	email: '126@163.com',
+	address: 'Hangzhou, Zhejiang',
+});
+
+var options = {
+	host: 'www.bing.com',
+	path: '/application/node',
+	method: 'POST',
+	headers: {
+		'Content-type': 'application/x-www-form-urlencoded',
+		'Content-Length': contents.length
+	}
+};
+
+var req = http.request(options, function(res) {
+	res.setEncoding('utf8');
+	res.on('data', function(data) {
+		console.log(data);
+	});
+});
+
+req.write(contents);
+req.end();     //  此处不能漏，否则客户端不会发送请求
+
+
+http.get({host: 'www.bing.com'}, function(res) {
+	res.setEncoding('utf8');
+	res.on('data', function(data) {
+		console.log(data);
+	});
+});
+
+
+http.ClientRequest 是由 http.request 或者 http.get 返回的对象，表示一个待发送的HTTP请求
+返回回调函数也可以对象生成后绑定，如下：
+
+var req = http.get({host: 'www.bing.com'});
+req.on('response', function(res) {
+	res.setEncoding('utf8');
+	res.on('data', function(data) {
+		console.log(data);
+	});
+});
+
+
+http.ClientRequest主要函数如下
+req.write(content)
+req.end();
+req.on('event', [callback])
+req.abort()       // 中止正在发送的请求
+req.setTimeout(timeout, [callback])  设置请求超时时间，timeout单位为毫秒，超时后callback被回调
+req.setNoDelay([noDelay])
+req.setSocketKeepAlive([enable], [initialDelay])
+
+http.ClientResponse 是 http.request 或者 http.get 入参中回调函数的参数，
+有data, end, close三个事件，
+有statusCode，httpVersion，headers，tailers等属性
+res.setEncoding([encoding])
+res.pause()     暂停接收数据和发送事件，方便实现下载功能
+res.resume()    从暂停状态中恢复
 
 
 /************************* 文件操作  *************************/
@@ -185,6 +323,29 @@ fs.open('content.txt', 'r', function(err, fd) {
 		console.log('bytesRead: ' + bytesRead);
 		console.log(buffer);
 	})
+});
+
+
+可能的坑：循环读取文件时，文件索引不能直接用i，因为函数回调时循环早结束了
+
+var fs = require('fs');
+var files = ['1.txt', '2.txt', '3.txt'];
+for(var i=0; i<files.length; i++) {
+	// 建立一个匿名函数，将循坏迭代变量i作为参数传入
+	// 由于运行时闭包的存在，匿名函数中定义的变量在它内部的函数执行完毕前都不会释放
+	(function(i) {          //  此处要用function(i) 简历闭包，否则内部拿到的i都是3，即循环结束的i值
+		fs.readFile(files[i], 'utf-8', function(err, contents) {
+			console.log(files[i] + ': ' + contents);
+		});
+	})(i);
+}
+
+更一般的写法：
+
+files.forEach(function(filename) {
+	fs.readFile(filename, 'utf-8', function(err, contents) {
+		console.log(filename + ': ' + contents);
+	});
 });
 
 

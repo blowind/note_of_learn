@@ -61,12 +61,18 @@ npm config set registry https://registry.npmjs.org/
 
 
 /************************          安装包说明         ************************/
+【supervisor】
 npm install -g supervisor        // 安装代码变更监控包，在运行的js源代码文件发生变更后重新加载
 $ supervisor app.js               // 使用方法
 
+【node-inspector】
 npm install -g node-inspector    //  安装node脚本网页调试器
 // 使用方法
 $ node --debug-brk=5858 debug.js   // 连接要debug.js脚本的调试服务器
 $ node-inspector          // 启动node-inspector
 
 在浏览器中打开 http://127.0.0.1:8080/debug?port=5858
+
+
+【express】
+npm install express --save     // 在当前项目目录下安装express框架
