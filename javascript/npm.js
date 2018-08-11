@@ -58,6 +58,9 @@ npm config set registry http://registry.npm.taobao.org/
 // 恢复默认镜像源
 npm config set registry https://registry.npmjs.org/
 
+// 指定从安装源http://registry.url下载安装包underscore
+npm install underscore --registry=http://registry.url
+
 
 
 /************************          安装包说明         ************************/
@@ -76,3 +79,6 @@ $ node-inspector          // 启动node-inspector
 
 【express】
 npm install express --save     // 在当前项目目录下安装express框架
+
+【node-gyp】
+npm install -g node-gyp  //  安装编写Node的C/C++扩展模块的构建工具node-gyp

@@ -35,6 +35,10 @@ process.execPath
 process.memoryUsage()
 
 
+process.dlopen()  // 一般加载C/C++模块(.node后缀)使用的方法
+process.binding('natives')  //  从核心模块数组二进制形式数组natives中加载核心模块代码
+ 
+
 2、console 全局变量用于提供控制台标准输出
 
 console.log()  向标准输出流打印字符，自带换行符
@@ -389,6 +393,18 @@ emitter.emit('error');
 
 /*************************  模块  *************************/
 
+模块分为两类：一类是核心模块；另一类是文件模块
+
+Node会缓存模块编译和执行后的对象，对相同模块的二次加载都一律采用缓存优先的方式（第一优先级）
+
+
+module对象的属性：
+1、 exports 
+2、 paths  是模块查找的路径数组，诸如：
+    [ '/root/nodeExec/node_modules',
+	  '/root/node_modules',
+	  '/node_modules' ]
+
 // exports本身是个空对象{}，所以要么是通过下面第一种情况给空对象加属性，要么像第二种情况使用新对象替换空对象
 
 // 示例一
@@ -434,10 +450,28 @@ hello.sayHello();
 
 // Node.js的包是一个目录，有对应的规范
 1、包含一个JSON格式的包说明文件 package.json，且该文件必须在包的顶层目录下（必须！！！）；
-2、二进制文件应该在bin目录下
-3、JavaScript代码应该在lib目录下；
-4、文档应该在doc目录下；
-5、单元测试应该在test目录下；
+2、bin目录下放置可执行二进制文件
+3、lib目录下放置JavaScript代码；
+4、doc目录下放置文档；
+5、test目录下放置单元测试用例代码；
+
+
+package.json字段说明：
+1、name  包名，必须唯一
+2、description  包简介
+3、version  版本号，格式为 major.minor.revision
+4、keywords  关键词数组
+5、dependencies  依赖包列表
+6、repositories  托管代码位置列表
+7、maintainers  包维护者列表
+8、contributors
+9、bugs
+10、licenses
+// Node相比于NPM规范多的4个字段
+11、author  包作者
+12、bin   将包作为命令行工具使用时，通过npm install package_name -g安装时将此目录添加到执行路径，之后其下脚本可以在命令行中直接执行
+13、main   指定主模块入口文件  默认是 index  按照js、node、json的扩展名依次搜索文件
+14、devDependencies  开发时需要的依赖，指导后续维护或者扩展开发
 
 
 /*************************  调试  *************************/
