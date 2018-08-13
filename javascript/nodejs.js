@@ -264,6 +264,109 @@ res.setEncoding([encoding])
 res.pause()     暂停接收数据和发送事件，方便实现下载功能
 res.resume()    从暂停状态中恢复
 
+/************************* 异步IO  *************************/
+
+在node.js启动时，创建了一个类似while(true)的循环体，每次执行一次循环体称为一次tick，每个tick的过程就是查看是否有事件等待处理，如果有，则取出事件极其相关的回调函数并执行，然后执行下一次tick
+
+
+// setTimeout和setInterval的延时异步操作是在观察者内部使用红黑树实现，不需要I/O线程池的参与
+//调用setTimeout和setInterval创建的定时器会被插入到定时器观察者内部的一个红黑树中。每次Tick执行时，会从该红黑树中迭代取出定时器对象，检查是否超过定时时间，如果超过，就形成一个事件，它的回调函数立即执行。
+//缺陷在于不精确，因为上一次事件循环的执行时间是未知的，可能已经超过设定时间点很久
+setTimeout(function() {  // 定时调用一次
+	doSomething();
+}, 0);
+setInterval(function() {  // 定时重复执行
+	doSomething();
+}, 1000);
+
+// 每次调用process.nextTick()方法，只会将回调函数放入队列中，在下一轮Tick时取出执行。
+//定时器中采用红黑树的操作时间复杂度为O(lg(n))，nextTick()的时间复杂度为O(1)
+process.nextTick(function() {});
+
+// 类似process.nextTick()，但是process.nextTick()回调函数执行的优先级高于setImmediate()
+// process.nextTick()属于idle观察者，setImmediate()属于check观察者，setTimeout采用的是类似IO观察者
+// 在每轮循环检查中，idle观察者先于I/O观察者，I/O观察者先于check观察者，即 idle观察者>>io观察者>check观察者
+// 实现上，process.nextTick()的回调函数保存在一个数组中，setImmediate()的回调函数保存在链表中
+// 运行上，process.nextTick()在每轮循环中都会将数组中的回调函数全部执行完，setImmediate()在每轮循环中执行链表中的一个回调函数
+setImmediate(function() {});
+
+process.nextTick(function() {
+	console.log('nextTick延迟执行1');
+});
+process.nextTick(function() {
+	console.log('nextTick延迟执行2');
+});
+setImmediate(function() {
+	console.log('setImmediate延迟执行1');
+	// 进入下次循环
+	process.nextTick(function() {
+		console.log('强势插入');
+	});
+});
+setImmediate(function() {
+	console.log('setImmediate延迟执行2');
+});
+console.log('正常执行');
+
+实际执行结果： （与书上讲的不一样，要调查一下原因）
+正常执行
+nextTick延迟执行1
+nextTick延迟执行2
+setImmediate延迟执行1
+setImmediate延迟执行2
+强势插入
+
+
+setImmediate()：当poll阶段完成后执行
+setTimeout(): 当时间达到后，有机会就执行
+两者执行顺序区别
+1、因被调用时上下文不同而不同
+2、在非I/O循环(主模块)中，顺序不固定（此处setTimeout时间要设置为0）
+3、在I/O循环中setImmdiate回调总是先执行
+
+process.nextTick()        会在eventloop继续执行前被调用
+process.nextTickQueue()   在处理完当前操作后调用，而不管eventloop走到了哪个阶段
+为了防止轮询阶段持续时间太长，libuv 会根据操作系统的不同设置一个轮询的上限
+
+nextTick()在eventloop当前阶段生效，即当前操作执行完，就执行nextTick。执行后，在继续evnetLoop
+setimmediat在poll阶段空闲时生效
+
+使用nextTick的主要原因: 
+1、允许处理错误，清理不需要的资源，或，在事件循环结束前再次尝试发送请求
+2、让回调函数，在调用栈unwound（已清除)后，且事件循环继续前执行。
+
+
+举例：
+A();
+B();
+C();
+           Event Loop
+   当前执行栈  |   等待队列
+   A B C          X X X X X
+
+A();
+process.nextTick(B);
+C();
+   当前执行栈  |   等待队列
+   A C        B   X X X X 
+
+A();
+setImmediate(B);  // 或者 setTimeout(B,0);
+C();
+   当前执行栈  |   等待队列
+   A C            X X X X B
+
+
+
+
+总结：
+1、尽量使用setImmediate()
+2、setTimeout() 在某个时间值后尽快执行函数，精度不高，有延迟执行的可能，动用了红黑树，资源消耗大
+3、setImmediate() 一旦轮询阶段完成，执行回调函数，消耗的资源小，不会造成阻塞，但是效率也是最低的
+4、process.nextTick() 在当前调用栈结束后立即处理，效率最高，消费资源小，但会阻塞CPU的后序调用；
+
+
+
 
 /************************* 文件操作  *************************/
 
@@ -362,6 +465,11 @@ EventEmitter.removeListener(event, listener) 移除指定事件的某个监听�
 EventEmitter.removeAllListeners([event])  移除所有事件的所有监听器，如果指定event，则移除指定事件的所有监听器
 
 
+注意点：
+1、对一个事件添加超过10个侦听器，会得到警告，可以使用emitter.setMaxListeners(0)去掉这个限制
+2、EventEmitter对error事件进行特殊对待，运行期间有显示添加过侦听器真调用，否则作为异常抛出，外部无不活则引起线程退出。
+
+
 var EventEmitter = require('events').EventEmitter;
 var event = new EventEmitter();
 
@@ -389,6 +497,331 @@ emitter.emit('someEvent', 'byvoid', 2018);
 
 // 特殊事件error，类似其他语言的异常
 emitter.emit('error');
+
+
+【继承events模块】
+var events = require('events');
+function Stream() {
+	events.EventEmitter.call(this);
+}
+util.inherits(Stream, events.EventEmitter);
+
+【利用事件队列觉得雪崩问题】  即短时间大量请求导致的后端资源响应恶化累积成无相应问题
+// 此处针对的是启动时第一次请求没有内存缓存，导致同一时刻SQL并发的重复查询多次引起的无意义性能问题
+var proxy = new events.EventEmitter();
+var status = "ready";
+var select = function(callback) {
+	proxy.once("selected", callback);   // 此处所有的调用都会进入事件队列，并与事件selected关联
+	if(status === "ready") {            // 单线程特性，所以此处不会存在交叉执行的情况，仅有并发请求中第一个执行的会进入if
+		status = "pending";
+		db.select("SQL", function(results) {   // 此处调用后会释放当前执行，但由于状态已改为pending，并发的其他请求进入不了
+			proxy.emit("selected",  results);   // SQL查询结果出来后，触发selected事件，所有已挂载的侦听器都会调用回到函数
+			status = "ready";           //  恢复状态，后序来的查询照常执行
+		});
+	}
+};
+
+【多对一的事件处理】 即回调函数依赖多个资源ready后才执行
+
+var after = function(times, callback) {   // 使用偏函数做资源完成次数的判断封装
+	var count=0, result={};
+	return function(key, value) {
+		result[key] = value;
+		count++;
+		if(count === times) {
+			callback(results);
+		}
+	};
+};
+var emitter = new events.Emitter();
+var done = after(3, render);  // 获取的资源达到三次后，调用render进行渲染
+emitter.on("done", done);   // 声明监控事件和回调函数done
+
+fs.readFile(template_path, "utf8", function(err, template) {
+	emitter.emit("done", "template", template);   // 获取模板资源后，触发done事件
+});
+db.query(sql, function(err, data) {
+	emitter.emit("done", "data", data);   // 获取数据库资源后，触发done事件
+});
+l10n.get(function(err, resources) {
+	emitter.emit("done", "resources", resources);  // 获取字库资源后，触发done事件
+});
+
+
+【Promise/Deferred模式】   先执行异步调用，延迟传递处理
+JQuery中的典型用例(ajax请求)：
+$.get('./api').success(onSuccess).error(onError).complete(onComplete);
+等价于
+$.get('./api', {    // 使用事件方式而不是Promise/Deferred模式执行调用时，要通过一个匿名对象将所有可能的执行分支传入，哪怕业务上这个回调肯定不用；
+	success: onSuccess,
+	error: onError,
+	complete: onComplete
+});
+
+【Promises/A】  
+定义：
+1、Promise操作只会处在3中状态中的一种：未完成态、完成态、失败态；
+2、Promise的状态只会从未完成态向完成态或者失败态转化，不能逆反，完成态和失败态不能互相转化；
+3、Promise的状态一旦转化，不能被更改；
+
+一个Promise对象只要具备then()方法即可，对then()方法有以下要求：
+1、接受完成态、错误态的回调方法。在操作完成或出现错误时，将会调用对应方法；
+2、可选的支持progress事件回调作为第三个方法；
+3、then()方法只接受function对象，其余对象被忽略；
+4、then()方法继续返回Promise对象，以实现链式调用；
+
+Deferred主要用于内部，用户维护异步模型的状态；Promise作用于外部，通过then()方法暴露给外部添加自定义逻辑
+Promise/Deferred模式将业务中不可变的部分封装在了Deferred中，将可变的部分交给了Promise。
+对于不同的场景需要去封装和改造Deferred部分，然后才能得到简洁的接口；如果场景不常用，封装花费的时间与带来的简洁相比不一定划算。
+
+
+一个典型的简单实现：
+
+var Promise = function() {
+	EventEmitter.call(this);
+};
+util.inherits(Promise, EventEmitter);
+//  then()方法所做的事情是将回调函数存放起来。
+Promise.prototype.then = function(fulfilledHandler, errorHandler, progressHandler) {
+	if(typeof fulfilledHandler === 'function') {
+		this.once('success', fulfilledHandler);  // 利用once()方法保证成功回调只执行一次
+	}
+	if(typeof errorHandler === 'function') {
+		this.once('error', errorHandler);  // 利用once()方法保证异常回调只执行一次
+	}
+	if(typeof progressHandler === 'function') {
+		this.on('progress', progressHandler);
+	}
+	return this;
+};
+
+// 触发执行前面Promise里回调函数的地方，实现这些功能的对象被称为Deferred，即延迟对象
+var Deferred = function() {
+	this.state = 'unfulfilled';
+	this.promise = new Promise();
+};
+Deferred.prototype.resolve = function(obj) {
+	this.state = 'fulfilled';
+	this.promise.emit('success', obj);
+};
+Deferred.prototype.reject = function(err) {
+	this.state = 'failed';
+	this.promise.emit('error', err);
+};
+Deferred.prototype.progress = function(data) {
+	this.promise.emit('progress', err);
+};
+
+简单改造一个调用为Promise/A形式
+var promisify = function(res) {
+	var deferred = new Deferred();
+	var result = '';
+	res.on('data', function(chunk) {
+		result += chunk;
+		deferred.progress(chunk);
+	});
+	res.on('end', function() {
+		deferred.resolve(result);
+	});
+	res.on('error', function(err) {
+		deferred.reject(err);
+	});
+	return deferred.promise;  // 不让外部程序调用resolve()和reject()
+};
+
+使用：
+promisify(res).then(function(){done();},   function(err){err();},   function(chunk){console.log("BODY:" + chunk);});
+
+
+【Promise中的多异步协作】
+Deferred.prototype.all = function(promises) {
+	var count = promises.length;
+	var that = this;
+	var results = [];
+	promises.forEach(function(promise, i) {  // 对于每个传入的异步回调，将其和下标一起传入
+		promise.then(function(data) {    
+			count--;                // 完成一份依赖的异步调用，则将计数减一，表示回调数据中任务完成一个
+			result[i] = data;       // 将回调结果作为任务数组对应下标指向的元素存入
+			if(count === 0) {
+				that.resolve(results);  // 所有回调函数都执行完毕时，完成执行
+			}
+		},           function(err) {       // 对每个函数调用的异常处理操作
+			that.reject(err);
+		});
+	});
+	return this.promise;
+}
+使用：
+var promise1 = readFile("foo.txt", "utf-8");
+var promise2 = readFile("bar.txt", "utf-8");
+var deferred = new Deferred();
+// 传入两个依赖任务，当最后一个任务执行完毕时，前述that.resolve(results);调用，传入结果results数组作为此处入参
+deferred.all([promise1, promise2]).then(function(results) {  
+	// TODO
+}, function(err) {
+	// TODO
+});
+
+要让Promise支持链式执行，主要通过以下两个步骤：
+1、将所有回调都存入到队列中；
+2、Promise完成时，逐个执行回调，一旦检测到返回了新的Promise对象，停止执行，然后将当前Deferred对象的promise引用改变为新的Promise对象，并将队列中余下的回调转交给它；
+
+
+/************************* async模块(用于流程控制)  *************************/
+
+【异步的串行执行】
+// 此处隐含了特殊的逻辑，每个callback()执行时都会将结果保存起来，然后执行下一个调用，知道结束所有调用
+// 最终的回调函数function(err, results)执行时，队列里的异步调用保存的结果以数组的方式传入
+async.series([
+	function(callback) {
+		fs.readFile('file1.txt', 'utf-8', callback);
+	},
+	function(callback) {
+		fs.readFile('file2.txt', 'utf-8', callbakc);
+	}], function(err, results) {
+		// results => [file1.txt, file2.txt]
+	}
+);
+等价于
+fs.readFile('file1.txt', 'utf-8', function(err, content) {
+	if(err) {
+		return callback(err);
+	}
+	fs.readFile('file1.txt', 'utf-8', function(err, data) {
+		if(err) {
+			return callback(err);
+		}
+		callback(null, [content, data]);  // 将两次读取的内容作为参数传给回调函数
+	});
+});
+
+【异步的并行执行】
+async.parallel([
+	function(callback) {
+		fs.readFile('file1.txt', 'utf-8', callback);
+	},
+	function(callback) {
+		fs.readFile('file2.txt', 'utf-8', callback);
+	}], function(err, results) {
+		// results => [file1.txt, file2.txt]
+	}
+);
+等价于
+var counter = 2;
+var results = [];
+var done = function(index, value) {
+	results[index] = value;
+	counter--;
+	if(counter === 0) {
+		callback(null, results);
+	}
+};
+var hasErr = false;
+var fail = function(err) {
+	if(!hasErr) {
+		hasErr = true;
+		callback(err);
+	}
+};
+fs.readFile('file1.txt', 'utf-8', function(err, content) {
+	if(err) {
+		return fail(err);
+	}
+	done(0, content);
+});
+fs.readFile('file2.txt', 'utf-8', function(err, data) {
+	if(err) {
+		return fail(err);
+	}
+	done(1, data);
+});
+
+
+【异步调用的依赖处理】
+async.waterfall([
+	function(callback) {
+		fs.readFile('file1.txt', 'utf-8', function(err, content) {
+			callback(err, content);
+		});
+	},
+	function(arg1, callback) { // arg1 => file2.txt
+		fs.readFile(arg1, 'utf-8', function(err, content) {
+			callback(err, content);
+		});
+	}, 
+	function(arg1, callback) {  // arg1 => file3.txt
+		fs.readFile(arg1, 'utf-8', function(err, content) {
+			callback(err, content);
+		});
+	}
+	], function(err, result) {
+		// result => file4.txt
+	}
+);
+等价于
+fs.readFile('file1.txt', 'utf-8', function(err, data1) {
+	if(err) { return callback(err); }
+	fs.readFile(data1, 'utf-8', function(err, data2) {
+		if(err) { return callback(err); }
+		fs.readFile(data2, 'utf-8', function(err, data3) {
+			if(err) { return callback(err); }
+			callback(null, data3);
+		});
+	});
+});
+
+【自动依赖处理】
+var deps = {
+	readConfig: function(callback) {
+		// read config file
+		callback();
+	},
+	connectMongoDB: ['readConfig', function(callback) {  // 一个依赖
+		// connect to mongodb
+		callback();
+	}],
+	connectRedis: ['readConfig', function(callback) {  // 一个依赖
+		// connect to redis
+		callback();
+	}],
+	compileAsserts: function(callback) {
+		// compile asserts
+		callback();
+	},
+	uploadAsserts: ['compileAsserts', function(callback) {  // 一个依赖
+		// upload to assert
+		callback();
+	}],
+	startup: ['connectMongoDB', 'connectRedis', 'uploadAsserts', function(callback) {   // 三个依赖
+		// startup
+	}]
+};
+async.auto(deps);
+等价于
+proxy.assp('readtheconfig', function() {
+	// read config file
+	proxy.emit('readConfig');
+}).on('readConfig', function() {
+	// connect to mongodb
+	proxy.emit('connectMongoDB');
+}).on('readConfig', function() {
+	// connect to redis
+	proxy.emit('connectRedis');
+}).assp('compiletheasserts', function() {
+	// compile asserts
+	proxy.emit('compileAsserts');
+}).on('uploadasserts', function() {
+	// upload to assert
+	proxy.emit('uploadAsserts');
+}).all('connectMongoDB', 'connectRedis', 'uploadAsserts', function() {
+	// startup
+});
+
+
+/************************* step模块(用于流程控制)  *************************/
+
+安装
+npm install step
 
 
 /*************************  模块  *************************/
@@ -484,3 +917,47 @@ $ node --debug-brk[=port] script.js   // 远程调试，调试器启动后会立
 $ node --debug-brk debug.js
 // 在另一个终端中
 $ node debug 127.0.0.1:5858
+
+
+/*************************  异步编程  *************************/
+
+偏函数（本质上一种模板思想，工厂模式的体现）
+var toString = Object.prototype.toString();
+
+var isString = function(obj) {
+	return toString.call(obj) == '[object String]';
+};
+var isFunction = function(obj) {
+	return toString.call(obj) == '[object Function]';
+};
+提炼成偏函数
+var isType = function(type) {
+	return function(obj) {
+		return toString.call(obj) == '[object ' + type +']';
+	};
+};
+
+
+编写异步方法异常处理注意点：
+1、必须执行调用者传入的回调函数；
+2、正确传递回异常供调用者判断；
+var async = function(callback) {
+	process.nextTick(function() {
+		var results = something;
+		if(error) {
+			return callback(error);
+		}
+		callback(null, result):
+	});
+};
+
+
+异常捕获的正确写法：(正确执行的流程callback调用不要写在try里面，否则callback()调用抛出的异常会进入catch，又会执行callback(err)，导致回调函数被执行两遍)
+try{
+	req.body = JSON.parse(buf, options.reviver);
+}catch(err) {
+	err.body = buf;
+	err.status = 400;
+	return callback(err);
+}
+callback();
