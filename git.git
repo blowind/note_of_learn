@@ -89,3 +89,6 @@ git reset --soft HASH   #返回到某个节点。保留修改
 3、如果输入$ git remote rm origin 还是报错的话，error: Could not remove config section 'remote.origin'.我们需要修改gitconfig文件的内容
 4、找到你的github的安装路径，我的是C:\Users\ASUS\AppData\Local\GitHub\PortableGit_ca477551eeb4aea0e4ae9fcd3358bd96720bb5c8\etc
  5、找到一个名为gitconfig的文件，打开它把里面的[remote "origin"]那一行删掉就好了！
+ 
+【fatal: unable to access ‘https://github.com/xingbuxing/TA-Lib-in-chinese.git/‘: OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443】 env命令设置GIT_SSL_NO_VERIFY环境变量为”ture”，并同时调用正常的git clone命令
+ env GIT_SSL_NO_VERIFY=true git clone https://<host_name>/git/project.git  
