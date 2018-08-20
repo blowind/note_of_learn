@@ -1,0 +1,6 @@
+
+
+contentType:
+
+application/vnd.ms-excel                                            //  excel 2003格式
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet   //  excel 2007格式

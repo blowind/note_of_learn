@@ -24,6 +24,8 @@ npm install 模块：           //  安装好后不写入package.json中
 npm install 模块 --save      //  安装好后写入package.json的dependencies中（生产环境依赖）
 npm install 模块 --save-dev  // 安装好后写入package.json的devDepencies中（开发环境依赖）
 
+npm uninstall --save 模块     // 删除安装包，同时从package.json的dependencies中删除依赖
+
 
 npm rebuild bcrypt --update-binary  // 更新bcrypt模块的二进制文件
 
