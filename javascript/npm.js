@@ -23,8 +23,10 @@ npm install 模块名称         //  本地安装
 npm install 模块：           //  安装好后不写入package.json中
 npm install 模块 --save      //  安装好后写入package.json的dependencies中（生产环境依赖）
 npm install 模块 --save-dev  // 安装好后写入package.json的devDepencies中（开发环境依赖）
-
 npm uninstall --save 模块     // 删除安装包，同时从package.json的dependencies中删除依赖
+
+
+
 
 
 npm rebuild bcrypt --update-binary  // 更新bcrypt模块的二进制文件
@@ -84,3 +86,13 @@ npm install express --save     // 在当前项目目录下安装express框架
 
 【node-gyp】
 npm install -g node-gyp  //  安装编写Node的C/C++扩展模块的构建工具node-gyp
+
+【JSHint】
+npm install -g jshint    //  进行js文件语法合规性检查的工具  使用方法  jshint main.js
+
+【mocha】
+npm install --save-dev mocha   // 将测试工具mocha安装到开发依赖项中
+
+
+【linkchecker】
+npm install -g linkchecker  //  检查网站是否有死链的工具  使用方法  linkcheck http://www.bing.com
