@@ -1,0 +1,27 @@
+<ul>
+	{{#each tours}}
+	{{!-- I'm in a new block...and the context has changed --}}
+	<li>
+		{{!-- each里面遍历时，上下文会在对象中进一层，因此获取tours同级对象需要使用../ --}}
+		{{name}} - {{price}}
+		{{#if ../currencies}}   {{!-- if比较特殊，上下文与上一级的上下文一样 --}}
+			({{../currency.abbrev}})
+		{{/if}}
+	</li>
+	{{/each}}
+</ul>
+{{#unless currencies}}  {{!-- 参数为false才会执行的unless方法，与if相反 --}}
+	<p>All prices in {{currency.name}}.</p>
+{{/unless}}
+{{#if specialUrl}}
+	<p>Check out our <a href="{{specialUrl}}">specials!</p>
+{{else}}
+	<p>Please check back often for specials.</p>
+{{/if}}
+<p>
+	{{#each currencies}}
+		<a href="#" class="currency">{{.}}</a>   {{!--  对each中的每个元素，可以使用.指代，.指向当前上下文，此处为currencies中元素 --}}
+	{{else}}  {{!--  此处else处理currencies不存在任何元素时 --}}
+		Unfortunately, we currently only accept {{currency.name}}.
+	{{/each}}
+</p>

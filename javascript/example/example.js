@@ -6,6 +6,9 @@ npm install --save express
 npm install --save express-handlebars   // 安装handlebars视图模板，当前最新版本为4.0.11
 
 
+默认情况下，Express.js 4.x 和 3.x可以使用提供给res.render方法的模板扩展，也可以使用通过view engine设置的默认扩展，
+去调用模板库里的require方法和__express方法。换句话说，Express.js是在外部实例化模板引擎库的，该库需要有__express方法。
+当模板引擎库不提供__express方法，也不提供有参数(path、options、callback)的类似方法时，建议你用Consolidate.js
 
 /***********************  示例   ***********************/
 
@@ -16,6 +19,8 @@ var app = express();
 var fortune = require('./lib/fortune.js');
 
 //  使用handlebars模板引擎方法一
+//  此处指定默认布局是 main，即完整的文件名是 main.handlebars
+//  默认情况下express在views子目录查找视图，在views/layouts目录下查找布局
 var handlebars = require('express-handlebars').create({defaultLayout: 'main'});
 app.engine('handlebars', handlebars.engine);
 
@@ -23,8 +28,13 @@ app.engine('handlebars', handlebars.engine);
 // var exphbs = require('express-handlebars');
 // app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 
-// 对Express的视图引擎进行配置，将其作为默认的视图引擎
+
+// 对Express进行配置，将其作为默认的视图引擎
+// 此处为配置express视图引擎的固定语句，根据生成的引擎名不同进行对应设置
 app.set('view engine', 'handlebars');
+
+// 启用模板缓存，可以提高性能，默认开发模式下禁用，生产模式下启用
+app.set('view cache', true);
 
 // 禁用Express的X-Powered-By头信息
 app.disable('x-powered-by');
@@ -35,7 +45,7 @@ app.use(express.static(__dirname + '/public'));
 
 app.set('port', process.env.PORT || 3000);
 
-// 添加路由的基本方法，返回默认状态码为200，因此可以省略不填
+// 不使用模板的添加路由的基本方法，返回默认状态码为200，因此可以省略不填
 // app.get('/', function(req, res) {
 // 	//  设置响应头
 // 	res.type('text/plain');
@@ -62,15 +72,34 @@ app.set('port', process.env.PORT || 3000);
 
 
 app.get('/', function(req, res) {
+	// 如果不指定views engine，那么扩展必须显式地传递，即此处要写为home.handlebars
 	res.render('home');
 });
 app.get('/about', function(req, res) {
 	// 随机的传递值到前台显示，此处使用本地编写的模块中的函数
 	res.render('about', {fortune: fortune.getFortune()});
 });
+app.get('/handelbars', function(req, res) {
+	res.render('hbs', {
+		currency: {
+			name: 'United States dollar',
+			abbrev: 'USD',
+		},
+		tours: [
+			{ name: 'Hood River', price: '$99.95'},
+			{ name: 'Oregon Coast', price: '$159.95'},
+		],
+		specialUrl: '/january-specials',
+		currencies: [ 'USD', 'GBP', 'BTC'],
+	});
+});
 // 没有布局的视图渲染，即/views/no-layout.handlebars不存在
 app.get('/no-layout', function(req, res) {
 	res.render('no-layout', {layout:null});
+});
+// 使用views/layouts/microsite.handlebars文件作为布局来渲染
+app.get('/foo', function(req, res) {
+	res.render('foo', {layout: 'microsite'});
 });
 // 使用定制的布局渲染视图
 app.get('/custom-layout', function(req, res) {
@@ -80,6 +109,7 @@ app.get('/test', function(req, res) {
 	res.type('text/plain');
 	res.send("this is a test");
 });
+
 
 
 app.get('/header', function(req, res) {
