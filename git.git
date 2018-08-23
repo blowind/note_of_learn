@@ -61,6 +61,9 @@ git push origin exchagne_au        ## 将新建的分支 exchagne_au 推送到�
 git branch --set-upstream-to=origin/exchange_au     ## 将本地的 exchange_au 关联要远端的 exchange_au
 git pull
 
+【查看分支创建信息】
+git reflog show --date=iso branch_name
+
 
 【删除git分支】
 

@@ -20,8 +20,18 @@ var fortune = require('./lib/fortune.js');
 
 //  使用handlebars模板引擎方法一
 //  此处指定默认布局是 main，即完整的文件名是 main.handlebars
-//  默认情况下express在views子目录查找视图，在views/layouts目录下查找布局
-var handlebars = require('express-handlebars').create({defaultLayout: 'main'});
+//  默认情况下express在views子目录查找视图，在views/layouts目录下查找布局文件，此处查找main.handlebars
+//  section即段落，在布局文件中需要放置除{{{body}}}之外的其他内容时，使用这个辅助方法执行
+//  【此处需要example.js主文件，jquery-test.handlebars视图文件，main.handlebars布局文件三个文件配合，其中主文件不要忘记配置jquery-test视图路由】
+var handlebars = require('express-handlebars').create({
+										defaultLayout: 'main',
+										helpers: {
+											section: function(name, options){
+												if(!this._sections) this._sections = {};
+												this._sections[name] = options.fn(this);
+												return null;
+											}
+										}            });
 app.engine('handlebars', handlebars.engine);
 
 //  使用handlebars模板引擎方法二
@@ -70,11 +80,67 @@ app.set('port', process.env.PORT || 3000);
 // });
 
 
+【【【【【【【【【【【【【【【【使用段落，在布局文件中使用】】】】】】】】】】】】】】】】】】】
+app.get('/jquery-test', function(req, res){
+	res.render('jquery-test');
+});
 
+
+
+！！！！！！！！！ 中间件一定要放在路径路由回调之前，否则不生效
+
+
+【【【【【【【【【【【【【【【【局部文件的使用】】】】】】】】】】】】】】】】】】】
+
+// 添加中间件，给res.locals.partials添加数据，res.locals对于任何视图可用，
+// 因此partials.abc可以在所有视图中作为上下文使用
+// 在视图中使用 {{> weather}} 来包含局部文件，
+// express-handlebars会在views/partials目录下查找weather.handlebars文件
+// 如果局部文件太多可以分目录存储，views/partials/social/facebook.handlebars文件通过{{> social/facebook}}方式引入视图
+// 【此处功能需要修改 example.js主文件，home.handlebars视图文件，添加weather.handlebars局部文件】
+function getWeatherData() {
+	return {
+	locations: [
+			{
+				name: 'Portland',
+				forecastUrl: 'http://www.wunderground.com/US/OR/Portland.html',
+				iconUrl: 'http://icons-ak.wxug.com/i/c/k/cloudy.gif',
+				weather: 'Overcast',
+				temp: '54.1 F (12.3 C)',
+			},
+			{
+				name: 'Bend',
+				forecastUrl: 'http://www.wunderground.com/US/OR/Bend.html',
+				iconUrl: 'http://icons-ak.wxug.com/i/c/k/partlycloudy.gif',
+				weather: 'Partly Cloudy',
+				temp: '55.0 F (12.8 C)',
+			},
+			{
+				name: 'Manzanita',
+				forecastUrl: 'http://www.wunderground.com/US/OR/Manzanita.html',
+				iconUrl: 'http://icons-ak.wxug.com/i/c/k/rain.gif',
+				weather: 'Light Rain',
+				temp: '55.0 F (12.8 C)',
+			},
+		],
+	};
+}
+app.use(function(req, res, next) {
+	if(!res.locals.partials) {
+		res.locals.partials = {};
+	}
+	res.locals.partials.abc = getWeatherData();
+	next();
+});
 app.get('/', function(req, res) {
 	// 如果不指定views engine，那么扩展必须显式地传递，即此处要写为home.handlebars
 	res.render('home');
 });
+
+
+
+【【【【【【【【【【【【【【【【基本单页面的渲染】】】】】】】】】】】】】】】】】】】
+
 app.get('/about', function(req, res) {
 	// 随机的传递值到前台显示，此处使用本地编写的模块中的函数
 	res.render('about', {fortune: fortune.getFortune()});
@@ -105,13 +171,12 @@ app.get('/foo', function(req, res) {
 app.get('/custom-layout', function(req, res) {
 	res.render('custom-layout', {layout:'custom'});
 });
+
+
 app.get('/test', function(req, res) {
 	res.type('text/plain');
 	res.send("this is a test");
 });
-
-
-
 app.get('/header', function(req, res) {
 	printReq(req, res);
 	res.set("Content-Type", 'text/plain');
@@ -149,7 +214,7 @@ app.get('/api/tours', function(req, res) {
 		},
 	});
 });
-app.put('/api/tour/:id', function(req, res) {
+app.get('/api/tour/:id', function(req, res) {
 	var p = tours.some(function(p) { return p.id == req.params.id; });
 
 	if(p) {
