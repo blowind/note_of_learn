@@ -15,6 +15,11 @@ npm install --save express-handlebars   // 安装handlebars视图模板，当前
 var express = require('express');
 var app = express();
 
+// 启用cookie功能需要安装cookie-parser中间件
+var credentials = require('./credential/credentials.js');
+app.use(require('cookie-parser')(credentials.cookieSecret));
+app.use(require('express-session')());     // 内存会话管理中间件
+
 // 引用本地lib目录下自己编写的模块文件fortune.js
 var fortune = require('./lib/fortune.js');
 
@@ -33,6 +38,7 @@ var handlebars = require('express-handlebars').create({
 											}
 										}            });
 app.engine('handlebars', handlebars.engine);
+
 
 //  使用handlebars模板引擎方法二
 // var exphbs = require('express-handlebars');
@@ -54,6 +60,7 @@ app.disable('x-powered-by');
 app.use(express.static(__dirname + '/public'));
 
 app.set('port', process.env.PORT || 3000);
+
 
 // 不使用模板的添加路由的基本方法，返回默认状态码为200，因此可以省略不填
 // app.get('/', function(req, res) {
@@ -135,16 +142,56 @@ app.use(function(req, res, next) {
 app.get('/', function(req, res) {
 	// 如果不指定views engine，那么扩展必须显式地传递，即此处要写为home.handlebars
 	res.render('home');
+	// 设置cookie，需要引入中间件和密钥文件
+	// 此处不带第三个参数，设置未签名cookie
+	res.cookie('cookie_plaintext', 'cookie info');
+	// 带第三个参数，设置签名cookie
+	res.cookie('cookie_ciphertext', 'cookie in plaintext', {signed: true});
+
+	req.session.userName = "myName";
+	var color
+});
+app.get('/about', function(req, res) {
+	var plaintext = req.cookies.cookie_plaintext;
+	var cipher = req.signedCookies.cookie_ciphertext;
+	console.log("明文cookie: " + plaintext);
+	console.log("密文cookie: " + cipher);
+
+	// 清除明文cookie，清除密文cookie同理
+	res.clearCookie('cookie_plaintext');
+
+	// 随机的传递值到前台显示，此处使用本地编写的模块中的函数
+	res.render('about', {fortune: fortune.getFortune()});
 });
 
+cookie的操作，一般是在response上设置cookie项:
+res.cookie("variableName", variableValue, [optionObject]);
+
+在request上取出cookie项:
+req.cookies.variableName;
+req.signedCookies.variableName;
+
+
+设置cookie时可以添加的选项
+domain   控制跟cookie相关的域名，不能设置跟服务器所用域名不同的域名，强行设置不生效
+path     控制应用这个cookie的路径，隐含的通配后面的路径，/会应用到网站所有页面
+maxAge   指定客户端保存cookie多长时间，单位毫秒。省略则在浏览器关闭时删除cookie
+secure   指定本cookie只通过安全（HTTPS）连接发送
+httpOnly 表明本cookie只能由服务器修改，可用于防范XSS攻击
+signed   设为true会对这个cookie签名，访问时需要使用 res.signedCookies而不是res.cookies
+
+
+会话session配置对象的选项
+key     存放唯一会话标识的cookie名称，默认为 connect.sid
+store   会话存储的实例，默认为一个MemoryStore的实例
+cookie  会话cookie 的设置(path, domain, secure等)
+
+对于会话，不是在请求对象获取值，在响应对象设置值，而是全部在请求对象上操作（响应对象上没有session属性）
+delete req.session.userName;   //  删除会话
 
 
 【【【【【【【【【【【【【【【【基本单页面的渲染】】】】】】】】】】】】】】】】】】】
 
-app.get('/about', function(req, res) {
-	// 随机的传递值到前台显示，此处使用本地编写的模块中的函数
-	res.render('about', {fortune: fortune.getFortune()});
-});
 app.get('/handelbars', function(req, res) {
 	res.render('hbs', {
 		currency: {
@@ -187,7 +234,7 @@ app.get('/header', function(req, res) {
 	res.send(s);
 });
 
-
+【【【【【【【【【【【【【【【【带参数的get请求处理】】】】】】】】】】】】】】】】】】】】
 
 var tours = [
 	{ id: 0, name: 'Hood River', price: 99.99 },
@@ -214,6 +261,7 @@ app.get('/api/tours', function(req, res) {
 		},
 	});
 });
+//  get请求中的参数都在req.query中
 app.get('/api/tour/:id', function(req, res) {
 	var p = tours.some(function(p) { return p.id == req.params.id; });
 
@@ -232,6 +280,65 @@ app.get('/api/tour/:id', function(req, res) {
 	}
 });
 
+
+【【【【【【【【【【【【【【【【post请求处理】】】】】】】】】】】】】】】】】】】】
+
+// 需要先安装body-parser包，引入后req.body对象可用
+// app.use(require('body-parser')());
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+
+// 处理form表单的post请求
+// 此处获取表单页面并填入必要的字段（此处是隐藏字段csrf）
+app.get('/newsletter', function(req, res) {
+	res.render('newsletter', {csrf: 'CSRF token goes here'});
+});
+// 此处处理表单页面submit的post请求
+app.post('/process', function(req, res) {
+	console.log('Form (from querystring): ' + req.query.form);
+	console.log('CSRF token (from hidden form field): ' + req.body._csrf);
+	console.log('Name (from visible form field): ' + req.body.name);
+	console.log('Email (from visible form field): ' + req.body.email);
+	res.redirect(303, '/thank-you');
+});
+// 此处处理post请求处理后的页面跳转
+app.get('/thank-you', function(req, res){
+    res.render('thank-you');
+});
+
+
+app.post('/processAjax', function(req, res){
+	// XHR是XML HTTP Request的简写，ajax请求依赖于XHR，所以ajax请求时xhr是true
+	//  req.accepts确认最合适的响应类型，根据Accepts HTTP头信息判断，此处询问最佳返回格式是json还是html
+	if(req.xhr || req.accepts('json,html')==='json'){
+		// 如果发生错误，应该发送 { error: 'error description' }
+		res.send({ success: true });
+	} else {
+		// 如果发生错误，应该重定向到错误页面
+		res.redirect(303, '/thank-you');
+	}
+});
+
+
+var formidable = require('formidable');
+app.get('/vacation-photo', function(req, res) {
+	var now = new Date();
+	res.render('vacation-photo', {
+		year: now.getFullYear(),
+		month: now.getMonth(),
+	});
+});
+app.post('/vacation-photo/:year/:month', function(req, res) {
+	var form = new formidable.IncomingForm();
+	form.parse(req, function(err, fields, files) {
+		if(err) return res.redirect(303, '/error');
+		console.log('received fields:');
+		console.log(fields);
+		console.log('received files:');
+		console.log(files);
+		res.redirect(303, '/thank-you');
+	});
+});
 
 
 

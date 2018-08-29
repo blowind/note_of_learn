@@ -84,6 +84,23 @@ $ node-inspector          // 启动node-inspector
 【express】
 npm install express --save     // 在当前项目目录下安装express框架
 
+【express-handlebars】
+npm install express-handlebars --save  // 在当前项目目录下安装express-handlebars视图模板
+
+【formidable】
+npm install --save formidable   //  处理multipart/form-data文件等二进制文件上传的依赖包
+
+【cookie-parser】
+npm install --save cookie-parser  // 处理cookie的中间件
+
+【express-session】
+npm install --save express-session   // 关键信息放在内存的会话管理中间件，要cookie-parser配合使用
+
+// express已废弃该报，通过自带的express.urlencoded()和express.json()分别处理post和ajax请求中的参数
+【body-parser】
+npm install --save body-parser  // 在当前项目目录下安装body-parser HTTP请求URL编码体解析中间件
+
+
 【node-gyp】
 npm install -g node-gyp  //  安装编写Node的C/C++扩展模块的构建工具node-gyp
 
