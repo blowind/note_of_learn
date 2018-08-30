@@ -22,6 +22,10 @@ app.use(require('express-session')());     // 内存会话管理中间件
 
 // 引用本地lib目录下自己编写的模块文件fortune.js
 var fortune = require('./lib/fortune.js');
+// 使用自己编写的两个中间件处理http请求
+var cartValidation = require('./lib/cartValidation.js');
+app.use(cartValidation.checkWaivers);
+app.use(cartValidation.checkGuestCounts);
 
 //  使用handlebars模板引擎方法一
 //  此处指定默认布局是 main，即完整的文件名是 main.handlebars
@@ -149,7 +153,6 @@ app.get('/', function(req, res) {
 	res.cookie('cookie_ciphertext', 'cookie in plaintext', {signed: true});
 
 	req.session.userName = "myName";
-	var color
 });
 app.get('/about', function(req, res) {
 	var plaintext = req.cookies.cookie_plaintext;
@@ -288,6 +291,22 @@ app.get('/api/tour/:id', function(req, res) {
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
+
+app.use(function(req, res, next) {
+	// 如果有即显消息，传到上下文中，然后清除，保证即显消息只生效一次
+	res.locals.flash = req.session.flash;
+	delete req.session.flash;
+	next();
+});
+
+// 此处模拟数据存储到数据库的过程
+function NewsletterSignup() {
+}
+NewsletterSignup.prototype.save = function(cb) {
+	cb();
+};
+// 邮箱正则匹配
+var VALID_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 // 处理form表单的post请求
 // 此处获取表单页面并填入必要的字段（此处是隐藏字段csrf）
 app.get('/newsletter', function(req, res) {
@@ -299,9 +318,41 @@ app.post('/process', function(req, res) {
 	console.log('CSRF token (from hidden form field): ' + req.body._csrf);
 	console.log('Name (from visible form field): ' + req.body.name);
 	console.log('Email (from visible form field): ' + req.body.email);
-	res.redirect(303, '/thank-you');
+
+	var name = req.body.name || '', email = req.body.email || '';
+	if(!email.match(VALID_EMAIL_REGEX)) {
+		if(req.xhr) return res.json({error: 'Invalid name email addresss.'});
+		req.session.flash = {
+			type: 'danger',
+			intro: 'Validation error!',
+			message: 'The email address you entered was not valid.',
+		};
+		return res.redirect(303, '/archive');
+	}
+	new NewsletterSignup({name: name, email: email}).save(function(err) {
+		if(err) {
+			if(req.xhr) return res.json({error: 'Database error.'});
+			req.session.flash = {
+				type: 'danger',
+				intro: 'Database error!',
+				message: 'There was a database error; please try again later.',
+			}
+			return res.redirect(303, '/archive');
+		}
+		if(req.xhr) return res.json({success: true});
+		req.session.flash = {
+			type: 'success',
+			intro: 'Thank you!',
+			message: 'You have now been signed up for the newsletter.',
+		};
+		return res.redirect(303, '/archive');
+	});
+	// res.redirect(303, '/thank-you');
 });
 // 此处处理post请求处理后的页面跳转
+app.get('/archive', function(req, res) {
+        res.render('archive');
+});
 app.get('/thank-you', function(req, res){
     res.render('thank-you');
 });
@@ -396,3 +447,60 @@ res.sendFile(path, [option], [callback])  根据路径读取指定文件并将�
 res.link(links)   设置链接响应报头，几乎无用
 res.locals           一个对象，包含用于渲染视图的默认上下文
 res.render(view, [locals], callback)   使用配置的模板引擎渲染视图
+
+
+关于中间件：
+1、路由处理器（app.get、app.post等，经常被统称为 app.VERB ）可以被看作只处理特定HTTP谓词（GET、POST等）的中间件。
+2、路由处理器的第一个参数必须是路径。用 "/*" 可以让某个路由匹配所有路径
+3、路由处理器和中间件的参数中都有回调函数，这个函数有 2 个、3 个或 4 个参数。如果有 2 个或 3 个参数，头两个参数是请求和响应对象，第三个参数是 next 函数。如果有 4 个参数，它就变成了错误处理中间件，第一个参数变成了错误对象，然后依次是请求、响应和 next 对象
+4、如果不调用 next()，管道就会被终止，也不会再有处理器或中间件做后续处理。
+5、如果调用了 next()，一般不宜再发送响应到客户端。如果你发送了，管道中后续的中间件或路由处理器还会执行，但它们发送的任何响应都会被忽略
+
+示例：
+var app = require('express')();
+app.use(function(req, res, next){
+	console.log('\n\nALLWAYS');
+	next();
+});
+app.get('/a', function(req, res){
+	console.log('/a: 路由终止 ');
+	res.send('a');
+});
+app.get('/a', function(req, res){
+	console.log('/a: 永远不会调用 ');
+});
+app.get('/b', function(req, res, next){
+	console.log('/b: 路由未终止 ');
+	next();
+});
+app.use(function(req, res, next){
+	console.log('SOMETIMES');
+	next();
+});
+app.get('/b', function(req, res, next){
+	console.log('/b (part 2): 抛出错误 ' );
+	throw new Error('b 失败 ');
+});
+app.use('/b', function(err, req, res, next){
+	console.log('/b 检测到错误并传递 ');
+	next(err);   // 传递了错误，最后走到500
+});
+app.get('/c', function(err, req){
+	console.log('/c: 抛出错误 ');
+	throw new Error('c 失败 ');
+});
+app.use('/c', function(err, req, res, next){
+	console.log('/c: 检测到错误但不传递 ');
+	next();     //  未传递错误，最后走到404
+});
+app.use(function(err, req, res, next){
+	console.log(' 检测到未处理的错误 : ' + err.message);
+	res.send('500 - 服务器错误 ');
+});
+app.use(function(req, res){
+	console.log(' 未处理的路由 ');
+	res.send('404 - 未找到 ');
+});
+app.listen(3000, function(){
+	console.log(' 监听端口 3000');
+});

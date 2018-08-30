@@ -6,9 +6,22 @@
 </head>
 <body>
 	<header><img src="/img/logo.png" alt="Meadowlark Travel Logo"></header>
-	{{!-- 注意此处是三个大括号用于放入数据，这种形式不会转义HTML标签 --}}
-	{{{body}}}
-	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-	{{{_sections.jquery}}}
+
+	<div class="container">
+		{{!-- 取出存储在res.locals里面的变量，如果存在，则下面语句执行 --}}
+		{{#if flash}}
+			<div class="alert alert-dismissiable alert-{{flash.type}}">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<strong>{{flash.intro}}</strong> {{{flash.message}}}
+			</div>
+		{{/if}}
+
+
+		{{!-- 注意此处是三个大括号用于放入数据，这种形式不会转义HTML标签 --}}
+		{{{body}}}
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+		{{{_sections.jquery}}}
+
+	</div>
 </body>
 </html>
