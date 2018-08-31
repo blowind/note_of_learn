@@ -3,6 +3,8 @@
 /****                                      java 8 函数式编程（lambda表达式）                                       ****/
 /**********************************************************************************************************************/
 
+具体的lambda表达式是在一个线程中执行的
+
 函数式变成范式的基石：
 1、没有共享的可变数据（常量是可以共享的）;
 2、将方法或函数传递给其他方法，即用行为参数化把代码传递给方法;
@@ -15,8 +17,124 @@ Collections.sort(inventory, new Comparator<Apple>() {
 	}
 });
 lambda表达式写法
-inventory.sort(comparing(Apple::getWeight));
+inventory.sort(comparing(Apple::getWeight));   // 方法引用的lambda表达式写法
 
+
+lambda表达式使用场景：
+所有函数式接口上都可以使用lambda表达式
+
+函数式接口：只定义一个抽象方法的接口（注意强调的是抽象方法只能由一个，默认方法是可以有多个的）
+Java API中典型示例：
+public interface Comparator<T> {   /* java.util.Comparator */
+	int compare(T o1, T o2);
+}
+public interface Runnable{  /* java.lang.Runnable */
+	void run();
+}
+public interface ActionListener extends EventListener {    /* java.awt.event.ActionListener */
+	void actionPerformed(ActionEvent e);
+}
+public interface Callable<V> {       /*  java.util.concurrent.Callable */
+	V call();
+}
+public interface PrivilegedAction<V> {   /* java.security.PrivilegedAction */
+	V run();
+}
+
+@FunctionalInterface 
+注解标注一个接口，表示该接口会设计成函数式接口，这样在接口定义多个抽象方法（包括通过继承接口的方式）时会产生编译告警
+虽然@FunctionInterface是非强制的，但建议每个用作函数接口的接口（即调用lambda表达式的函数设计时声明的类型），都应该添加这个注释声明
+
+示例：将文件处理操作参数化
+@FunctionalInterface
+public interface BufferedReaderProcessor {
+	String process(BufferedReader b) throws IOException;
+}
+public static String processFile(BufferedReaderProcessor p) throws IOException {
+	try(BufferedReader br = new BufferedReader(new FileReader("data.txt"))) {
+		return p.process(br);
+	}
+}
+String oneLine = processFile( (BufferedReader br) -> br.readLine() );
+String twoLine = processFile( (BufferedReader br) -> br.readLine() + br.readLine() ); 
+
+
+
+提炼演进过程：
+/* 层次一：通过传值来实现过滤，最基本的功能封装 */
+public static List<Apple> filterApplesByColor(List<Apple> inventory, String color) {
+	List<Apple> result = new ArrayList<Apple>();
+	for(Apple apple : inventory) {
+		if(apple.getColor().equals(color)) {
+			result.add(apple);
+		}
+	}
+	return result;
+}
+
+/* 层次二：通过传值和筛选方案标记来实现过滤，最烂的方案，对内对外都不友好 */
+public static List<Apple> filterApples(List<Apple> inventory, String color, int weight, boolean flag) {
+	List<Apple> result = new ArrayList<Apple>();
+	for(Apple apple : inventory) {
+		if( (flag && apple.getColor().equals(color)) ||
+				(!flag && apple.getWeight() > weight) ){
+			result.add(apple);
+		}
+	}
+	return result;
+}
+
+/*层次三：提取动作谓词，将行为参数化后作为参数传入，缺点是所有的参数化行为都需要使用类进行封装*/
+/*此处有策略模式的思想*/
+public interface ApplePredicate{
+	boolean test(Apple apple);
+}
+public class AppleHeavyWeightPredicate implements ApplePredicate {
+	public boolean test(Apple apple) {
+		return apple.getWeight() > 150;
+	}
+}
+public class AppleGreenColorPredicate implements ApplePredicate {
+	public boolean test(Apple apple) {
+		return "green".equals(apple.getColor());
+	}
+}
+public static List<Apple> filterApples(List<Apple> inventory, ApplePredicate p) {
+	List<Apple> result = new ArrayList<Apple>();
+	for(Apple apple : inventory) {
+		if(p.test(apple)) {
+			result.add(apple);
+		}
+	}
+	return result;
+}
+List<Apple> greenApples = filterApples(inventory, new AppleGreenColorPredicate());
+
+/*层次四：使用匿名类省略定义封装动作的参数类,进一步优化*/
+List<Apple> redApples = filterApples(inventory, new ApplePredicate() {
+	public boolean test(Apple apple) {
+		return "red".equals(apple.getColor());
+	}
+});
+
+/*层次五：使用lambda表达式，完全的行为分离*/
+List<Apple> result = filterApples(inventory, (Apple apple) -> "red".equals(apple.getColor()));
+
+/*层次六：将业务类泛化，抽取行为模板使得操作可以通用*/
+public interface Predicate<T> {
+	boolean test(T t);
+}
+public static <T> List<T> filter(List<T> list, Predicate<T> p) {
+	List<T> result = new ArrayList<T>();
+	for(T e: list) {
+		if(p.test(e)) {
+			result.add(e);
+		}
+	}
+	return result;
+}
+List<Apple> redApples = filter(inventory, (Apple apple) -> "red".equals(apple.getColor()));
+List<Integer> evenNumbers = filter(numbers, (Integer i) -> i % 2 == 0);
 
 
 
@@ -31,42 +149,130 @@ Runnable multiStatement = () -> {
 BinaryOperator<Long> add = (x, y) -> x + y;
 BinaryOperator<Long> addExplicit = (Long x, Long y) -> x + y;
 
-接口                     参数                   返回类型
-Predicate<T>              T                      boolean
-Consumer<T>               T                      void
-Function<T,R>             T                      R
-Supplier<T>              None                    T
-UnaryOperator<T>          T                      T
-BinaryOperator<T>       (T,T)                    T
+java.util.function包中定义的新函数式接口:
+接口                     参数            返回类型      描述符             抽象方法(不重要)
+Predicate<T>              T               boolean    T->boolean          boolean test(T t);
+Consumer<T>               T                void        T->void            void accept(T t);
+Function<T,R>             T                 R           T->R                R apply(T t);    
+Supplier<T>              None               T          ()->T                T get();                           
+UnaryOperator<T>          T                 T           T->T            
+BinaryOperator<T>       (T,T)               T         (T,T)->T
+BiPredicate<L,R>        (L,R)             boolean    (L,R)->boolean
+BiConsumer<T,U>         (T,U)              void      (T,U)->void
+BiFunction(T,U,R)       (T,U)               R         (T,U)->R
+
+上述接口除了BiPredicate<L,R>之外，其他都有优化装箱/拆箱的变种
 
 
+由于lambda表达式的目标类型是由编译器自动检查匹配的，因此同一个lambda表达式可以用于多个不同的函数式接口
+Callable<Integer> c = () -> 42;
+PrivilegedAction<Integer> p = () -> 42;
+
+Comparator<Apple> c1 = (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2,getWeight());
+ToIntBiFunction<Apple, Apple> c2 = (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2,getWeight());
+BiFunction<Apple, Apple, Integer> c3 = (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2,getWeight());
+
+
+特殊的void兼容规则：如果一个Lambda的主题是一个语句表达式，它就和一个返回void的函数描述符兼容（需要参数列表也兼容）。如下，虽然add方法返回一个boolean，但是根据特殊兼容规则也合法
+Pridicate<String> p = s -> list.add(s);    /* Predicate返回了一个boolean */
+Consumer<String> p = s -> list.add(s);     /* Consumer返回了一个void */
+
+
+
+复合lambda表达式：   Comparator接口的默认方法
+1、比较器复合   java.util.Comparator.comparing静态方法，用于生成lambda表达式比较器
+	Comparator<Apple> c = Comparator.comparing(Apple::getWeight);      (T,T)->R类型的比较器生成，常规升序
+	inventory.sort(c);
+	inventory.sort(comparing(Apple::getWeight));
+	
+	inventory.sort(comparing(Apple::getWeight).reversed());    // 逆序，按降序返回结果
+	// 比较器链，当第一个比较得出相同结果时，应用第二个比较
+	inventory.sort(comparing(Apple::getWeight).reversed().thenComparing(Apple::getCountry));
+
+2、谓词复合   Predicate接口的默认方法
+
+	Predicate<Apple> redApple = e -> "red".equals(apple.getColor());
+	// 取非
+	Predicate<Apple> notRedApple = redApple.negate();          
+	// 与，链接两个谓词
+	Predicate<Apple> redAndHeavyApple = redApple.and(a -> a.getWeight() > 150);   
+	// 或，链接两个谓词 此处等价于  ( c == 'red' && w > 150) || c == 'green'
+	Predicate<Apple> redAndHeavyAppleOrGreen = redApple.and(a -> a.getWeight() > 150) 
+													   .or(a -> "green".equals(a.getColor())); 
+	注意： and和or方法是按照在表达式链中的位置，从左到右确定优先级的，即从左到右层层加括号
+	a.or(b).and(c)  等价于  (a || b) && c
+	
+3、函数复合   Function接口的默认方法
+	
+	Function<Integer, Integer> f = x -> x + 1;
+	Function<Integer, Integer> g = x -> x * 2;   
+	Function<Integer, Integer> h = f.andThen(g);   // 数学上等价于g(f(x)), andThen表示当前函数应用后接着应用
+	int result = h.apply(1);      // 得到4
+	
+	Function<Integer, Integer> f = x -> x + 1;
+	Function<Integer, Integer> g = x -> x * 2;   
+	Function<Integer, Integer> h = f.compose(g);  // 数学上等价于f(g(x)), compose表示当前函数作用于后面函数的结果
+	int result = h.apply(1);      // 得到3
+	
+
+Stream 流: 从支持数据处理操作的源生成的元素序列
+元素序列： 流提供了一个接口，可以访问特定元素类型的一组有序值。集合侧重于数据/存储，流侧重于计算
+源：流使用的提供数据的源，如集合、数组或输入/输出资源。从有序集合生成流时会保留原有的顺序。有列表生成的流，元素顺序与列表一致。
+数据处理操作：支持类似于数据库的而操作，以及函数式编程语言中的常用操作。
+
+	
+	
+	
+	
+	
 惰性求值方法： 用于设置过滤条件，常见的有       filter, of, map, flatMap, min, max
 及早求值方法： 用来执行具体过滤条件并输出结果   count, collect, get, reduce, forEach
 
+// 个数统计
+long count = allArtists.stream()
+					   .filter(artist -> artist.isFrom("London"))
+					   .count();
 
-long count = allArtists.stream().filter(artist -> artist.isFrom("London")).count();   //  将列表转为streasm
+//  限制获取的数据
+List<String> topThree = menu.stream()
+						    .filter(d -> d.getCalories() > 300)   // 筛选卡路里超过300的
+							.map(Dish::getName)       ///  获取菜名
+							.limit(3)       // 获取前三
+							.collect(Collectors.toList());      // 结果存储到集合
 
 //  调用Stream类的静态方法生成stream流，然后通过collect方法转换成List
-List<String> collected = Stream.of("a", "b", "c").collect(Collectors.toList());   
+List<String> collected = Stream.of("a", "b", "c")
+							   .collect(Collectors.toList());   
 
 //  使用map方法依次操作流的每个元素后再输出成List
-List<String> collected = Stream.of("a", "b", "hello").map(string -> string.toUpperCase()).collect(Collectors.toList());
+List<String> collected = Stream.of("a", "b", "hello")
+                               .map(string -> string.toUpperCase())
+							   .collect(Collectors.toList());
 
 //  使用filter过滤流中符合条件的数据
-List<String> collected = Stream.of("a", "1bc", "abc1").filter(value -> isDigit(value.charAt(0))).collect(Collectors.toList());
+List<String> collected = Stream.of("a", "1bc", "abc1")
+                               .filter(value -> isDigit(value.charAt(0)))
+							   .collect(Collectors.toList());
 
 //  合并多个stream，flatMap方法的函数接口与map一样，都是Function接口，不过方法的返回值限制为Stream类型
-List<Integer> together = Stream.of(Arrays.asList(1, 2), Arrays.asList(3, 4)).flatMap(numbers -> numbers.stream()).collect(Collectors.toList());
+List<Integer> together = Stream.of(Arrays.asList(1, 2), Arrays.asList(3, 4))
+                               .flatMap(numbers -> numbers.stream())
+							   .collect(Collectors.toList());
 
 //   通过传入Comparator函数接口查找最小元素，同理还有max方法
-Track shortestTrank = tracks.stream().min(Comparator.comparing(track -> track.getLength())).get();
+Track shortestTrank = tracks.stream()
+                            .min(Comparator.comparing(track -> track.getLength()))
+							.get();
 
 //  使用reduce进行累积操作，两个参数，第一个参数是初始值，第二个参数是一个lambda表达式
-int count = Stream.of(1, 2, 3).reduce(0, (acc, element) -> acc + element);
+int count = Stream.of(1, 2, 3)
+                  .reduce(0, (acc, element) -> acc + element);
 
 //  对整形，长整形，双浮点行调用对应的函数接口提高效率，
 //  诸如此处输出的IntStream对象还包含了额外的summaryStatistics()方法，可以进行方便的统计处理
-IntSummaryStatistics trackLengthStats = album.getTracks().mapToInt(track -> track.getLength()).summaryStatistics();
+IntSummaryStatistics trackLengthStats = album.getTracks()
+                                             .mapToInt(track -> track.getLength())
+											 .summaryStatistics();
 
 
 public class StringExercises {
@@ -137,9 +343,6 @@ public class FilterUsingReduce {
     }
 }
 
-
-@FunctionInterface
-//  每个用作函数接口的接口（即调用lambda表达式的函数设计时声明的类型），都应该添加这个注释声明
 
 
 默认方法： 
@@ -271,8 +474,50 @@ public class Artists {
 }
 
 
-方法引用：主要用做lambda表达式所在地方的简写，提现了将方法作为值的思想，让方法变成像值一样的一等公民  
-标准语法为  Classname::methodName
+方法引用：主要用做lambda表达式所在地方的简写，体现了将方法作为值的思想，让方法变成像值一样的一等公民 
+可以把方法引用看做针对仅仅涉及单一方法的Lambda的语法糖
+
+
+方法引用主要有三类：
+1、指向静态方法的方法引用                如 Integer::parseInt
+2、指向任意类型实例方法的方法引用        如 String::length
+3、指向现有对象的实例方法的方法引用      如 this::getColor
+
+对应的可以用来重构lambda表达式的三中方法
+1、(args) -> ClassName.staticMethod(args)      重构为    ClassName::staticMethod
+2、(arg0, rest) -> arg0.instanceMethod(rest)   重构为    ClassName::instanceMethod   arg0是ClassName类型
+3、(args) -> expr.instanceMethod(args)         重构为    expr::instanceMethod        expr是一个外部对象
+
+构造函数引用
+Supplier<Apple> c1 = Apple::new;   /* 默认构造函数的情况 */
+Apple a1 = c1.get();  /*  调用Supplier的get方法产生一个新的Apple对象实例  */
+
+Function<Integer, Apple> c2 = Apple::new;   /*  一参数Apple(Integer weight)构造函数的情况 */
+Apple a2 = c2.apply(110);        /*  调用Function函数的apply方法产生一个新的Apple对象实例 */
+
+BiFunction<String, Integer, Apple> c3 = Apple::new; /* 两参数Apple(String color, Integer weight)构造函数的情况 */
+Apple a3 = c3.apply("green", 110);  /*  调用BiFunction函数的apply方法产生一个新的Apple对象实例 */
+
+好玩的应用：根据名字和关键参数生成对象(工厂模式的味道)
+static Map<String, Function<Integer, Fruit>> map = new HashMap<>();
+static {
+	map.put("apple", Apple::new);
+	map.put("orange", Orange::new);
+	...
+}
+public static Fruit giveMeFruit(String fruit, Integer weight) {
+	return map.get(fruit.toLowerCase()).apply(weight);   /* 使用apply方法生成对象 */
+}
+
+
+示例：
+lambda表达式写法                                方法引用写法
+(Apple a) -> a.getWeight()                      Apple::getWeight
+() -> Thread.currentThread().dumpStack()        Thread.currentThread()::dumpStack
+(str, i) -> str.substring(i)                    String::substring
+(String s) -> System.out.println(s)             System.out::println
+
+
 artist  ->  artist.getName()      形如左边的lambda表达式可以简写成，注意此处没有小括号       Artist::getName  
 (name, nationality) -> new Artist(name, nationality)  构造函数lambda表达式简写    Artist::new
 
