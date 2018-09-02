@@ -220,53 +220,147 @@ Stream 流: 从支持数据处理操作的源生成的元素序列
 源：流使用的提供数据的源，如集合、数组或输入/输出资源。从有序集合生成流时会保留原有的顺序。有列表生成的流，元素顺序与列表一致。
 数据处理操作：支持类似于数据库的而操作，以及函数式编程语言中的常用操作。
 
+// 由值创建流
+Stream<String> stream = stream.of("Java 8", "Lambdas", "Action");
+
+Stream<String> emptyStream = Stream.empty();  // 得到一个空流
+
+// 由数组创建流
+int[] numbers = {2, 3, 5, 7, 11, 13};
+int sum = Arrays.stream(numbers).sum();
+
+// 由文件生成流    
+// 示例：统计一个文件中有多少个不同的词
+long uniqueWords = 0;
+try(Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset())) {   // 读取文件并生成流
+	uniqueWords = lines.flatMap(line -> Arrays.stream(line.split(" ")))        // 生成单词流
+					   .distinct()          // 删除重复项
+					   .count();       // 统计数值
+}catch(IOException e) {}
 	
 	
 	
-	
-	
-惰性求值方法： 用于设置过滤条件，常见的有       filter, of, map, flatMap, min, max
-及早求值方法： 用来执行具体过滤条件并输出结果   count, collect, get, reduce, forEach
+惰性求值方法： 用于设置过滤条件，常见的有       of, filter, map, flatMap, min, max, limit, sorted, distinct
+及早求值方法： 用来执行具体过滤条件并输出结果   collect, forEach, count, get, reduce
+
+// 筛选各异的元素  distinct（根据元素的hashCode和equals方法实现）
+List<Integer> numbers = Arrays.asList(1, 2, 1, 3, 3, 2, 4);
+numbers.stream()
+		.filter(i -> i%2 == 0)      // 筛选偶数
+		.distinct()   // 去重
+		.forEach(System.out::println);
+
 
 // 个数统计
 long count = allArtists.stream()
 					   .filter(artist -> artist.isFrom("London"))
 					   .count();
 
-//  限制获取的数据
+//  截短流（取部分数据），如果流是有序的，最多返回前n个元素
 List<String> topThree = menu.stream()
 						    .filter(d -> d.getCalories() > 300)   // 筛选卡路里超过300的
 							.map(Dish::getName)       ///  获取菜名
 							.limit(3)       // 获取前三
 							.collect(Collectors.toList());      // 结果存储到集合
+							
+//  跳过元素（和limit功能互补）
+List<Dish> dished = menu.stream()
+						.filter(d -> d.getCalories() > 300)    // 筛选卡路里超过300的
+						.skip(2)   // 跳过前两个元素
+						.collect(toList());
 
+// 返回有序流  下面三者等价
+List<Integer> sameOrder = numbers.stream().sorted().collect(Collectors.toList());
+List<Integer> sameOrder = numbers.stream().sorted((x, y) -> x-y).collect(Collectors.toList());
+List<Integer> sameOrder = numbers.stream().sorted(comparing(x -> x)).collect(Collectors.toList());
+						
 //  调用Stream类的静态方法生成stream流，然后通过collect方法转换成List
 List<String> collected = Stream.of("a", "b", "c")
 							   .collect(Collectors.toList());   
 
 //  使用map方法依次操作流的每个元素后再输出成List
 List<String> collected = Stream.of("a", "b", "hello")
-                               .map(string -> string.toUpperCase())
+                               .map(String::toUpperCase)
 							   .collect(Collectors.toList());
 
+// 接收一个数组产生一个流，流元素的类型还是数组元素的类型
+String[] arrayOfWords = {"Goodbye", "World"};
+Stream<String> streamOfWords = Arrays.stream(arrayOfWords);
+							   
 //  使用filter过滤流中符合条件的数据
 List<String> collected = Stream.of("a", "1bc", "abc1")
                                .filter(value -> isDigit(value.charAt(0)))
 							   .collect(Collectors.toList());
 
-//  合并多个stream，flatMap方法的函数接口与map一样，都是Function接口，不过方法的返回值限制为Stream类型
+// 合并多个stream，flatMap方法的函数接口与map一样，都是Function接口，不过方法的返回值限制为Stream类型
+// flatMap的作用相当于把之前的元素进一步打碎，组成一个统一的新流
+// 示例：多数组元素合并
 List<Integer> together = Stream.of(Arrays.asList(1, 2), Arrays.asList(3, 4))
                                .flatMap(numbers -> numbers.stream())
 							   .collect(Collectors.toList());
+// 示例：找出单词里面所有出现过的字符							   
+List<String> uniqueCharacters = Arrays.asList("Java 8", "Lambdas", "In")
+									  .stream()
+									  .map(w -> w.split(""))  // 将每个单词转化成有字符构成的数组
+									  // 区别于 map(Arrays::stream) 每个数组不是映射成一个流，
+									  // 而是映射成流的内容，等于合并成一个流
+									  // 即使用map时每个元素是Stream<String>类型，而使用flatMap每个元素是String类型
+									  .flatMap(Arrays::stream) 
+									  .distinct()
+									  .collect(Collectors.toList());
+// 示例：给定两个数字列表，返回所有可能的数对（笛卡尔积？）
+List<Integer> numbers1 = Arrays.asList(1, 2, 3);
+List<Integer> numbers2 = Arrays.asList(3, 4);
+List<int[]> pairs = numbers1.stream()
+							.flatMap(i -> numbers2.stream()
+												  .map(j -> new int[]{i, j})
+									)
+							.collect(toList());
+// 示例：给定两个数字列表，返回所有可能的和能被3整除的数对（笛卡尔积？）
+List<int[]> pairs = numbers1.stream()
+							.flatMap(i -> numbers2.stream()
+												  .filter(j -> (i + j) % 3 == 0)
+												  .map(j -> new int[]{i, j})
+									)
+							.collect(toList());
+							   
+// 是否至少匹配一个元素      
+// 查看菜单是否有素食可选
+if(menu.stream().anyMatch(Dish::isVegetarian()) {
+	...  
+}
 
+// 是否匹配所有元素
+// 检查所有菜的热量是否都低于1000卡路里
+boolean isHealthy = menu.stream().allMatch(d -> d.getCalories() < 1000);
+
+// 是否没有任何元素匹配
+boolean isHealthy = menu.stream().noneMatch(d -> d.getCalories() >= 1000);
+
+// 查找任意一个符合条件的元素   有短路逻辑，即找到第一个符合要求的结果时立即结束
+Optional<Dish> dish = menu.stream().filter(Dish::isVegetarian).findAny();
+
+// 返回第一个符合条件的元素  与findAny的差异主要在并行，找第一个元素在并行上有很多限制
+Optional<Integer> firstRequiredNum = someNumbers.stream()
+												.map(x -> x * x)
+												.filter(x -> x%3 == 0)
+												.findFirst();
+							   
 //   通过传入Comparator函数接口查找最小元素，同理还有max方法
 Track shortestTrank = tracks.stream()
                             .min(Comparator.comparing(track -> track.getLength()))
 							.get();
 
 //  使用reduce进行累积操作，两个参数，第一个参数是初始值，第二个参数是一个lambda表达式
-int count = Stream.of(1, 2, 3)
+int sum = Stream.of(1, 2, 3)
                   .reduce(0, (acc, element) -> acc + element);
+// 简略写法
+int sum = numbers.stream().reduce(0, Integer::sum);
+// 无初始值的变种，考虑到流中无元素的情况，因此返回值包裹在Optional中
+Optional<Integer> sum = numbers.stream().reduce(Integer::sum);
+// 应用扩展，求流中最大/最小值，每次归约时，返回更大/更小的那个值
+Optional<Integer> max = numbers.stream().reduce(Integer::max);
+Optional<Integer> min = numbers.stream().reduce(Integer::min);
 
 //  对整形，长整形，双浮点行调用对应的函数接口提高效率，
 //  诸如此处输出的IntStream对象还包含了额外的summaryStatistics()方法，可以进行方便的统计处理
@@ -275,6 +369,39 @@ IntSummaryStatistics trackLengthStats = album.getTracks()
 											 .summaryStatistics();
 
 
+数值流：  为解决数值类型对象化造成的装箱/拆箱开销
+引入三个原始类型特化流： IntStream、DoubleStream、LongStream
+特化流特有的惰性求值方法：  sum()  max()  min()  average()
+
+// 映射到数值流  mapToInt  mapToDouble  mapToLong
+int calories = menu.stream().mapToInt(Dish::getCalories).sum(); 
+
+// 转换回对象流
+IntStream intStream = menu.stream().mapToInt(Dish::getCalories);
+Stream<Integer> stream = intStream.boxed();  // 数值流转化为是Stream
+
+// 默认值OptionalInt
+// 因为最大值可能不存在（流为空），因此不能直接返回int
+OptionalInt maxCalories = menu.stream().mapToInt(Dish::getCalories).max(); 
+int max = maxCalories.orElse(1);        // 没有最大值的话，就提供一个默认最大值
+
+// 获取范围内数值
+// IntStream和LongStream的两个静态方法 range和rangeClosed，区别是后者包含截止数
+IntStream evenNumbers = IntStream.rangeClosed(1, 100).filter(n -> n%2 == 0);
+
+// 生成勾股数的三元组
+Stream<int[]> pythagoreanTriples = IntStream.rangeClosed(1, 100).boxed()
+											.flatMap(a -> IntStream.rangeClosed(a, 100)  // 把所有生成的三元数流扁平化成一个流
+																   .filter(b -> Math.sqrt(a*a+b*b) % 1 == 0)  // 开根为整数
+																   .mapToObj(b -> new int[]{a, b, (int)Math.sqrt(a*a+b*b)})
+													);
+// 优化后结果
+Stream<double[]> pythagoreanTriples2 = IntStream.rangeClosed(1, 100).boxed()
+												.flatMap(a -> IntStream.rangeClosed(a, 100)
+																.mapToObj(b -> new double[]{a, b, Math.sqrt(a*a+b*b)})
+																.filter(t -> t[2] % 1 == 0));
+											 
+											 
 public class StringExercises {
 	/**  计算一个字符串中小写字母的个数 **/
 	public static int countLowercaseLetters(String string) {
@@ -528,7 +655,7 @@ Set<Integer> numbers = new HashSet<Integer>(Arrays.asList(4, 3, 2, 1));
 List<Integer> sameOrder = numbers.stream().sorted().collect(Collectors.toList());  //  通过排序使无序变有序
 
 
-【使用收集器】
+【使用收集器】    以下大部分情况默认引入了Collectors的静态方法，即 import static java.util.stream.Collectors.*
 1、转换成指定集合
 //  除了Collectors传统的toList(),  toSet(),  还有  toCollection(),  toMap()   
 例如：
@@ -556,22 +683,67 @@ public double averageNumberOfTracks(List<Album> albums) {
 	//  还可以使用 summingInt 求和
 }
 
-3、数据分块（只能根据true或者false分成两组）
+// 统计个数
+long howManyDished = menu.stream().collect(Collectors.counting());
+long howManyDished = menu.stream().count()   // 更高效的写法
+
+// 查找流中最大/最小值  注意为了防止流为空的情况，结果使用Optional接收
+Comparator<Dish> dishCaloriesComparator = Comparator.comparingInt(Dish::getCalories);
+Optional<Dish> mostCalorieDish = menu.stream().collect(maxBy(dishCaloriesComparator));  // 查找最大值，需要传入比较器
+Optional<Dish> mostCalorieDish = menu.stream().collect(minBy(dishCaloriesComparator));
+
+// 求和   summingInt/summingLong/summingDouble
+int totalCalories = menu.stream().collect(summingInt(Dish::getCalories)); 
+
+// 求平均值
+double avgCalories = menu.stream().collect(averagingInt(Dish::getCalories)); 
+
+// 求统计值      可以得到流的元素个数、元素和、最小值/最大值、平均值
+//summarizingInt/summarizingLong/summarizingDouble对应返回类型IntSummaryStatistics/LongSummaryStatistics/DoubleSummaryStatistics
+IntSummaryStatistics menuStatistics = menu.stream().collect(summarizingInt(Dish::getCalories));
+
+3、字符串
+String shortMenu = menu.stream.map(Dish::getName).collect(joining());  // 无参版本使用空格连接字符串
+String shortMenu = menu.stream.collect(joining());  // 如果Dish的toString方法返回菜名，无需提取
+String shortMenu = menu.stream.map(Dish::getName).collect(joining(", "));  // 一参版本指定连接字符串
+
+//  提取所有艺术家的名字并作为一个[]框起来、并用逗号分隔的字符串返回
+String result = artists.stream().map(Artist::getName()).collect(Collectors.joining(", ", "[", "]"));
+
+
+广义的规约汇总：即所有求值/合并字符串操作的通用方法
+// 求和
+// 三参数版本：起始值，转换函数，BinaryOperator
+int totalCalories = menu.stream().collect(reducing(0, Dish::getCalories, (i, j) -> i + j)); 
+int totalCalories = menu.stream().collect(reducing(0, Dish::getCalories, Integer::sum));   // 累积函数使用方法引用
+// 以下写法有限制，流元素个数必须不为空，因为reduce操作本质上得到Optional对象，由于流元素不为空，保证get()能获取到值
+int totalCalories = menu.stream().map(Dish::getCalories).reduce(Integer::sum).get();  
+int totalCalories = menu.stream().mapToInt(Dish::getCalories).sum();    // 确认元素不为空后使用特殊流的更简洁写法
+
+// 统计个数
+long howManyDished = menu.stream().collect(reducing(0L, e -> 1L, Long::sum);
+
+// 获取流中最大/最小值   一参数版本：把流中第一个元素作为起点，返回自身的恒等函数作为转换函数
+Optional<Dish> mostCalorieDish = menu.stream().collect(reducing((d1, d2) -> d1.getCalories() > d2.getCalories() ? d1 : d2));
+
+// 连接字符串
+String shortMenu = menu.stream.map(Dish::getName).collect(reducing((s1, s2) -> s1 + s2)).get();  // 要求流元素不为空
+String shortMenu = menu.stream.collect(reducing("", Dish::getName, (s1, s2) -> s1 + s2));
+
+
+4、数据分块（只能根据true或者false分成两组）
 // 使用Predicate对象判断一个元素应该属于哪个部分，并根据布尔值返回一个Map到列表
 public Map<Boolean, List<Artist>> bandsAndSolo(Stream<Artist> artists) {
 	return artists.collect(partitioningBy(artist -> artisit.isSolo()));
 	// 等价于  return artists.collect(partitioningBy(Artist::isSolo));
 }
 
-4、数据分组
+5、数据分组
 //  根据主唱对专辑分组，groupingBy 收集器根据接受一个分类函数，用来对数据进行分组
 public Map<Artist, List<Album>> albumsByArtist(Stream<Album> albums) {
 	return albums.collect(groupingBy(album -> album.getMainMusician()));
 }
 
-5、字符串
-//  提取所有艺术家的名字并作为一个[]框起来、并用逗号分隔的字符串返回
-String result = artists.stream().map(Artist::getName()).collect(Collectors.joining(", ", "[", "]"));
 
 6、组合收集器
 public Map<Artist, Long> numberOfAlbums(Stream<Album> albums) {
