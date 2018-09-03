@@ -661,6 +661,8 @@ List<Integer> sameOrder = numbers.stream().sorted().collect(Collectors.toList())
 例如：
 numbers.stream().collect(Collectors.toCollection(TreeSet::new));          //  指定生成的集合的类型，此处为TreeSet
 
+// 把流中所有项目收集到给定的供应源创建的集合
+Collection<Dish> dishes = menuStream.collect(toCollection(), ArrayList::new);
 
 emps = IntStream.range(0, 10).mapToObj(x -> new Emp(x % 3, x % 5 == 0 ? null : "name" + x)).toArray(Emp[]::new);
 Stream.of(emps).collect(Collectors.toMap(Emp::getId, Emp::getName,(k,v)->v));
@@ -731,21 +733,64 @@ String shortMenu = menu.stream.map(Dish::getName).collect(reducing((s1, s2) -> s
 String shortMenu = menu.stream.collect(reducing("", Dish::getName, (s1, s2) -> s1 + s2));
 
 
-4、数据分块（只能根据true或者false分成两组）
-// 使用Predicate对象判断一个元素应该属于哪个部分，并根据布尔值返回一个Map到列表
-public Map<Boolean, List<Artist>> bandsAndSolo(Stream<Artist> artists) {
-	return artists.collect(partitioningBy(artist -> artisit.isSolo()));
-	// 等价于  return artists.collect(partitioningBy(Artist::isSolo));
-}
-
-5、数据分组
+4、数据分组
 //  根据主唱对专辑分组，groupingBy 收集器根据接受一个分类函数，用来对数据进行分组
 public Map<Artist, List<Album>> albumsByArtist(Stream<Album> albums) {
 	return albums.collect(groupingBy(album -> album.getMainMusician()));
 }
 
+// groupingBy中传入分类函数，把分类函数的值作为键，流中所有具有这个分类值得项目列表作为映射值
+// 单参数版本是 groupingBy(f, toList()) 的简便写法
+Map<Dish.Type, List<Dish>> dishesByType = menu.stream().collect(groupingBy(Dish::getType));
 
-6、组合收集器
+// 自定义根据卡路里含量进行分组
+public enum CaloricLevel { DIET, NORMAL, FAT }
+Map<CaloricLevel, List<Dish>> dishedByCaloricLevel = menu.stream().collect(
+					groupingBy( dish -> {
+								if (dish.getCalories() <= 400) return CaloricLevel.DIET;
+								else if(dis.getCalories() <= 700) return CaloricLevel.NORMAL;
+								else return CaloricLevel.FAT;
+					}));
+
+5、组合收集器				
+// 多级分组  给groupingBy传入collector类型的第二个参数，可以用类似的格式无限向下细分
+Map<Dish.Type, Map<CaloricLevel, List<Dish>>> dishesByTypeCaloricLevel = 
+	menu.stream.collect(groupingBy(Dish::getType, groupingBy( 
+	                                          dish -> { if (dish.getCalories() <= 400) return CaloricLevel.DIET;
+											  else if(dis.getCalories() <= 700) return CaloricLevel.NORMAL;
+											  else return CaloricLevel.FAT;
+						})));
+	
+// 按子组收集数据   示例：统计子组元素个数  结合counting求个数
+Map<Dish.Type, Long> typesCount = menu.stream().collect(groupingBy(Dish::getType, counting()));
+
+// 查找菜单中热量最高的菜肴，此处Optional类型是maxBy的返回结果，冗余，因为不存在的类型不会成为map的key
+// 结合 maxBy和comparingInt 求极值
+Map<Dish.Type, Optional<Dish>> mostCaloricByType = menu.stream()
+													   .collect(groupingBy(Dish::getType,
+																	maxBy(comparingInt(Dish::getCalories))));
+																	
+// collectingAndThen把收集器的结果转成另一种类型，参数一为要转换的收集器，参数二为收集函数，然后返回一个收集器
+// 结合 collectingAndThen 对结果进行转换
+Map<Dish.Type, Dish> mostCaloricByType = menu.stream().collect(groupingBy(
+													Dish::getType,
+													collectingAndThen(maxBy(comparingInt(Dish::getCalories)),
+																	  Optional::get)));
+
+// 获取各类菜的热量总值  结合summingInt求和
+Map<Dish.Type, Integer> totalCaloriesByType = menu.stream().collect(
+															groupingBy(Dish::getType,
+																	   summingInt(Dish::getCalories)));
+																	   
+// 获取各类菜的热量水平  结合mapping做归类
+Map<Dish.Type, Set<CaloricLevel>> caloricLevelByType = menu.stream().collect(
+											groupingBy(Dish:getType, mapping( 
+											dish -> { if (dish.getCalories() <= 400) return CaloricLevel.DIET;
+													  else if(dis.getCalories() <= 700) return CaloricLevel.NORMAL;
+											          else return CaloricLevel.FAT; },
+											toSet() )));
+															
+
 public Map<Artist, Long> numberOfAlbums(Stream<Album> albums) {
 	//  使用收集器counting() 对 groupingBy()收集器 分块的内容进一步处理，得到每个艺术家专辑的数量
 	return albums.collect(groupingBy(album -> album.getMainMusician(), counting()));
@@ -755,6 +800,44 @@ public Map<Artist, List<String>> nameOfAlbums(Stream<Album> albums) {
 	//  使用收集器 mapping() 对 groupingBy()收集器 分块的内容进一步处理，得到每个艺术家专辑名字的列表
 	return albums.collect(groupingBy(Album::getMainMusician, mapping(Album::getName, toList())));
 }
+
+
+// 	给定上限，将其内整数按照质数和非质数分区
+public boolean isPrime(int candidate) {
+	int candidateRoot = (int)Math.sqrt((double)candidate);
+	return IntStream.rangeClosed(2, candidateRoot).noneMatch(i -> candidate % i == 0);
+}
+public Map<Boolean, List<Integer>> partitionPrimes(int n) {
+	return IntStream.rangeClosed(2, n).boxed().collect(partitioningBy(candidate -> isPrime(candidate)));
+}
+								
+																	  
+6、数据分块/分区（只能根据true或者false分成两组）   分区是分组的特殊情况，由一个谓词作为分类函数
+// 使用Predicate对象判断一个元素应该属于哪个部分，并根据布尔值返回一个Map到列表
+public Map<Boolean, List<Artist>> bandsAndSolo(Stream<Artist> artists) {
+	return artists.collect(partitioningBy(artist -> artisit.isSolo()));
+	// 等价于  return artists.collect(partitioningBy(Artist::isSolo));
+}
+
+// 按是否是素餐来分区  一参数版本
+Map<Boolean, List<Dish>> partitionedMenu = menu.stream().collect(partitioningBy(Dish::isVegetarian));
+
+// 二参数版本，进一步分类
+Map<Boolean, Map<Dish.Type, List<Dish>>> vegetarianDishesByType = menu.stream().collect(
+																	partitioningBy(Dish::isVegetarian,
+																				   groupingBy(Dish::getType)));
+// 二参数版本，获取两类菜品中各自热量最高的菜品																			   
+Map<Boolean, Dish> mostCaloricPartitionedByVegetarian = menu.stream().collect(
+														 partitioningBy(Dish::isVegetarian,
+																		collectingAndThen(maxBy(comparingInt(Dish::getCalories)),
+																						  Optional::get)));
+// 得到荤菜/素菜各自的数目													  
+menu.stream().collect(partitioningBy(Dish::isVegetarian, counting()));
+
+
+
+
+
 
 // 下面是lambda表达式给 Map 操作带来的一些语法糖
 
