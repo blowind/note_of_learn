@@ -802,7 +802,7 @@ public Map<Artist, List<String>> nameOfAlbums(Stream<Album> albums) {
 }
 
 
-// 	给定上限，将其内整数按照质数和非质数分区
+// 	给定上限，将其内整数按照质数和非质数分区，此处判断没有太多剪枝操作，就是挨个元素判断，参见自己构造收集器
 public boolean isPrime(int candidate) {
 	int candidateRoot = (int)Math.sqrt((double)candidate);
 	return IntStream.rangeClosed(2, candidateRoot).noneMatch(i -> candidate % i == 0);
@@ -837,7 +837,152 @@ menu.stream().collect(partitioningBy(Dish::isVegetarian, counting()));
 
 
 
+实现Collector接口实现自己的收集器举例：
+import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
+import static java.util.stream.Collector.Characteristics.CONCURRENT;
+import static java.util.stream.Collector.Characteristics.IDENTITY_FINISH;
+/** 接口三个参数，
+ *  第一个是流中要收集的项目的泛型地方，
+ *  第二个是累加器的类型，
+ *  第三个是收集操作得到的对象的类型 */
+public class ToListCollector<T> implements Collector<T, List<T>, List<T>> {
 
+	// 返回一个无参函数，该函数创建一个空的累加器
+	@Override
+	public Supplier<List<T>> supplier() {
+		return ArrayList::new;
+	}
+
+	// 返回一个执行规约规约操作的函数
+	// 函数两个形参，参数一为保存规约结果的累加器，参数二为本次规约元素
+	@Override
+	public BiConsumer<List<T>, T> accumulator() {
+		return List::add;
+	}
+
+	// 返回一个累积结束后最后调用的函数，用于将累加器对象转换为目标结果
+	@Override
+	public Function<List<T>, List<T>> finisher() {
+		return Function.identity();  // 本函数是接口自带方法，表示累加器本身就是最终结果
+	}
+
+	// 返回一个供归约操作使用的函数，定义了并行处理时各个子部分的累加器要如何合并
+	// 前三个方法已经实现了流功能，但并行的实现要依赖本方法实现
+	@Override
+	public BinaryOperator<List<T>> combiner() {
+		return (list1, list2) -> {
+			list1.addAll(list2);
+			return list1;
+		};
+	}
+
+	// 定义收集器的行为，有三种相互独立的标记：UNORDERED，CONCURRENT，IDENTITY_FINISH
+	// UNORDERED： 归约结果不受流中项目的遍历和累积顺序的影响
+	// CONCURRENT： 标记支持并行，对于标记为UNORDERED的流，仅在用于无序数据源时才可以并行归约
+	// IDENTITY_FINISH： 表明finisher方法返回的函数是一个恒等函数
+	@Override
+	public Set<Characteristics> characteristics() {
+		return Collections.unmodifiableSet(EnumSet.of(IDENTITY_FINISH, CONCURRENT));
+	}
+}
+使用：
+List<Dish> dishes = menuStream.collect(new ToListCollector<Dish>());
+
+使用collect的重载方法快速实现上述功能：（只需提供supplier，accumulator，combiner）
+// 由于不能传递Characteristics参数，所以他永远都是一个 IDENTITY_FINISH和CONCURRENT的收集器
+List<Dish> dishes = menuStream.collect(ArrayList::new, List::add, List::addAll); // 注意和HashMap的使用对比
+
+/*   构造复杂的收集器，收集给定范围内的素数和合数，分类存放  */
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collector;
+import java.util.stream.IntStream;
+import static java.util.stream.Collector.Characteristics.IDENTITY_FINISH;
+public class PrimeNumbersCollector implements Collector<Integer, Map<Boolean, List<Integer>>, Map<Boolean, List<Integer>>> {
+	// 剪枝，从给定列表中，取出前N个符合谓词条件P的元素
+	public static <A> List<A> takeWhile(List<A> list, Predicate<A> p) {
+		int i = 0;
+		for(A item: list) {
+			if(!p.test(item)) {
+				return list.subList(0, i);
+			}
+			i++;
+		}
+		return list;
+	}
+	// 从给定素数表中，取出小于目标数的平方根值的素数
+	public static boolean isPrime(List<Integer> primes, int candidate) {
+		int candidateRoot = (int)Math.sqrt((double)candidate);
+		return takeWhile(primes, i -> i <= candidateRoot)
+				.stream()
+				.noneMatch(p -> candidate % p == 0);
+	}
+
+	@Override
+	public Supplier<Map<Boolean, List<Integer>>> supplier() {
+		return () -> new HashMap<Boolean, List<Integer>>() {{
+			put(true, new ArrayList<>());
+			put(false, new ArrayList<>());
+		}};
+	}
+
+	@Override
+	public BiConsumer<Map<Boolean, List<Integer>>, Integer> accumulator() {
+		return (acc, candidate) ->
+			acc.get(isPrime(acc.get(true), candidate)).add(candidate);
+	}
+
+	@Override
+	public Function<Map<Boolean, List<Integer>>, Map<Boolean, List<Integer>>> finisher() {
+		return Function.identity();
+	}
+
+	// 由于算法本身是顺序的（返回的质数从小到大，而且被用于质数判断），因此此处并行的方法实际上不可行
+	// 一般正常来说抛出一个UnsupportedOperationException异常，此处实现是为了展示
+	@Override
+	public BinaryOperator<Map<Boolean, List<Integer>>> combiner() {
+		return (Map<Boolean, List<Integer>> map1, Map<Boolean, List<Integer>> map2) -> {
+			map1.get(true).addAll(map2.get(true));
+			map1.get(false).addAll(map2.get(false));
+			return map1;
+		};
+	}
+
+	@Override
+	public Set<Characteristics> characteristics() {
+		return Collections.unmodifiableSet(EnumSet.of(IDENTITY_FINISH));
+	}
+
+	public static void main(String[] argv) {
+		// 效率还是有点
+		Map<Boolean, List<Integer>> paritionPrimesWithCustomCollector =
+				IntStream.rangeClosed(2, 1000000).boxed().collect(new PrimeNumbersCollector());
+				
+		for(Integer i : paritionPrimesWithCustomCollector.get(true)) {
+			System.out.print(i + " ");
+		}
+	}
+}
+使用collect的重载方法快速实现上述功能：
+public Map<Boolean, List<Integer>> partitionPrimesWithCustomCollector(int n) {
+	IntStream.rangeClosed(2, n).boxed().collect(
+			() -> new HashMap<Boolean, List<Integer>>() {{
+				put(true, new ArrayList<Integer>());
+				put(false, new ArrayList<Integer>());
+			}},
+			(acc, candidate) -> {
+				acc.get(isPrime(acc.get(true), candidate)).add(candidate);
+			},
+			(map1, map2) -> {
+				map1.get(true).addAll(map2.get(true));
+				map1.get(false).addAll(map2.get(false));
+			});
+}
 
 // 下面是lambda表达式给 Map 操作带来的一些语法糖
 
@@ -850,6 +995,20 @@ artistCache.computeIfAbsent(name, this::readArtistFromDB);
 //  Map中value为List，计算List元素做统计分析的场景，forEach接收一个BiConsumer对象，该对象接受两个参数，返回void
 Map<Artist, Integer> countOfAlbums = new HashMap<>();
 albumsByArtist.forEach( (artist, albums) -> { countOfAlbums.put(artist, albums.size()); } );
+
+
+并行数据处理： 
+流的处理过程中使用parallel()并行化，使用sequential()串行化，
+不能同时使用，以流操作中最后出现的并行/串行调用为整个流的标记（该调用本质上是在内部设置了一个boolean标志）
+
+// 求给定范围内所有整数的和
+public static long parallelSum(long n) {
+	return Stream.iterate(1L, i -> i + 1)
+				 .limit(n)
+				 .parallel()
+				 .reduce(0L, Long::sum);
+}
+
 
 //  并行化数组操作
 public static double[] parallelInitialize(int size) {
