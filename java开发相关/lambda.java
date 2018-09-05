@@ -41,6 +41,8 @@ public interface PrivilegedAction<V> {   /* java.security.PrivilegedAction */
 	V run();
 }
 
+/*********************************          FunctionalInterface          *****************************************/
+
 @FunctionalInterface 
 注解标注一个接口，表示该接口会设计成函数式接口，这样在接口定义多个抽象方法（包括通过继承接口的方式）时会产生编译告警
 虽然@FunctionInterface是非强制的，但建议每个用作函数接口的接口（即调用lambda表达式的函数设计时声明的类型），都应该添加这个注释声明
@@ -59,6 +61,192 @@ String oneLine = processFile( (BufferedReader br) -> br.readLine() );
 String twoLine = processFile( (BufferedReader br) -> br.readLine() + br.readLine() ); 
 
 
+/*********************************          默认方法          *****************************************/
+
+备注：Java 8可以在接口内声明静态方法了
+
+默认方法： 
+1、当具体实现类中存在方法与接口中默认方法签名相同的冲突时，优先选择实现类中的方法，
+2、默认方法的优先级与虚方法类似，即具体实现类没有Override接口中的默认方法时，实现类对象调用时使用接口默认方法，若Override接口中的默认方法，则使用实现类中的方法
+
+产生背景：
+实现Stream流时，要给集合接口Collection<T>及其实现类添加stream和parallelStream流化方法，
+为了明显接口添加新方法后implement接口的所有现存实现代码都要修改，在接口中添加默认方法来给出默认实现
+
+public interface Parent {
+	public void message(String body);
+	
+	public default void welcome() {  message("Parent: Hi!"); }     //  此处在父接口里面声明了默认方法
+	
+	public String getLastMessage();
+}
+
+@Test
+public void parentDefaultUsed() {
+	Parent parent = new ParentImpl();              //  此处调用接口的具体实现类生成对象
+	parent.welcome();                   //    对象自然能使用接口中定义的默认方法
+}
+
+/* 注意此处是接口继承 */
+public interface Child extends  Parent {      //  子接口覆盖了父接口的默认方法
+	@Override
+	public default void welcome() {  message("Child: Hi!"); }
+}
+
+@Test
+public void childOverrideDefault() {
+	Child child = new ChildImpl();          //  此处调用子接口的具体实现类生成对象
+	child.welcome();                         //  对象默认能使用接口中覆盖过的默认方法
+}
+
+多接口继承中方法签名冲突时，默认编译错误，可以通过类中实现冲突方法解决这个问题
+public interface Jukebox {
+	public default String rock() {
+		return "... all over the world!";
+	}
+}
+
+public interface Carriage {
+	public default String rock() {
+		return "... from side to side";
+	}
+}
+
+// 语法 InterfaceName.super指向继承自父接口的方法
+public class MusicalCarriage implements Carriage, Jukebox {
+	@Override
+	public String rock() {
+		return Carriage.super.rock();     //  增强的super语法，指明使用接口Carriage中定义的默认方法
+	}
+}
+
+默认方法的三定律：
+1. 类胜于接口。如果在继承链中有方法体或抽象的方法声明，那么就可以忽略接口中定义的方法。
+2. 子类胜于父类。如果一个接口继承了另一个接口，且两个接口都定义了一个默认方法，那么子类中定义的方法胜出。
+3. 没有规则三。如果上面两条规则不适用，子类要么需要实现该方法，要么将该方法声明为抽象方法。
+int count = Stream.of(1, 2, 3).reduce(0, (acc, element) -> acc + element);
+
+
+public interface Performance {
+	public String getName();
+
+	public Stream<Artist> getMusicians();
+
+	/**
+	 *  添加 getAllMusicians 方法，该方法返回包含所有艺术家名字的 Stream ，如果对象是乐队，则返回乐队名和每个乐队成员的名字
+	 */
+	public default Stream<Artist> getAllMusicians() {
+		return getMusicians().flatMap(artist -> Stream.concat(Stream.of(artist), artist.getMembers()));
+	}
+}
+
+
+/*********************************          Optional          *****************************************/
+
+Optional的使用： 该对象相当于一个值的容器，是一个容器对象
+Optional<String> a = Optional.of("a");   
+assertEquals("a", a.get());            //  可以通过get方法获取容器中的值
+
+Optional emptyOptional = Optional.empty();           //  通过工厂方法得到为空的Optional对象
+Optional alsoEmpty = Optional.ofNullable(null);      //  讲空值转换成Optional对象，最终效果同上
+
+assertFalse(emptyOptional.isPresent());       //     isPresent() 方法判断Optional对象中是否有值
+assertTrue(a.isPresent());                    //   同上
+
+assertEquals("b", emptyOptional.orElse("b"));          //   orElse() 方法在Optional为空时提供备选值
+assertEquals("c", emptyOptional.orElseGet(() -> "c"));   //  为空时接受一个Supplier对象并调用
+
+
+/* 使用Optional改造已有的方法  */
+public class Artists {
+	private List<Artist> artists;
+	public Artists(List<Artist> artists) {
+		this.artists = artists;
+	}
+//	public Artist getArtist(int index) {
+//		if(index < 0 || index >= artists.size()) {
+//			indexExcetipn(index);
+//		}
+//		return artists.get(index);
+//	}
+
+//	public void indexExcetipn(int index) {
+//		throw new IllegalArgumentException(index + "doesn't correspond to an Artist");
+//	}
+//
+//	public String getArtistName(int index) {
+//		try{
+//			Artist artist = getArtist(index);
+//			return artist.getName();
+//		}catch (IllegalArgumentException e) {
+//			return "unknown";
+//		}
+//	}
+	public Optional<Artist> getArtist(int index) {
+		if(index < 0 || index >= artists.size()) {
+			return Optional.empty();
+		}else{
+			return Optional.of(artists.get(index));
+		}
+	}
+	public String getArtistName(int index) {
+		Optional<Artist> artist = getArtist(index);
+		return artist.map(Artist::getName).orElse("unknown");
+	}
+}
+
+
+/*********************************          方法引用          *****************************************/
+
+方法引用：主要用做lambda表达式所在地方的简写，体现了将方法作为值的思想，让方法变成像值一样的一等公民 
+可以把方法引用看做针对仅仅涉及单一方法的Lambda的语法糖
+
+
+方法引用主要有三类：
+1、指向静态方法的方法引用                如 Integer::parseInt
+2、指向任意类型实例方法的方法引用        如 String::length
+3、指向现有对象的实例方法的方法引用      如 this::getColor
+
+对应的可以用来重构lambda表达式的三中方法
+1、(args) -> ClassName.staticMethod(args)      重构为    ClassName::staticMethod
+2、(arg0, rest) -> arg0.instanceMethod(rest)   重构为    ClassName::instanceMethod   arg0是ClassName类型
+3、(args) -> expr.instanceMethod(args)         重构为    expr::instanceMethod        expr是一个外部对象
+
+构造函数引用
+Supplier<Apple> c1 = Apple::new;   /* 默认构造函数的情况 */
+Apple a1 = c1.get();  /*  调用Supplier的get方法产生一个新的Apple对象实例  */
+
+Function<Integer, Apple> c2 = Apple::new;   /*  一参数Apple(Integer weight)构造函数的情况 */
+Apple a2 = c2.apply(110);        /*  调用Function函数的apply方法产生一个新的Apple对象实例 */
+
+BiFunction<String, Integer, Apple> c3 = Apple::new; /* 两参数Apple(String color, Integer weight)构造函数的情况 */
+Apple a3 = c3.apply("green", 110);  /*  调用BiFunction函数的apply方法产生一个新的Apple对象实例 */
+
+好玩的应用：根据名字和关键参数生成对象(工厂模式的味道)
+static Map<String, Function<Integer, Fruit>> map = new HashMap<>();
+static {
+	map.put("apple", Apple::new);
+	map.put("orange", Orange::new);
+	...
+}
+public static Fruit giveMeFruit(String fruit, Integer weight) {
+	return map.get(fruit.toLowerCase()).apply(weight);   /* 使用apply方法生成对象 */
+}
+
+
+示例：
+lambda表达式写法                                方法引用写法
+(Apple a) -> a.getWeight()                      Apple::getWeight
+() -> Thread.currentThread().dumpStack()        Thread.currentThread()::dumpStack
+(str, i) -> str.substring(i)                    String::substring
+(String s) -> System.out.println(s)             System.out::println
+
+
+artist  ->  artist.getName()      形如左边的lambda表达式可以简写成，注意此处没有小括号       Artist::getName  
+(name, nationality) -> new Artist(name, nationality)  构造函数lambda表达式简写    Artist::new
+
+
+/*********************************          提炼演进过程          *****************************************/
 
 提炼演进过程：
 /* 层次一：通过传值来实现过滤，最基本的功能封装 */
@@ -215,6 +403,8 @@ Consumer<String> p = s -> list.add(s);     /* Consumer返回了一个void */
 	int result = h.apply(1);      // 得到3
 	
 
+/*********************************          Stream 流          *****************************************/
+	
 Stream 流: 从支持数据处理操作的源生成的元素序列
 元素序列： 流提供了一个接口，可以访问特定元素类型的一组有序值。集合侧重于数据/存储，流侧重于计算
 源：流使用的提供数据的源，如集合、数组或输入/输出资源。从有序集合生成流时会保留原有的顺序。有列表生成的流，元素顺序与列表一致。
@@ -239,6 +429,7 @@ try(Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCha
 }catch(IOException e) {}
 	
 	
+/*********************************          流处理/过滤方法示例          *****************************************/
 	
 惰性求值方法： 用于设置过滤条件，常见的有       of, filter, map, flatMap, min, max, limit, sorted, distinct
 及早求值方法： 用来执行具体过滤条件并输出结果   collect, forEach, count, get, reduce
@@ -387,6 +578,7 @@ int max = maxCalories.orElse(1);        // 没有最大值的话，就提供一�
 
 // 获取范围内数值
 // IntStream和LongStream的两个静态方法 range和rangeClosed，区别是后者包含截止数
+// 求范围数列时，range的效率比iterate高
 IntStream evenNumbers = IntStream.rangeClosed(1, 100).filter(n -> n%2 == 0);
 
 // 生成勾股数的三元组
@@ -470,189 +662,14 @@ public class FilterUsingReduce {
     }
 }
 
-
-
-默认方法： 
-1、当具体实现类中存在方法与接口中默认方法签名相同的冲突时，优先选择实现类中的方法，
-2、默认方法的优先级与虚方法类似，即具体实现类没有Override接口中的默认方法时，实现类对象调用时使用接口默认方法，若Override接口中的默认方法，则使用实现类中的方法
-
-产生背景：
-实现Stream流时，要给集合接口Collection<T>及其实现类添加stream和parallelStream流化方法，
-为了明显接口添加新方法后implement接口的所有现存实现代码都要修改，在接口中添加默认方法来给出默认实现
-
-public interface Parent {
-	public void message(String body);
-	
-	public default void welcome() {  message("Parent: Hi!"); }     //  此处在父接口里面声明了默认方法
-	
-	public String getLastMessage();
-}
-
-@Test
-public void parentDefaultUsed() {
-	Parent parent = new ParentImpl();              //  此处调用接口的具体实现类生成对象
-	parent.welcome();                   //    对象自然能使用接口中定义的默认方法
-}
-
-/* 注意此处是接口继承 */
-public interface Child extends  Parent {      //  子接口覆盖了父接口的默认方法
-	@Override
-	public default void welcome() {  message("Child: Hi!"); }
-}
-
-@Test
-public void childOverrideDefault() {
-	Child child = new ChildImpl();          //  此处调用子接口的具体实现类生成对象
-	child.welcome();                         //  对象默认能使用接口中覆盖过的默认方法
-}
-
-多接口继承中方法签名冲突时，默认编译错误，可以通过类中实现冲突方法解决这个问题
-public interface Jukebox {
-	public default String rock() {
-		return "... all over the world!";
-	}
-}
-
-public interface Carriage {
-	public default String rock() {
-		return "... from side to side";
-	}
-}
-
-// 语法 InterfaceName.super指向继承自父接口的方法
-public class MusicalCarriage implements Carriage, Jukebox {
-	@Override
-	public String rock() {
-		return Carriage.super.rock();     //  增强的super语法，指明使用接口Carriage中定义的默认方法
-	}
-}
-
-默认方法的三定律：
-1. 类胜于接口。如果在继承链中有方法体或抽象的方法声明，那么就可以忽略接口中定义的方法。
-2. 子类胜于父类。如果一个接口继承了另一个接口，且两个接口都定义了一个默认方法，那么子类中定义的方法胜出。
-3. 没有规则三。如果上面两条规则不适用，子类要么需要实现该方法，要么将该方法声明为抽象方法。
-int count = Stream.of(1, 2, 3).reduce(0, (acc, element) -> acc + element);
-
-
-public interface Performance {
-	public String getName();
-
-	public Stream<Artist> getMusicians();
-
-	/**
-	 *  添加 getAllMusicians 方法，该方法返回包含所有艺术家名字的 Stream ，如果对象是乐队，则返回乐队名和每个乐队成员的名字
-	 */
-	public default Stream<Artist> getAllMusicians() {
-		return getMusicians().flatMap(artist -> Stream.concat(Stream.of(artist), artist.getMembers()));
-	}
-}
-
-
-Optional的使用： 该对象相当于一个值的容器，是一个容器对象
-Optional<String> a = Optional.of("a");   
-assertEquals("a", a.get());            //  可以通过get方法获取容器中的值
-
-Optional emptyOptional = Optional.empty();           //  通过工厂方法得到为空的Optional对象
-Optional alsoEmpty = Optional.ofNullable(null);      //  讲空值转换成Optional对象，最终效果同上
-
-assertFalse(emptyOptional.isPresent());       //     isPresent() 方法判断Optional对象中是否有值
-assertTrue(a.isPresent());                    //   同上
-
-assertEquals("b", emptyOptional.orElse("b"));          //   orElse() 方法在Optional为空时提供备选值
-assertEquals("c", emptyOptional.orElseGet(() -> "c"));   //  为空时接受一个Supplier对象并调用
-
-
-/* 使用Optional改造已有的方法  */
-public class Artists {
-	private List<Artist> artists;
-	public Artists(List<Artist> artists) {
-		this.artists = artists;
-	}
-//	public Artist getArtist(int index) {
-//		if(index < 0 || index >= artists.size()) {
-//			indexExcetipn(index);
-//		}
-//		return artists.get(index);
-//	}
-
-//	public void indexExcetipn(int index) {
-//		throw new IllegalArgumentException(index + "doesn't correspond to an Artist");
-//	}
-//
-//	public String getArtistName(int index) {
-//		try{
-//			Artist artist = getArtist(index);
-//			return artist.getName();
-//		}catch (IllegalArgumentException e) {
-//			return "unknown";
-//		}
-//	}
-	public Optional<Artist> getArtist(int index) {
-		if(index < 0 || index >= artists.size()) {
-			return Optional.empty();
-		}else{
-			return Optional.of(artists.get(index));
-		}
-	}
-	public String getArtistName(int index) {
-		Optional<Artist> artist = getArtist(index);
-		return artist.map(Artist::getName).orElse("unknown");
-	}
-}
-
-
-方法引用：主要用做lambda表达式所在地方的简写，体现了将方法作为值的思想，让方法变成像值一样的一等公民 
-可以把方法引用看做针对仅仅涉及单一方法的Lambda的语法糖
-
-
-方法引用主要有三类：
-1、指向静态方法的方法引用                如 Integer::parseInt
-2、指向任意类型实例方法的方法引用        如 String::length
-3、指向现有对象的实例方法的方法引用      如 this::getColor
-
-对应的可以用来重构lambda表达式的三中方法
-1、(args) -> ClassName.staticMethod(args)      重构为    ClassName::staticMethod
-2、(arg0, rest) -> arg0.instanceMethod(rest)   重构为    ClassName::instanceMethod   arg0是ClassName类型
-3、(args) -> expr.instanceMethod(args)         重构为    expr::instanceMethod        expr是一个外部对象
-
-构造函数引用
-Supplier<Apple> c1 = Apple::new;   /* 默认构造函数的情况 */
-Apple a1 = c1.get();  /*  调用Supplier的get方法产生一个新的Apple对象实例  */
-
-Function<Integer, Apple> c2 = Apple::new;   /*  一参数Apple(Integer weight)构造函数的情况 */
-Apple a2 = c2.apply(110);        /*  调用Function函数的apply方法产生一个新的Apple对象实例 */
-
-BiFunction<String, Integer, Apple> c3 = Apple::new; /* 两参数Apple(String color, Integer weight)构造函数的情况 */
-Apple a3 = c3.apply("green", 110);  /*  调用BiFunction函数的apply方法产生一个新的Apple对象实例 */
-
-好玩的应用：根据名字和关键参数生成对象(工厂模式的味道)
-static Map<String, Function<Integer, Fruit>> map = new HashMap<>();
-static {
-	map.put("apple", Apple::new);
-	map.put("orange", Orange::new);
-	...
-}
-public static Fruit giveMeFruit(String fruit, Integer weight) {
-	return map.get(fruit.toLowerCase()).apply(weight);   /* 使用apply方法生成对象 */
-}
-
-
-示例：
-lambda表达式写法                                方法引用写法
-(Apple a) -> a.getWeight()                      Apple::getWeight
-() -> Thread.currentThread().dumpStack()        Thread.currentThread()::dumpStack
-(str, i) -> str.substring(i)                    String::substring
-(String s) -> System.out.println(s)             System.out::println
-
-
-artist  ->  artist.getName()      形如左边的lambda表达式可以简写成，注意此处没有小括号       Artist::getName  
-(name, nationality) -> new Artist(name, nationality)  构造函数lambda表达式简写    Artist::new
-
 List<Integer> numbers = Arrays.asList(1, 2 ,3 ,4);
 List<Integer> sameOrder = numbers.stream().collect(Collectors.toList());       //  流保持原有顺序
 
 Set<Integer> numbers = new HashSet<Integer>(Arrays.asList(4, 3, 2, 1));
 List<Integer> sameOrder = numbers.stream().sorted().collect(Collectors.toList());  //  通过排序使无序变有序
+
+
+/*********************************          收集器          *****************************************/
 
 
 【使用收集器】    以下大部分情况默认引入了Collectors的静态方法，即 import static java.util.stream.Collectors.*
@@ -1078,3 +1095,24 @@ public void simpleMovingAverage() {
 		System.out.print(a + " ");  // 得到  1.0 2.0 3.0 3.5 
 	}
 }
+
+
+/*********************************          分支/合并框架          *****************************************/
+
+分支/合并框架：
+
+
+/*********************************              调试          *****************************************/
+
+调试：
+1、调用栈显示的异常一般都是at Debugging.lambda$main$0(Debugging.java:6)这种，没啥鸟用，看看异常名称确认吧
+2、使用peek输出中间结果，peek的设计初衷就是在流的每个元素恢复运行之前，插入执行一个动作
+	List<Integer> result = numbers.stream()
+							.peek(x -> System.out.println("from stream: " + x))
+							.map(x -> x + 17)
+							.peek(x -> System.out.println("after map: " + x))
+							.filter(x -> x % 2 == 0)
+							.peek(x -> System.out.println("after filter: " + x))
+							.limit(3)
+							.peek(x -> System.out.println("after limit: " + x))
+							.collect(toList());
