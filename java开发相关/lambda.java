@@ -124,6 +124,7 @@ public class MusicalCarriage implements Carriage, Jukebox {
 1. 类胜于接口。如果在继承链中有方法体或抽象的方法声明，那么就可以忽略接口中定义的方法。
 2. 子类胜于父类。如果一个接口继承了另一个接口，且两个接口都定义了一个默认方法，那么子类中定义的方法胜出。
 3. 没有规则三。如果上面两条规则不适用，子类要么需要实现该方法，要么将该方法声明为抽象方法。
+	明确指定使用某个接口的默认方法的语法：  X.supre.m(...); 其中X是接口名，m是接口中方法名
 int count = Stream.of(1, 2, 3).reduce(0, (acc, element) -> acc + element);
 
 
@@ -144,11 +145,30 @@ public interface Performance {
 /*********************************          Optional          *****************************************/
 
 Optional的使用： 该对象相当于一个值的容器，是一个容器对象
-Optional<String> a = Optional.of("a");   
+Optional<String> a = Optional.of("a");    // 通过of工厂方法包装对象创建一个Optional实例
 assertEquals("a", a.get());            //  可以通过get方法获取容器中的值
 
+Optional<Car> optCar = Optional.ofNullable(car);  // ofNullable工厂方法允许创建一个空值对象
+
+Optional<Insurance> optInsurance = Optional.ofNullable(insurance);
+Optional<String> name = optInsurance.map(Insurance::getName);  // 使用map从Optional中提取和转换值
+
+// 对象的链式调用时，如果每个对象都需要判空，则可以使用下面写法优化（注意不能用map替代flatMap）
+public String getCarInsuranceName(Optional<Person> person) {
+	// 非空强约束写法  person.getCar().getInsurance().getName();
+	return person.flatMap(Person::getCar)
+				 .flatMap(Car::getInsurance)
+				 .map(Insurance::getName)
+				 .orElse("Unknown");
+}
+
+Optional<Insurance> optInsurance = ...;
+// 通过filter过滤Optional对象，如果为true返回原对象，如果为false将Optional置空
+optInsurance.filter(insurance -> "CambridgeInsurance".equals(insurance.getName()))
+													 .ifPresent(x -> System.out.println("ok"));
+
 Optional emptyOptional = Optional.empty();           //  通过工厂方法得到为空的Optional对象
-Optional alsoEmpty = Optional.ofNullable(null);      //  讲空值转换成Optional对象，最终效果同上
+Optional alsoEmpty = Optional.ofNullable(null);      //  将空值转换成Optional对象，最终效果同上
 
 assertFalse(emptyOptional.isPresent());       //     isPresent() 方法判断Optional对象中是否有值
 assertTrue(a.isPresent());                    //   同上
@@ -156,6 +176,29 @@ assertTrue(a.isPresent());                    //   同上
 assertEquals("b", emptyOptional.orElse("b"));          //   orElse() 方法在Optional为空时提供备选值
 assertEquals("c", emptyOptional.orElseGet(() -> "c"));   //  为空时接受一个Supplier对象并调用
 
+Optional获取值的几种方法：
+get()   如果变量存在，它直接返回封装的变量值，否则就抛出一个NoSuchElementException异常
+orElse(T other)     在Optional对象不包含值时提供一个默认值
+orElseGet(Supplier<? extends T> other)   Supplier方法只有在Optional对象不含值时才执行调用
+orElseThrow(Supplier<? extends X> exceptionSupplier)   可以定制希望抛出的异常类型
+ifPresent(Consumer<? super T>)   在变量值存在时执行一个作为参数传入的方法，否则就不进行任何操作
+
+
+empty       返回一个空的 Optional 实例
+filter      如果值存在并且满足提供的谓词，就返回包含该值的 Optional 对象；否则返回一个空的Optional对象
+flatMap     如果值存在，就对该值执行提供的mapping函数调用，返回一个Optional类型的值，
+            否则就返回一个空的Optional对象
+get         如果该值存在，将该值用 Optional封装返回，否则抛出一个NoSuchElementException异常
+ifPresent   如果值存在，就执行使用该值的方法调用，否则什么也不做
+isPresent   如果值存在就返回 true ，否则返回 false
+map         如果值存在，就对该值执行提供的 mapping函数调用
+of          将指定值用Optional封装之后返回，如果该值为 null ，则抛出一个NullPointerException异常
+ofNullable  将指定值用 Optional 封装之后返回，如果该值为 null ，则返回一个空的 Optional 对象
+orElse      如果有值则将其返回，否则返回一个默认值
+orElseGet   如果有值则将其返回，否则返回一个由指定的 Supplier 接口生成的值
+orElseThrow 如果有值则将其返回，否则抛出一个由指定的 Supplier 接口生成的异常
+
+基础类型的Optional对象(不推荐使用):  OptionalInt, OptionalLong, OptionalDouble
 
 /* 使用Optional改造已有的方法  */
 public class Artists {
@@ -1093,6 +1136,121 @@ public void simpleMovingAverage() {
 			}).toArray();          //  将结果从流转换为数据
 	for(double a : ret) {
 		System.out.print(a + " ");  // 得到  1.0 2.0 3.0 3.5 
+	}
+}
+
+/*********************************          CompletableFuture          *****************************************/
+
+public class Shop {
+	static List<Shop> shops = Arrays.asList(
+			new Shop("BestPrice"),
+			new Shop("LetsSaveBig"),
+			new Shop("MyFavoriteShop"),
+			new Shop("BuyItAll"));
+	String name;
+
+	public Shop(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public static void delay() {
+		try{
+			Thread.sleep(1000L);
+		}catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private double calculatePrice(String product) {
+		delay();
+		Random random = new Random();
+		return random.nextDouble()*product.charAt(0) + product.charAt(1);
+	}
+
+	public double getPrice(String product) {
+		return calculatePrice(product);
+	}
+
+	public Future<Double> getPriceAsync2(String product) {
+		// 使用CompletableFuture的工厂方法，包括异常处理在内的实现与getPriceAsync完全等价
+		// 交由ForkJoinPool池中的某个执行线程Executor运行
+		// 具体线程数等于 Runtime.getRuntime().availableProcessors()的返回值
+		return CompletableFuture.supplyAsync(() -> calculatePrice(product));
+	}
+
+	public Future<Double> getPriceAsync(String product) {
+		CompletableFuture<Double> futurePrice = new CompletableFuture<>();
+		new Thread( () -> {
+			try{
+				double price = calculatePrice(product);
+				// 价格计算正常结束，完成future操作并设置商品价格
+				futurePrice.complete(price);
+			}catch (Exception ex) {
+				// 抛出导致异常的失败，完成本次future操作
+				futurePrice.completeExceptionally(ex);
+			}
+		}).start();
+		return futurePrice;
+	}
+
+	public static void main(String[] argv) {
+		Shop shop = new Shop("best shop");
+		Future<Double> futurePrice = shop.getPriceAsync("my favorite");
+		// do something else
+		try{
+			double price = futurePrice.get();
+		}catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public List<String> findPrices(String product) {
+		// 串行执行，大概4秒多
+		return shops.stream().map(shop ->
+			String.format("%s price is %.2f", shop.getName(), shop.getPrice(product))).collect(Collectors.toList());
+	}
+
+	public List<String> findPrices(String product) {
+		// 并行执行，大概1秒多
+		return shops.parallelStream().map(shop -> String.format("%s price is %.2f", shop.getName(), shop.getPrice(product))).collect(Collectors.toList());
+	}
+
+	public List<String> findPrices(String product) {
+		// 分两次并行执行，此处大概2秒多（注意不是用parallelStream）
+		// 此处分两次流处理的原因是，如果是一个流中，必须等每次CompletableFuture结果计算出来后，才会进行下个元素处理，即到join操作执行完毕，这样就变成完全串行的执行了
+		List<CompletableFuture<String>> priceFutures = shops.stream()
+				.map(shop -> CompletableFuture.supplyAsync(
+						() -> shop.getName() + " price is " + shop.getPrice(product))
+				).collect(Collectors.toList());
+		// 使用join连接各个元素的结果
+		return priceFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
+	}
+
+	private static final Executor executor = Executors.newFixedThreadPool(
+						Math.min(shops.size(),
+						100),
+						new ThreadFactory() {
+							public Thread newThread(Runnable r) {
+								Thread t = new Thread(r);
+								// 将线程标记为守护进程，意味着程序退出时它也会被回收
+								t.setDaemon(true);
+								return t;
+							}}
+						);
+
+	public List<String> findPrices(String product) {
+		List<CompletableFuture<String>> priceFutures = shops.stream()
+				// 提供定制的执行器/线程池executor，用于根据实际机器的内核数并行，提高性能
+				.map(shop -> CompletableFuture.supplyAsync(
+						() -> shop.getName() + " price is " + shop.getPrice(product),
+						executor)
+				).collect(Collectors.toList());
+		// 使用join连接各个元素的结果
+		return priceFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
 	}
 }
 
