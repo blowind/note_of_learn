@@ -1254,6 +1254,25 @@ public class Shop {
 	}
 }
 
+// 多个并行任务的连接执行
+public List<String> findPrices(String product) {
+	// 此处三个map都是在同一个线程顺序执行，并且以shops里面元素为单位并行
+	List<CompletableFuture<String>> priceFutures = shops.stream()
+					// 此处getPrice()涉及到异步的远程调用，使用了线程池executor
+					// 每个元素为CompletableFuture<String>类型
+					.map(shop -> CompletableFuture.supplyAsync(
+									() -> shop.getPrice(product), executor))
+					// 此处parse()是个本地函数，不存在异步，因此用thenApply
+					// 每个元素为CompletableFuture<Quote>类型
+					.map(future -> future.thenApply(Quote::parse))
+					// 此处applyDiscount()涉及到异步远程调用，同样使用线程池executor，使用thenCompose联结
+					// 还有thenComposeAsync版本，第二个参数用于指定切换一个新的线程池执行
+					.map(future -> future.thenCompose(quote ->
+								CompletableFuture.supplyAsync(
+									() -> Discount.applyDiscount(quote))))
+					.collect(toList());
+	return priceFutures.stream().map(CompletableFuture::join).collect(toList());
+}
 
 /*********************************          分支/合并框架          *****************************************/
 

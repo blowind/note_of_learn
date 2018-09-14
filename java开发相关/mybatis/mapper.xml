@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mappper对应的命名空间与项目中CoAreaStatusMapper类定义的路径相同 -->
+<mapper namespace="com.chuanying.app.dao.CoAreaStatusMapper">
+
+	<!-- 
+		id： 为本mapper名空间中引用时的标记 
+		type： 配置查询列苏映射到的Java对象类型，需要使用全路径限定名
+		extends： 选填，可以配置当前的resultMap继承其他的resultMap，属性值为父resultMap的id
+		autoMapping: 选填，配置是否启用非映射字段的自动映射功能，这样不在resultMap中配置的字段也能映射
+	-->
+	<resultMap id="BaseResultMap" type="com.chuanying.app.model.CoAreaStatusDO">
+		<!-- 简单类型的jdbcType可以省略 -->
+		<!--
+		内部标签类型：
+			id：标记结果作为id，代表主链字段
+			result： 注入到Java对象属性的普通结果，最常用配置
+			association：复杂的类型关联
+			collection： 复杂类型的集合
+			discriminator：根据结果值来决定使用哪个结果映射
+			case： 基于某些值得结果映射
+
+		-->
+
+		<!--  
+		id/result属性：
+			column： 列名
+			property： 属性名
+			javaType： 一个Java类的完全限定名或类型别名
+			jdbcType： 列对应的数据库类型，对插入、更新、删除操作可能为null的列进行处理
+			typeHandler： 覆盖默认的类型处理器，值是类的完全限定名或类型别名
+		-->
+	    <id column="id" jdbcType="INTEGER" property="id" />
+	    <result column="area" jdbcType="VARCHAR" property="area" />
+	    <result column="status" jdbcType="TINYINT" property="status" />
+	    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+	</resultMap>
+
+	<!-- 查找对应的列名字段，一般来说是包含全部字段，因此没什么条件判断 -->
+	<sql id="sql_column_list">
+		id
+		,area
+		,status
+		,created_at
+	</sql>
+
+	<!-- 
+		id：属性值要求与接口中的方法名一致，否则MyBatis无法匹配。由于id在同一个命名空间（基本等价于xml文件中）不可重复，因此存在接口中多个重载的同名方法对应同一个select配置的情况
+		resultType：定义当前查询的返回值类型，一般要全限定名，如果是自定义类型并且在config中指定了前缀，可以直接用类名
+		resultMap：配置Java对象的属性和查询结果列的对应关系
+
+	 -->
+	<select id="findEnabledAreas" parameterType="java.util.Map" resultType="java.lang.String">
+	    SELECT area
+	    FROM co_area_status
+	    WHERE status = #{status}
+	</select>
+
+	<!-- 注意对比resultMap和resultType的差异，resultType需要在返回结果用使用别名来保证列名与Java对象域变量名一模一样
+		 若配置了mapUnderscoreToCamelCase设置为true，则下划线转驼峰的映射可以省略别名
+	 -->
+	<select id="selectByIdMap" resultMap="BaseResultMap">
+		SELECT * FROM co_area_status where id = #{id}
+	</select>
+	<select id="selectByIdType" resultType="com.chuanying.app.model.CoAreaStatus">
+		select id,
+			area,
+			status,
+			created_at createdAt
+		from co_area_status where id = #{id}
+	</select>
+
+	
+</mapper>

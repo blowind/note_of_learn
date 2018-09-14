@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 对于mybatis功能配置文件，此处校验空间都是config，映射文件都是mapper -->
+<!DOCTYPE configuration 
+			PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+			"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<settings>
+		<!-- 指定使用LOG4J输出日志 -->
+		<setting name="logImpl" value="LOG4J"/>
+		<!-- 自动将下划线方式命名的数据库列映射到Java对象的驼峰式域变量名上 -->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+
+	<typeAliases>
+		<!-- 指定DAO领域类的全限定名前缀，这样使用类名时可以使用使用类名，如Country -->
+		<package name="tk.mybatis.simple.model"/>
+	</typeAliases>
+
+
+	<environments default="development">
+		<!-- 配置数据库连接 -->
+		<environment id="development">
+			<transactionManager type="JDBC">
+				<property name="" value=""/>
+			</transactionManager>
+			<dataSource type="UNPOOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver"/>
+				<property name="url" value="jdbc:mysql://localhost:3306/mybatis"/>
+				<property name="username" value="root"/>
+				<property name="password" value=""/>
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<!-- 指定SQL语句和映射配置文件 -->
+		<mapper resource="tk/mybatis/simple/mapper/CountryMapper.xml"/>
+		<!-- 使用指定父目录的方式，配置所有的映射xml文件 -->
+		<!-- <mapper resource="tk/mybatis/simple/mapper"/> -->
+	</mappers>
+</configuration>
