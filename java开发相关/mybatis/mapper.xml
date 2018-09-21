@@ -38,6 +38,14 @@
 	    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
 	</resultMap>
 
+	<resultMap id="ArguResultMap" type="com.chuanying.app.model.CoAreaStatusDO">
+		<!-- 
+		constructor： 通过构造方法注入属性的结果值，构造方法中的idArg, arg分别对应resultMap中的id、result标签 
+			idArg： id参数，标记结果作为id
+			arg：   注入到构造方法的一个普通结果
+		-->
+	</resultMap>
+
 	<!-- 查找对应的列名字段，一般来说是包含全部字段，因此没什么条件判断 -->
 	<sql id="sql_column_list">
 		id
@@ -64,7 +72,8 @@
 	<select id="selectByIdMap" resultMap="BaseResultMap">
 		SELECT * FROM co_area_status where id = #{id}
 	</select>
-	<select id="selectByIdType" resultType="com.chuanying.app.model.CoAreaStatus">
+	<!-- 返回列名与对象属性名完全一致（达到自动映射的目的）时，或者返回的是一个基本类型的对象形式时，可以用resultType -->
+	<select id="selectByIdType" resultType="com.chuanying.app.model.CoAreaStatus"> 
 		select id,
 			area,
 			status,
@@ -72,5 +81,44 @@
 		from co_area_status where id = #{id}
 	</select>
 
+	<!-- 对象作为字段的（此处是SysUser对象作为SysRole类的字段），
+	     相关并表查询（sys_user/sys_role/sys_user_role三张表）的映射写法，不常用不推荐 -->
+	<select id="selectRolesByUserId" resultType="tk.mybatis.simple.model.SysRole">
+		SELECT r.id,
+			   r.role_name roleName,
+			   r.enabled,
+			   r.create_by createBy,
+			   r.create_time createTime,
+			   u.user_name as "user.userName",
+			   u.user_email as "user.userEmail"
+		FROM sys_user u
+		INNER JOIN sys_user_role ur ON u.id = ur.user_id
+		INNER JOIN sys_role On ur.role_id = r.id
+		WHERE u.id = #{userId}
+	</select>
+
 	
+	时间类型的对应关系：
+	JAVA                      JDBC类型/MYBATIS        MYSQL
+	java.util.Date                 DATE               date
+	java.util.Date                 TIME               time
+	java.util.Date               TIMESTAMP           datetime
+
+	<!-- 	
+	id： 命名空间汇总的唯一标识
+	parameterType： 传入的语句参数的完全限定名或别名，MyBatis可以自行推断，不建议配置
+	flushCache： 默认true，只要语句被调用，就清空一级和二级缓存
+	timeout： 抛出异常前，驱动程序等待数据库返回结果的秒数
+	statementType： 对STATEMENT、PREPARED、CALLABLE分别使用默认的Statement、PreparedStatement、CallableStatement
+	useGeneratedKeys：默认false。置为true时使用JDBC的getGeneratedKeys方法取出数据库内部生成的主键
+	keyProperty： 指定getGeneratedKeys方法获取的主键赋值的属性名
+	keyColumn： 仅对INSERT和UPDATE有效。生成的键值设置表中的列名，当主键列不是表中第一列时需要设置
+	databaseId：配了databaseIdProvider时，加载所有不带databaseId或者匹配当前databaseId的语句 
+
+	insert返回的类型int是执行SQL影响的行数，一般是插入成功数
+	-->
+	<insert id="insert">
+		INSERT INTO sys_user(id, user_name, user_password, user_email, head_img, create_time)
+		       VALUES (#{id}, #{userName}, #{userPassword}, #{userEmail}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP})
+	</insert>
 </mapper>
