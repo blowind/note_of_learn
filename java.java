@@ -672,6 +672,82 @@ public class GenericReading {
 	
 	
 /****                                               反射                                        ****/
+
+基本使用：
+public class ReflectServiceImpl {
+	public void sayHello(String name) {
+		System.out.println("Hello " + name);
+	}
+}
+public class ReflectServiceImpl2 {
+	private String name;
+	public ReflectServiceImpl2(String name) {
+		this.name = name;
+	}
+	public void sayHello() {
+		System.out.println("hello " + name);
+	}
+}
+
+public class Main {
+
+	/*通过反射获取对象（无参构造函数版）*/
+	public ReflectServiceImpl getInstance() {
+		ReflectServiceImpl object = null;
+		try{
+			/*通过newInstance初始化一个类对象，不带参数的初始化方法*/
+			object = (ReflectServiceImpl)Class.forName("com.zxf.zxfbatis.simple.ReflectServiceImpl").newInstance();
+		}catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+			ex.printStackTrace();
+		}
+		return object;
+	}
+
+	/*通过反射获取对象（有参构造函数版）*/
+	public ReflectServiceImpl2 getInstance2() {
+		ReflectServiceImpl2 object = null;
+		try {
+			object = (ReflectServiceImpl2)Class.forName("com.zxf.zxfbatis.simple.ReflectServiceImpl2").getConstructor(String.class).newInstance("张三");
+		}catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
+			ex.printStackTrace();
+		}
+		return object;
+	}
+
+	/*反射方法： 已有对象不确定类时的调用方法，static仅是为了main调用方便*/
+	public static Object reflectMethod() {
+		Object returnObj = null;
+		ReflectServiceImpl target = new ReflectServiceImpl();
+		try{
+			Method method = ReflectServiceImpl.class.getMethod("sayHello", String.class);
+			returnObj = method.invoke(target, "张三");
+		}catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+			ex.printStackTrace();
+		}
+		return returnObj;
+	}
+
+	/*反射方法： 没有对象但确定类时的调用方法，static仅是为了main调用方便*/
+	public static Object reflect() {
+		ReflectServiceImpl object = null;
+		try {
+			object = (ReflectServiceImpl)Class.forName("com.zxf.zxfbatis.simple.ReflectServiceImpl").newInstance();
+			Method method = object.getClass().getMethod("sayHello", String.class);
+			method.invoke(object, "张三");
+		}catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException ex) {
+			ex.printStackTrace();
+		}
+		return object;
+	}
+
+	public static void main(String[] argv) {
+		reflectMethod();
+		reflect();
+	}
+}
+
+
+
 类方法提取器
 import java.lang.reflect.*;
 import java.util.regex.*;
@@ -731,7 +807,156 @@ public class ShowMethods {
 	}
 }
 
-动态代理
+【动态代理】
+JDK动态代理基本使用示例：（限制：调用的地方必须要提供代理的接口才能使用，比如此处的HelloWorld接口）
+public interface HelloWorld {
+	public void sayHelloWorld();
+}
+public class HelloWorldImpl implements HelloWorld {
+	@Override
+	public void sayHelloWorld() {
+		System.out.println("Hello World");
+	}
+}
+
+public class JdkProxyExample implements InvocationHandler {
+	/*存放真实对象*/
+	private Object target = null;
+
+	/*绑定代理对象和真实对象的代理关系，返回代理对象*/
+	public Object bind(Object target) {
+		// 保存真实对象target到本对象里
+		this.target = target;
+		/*建立并生成代理对象
+		  参数1:指定target本身的类加载器作为类加载器
+		  参数2:指定动态代理对象挂载的接口，此处为target实现的接口
+		  参数3:定义实现方法逻辑的代理类，此处为当前对象，该对象必须实现InvocationHandler接口*/
+		return Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), this);
+	}
+
+	@Override
+	/*实现代理逻辑方法
+	* 参数1:代理对象，即前述bind方法生成的对象
+	* 参数2:当前调度的方法
+	* 参数3:调度方法的参数*/
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		System.out.println("进入代理逻辑方法");
+		System.out.println("在调度真实对象之前的服务");
+		Object obj = method.invoke(target, args);
+		System.out.println("在调度真实对象之后的服务");
+		return obj;
+	}
+	/* 使用举例 */
+	public static void main(String[] argv) {
+		JdkProxyExample jdk = new JdkProxyExample();
+		HelloWorld proxy = (HelloWorld)jdk.bind(new HelloWorldImpl());
+		proxy.sayHelloWorld();
+	}
+}
+
+使用JDK动态代理实现拦截器：
+public interface Interceptor {
+	boolean before(Object proxy, Object target, Method method, Object[] args);
+	void around(Object proxy, Object target, Method method, Object[] args);
+	void after(Object proxy, Object target, Method method, Object[] args);
+}
+/*外层使用者提供的拦截器实现，与业务逻辑强相关*/
+public class MyInterceptor implements Interceptor {
+	@Override
+	public boolean before(Object proxy, Object target, Method method, Object[] args) {
+		System.out.println("反射方法前逻辑");
+		return false;
+	}
+
+	@Override
+	public void after(Object proxy, Object target, Method method, Object[] args) {
+		System.out.println("反射方法后逻辑");
+	}
+
+	@Override
+	public void around(Object proxy, Object target, Method method, Object[] args) {
+		System.out.println("取代被代理对象的方法");
+	}
+}
+/*拦截逻辑实现，底层框架提供者的任务*/
+public class InterceptorJdkProxy implements InvocationHandler {
+	private Object target;
+	private String interceptorClass = null;
+
+	public InterceptorJdkProxy(Object target, String interceptorClass) {
+		this.target = target;
+		this.interceptorClass = interceptorClass;
+	}
+
+	/*绑定定制化拦截器，返回一个代理占位*/
+	public static Object bind(Object target, String interceptorClass) {
+		return Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), new InterceptorJdkProxy(target, interceptorClass));
+	}
+
+	@Override
+	/*拦截器的拦截逻辑放在此处实现*/
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		/*如果未注册自定义拦截类(设置拦截器)，则直接反射原有方法*/
+		if(interceptorClass == null) {
+			return method.invoke(target, args);
+		}
+
+		Object result = null;
+		/*通过反射生成拦截器*/
+		Interceptor interceptor = (Interceptor)Class.forName(interceptorClass).newInstance();
+		/*调用前置方法，返回true则反射原有方法，否则执行around拦截方法*/
+		if(interceptor.before(proxy, target, method, args)) {
+			result = method.invoke(target, args);
+		}else{
+			interceptor.around(proxy, target, method, args);
+		}
+		/*统一调用后置方法*/
+		interceptor.after(proxy,  target, method, args);
+		return result;
+	}
+
+	public static void main(String[] args) {
+		HelloWorld proxy = (HelloWorld)InterceptorJdkProxy.bind(new HelloWorldImpl(), "com.zxf.zxfbatis.simple.MyInterceptor");
+		proxy.sayHelloWorld();
+	}
+}
+
+CGLIB动态代理：
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.MethodInterceptor;
+import org.springframework.cglib.proxy.MethodProxy;
+import java.lang.reflect.Method;
+public class CglibProxyExample implements MethodInterceptor {
+	/*生成CGLIB代理对象，注意整个操作过程不涉及代理接口*/
+	public Object getProxy(Class cls) {
+		/*CGLIB enhaner增强类对象*/
+		Enhancer enhancer = new Enhancer();
+		/*设置增强类型，本质上就是设置被代理的对象*/
+		enhancer.setSuperclass(cls);
+		/*定义代理逻辑对象为当前对象，即当前对象为代理人
+		  要求当前对象实现MethodInterceptor接口*/
+		enhancer.setCallback(this);
+		/*返回代理对象*/
+		return enhancer.create();
+	}
+
+	@Override
+	public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+		System.out.println("调用真实对象前");
+		Object result = methodProxy.invokeSuper(proxy, args);
+		System.out.println("调用真实对象后");
+		return result;
+	}
+
+	public static void main(String[] argv) {
+		CglibProxyExample cpe = new CglibProxyExample();
+		ReflectServiceImpl obj = (ReflectServiceImpl)cpe.getProxy(ReflectServiceImpl.class);
+		obj.sayHello("张三");
+	}
+}
+
+
+
 import java.lang.reflect.*;
 interface MyInterface {
 	void doSomething();

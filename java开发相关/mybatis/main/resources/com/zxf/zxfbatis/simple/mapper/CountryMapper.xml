@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+				"-//mybatis.org//DTD Mapper 3.0//EN"
+				"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxf.zxfbatis.simple.mapper.CountryMapper">
+	<select id="selectAll" resultType="Country">
+		select id, countryname, countrycode from country
+	</select>
+
+	<insert id="insertById" parameterType="com.zxf.zxfbatis.simple.model.Country">
+		insert into
+		<choose>
+			<when test="id != null and id lt 1000 and id gt 100">
+				<bind name="tableId" value='@com.zxf.zxfbatis.simple.utils.DateIndicator@getDayIndexOfYear()'/>
+				country_rbt_#{tableId}
+			</when>
+			<otherwise>
+				<bind name="tableId" value="1"/>
+				country_#{tableId}
+			</otherwise>
+		</choose>
+		(id, countryname, countrycode)
+		VALUES
+		(#{id}, #{countryname}, #{countrycode})
+	</insert>
+</mapper>
+    

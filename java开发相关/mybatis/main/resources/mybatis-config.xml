@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+				PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+				"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="logImpl" value="LOG4J"/>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<setting name="aggressiveLazyLoading" value="false"/>
+	</settings>
+
+	<!--配置DVO(Data Value Object)的别名，这样在具体的mapper中就不用写对象的全路径名-->
+	<typeAliases>
+		<package name="com.zxf.zxfbatis.simple.model"/>
+	</typeAliases>
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC">
+				<property name="" value=""/>
+			</transactionManager>
+			<dataSource type="UNPOOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver"></property>
+				<property name="url" value="jdbc:mysql://localhost:3306/mybatis"/>
+				<property name="username" value="root"/>
+				<property name="password" value="123456"/>
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<!--<mapper resource="com/zxf/simple/mapper/CountryMapper.xml"/>-->
+		<package name="com.zxf.zxfbatis.simple.mapper"/>
+	</mappers>
+</configuration>

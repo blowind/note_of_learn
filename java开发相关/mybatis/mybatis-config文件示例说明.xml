@@ -10,6 +10,7 @@
 		<setting name="logImpl" value="LOG4J"/>
 		<!-- 自动将下划线方式命名的数据库列映射到Java对象的驼峰式域变量名上 -->
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<setting name="aggressiveLazyLoading" value="false"/>
 	</settings>
 
 	<typeAliases>
