@@ -48,6 +48,8 @@ public class MyBatisMain {
 		try{
 			SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(configuration);
 			sqlSession = factory.openSession();
+
+			/* ibatis老版本遗留的使用方式，需要指定SQL id */
 			List<Country> ret = sqlSession.selectList("com.zxf.zxfbatis.simple.mapper.CountryMapper.selectAll");
 			for(Country c : ret) {
 				StringBuilder sb = new StringBuilder();
@@ -55,6 +57,7 @@ public class MyBatisMain {
 				System.out.println(sb.toString());
 			}
 
+			/* 新版本推荐的使用方式，完全的面向对象的使用方式，并且IDE能进行错误校验，和spring配合更好 */
 			CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
 			Country ret2 = mapper.selectById2();
 			System.out.println(ret2);

@@ -5,6 +5,19 @@
 			"http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
+	<!-- ================================================================ -->
+	<!-- 以下配置项的顺序不能颠倒，否则启动阶段会有异常，导致程序无法运行 -->
+	<!-- ================================================================ -->
+
+	<!-- 属性 -->
+	<properties>
+		<property name="database.driver" value="com.mysql.jdbc.Driver"/>
+		<property name="database.url" value="jdbc:mysql://localhost:3306/ssm"/>
+		<property name="database.username" value="root"/>
+		<property name="database.password" value="123456"/>
+	</properties>
+
+	<!-- 设置 -->
 	<settings>
 		<!-- 指定使用LOG4J输出日志 -->
 		<setting name="logImpl" value="LOG4J"/>
@@ -13,18 +26,36 @@
 		<setting name="aggressiveLazyLoading" value="false"/>
 	</settings>
 
+	<!-- 类型别名 -->
 	<typeAliases>
 		<!-- 指定DAO领域类的全限定名前缀，这样使用类名时可以使用使用类名，如Country -->
 		<package name="tk.mybatis.simple.model"/>
+		<!-- 指定单个的POJO对象别名，用于xml中省去路径直接指代，与上述包名省略功能互斥 -->
+		<!-- <typeAlias type="com.zxf.zxfbatis.simple.model.Country" alias="Country"/> -->
 	</typeAliases>
 
+	<!-- 类型处理器 -->
+	<typeHandlers>
+	</typeHandlers>
 
+	<!-- 对象工厂，不常用 -->
+	<objectFactory>
+	</objectFactory>
+
+	<!-- 插件 -->
+	<plugins>
+	</plugins>
+
+
+	<!-- 配置环境 -->
 	<environments default="development">
-		<!-- 配置数据库连接 -->
+		<!-- 环境变量 -->
 		<environment id="development">
+			<!-- 事务管理器 -->
 			<transactionManager type="JDBC">
 				<property name="" value=""/>
 			</transactionManager>
+			<!-- 数据源 -->
 			<dataSource type="UNPOOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver"/>
 				<property name="url" value="jdbc:mysql://localhost:3306/mybatis"/>
@@ -34,6 +65,11 @@
 		</environment>
 	</environments>
 
+	<!-- 数据库厂商标识，不常用 -->
+	<databaseIdProvider>
+	</databaseIdProvider>
+
+	<!-- 映射器 -->
 	<mappers>
 		<!-- 指定SQL语句和映射配置文件 -->
 		<mapper resource="tk/mybatis/simple/mapper/CountryMapper.xml"/>
