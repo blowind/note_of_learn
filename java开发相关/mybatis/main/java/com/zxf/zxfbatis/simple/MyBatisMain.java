@@ -22,6 +22,17 @@ import java.util.List;
 public class MyBatisMain {
 
 	public static void main(String[] argv) {
+
+
+		/*  对于同样的配置，
+		在java程序中配置的属性优先级最高(能覆盖其他两种配置的值)，
+		properties文件中优先级次之，
+		xml文件中properties标签中的优先级最低  */
+
+
+		/****************************************************************/
+		/*通过java代码中进行配置的情况，不推荐，因为每次修改配置要改代码*/
+		/****************************************************************/
 		/*数据库连接池信息*/
 		PooledDataSource dataSource = new PooledDataSource();
 		dataSource.setDriver("com.mysql.jdbc.Driver");
@@ -69,6 +80,26 @@ public class MyBatisMain {
 			sqlSession.rollback();
 		}finally {
 			sqlSession.close();
+		}
+
+		/*************************************************/
+		/*通过xml和properties资源配置文件配置并加载的情况*/
+		/*************************************************/
+		try{
+			/*加载properties文件中的属性值*/
+			InputStream propertiesStream = Resources.getResourceAsStream("jdbc.properties");
+			Properties props = new Properties();
+			props.load(propertiesStream);
+			/*取出密文用户名和密码，解密成明文后放回*/
+			String username = props.getProperty("database.username");
+			String password = props.getProperty("database.password");
+			props.put("database.username", CodeUtils.decode(username));
+			props.put("database.password", CodeUtils.decode(password));
+			InputStream xmlStream = Resources.getResourceAsStream("mybatis-config.xml");
+			/*加载xml配置和properties配置*/
+			SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(xmlStream, props);
+		}catch (IOException ioe) {
+			ioe.printStackTrace();
 		}
 
 	}

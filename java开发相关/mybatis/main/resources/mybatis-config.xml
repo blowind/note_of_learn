@@ -14,6 +14,13 @@
 		<package name="com.zxf.zxfbatis.simple.model"/>
 	</typeAliases>
 
+	<typeHandlers>
+		<!--配置typeHandler，当jdbcType和javaType能与typeHandler处理的内容对应时，
+		    启动MyTypeHandler处理-->
+		<typeHandler jdbcType="VARCHAR" javaType="string"
+								 handler="com.zxf.zxfbatis.simple.handler.MyTypeHandler"/>
+	</typeHandlers>
+
 	<environments default="development">
 		<environment id="development">
 			<transactionManager type="JDBC">

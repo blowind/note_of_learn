@@ -1,5 +1,9 @@
 package com.zxf.zxfbatis.simple.model;
 
+import org.apache.ibatis.type.Alias;
+
+/* mapper xml文件中使用的别名，用于默认别名发生同名冲突时指定具体的别名 */
+@Alias("country")
 public class Country {
 	private Long id;
 	private String countryname;

@@ -11,11 +11,14 @@
 
 	<!-- 属性 -->
 	<properties>
+		<!-- 在本文件的其他地方可以使用${database.driver}引用该值 -->
 		<property name="database.driver" value="com.mysql.jdbc.Driver"/>
 		<property name="database.url" value="jdbc:mysql://localhost:3306/ssm"/>
 		<property name="database.username" value="root"/>
 		<property name="database.password" value="123456"/>
 	</properties>
+	<!-- 将配置放在.properties文件中(classpath路径下)并在本文件引用的方式 -->
+	<properties resource="jdbc.properties"/>
 
 	<!-- 设置 -->
 	<settings>
@@ -23,19 +26,34 @@
 		<setting name="logImpl" value="LOG4J"/>
 		<!-- 自动将下划线方式命名的数据库列映射到Java对象的驼峰式域变量名上 -->
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
+
+
+		<!-- 影响所有映射器中配置缓存的全局开关，默认为true -->
+		<settings name="cacheEnabled" value="true"/>
+
+		<!-- 延迟加载的全局开关，开启时所有关联对象都会延迟加载，默认为false -->
+		<settings name="lazyLoadingEnabled" value="false"/>
+		<!-- 启用时对任意延迟属性的调用会使带有延迟加载属性的对象完整加载，否则按需加载，3.4.1版本后默认为false -->
 		<setting name="aggressiveLazyLoading" value="false"/>
+
+
 	</settings>
 
-	<!-- 类型别名 -->
+	<!-- 类型别名，在MyBatis中别名不区分大小写，所以别名一般都小写，本身小写的情况下加前缀下划线 -->
 	<typeAliases>
-		<!-- 指定DAO领域类的全限定名前缀，这样使用类名时可以使用使用类名，如Country -->
+		<!-- 指定DAO领域类的全限定名前缀，MyBatis会扫描这个包里的所有类，将其第一个字母变小写后作为其别名 -->
 		<package name="tk.mybatis.simple.model"/>
 		<!-- 指定单个的POJO对象别名，用于xml中省去路径直接指代，与上述包名省略功能互斥 -->
-		<!-- <typeAlias type="com.zxf.zxfbatis.simple.model.Country" alias="Country"/> -->
+		<!-- <typeAlias type="com.zxf.zxfbatis.simple.model.Country" alias="country"/> -->
 	</typeAliases>
 
 	<!-- 类型处理器 -->
+	<!-- 用于jdbcType和javaType类型之间的相互转换，多用于自定义枚举类或者数据库使用特殊数据类型的场景 -->
 	<typeHandlers>
+		<!--配置typeHandler，当jdbcType和javaType能与typeHandler处理的内容对应时，
+		    启动MyTypeHandler处理-->
+		<typeHandler jdbcType="VARCHAR" javaType="string"
+								 handler="com.zxf.zxfbatis.simple.handler.MyTypeHandler"/>
 	</typeHandlers>
 
 	<!-- 对象工厂，不常用 -->

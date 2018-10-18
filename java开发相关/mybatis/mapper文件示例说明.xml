@@ -36,6 +36,12 @@
 	    <result column="area" jdbcType="VARCHAR" property="area" />
 	    <result column="status" jdbcType="TINYINT" property="status" />
 	    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+
+	    <!-- 指定映射处理表列role_name和属性roleName的处理器MyTypeHandler，
+	    	 分别要定义MyTypeHandler类并在mybatis-config.xml文件中配置  -->
+	    <!--
+	    <result property="roleName" column="role_name" typeHandler="com.zxf.zxfbatis.simple.handler.MyTypeHandler"/> 
+		-->
 	</resultMap>
 
 	<resultMap id="ArguResultMap" type="com.chuanying.app.model.CoAreaStatusDO">
