@@ -54,6 +54,8 @@
 		    启动MyTypeHandler处理-->
 		<typeHandler jdbcType="VARCHAR" javaType="string"
 								 handler="com.zxf.zxfbatis.simple.handler.MyTypeHandler"/>
+		<!-- 使用包扫描的方式，指定该路径下所有的typeHandler，其中的jdbcType和javaType在类定义中通过注解指定 -->
+		<package name="com.zxf.zxfbatis.simple.handler"/>
 	</typeHandlers>
 
 	<!-- 对象工厂，不常用 -->

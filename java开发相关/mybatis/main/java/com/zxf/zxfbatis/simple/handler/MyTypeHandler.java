@@ -1,6 +1,8 @@
 package com.zxf.zxfbatis.simple.handler;
 
 import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedJdbcTypes;
+import org.apache.ibatis.type.MappedTypes;
 import org.apache.ibatis.type.TypeHandler;
 
 import java.sql.CallableStatement;
@@ -14,6 +16,8 @@ import java.sql.SQLException;
  * @description
  * @date 2018/10/18 13:50
  */
+@MappedTypes(String.class)
+@MappedJdbcTypes(JdbcType.VARCHAR)
 public class MyTypeHandler implements TypeHandler<String> {
 
 	@Override

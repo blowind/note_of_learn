@@ -127,4 +127,50 @@
 		INSERT INTO sys_user(id, user_name, user_password, user_email, head_img, create_time)
 		       VALUES (#{id}, #{userName}, #{userPassword}, #{userEmail}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP})
 	</insert>
+
+
+	<!-- 注意此处的类型string是在xml配置文件的typeHandler中定义的映射类型，此处显示其应用
+	     指定javaType和jdbcType，mybatis自动匹配handler进行处理 -->
+	<select id="findRoles" parameterType="string" resultMap="roleMapper">
+		select id, role_name, note from t_role
+		where role_name like concat('%', #{roleName, jdbcType=VARCHAR, javaType=string}, '%')
+	</select>
+	<!-- 指定MyTypeHandler作为处理类型映射关系的类，
+		 用于数据库返回为空无法判定采用哪个typeHandler，
+		 又没有在xml或代码中注册对应的javaType的typeHandler时使用 -->
+	<select id="findRoles2" parameterType="string" resultMap="roleMapper">
+		select id, role_name, note from t_role
+		where note like concat('%', #{note, typeHandler=com.zxf.zxfbatis.simple.handler.MyTypeHandler}, '%')
+	</select>
+
+
+
+	<!-- 使用ibatis自带的枚举处理器EnumOrdinalTypeHandler映射到自定义枚举类型SexEnum，
+		 此时数据库中存储的是数字类型integer，即SexEnum中各个类型的下标(从上到下以0开始计数)
+		 弊端：下标数值可能与枚举类型中自己定义的索引数值不一致 -->
+	<resultMap id="userMapper" type="user">
+		<result property="id" column="id"/>
+		<result property="username" column="user_name"/>
+		<result property="sex" column="sex" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
+	</resultMap>
+
+	<!-- 使用ibatis自带的枚举处理器EnumTypeHandler映射到自定义枚举类型SexEnum，
+		 此时数据库中存储的是字符类型VARCHAR，即SexEnum中的枚举项的名字
+		 在java对象中的类型转换，使用Enum.valueOf(SexEnum.class, "MALE")得到，其中MALE是数据库中存储的枚举字符串 -->
+	<resultMap id="userMapper" type="user">
+		<result property="id" column="id"/>
+		<result property="username" column="user_name"/>
+		<result property="sex" column="sex" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+	</resultMap>
+
+	<!-- 使用自定义的枚举处理器SexEnumTypeHandler映射到自定义枚举类型SexEnum，
+		 此时数据库中存储的是数字类型integer，即SexEnum中各个枚举类型的id值（通过SexEnumTypeHandler实现的接口函数指定）
+		 推荐的枚举映射用法 -->
+	<resultMap id="userMapper" type="user">
+		<result property="id" column="id"/>
+		<result property="username" column="user_name"/>
+		<result property="sex" column="sex" typeHandler="com.zxf.zxfbatis.simple.handler.SexEnumTypeHandler"/>
+	</resultMap>
+
+
 </mapper>
