@@ -173,4 +173,19 @@
 	</resultMap>
 
 
+	<!-- 二进制的文件内容存数据库，不推荐使用，可以使用专门的文件服务器 -->
+	<resultMap id="file" type="com.ssm.chapter5.pojo.TestFile">
+		<id column="id" property="id"/>
+		<!-- 处理数据库列为blob类型，类属性为byte[]的列，一般这种格式转换能默认匹配，不用在typeHandler中显示指定 -->
+		<result column="content" property="content" typeHandler="org.apache.ibatis.type.BlobTypeHandler"/>
+	</resultMap>
+
+	<!-- 二进制的文件内容存数据库，不推荐使用，可以使用专门的文件服务器 -->
+	<resultMap id="file" type="com.ssm.chapter5.pojo.TestFile">
+		<id column="id" property="id"/>
+		<!-- 处理数据库列为blob类型，类属性为InputStream的列 -->
+		<result column="content" property="content" typeHandler="org.apache.ibatis.type.BlobInputStreamTypeHandler"/>
+	</resultMap>
+
+
 </mapper>

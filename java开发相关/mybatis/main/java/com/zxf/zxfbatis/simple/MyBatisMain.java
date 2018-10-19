@@ -41,6 +41,7 @@ public class MyBatisMain {
 		dataSource.setUrl("jdbc:mysql://localhost:3306/mybatis");
 		dataSource.setDefaultAutoCommit(false);
 		/*采用MyBatis的JDBC事务*/
+		/* MyBatis为Transaction提供了两个实现类：JdbcTransaction和ManagedTransaction */
 		TransactionFactory transactionFactory = new JdbcTransactionFactory();
 		Environment environment = new Environment("development", transactionFactory, dataSource);
 

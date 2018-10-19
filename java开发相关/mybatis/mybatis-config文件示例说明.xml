@@ -59,7 +59,8 @@
 	</typeHandlers>
 
 	<!-- 对象工厂，不常用 -->
-	<objectFactory>
+	<objectFactory type="com.zxf.zxfbatis.simple.factory.MyObjectFactory">
+		<property name="prop1" value="value1"/>
 	</objectFactory>
 
 	<!-- 插件 -->
@@ -72,15 +73,40 @@
 		<!-- 环境变量 -->
 		<environment id="development">
 			<!-- 事务管理器 -->
+			<!-- MyBatis为Transaction提供了两个实现类：
+				   JdbcTransaction和ManagedTransaction，实现TransactionFactory接口 -->
+			<!-- JdbcTransaction以JDBC的方式对数据库的提交和回滚进行操作 -->
 			<transactionManager type="JDBC">
 				<property name="" value=""/>
 			</transactionManager>
+			<!-- ManagedTransaction的提交和回滚不用任何操作，而是把事务交给容器处理 -->
+			<!-- <transactionManager type="MANAGED"> -->
+
+			<!-- 使用自定义的事务管理器 -->
+			<!-- <transactionManager type="com.zxf.zxfbatis.simple.transaction.MyTransactionFactory"/> -->
+
+
 			<!-- 数据源 -->
+			<!-- 使用UnpooledDataSourceFactory、PooledDataSourceFactory和JndiDataSourceFactory
+				 三个工厂类来提供DataSource连接对象，分别对应UNPOOLED、POOLED、JNDI三个配置 -->
 			<dataSource type="UNPOOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver"/>
 				<property name="url" value="jdbc:mysql://localhost:3306/mybatis"/>
 				<property name="username" value="root"/>
 				<property name="password" value=""/>
+			</dataSource>
+
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver"/>
+				<property name="url" value="jdbc:mysql://localhost:3306/mybatis"/>
+				<property name="username" value="root"/>
+				<property name="password" value=""/>
+
+				<!-- 以下设置可选，下面填的value都是默认值 -->
+				<!-- 维持的最大活动连接数 -->
+				<property name="poolMaximumActiveConnections" value="10"/>
+				<!-- 最大空闲连接数 -->
+				<property name="poolMaximumIdleConnections" value="?"/>
 			</dataSource>
 		</environment>
 	</environments>
