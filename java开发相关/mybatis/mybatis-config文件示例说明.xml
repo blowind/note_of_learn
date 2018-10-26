@@ -72,6 +72,8 @@
 	<environments default="development">
 		<!-- 环境变量 -->
 		<environment id="development">
+
+
 			<!-- 事务管理器 -->
 			<!-- MyBatis为Transaction提供了两个实现类：
 				   JdbcTransaction和ManagedTransaction，实现TransactionFactory接口 -->
@@ -79,11 +81,14 @@
 			<transactionManager type="JDBC">
 				<property name="" value=""/>
 			</transactionManager>
-			<!-- ManagedTransaction的提交和回滚不用任何操作，而是把事务交给容器处理 -->
+
+			<!-- ManagedTransaction的提交和回滚不用任何操作，而是把事务交给容器处理
+				 默认情况下回关闭连接 -->
 			<!-- <transactionManager type="MANAGED"> -->
 
 			<!-- 使用自定义的事务管理器 -->
 			<!-- <transactionManager type="com.zxf.zxfbatis.simple.transaction.MyTransactionFactory"/> -->
+
 
 
 			<!-- 数据源 -->
@@ -94,6 +99,10 @@
 				<property name="url" value="jdbc:mysql://localhost:3306/mybatis"/>
 				<property name="username" value="root"/>
 				<property name="password" value=""/>
+
+				<!-- 通过点分属性的方式给数据库驱动传属性，此处传递值为UTF8的encoding属性给数据库驱动
+				     实际是调用DriverManager.getConnection(url, driverProperties)方法传递 -->
+				<property name="driver.encoding" value="UTF8"/>
 			</dataSource>
 
 			<dataSource type="POOLED">
@@ -107,19 +116,56 @@
 				<property name="poolMaximumActiveConnections" value="10"/>
 				<!-- 最大空闲连接数 -->
 				<property name="poolMaximumIdleConnections" value="?"/>
+				<!-- 被强制返回前，池中连接被checkout的时间，单位毫秒 -->
+				<property name="poolMaximumCheckoutTime" value="20000"/>
+				<!-- 如果获取连接花费时间过长，打印状态日志，并重新尝试获取一个连接，设置这期间间隔，单位毫秒 -->
+				<property name="poolTimeToWait" value="20000"/>
 			</dataSource>
+
+			<!-- 根据JNDI信息拿外部容器实现的数据库连接对象 -->
+			<dataSource type="JNDI">
+				<!-- 寻找data_source的上下文，可选，忽略时在InitialContext中寻找data_source属性 -->
+				<property name="initial_context" value=""/>
+				<!-- 引用数据源实例位置上下文的路径 -->
+				<property name="data_source" value=""/>
+
+				<!-- 通过点分属性的方式设置数据源的附带属性，可选 -->
+				<property name="env.encoding" value="UTF8"/>
+			</dataSource>
+
 		</environment>
 	</environments>
 
 	<!-- 数据库厂商标识，不常用 -->
 	<databaseIdProvider>
+		<!-- 此处name是使用的数据库名称，value是其在配置中的别名，例如select或者insert语句中配置databaseId属性 -->
+		<property name="Oracle" value="oracle"/>
+		<property name="MySQL" value="mysql"/>
+		<property name="DB2" value="db2"/>
+	</databaseIdProvider>
+
+	<databaseIdProvider type="com.zxf.zxfbatis.simple.provider.MyDatabaseIdProvider">
+		<property name="msg" value="自定义DatabaseIdProvider"/>
 	</databaseIdProvider>
 
 	<!-- 映射器 -->
 	<mappers>
+		<!-- 用文件路径引入映射器 -->
 		<!-- 指定SQL语句和映射配置文件 -->
 		<mapper resource="tk/mybatis/simple/mapper/CountryMapper.xml"/>
 		<!-- 使用指定父目录的方式，配置所有的映射xml文件 -->
 		<!-- <mapper resource="tk/mybatis/simple/mapper"/> -->
+
+
+		<!-- 用xml文件指定 -->
+		<mapper url="file:///var/mappers/tk/mybatis/simple/mapper/CountryMapper.xml"/>
+
+
+		<!-- 用包名引入映射器 -->
+		<package name="tk/mybatis/simple/mapper"/>
+
+
+		<!-- 使用类注册引入映射器 -->
+		<mapper class="tk/mybatis/simple/mapper/CountryMapper"/>
 	</mappers>
 </configuration>

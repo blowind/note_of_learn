@@ -187,5 +187,50 @@
 		<result column="content" property="content" typeHandler="org.apache.ibatis.type.BlobInputStreamTypeHandler"/>
 	</resultMap>
 
+	<!-- 调用类的静态函数的静态方法根据条件生成数值，用作数据表名的拼接，
+      	 注意拼接类型只能是数字，不能是字符串(字符串会报错) -->
+	<select id="getDayDetailByIdCode" resultMap="BaseResultMap">
+        SELECT user_id, coin_code, amount_sign, handle_type, sum(amount) as amount
+        FROM
+      <choose>
+        <when test="userId != null and userId != '' and userId lt 1000 and userId gt 0">
+          <bind name="tableId" value='@com.chuanying.eoe.match.utils.DateIndicator@getDayIndexOfYear()'/>
+          <choose>
+            <when test="tableId lt 10">
+              account_detail_rbt_00#{tableId}
+            </when>
+            <when test="tableId lt 100">
+              account_detail_rbt_0#{tableId}
+            </when>
+            <otherwise>
+              account_detail_rbt_#{tableId}
+            </otherwise>
+          </choose>
+        </when>
+        <otherwise>
+          account_detail
+        </otherwise>
+      </choose>
+        WHERE date(create_time) = date(date_add(now(), interval -1 day))
+        GROUP BY user_id, coin_code, amount_sign, handle_type
+    </select>
+
+    <!-- 同上，使用工具类静态函数生成条件变量用于数据库选择 -->
+    <insert id="migrateRobotDataByDay">
+        <bind name="tableId" value='@com.chuanying.eoe.match.util.DateIndicator@getMonthIndexOfYear()'/>
+        INSERT INTO trade_entrust_detail_rbt_bak_#{tableId}
+        (SELECT * FROM trade_entrust_detail_rbt
+        WHERE date_format(create_time,'%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d') LIMIT #{pageSize} OFFSET (#{pageNum} - 1) * #{pageSize})
+    </insert>
+
+    <!-- 展示databaseId数据库厂商标志的使用，需要与mybatis-config.xml中的databaseIdProvider配置配合
+         不配置databaseId的SQL会被当做默认值，当没有最佳匹配时运行，若所有语句都有配置但与实际数据库不一致，抛出异常 -->
+    <select id="getRole" parameterType="Long" resultType="role" databaseId="oracle">
+    	select id, role_name as roleName, note from t_role where id = #{id}
+    </select>
+    <select id="getRole" parameterType="Long" resultType="role" databaseId="mysql">
+    	select id, role_name as roleName, note from t_role where id = #{id}
+    </select>
+
 
 </mapper>
