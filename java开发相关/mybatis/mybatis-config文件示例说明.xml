@@ -22,6 +22,12 @@
 
 	<!-- 设置 -->
 	<settings>
+		<!-- 自动映射开关，三个取值：
+			 1、NONE（不自动映射）
+			 2、PARTIAL（默认值，只对没有嵌套结果集进行映射）
+			 3、FULL（对所有结果集进行映射，包括嵌套结果集） -->
+		<settings name="autoMappingBehavior" value="PARTIAL"/>
+
 		<!-- 指定使用LOG4J输出日志 -->
 		<setting name="logImpl" value="LOG4J"/>
 		<!-- 自动将下划线方式命名的数据库列映射到Java对象的驼峰式域变量名上 -->

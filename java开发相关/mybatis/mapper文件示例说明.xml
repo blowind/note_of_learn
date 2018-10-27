@@ -62,8 +62,13 @@
 
 	<!-- 
 		id：属性值要求与接口中的方法名一致，否则MyBatis无法匹配。由于id在同一个命名空间（基本等价于xml文件中）不可重复，因此存在接口中多个重载的同名方法对应同一个select配置的情况
-		resultType：定义当前查询的返回值类型，一般要全限定名，如果是自定义类型并且在config中指定了前缀，可以直接用类名
+		parameterType:给出类的全限定名或者别名，将Java Bean、Map等简单的参数类型传给SQL
+		resultType：定义当前查询的返回值类型，一般要全限定名，如果是自定义类型并且在config中指定了前缀，可以直接用类名，与resultMap互斥
 		resultMap：配置Java对象的属性和查询结果列的对应关系
+		flushCache：调用SQL后，是否要求MyBatis清空之前查询本地缓存和二级缓存，默认为false
+		useCache：启动二级缓存的开关，是否要求MyBatis将此次结果缓存，默认为true
+		timeout：查询超时参数，单位为秒，默认为数据库厂商提供的JDBC驱动设置的秒数
+		fetchSize：获取记录的总条数设定，默认为数据库厂商提供的JDBC驱动设置的条数
 
 	 -->
 	<select id="findEnabledAreas" parameterType="java.util.Map" resultType="java.lang.String">
@@ -71,6 +76,55 @@
 	    FROM co_area_status
 	    WHERE status = #{status}
 	</select>
+	<select id="countUserByFirstName" parameterType="string" resultType="int">
+		select count(*) total from t_user
+		where user_name like concat(#{firstName}, '%')
+	</select>
+
+
+	<!-- 多参数传递： -->
+	<!-- 使用Map接口传递多个参数，适用几乎所有场景，但不推荐
+		 对应接口为: public List<Role> findRolesByMap(Map<String, Object> paramterMap);  -->
+	<select id="firstRolesByMap" parameterType="map" resultType="role">
+		select id, role_name as roleName, note from t_role
+		where role_name like concat('%', #{roleName}, '%')
+		and note like concat('%', #{note}, '%')
+	</select>
+
+	<!-- 使用注解传递多个参数，此处不需给出parameterType配置
+	     对应接口为： public List<Role> findRoleByAnnotation(@Param("roleName") String roleName, @Param("note") String note); -->
+    <select id="findRoleByAnnotation" resultType="role">
+		select id, role_name as roleName, note from t_role
+		where role_name like concat('%', #{roleName}, '%')
+		and note like concat('%', #{note}, '%')
+	</select>
+
+	<!-- 使用Java Bean传递多个参数，应对参数过多（一般大于等于5）的情况
+	     对应接口为： public List<Role> findRolesByBean(RoleParams roleParams); -->
+	<select id="findRolesByBean" parameterType="com.zxf.zxfbatis.simple.dao.RoleParams" resultType="role">
+		select id, role_name as roleName, note from t_role
+		where role_name like concat('%', #{roleName}, '%')
+		and note like concat('%', #{note}, '%')
+	</select>
+
+	<!-- 混合前两种情况，即使用点分属性引用每个Java对象的属性
+	     对应接口为： public List<Role> findByMix(@Param("params") RoleParams roleParams, @Param("page") PageParam pageParam); -->
+	<select id="findByMix" resultType="role">
+		select id, role_name as roleName, note from t_role
+		where role_name like concat('%', #{params.roleName}, '%')
+		and note like concat('%', #{params.note}, '%')
+		limit #{page.start}, #{page.limit}
+	</select>
+
+	<!--使用MyBatis内置分页功能（RowBounds类）
+	    对应接口：List<Country> findByRowBounds(@Param("id") Integer id, RowBounds rowBounds);
+	    注意：
+	    1、 接口中要带RowBounds参数，但是SQL中不用带，MyBatis会自动处理
+	    2、 只能运用于一些小数据量的查询，对大量数据查询性能不佳，建议通过分页插件处理 -->
+	<select id="findByRowBounds" resultType="com.zxf.zxfbatis.simple.model.Country">
+		SELECT * FROM country WHERE <![CDATA[ id > #{id} ]]>
+	</select>
+
 
 	<!-- 注意对比resultMap和resultType的差异，resultType需要在返回结果用使用别名来保证列名与Java对象域变量名一模一样
 		 若配置了mapUnderscoreToCamelCase设置为true，则下划线转驼峰的映射可以省略别名
@@ -116,9 +170,15 @@
 	flushCache： 默认true，只要语句被调用，就清空一级和二级缓存
 	timeout： 抛出异常前，驱动程序等待数据库返回结果的秒数
 	statementType： 对STATEMENT、PREPARED、CALLABLE分别使用默认的Statement、PreparedStatement、CallableStatement
-	useGeneratedKeys：默认false。置为true时使用JDBC的getGeneratedKeys方法取出数据库内部生成的主键
-	keyProperty： 指定getGeneratedKeys方法获取的主键赋值的属性名
-	keyColumn： 仅对INSERT和UPDATE有效。生成的键值设置表中的列名，当主键列不是表中第一列时需要设置
+
+	主键回填：
+	useGeneratedKeys：默认false。置为true时使用JDBC的getGeneratedKeys方法取出数据库内部生成的主键（新增数据后使用主键id进行关联的场景）
+	以下两个配置仅对INSERT和UPDATE有效：
+	keyProperty： 指定getGeneratedKeys方法获取的主键赋值的属性名，即MyBatis把插入后新生成的主键回填到Bean里哪个属性，多个主键用逗号
+	分隔
+	keyColumn： 。生成的键值设置表中的列名，当主键列不是表中第一列时需要设置，复合主键使用逗号分隔
+
+
 	databaseId：配了databaseIdProvider时，加载所有不带databaseId或者匹配当前databaseId的语句 
 
 	insert返回的类型int是执行SQL影响的行数，一般是插入成功数
@@ -126,6 +186,10 @@
 	<insert id="insert">
 		INSERT INTO sys_user(id, user_name, user_password, user_email, head_img, create_time)
 		       VALUES (#{id}, #{userName}, #{userPassword}, #{userEmail}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP})
+	</insert>
+	<!-- 使用插入后生成的主键id回填到Role对象中，用于后续处理 -->
+	<insert id="insertRole" parameterType="role" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_role(role_name, note) VALUES (#{roleName}, #{note})
 	</insert>
 
 
