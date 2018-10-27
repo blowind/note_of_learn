@@ -5,6 +5,20 @@
 <!-- mappper对应的命名空间与项目中CoAreaStatusMapper类定义的路径相同 -->
 <mapper namespace="com.chuanying.app.dao.CoAreaStatusMapper">
 
+	<resultMap>
+		<constructor>
+			<idArg/>
+			<arg/>
+		</constructor>
+		<id/>
+		<result/>
+		<association/>
+		<collection/>
+		<discriminator>
+			<case/>
+		</discriminator>
+	</resultMap>
+
 	<!-- 
 		id： 为本mapper名空间中引用时的标记 
 		type： 配置查询列苏映射到的Java对象类型，需要使用全路径限定名
@@ -17,8 +31,8 @@
 		内部标签类型：
 			id：标记结果作为id，代表主链字段
 			result： 注入到Java对象属性的普通结果，最常用配置
-			association：复杂的类型关联
-			collection： 复杂类型的集合
+			association：复杂的类型关联，即POJO类类型属性对应数据库的跨表关联，一对一关联
+			collection： 复杂类型的集合，即POJO类类型属性对应数据库的跨表关联，一对多关联
 			discriminator：根据结果值来决定使用哪个结果映射
 			case： 基于某些值得结果映射
 
@@ -27,7 +41,7 @@
 		<!--  
 		id/result属性：
 			column： 列名
-			property： 属性名
+			property： 属性名，可以用点分属性名来指定成员对象中的属性
 			javaType： 一个Java类的完全限定名或类型别名
 			jdbcType： 列对应的数据库类型，对插入、更新、删除操作可能为null的列进行处理
 			typeHandler： 覆盖默认的类型处理器，值是类的完全限定名或类型别名
@@ -50,15 +64,43 @@
 			idArg： id参数，标记结果作为id
 			arg：   注入到构造方法的一个普通结果
 		-->
+		<constructor>
+			<idArg column="id" javaType="int"/>
+			<arg column="role_name" javaType="string"/>
+		</constructor>
 	</resultMap>
 
-	<!-- 查找对应的列名字段，一般来说是包含全部字段，因此没什么条件判断 -->
+	<!-- 使用map存储结果集，适用于所有场景，但不推荐，因为调用地方取数据需要从Map里面挨个get，导致强耦合 -->
+	<select id="findColorByNote" parameterType="string" resultType="map">
+		select id, color, note from t_color where note like concat('%', #{note}, '%')
+	</select>
+
+	<!-- 使用POJO存储结果集，即正常的type="com.chuanying.app.model.CoAreaStatusDO"形式，不赘述 -->
+
+
+	<!-- 定义一条SQL的一部分，用于文件内其他地方复用，多用于列名罗列  -->
 	<sql id="sql_column_list">
 		id
 		,area
 		,status
 		,created_at
 	</sql>
+	<select id="getAreaStatus" parameterType="long" resultMap="BaseResultMap">
+		select <include refid="sql_column_list"/> from co_area_status where id = #{id}
+	</select>
+	<!-- 带变量传递的SQL用法 -->
+	<sql id="roleCols">
+		${alias}.id, ${alias}.role_name, ${alias}.note
+	</sql>
+	<select id="getRole" parameterType="long" resultMap="roleMap">
+		select 
+		<include refid="roleCols">
+			<!-- 将t_role的别名r作为参数值传入 -->
+			<property name="alias" value="r"/>
+		</include>
+		from t_role r where id = #{id}
+	</select>
+
 
 	<!-- 
 		id：属性值要求与接口中的方法名一致，否则MyBatis无法匹配。由于id在同一个命名空间（基本等价于xml文件中）不可重复，因此存在接口中多个重载的同名方法对应同一个select配置的情况
@@ -191,6 +233,14 @@
 	<insert id="insertRole" parameterType="role" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_role(role_name, note) VALUES (#{roleName}, #{note})
 	</insert>
+	<!-- 自定义主键，此处插入前先查找，表中不存在数据时主键id设置为1，否则取数据中最大的id并加3 -->
+	<insert id="insertRole" parameterType="role">
+		<!-- keyProperty指定要设置的POJO的主键，resultType表示返回类型，order为BEFORE表示在当前定义的SQL前执行，还有AFTER可选 -->
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+			select if (max(id) = null, 1, max(id) + 3) from t_role
+		</selectKey>
+		insert into t_role(id, role_name, note) values (#{id}, #{roleName}, #{note})
+	</insert>
 
 
 	<!-- 注意此处的类型string是在xml配置文件的typeHandler中定义的映射类型，此处显示其应用
@@ -251,6 +301,40 @@
 		<result column="content" property="content" typeHandler="org.apache.ibatis.type.BlobInputStreamTypeHandler"/>
 	</resultMap>
 
+	<!-- 
+	指定属性和数据列及转换处理类示例，较少使用，一般用于自定义类型存储
+	#{age, javaType=int, jdbcType=NUMERIC, typeHandler=MyTypeHandler}
+
+	指定数据精度，此处只保留数字的两位有效位
+	#{width, javaType=double, jdbcType=NUMERIC, numericScale-2}
+ 	-->
+
+
+	<!-- 特殊字符串的替换和处理（#和$）
+ 	     ${}里面的内容不会进一步转义，实际差别得从底层debug日志容易看出来，
+ 	     即传给数据库的内容不一样，${}在MyBatis这层转换完毕，#{}要到数据库那边去转换填入
+ 	     对应接口： Country selectByColumnName(@Param("columnName") String columnName, @Param("id") Integer id); -->
+ 	<select id="selectByColumnName" resultType="country">
+		select ${columnName} from country where id = #{id}
+	</select>
+	<select id="selectByColumnName" resultType="country">
+		select #{columnName} from country where id = #{id}
+	</select>
+	<!-- 	
+	${}的日志：
+	DEBUG [main] - ==>  Preparing: select id, countryname from country where id = ? 
+	DEBUG [main] - ==> Parameters: 1(Integer)
+	TRACE [main] - <==    Columns: id, countryname
+	TRACE [main] - <==        Row: 1, 中国
+	DEBUG [main] - <==      Total: 1
+	#{}的日志：
+	DEBUG [main] - ==>  Preparing: select ? from country where id = ? 
+	DEBUG [main] - ==> Parameters: id, countryname(String), 1(Integer)
+	TRACE [main] - <==    Columns: id, countryname
+	TRACE [main] - <==        Row: id, countryname
+	DEBUG [main] - <==      Total: 1 
+	-->
+
 	<!-- 调用类的静态函数的静态方法根据条件生成数值，用作数据表名的拼接，
       	 注意拼接类型只能是数字，不能是字符串(字符串会报错) -->
 	<select id="getDayDetailByIdCode" resultMap="BaseResultMap">
@@ -295,6 +379,15 @@
     <select id="getRole" parameterType="Long" resultType="role" databaseId="mysql">
     	select id, role_name as roleName, note from t_role where id = #{id}
     </select>
+
+
+    <update id="updateRole" parameterType="role">
+    	update t_role set role_name = #{roleName}, note = #{note} where id = #{id}
+    </update>
+
+    <delete id="deleteRole" parameterType="long">
+    	delete from t_role where id = #{id}
+    </delete>
 
 
 </mapper>
