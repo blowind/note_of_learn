@@ -5,6 +5,60 @@
 <!-- mappper对应的命名空间与项目中CoAreaStatusMapper类定义的路径相同 -->
 <mapper namespace="com.chuanying.app.dao.CoAreaStatusMapper">
 
+	<!-- MyBatis默认开启一级缓存，二级缓存需要用cache配置在买个mapper.xml文件里显示开启，缓存配置仅对当前名空间有效
+	     一级缓存：同一个SqlSession的完全相同的查询连续执行时，第二次不查数据库直接返回上次的结果，POJO不需要实现Serializable接口；
+	     二级缓存：建立在SqlSessionFactory上的缓存，多个SqlSession共用相同的查询结果，除非结果被操作类语句更新，POJO需要实现Serializable接口 -->
+	
+	<!-- 开启二级缓存 -->
+	<cache/>
+
+	<!-- 实现自定义的缓存类RedisCache，该类实现Cache接口 -->
+	<cache type="com.zxf.zxfbatis.simple.cache.RedisCache">
+		<property name="host" value="localhost"/>
+	</cache>
+
+
+	<!-- 对存储过程的支持 -->
+	<!-- 	创建存储过程(SQL)
+		create or replace
+		PROCEDURE count_role(
+			p_role_name in varchar,
+			count_total out int,
+			exec_date out date )
+		IS
+		BEGIN
+			select count(*) into count_total from t_role where role_name like concat('%', p_role_name, '%');
+			select sysdate into exec_date from dual;
+		END;
+		对应POJO：
+		public class PdCountRoleParams {
+			private String roleName;
+			private int total;
+			private Date execDate;
+		} 
+	-->
+	<!-- statementType为CALLABLE表明在使用存储过程，否则会抛异常 -->
+	<select id="countRole" parameterType="com.zxf.zxfbatis.simple.param.PdCountRoleParams" statementType="CALLABLE">
+		<!-- 使用mode设置输入输出参数，总共有IN/OUT/INOUT三种类型 -->
+		{call count_role(
+			#{roleName, mode=IN, jdbcType=VARCHAR},
+			#{total, mode=OUT, jdbcType=INTEGER},
+			#{execDate, mode=OUT, jdbcType=DATE}
+		 )
+		}
+	</select>
+
+
+
+	<!-- 对语句的个性化配置,flushCache表示是否刷新缓存，useCache表示是否需要缓存，仅对select有效 -->
+	<select ... flushCache="false" useCache="true"/>
+	<insert ... flushCache="true"/>
+	<update ... flushCache="true"/>
+	<delete ... flushCache="true"/>
+
+	<!-- 跨命名空间（xml文件）复用其他名空间设定的缓存配置 -->
+	<cache-ref namespace="com.zxf.zxfbatis.simple.mapper.RoleMapper"/>
+
 	<resultMap>
 		<constructor>
 			<idArg/>
@@ -335,6 +389,99 @@
 	DEBUG [main] - <==      Total: 1 
 	-->
 
+	
+
+    <!-- 展示databaseId数据库厂商标志的使用，需要与mybatis-config.xml中的databaseIdProvider配置配合
+         不配置databaseId的SQL会被当做默认值，当没有最佳匹配时运行，若所有语句都有配置但与实际数据库不一致，抛出异常 -->
+    <select id="getRole" parameterType="Long" resultType="role" databaseId="oracle">
+    	select id, role_name as roleName, note from t_role where id = #{id}
+    </select>
+    <select id="getRole" parameterType="Long" resultType="role" databaseId="mysql">
+    	select id, role_name as roleName, note from t_role where id = #{id}
+    </select>
+
+
+    <update id="updateRole" parameterType="role">
+    	update t_role set role_name = #{roleName}, note = #{note} where id = #{id}
+    </update>
+
+    <delete id="deleteRole" parameterType="long">
+    	delete from t_role where id = #{id}
+    </delete>
+
+
+    <!-- 动态SQL -->
+    <!-- 单条件分支判断： if语句的使用 -->
+    <select id="findRoles" parameterType="string" resultMap="roleResultMap">
+    	select role_no, role_name, note from t_role where 1=1 
+    	<if test="roleName != null and roleName != ''">
+    		and role_name like concat('%', #{roleName}, '%')
+    	</if>
+    </select>
+
+    <!-- 处理SQL拼装的付出元素，一般用于去掉多余的and和or，主要有trim、where、set，其中trim功能最强 -->
+
+    <!-- where: 元素内部的条件成立时，才会加入where这个SQL关键字到组装的SQL语句里，同时去掉开头的and或者or -->
+    <select id="findRoles" parameterType="role" resultMap="roleResultMap">
+    	select role_no, role_name, note from t_role
+    	<where>
+    		<if test="roleName != null and roleName != ''">
+    			and role_name like concat('%', #{roleName}, '%')
+    		</if>
+    		<if test="note != null and note != ''">
+    			and note like concat('%', #{note}, '%')
+    		</if>
+    	</where>
+    </select>
+
+    <!-- 使用trim添加前缀where前缀并去掉可能多余的and -->
+    <select id="findRoles" parameterType="string" resultMap="roleResultMap">
+    	select role_no, role_name, note from t_role
+    	<trim prefix="where" prefixOverrides="and">
+    		<if test="roleName != null and roleName != ''">
+    			and role_name like concat('%', #{roleName}, '%')
+    		</if>
+    	</trim>
+    </select>
+
+    <!-- 使用set更新需要更新的参数，set会自动去掉结尾多余的逗号 -->
+    <!-- 等价于： <trim prefix="SET" suffixOverrides=",">...</trim> -->
+    <update id="updateRole" parameterType="role">
+    	update t_role
+    	<set>
+    		<if test="roleName != null and roleName != ''">
+    			role_name = #{roleName},
+    		</if>
+    		<if test="note != null and note != ''">
+    			note = #{note}
+    		</if>
+    	</set>
+    	where role_no = #{roleNo}
+    </update>
+
+    <!-- foreach进行集合遍历，一般处理数据、List和Set接口的集合，多用于SQL中的in关键字 -->
+   	<select id="findUserBySex" resultType="user">
+   		select * from t_role where role_no in 
+   		<!-- roleNoList是传入的参数名称，item是当前元素变量名，index是当前元素下标 -->
+   		<foreach item="roleNo" index="index" collection="roleNoList" open="(" separator="," close=")">
+   			#{roleNo}
+   		</foreach>
+   	</select>
+
+   	<!-- test中的字符串判断，此处判断传入的变量type是不是字符串Y -->
+   	<select id="getRoleTest" parameterType="string" resultMap="roleResultMap">
+   		select role_no, role_name, note from t_role
+   		<if test=" type == 'Y'.toString()">
+   			where 1=1
+   		</if>
+   	</select>
+
+
+    <!-- 多条件分支判断：choose(when, otherwise)语句的使用 -->
+
+    <!-- bind：通过OGNL表达式去自定义一个上下文变量，此处拼接一个新字符串（前后加%） -->
+    <bind name="pattern" value="'%' + _parameter + '%'">
+
 	<!-- 调用类的静态函数的静态方法根据条件生成数值，用作数据表名的拼接，
       	 注意拼接类型只能是数字，不能是字符串(字符串会报错) -->
 	<select id="getDayDetailByIdCode" resultMap="BaseResultMap">
@@ -371,23 +518,6 @@
         WHERE date_format(create_time,'%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d') LIMIT #{pageSize} OFFSET (#{pageNum} - 1) * #{pageSize})
     </insert>
 
-    <!-- 展示databaseId数据库厂商标志的使用，需要与mybatis-config.xml中的databaseIdProvider配置配合
-         不配置databaseId的SQL会被当做默认值，当没有最佳匹配时运行，若所有语句都有配置但与实际数据库不一致，抛出异常 -->
-    <select id="getRole" parameterType="Long" resultType="role" databaseId="oracle">
-    	select id, role_name as roleName, note from t_role where id = #{id}
-    </select>
-    <select id="getRole" parameterType="Long" resultType="role" databaseId="mysql">
-    	select id, role_name as roleName, note from t_role where id = #{id}
-    </select>
-
-
-    <update id="updateRole" parameterType="role">
-    	update t_role set role_name = #{roleName}, note = #{note} where id = #{id}
-    </update>
-
-    <delete id="deleteRole" parameterType="long">
-    	delete from t_role where id = #{id}
-    </delete>
 
 
 </mapper>
