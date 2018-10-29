@@ -39,5 +39,13 @@
                 <value>ListValue3</value>  
             </list>  
         </property>  
+
+        <property name="a">
+            <array>
+                <value>value-array-1</value>
+                <value>value-array-2</value>
+                <value>value-array-3</value>
+            </array>
+        </property>
     </bean>  
 </beans>
