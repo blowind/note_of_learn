@@ -98,6 +98,14 @@ public class TimelineUtils {
 		return DAY_END_FORMAT.format(cal.getTime());
 	}
 
+  /* 获取W3DTF格式的时间字符串，样例：2003-12-15T14:43:07Z */
+  public static String getFormatOfW3DTF() {
+    Calendar cal = Calendar.getInstance();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+    return sdf.format(cal.getTime());
+  }
+
 	public static void main(String[] argv) {
 		try{
 			System.out.println(startOfTodayInStr());

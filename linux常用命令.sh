@@ -339,6 +339,12 @@ kill -KILL 5166  ## 杀死pid为5166的进程
 27、建立软链接
 ln -s abc cde  ## 建立abc的软链接
 
+28、查看当前脏页数量
+cat /proc/vmstat | egrep "dirty|writeback"
+
+
+29、linux查看当前文件系统的格式
+df -T
 
 
 
