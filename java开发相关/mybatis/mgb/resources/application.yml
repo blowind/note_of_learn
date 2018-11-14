@@ -1,0 +1,45 @@
+server:
+  port: 9087
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: ydl-content-service
+
+---
+
+dubbo:
+  application:
+    name: ydl-content-service
+  scan:
+    basePackages: com.ydl.content.service.facade
+  provider:
+    protocols:
+    - id: dubbo
+      name: dubbo
+      port: 30035
+      threads: 200
+    - jsonrpc:
+      id: jsonrpc
+      name: jsonrpc
+      port: 30036
+      threads: 200
+
+logging:
+  file: /opt/release/logs/test/${spring.application.name}-debug.log
+
+druid:
+  pool:
+    user-name: ydl
+    password: tt12345
+    jdbc-url: jdbc:mysql://120.26.213.52:3306/ydl_marketing?zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8
+    driver-class-name: com.mysql.jdbc.Driver
+
+redis:
+  host-name: 10.117.110.131
+  port: 6379
+
+ydl:
+  logging:
+    enable: true

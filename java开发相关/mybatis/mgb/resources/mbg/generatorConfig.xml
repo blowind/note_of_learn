@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="context1" defaultModelType="flat">
+        <!-- 指定生成的java文件的编码,没有直接生成到项目时中文可能会乱码 -->
+        <property name="javaFileEncoding" value="UTF-8" />
+        <!-- 这里的type里写的是你的实现类的类全路径 -->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="addRemarkComments" value="true"/>
+                <!--type="com.ydl.common.helper.CommentGeneratorHelper">-->
+        </commentGenerator>
+        <!--数据库链接地址账号密码 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://120.26.213.52/ydl?serverTimezone=Hongkong&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;tinyInt1isBit=false"
+                        userId="ydl"
+                        password="tt12345">
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+        <!--生成Model类存放位置 -->
+        <javaModelGenerator
+                targetPackage="com.zxf.mybatis.generator.dao"
+                targetProject="src\main\java">
+                <!--targetProject="..\..\ydl-content\ydl-content-intf\src\main\java">-->
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+        <!--生成对应表及类名 -->
+        <table tableName="favorite">
+            <generatedKey column="id" sqlStatement="MySql"/>
+        </table>
+    </context>
+</generatorConfiguration>
