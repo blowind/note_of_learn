@@ -1,0 +1,1 @@
+使用MBG最重要的是两个文件，pom.xml中引入相关插件并在其中指定generatorConfig.xml文件位置，generatorConfig.xml文件用于说明生成POJO的具体配置

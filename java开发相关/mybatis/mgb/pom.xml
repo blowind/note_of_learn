@@ -28,11 +28,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <!--添加MGB相关插件，用于生成相关代码-->
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
                 <version>1.3.7</version>
                 <configuration>
+                    <!--指定generatorConfig.xml配置文件路径-->
                     <configurationFile>
                         ${basedir}/src/main/resources/mbg/generatorConfig.xml
                     </configurationFile>
@@ -40,6 +42,7 @@
                     <verbose>true</verbose>
                 </configuration>
                 <dependencies>
+                    <!--指定JDBC驱动依赖包，如果generatorConfig.xml配置文件中有自定义的handler等类，也需要添加到引用-->
                     <dependency>
                         <groupId>mysql</groupId>
                         <artifactId>mysql-connector-java</artifactId>
