@@ -4,10 +4,10 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <!--可选，最多配置一个，用于指定后续要使用的各种外部属性，引入属性文件后，可以使用${property}的形式进行引用-->
-    <!--resource指定classpath下的文件，与url配置互斥-->
-    <!--<properties resource="init.properties"/>-->
-    <!--url指定系统路径下的文件，与resource配置互斥-->
-    <!--<properties url="d:\init.properties"/>-->
+    <!--resource指定classpath下的文件，与url配置互斥，注意只支持.properties文件，不支持.yml文件-->
+    <!--<properties resource="application.properties"/>-->
+    <!--url指定系统路径下的文件，与resource配置互斥，注意只支持.properties文件，不支持.yml文件-->
+    <properties url="file:///E:\mine\test_mbg\mybatis-generator\src\main\resources\application.properties"/>
 
     <!--可选，可配置多个，多用于指定驱动路径，可以使用${driver}形式指定-->
     <!--<classPathEntry location="e:\driver\mysql-connector-java-5.1.47.jar"/>-->
@@ -50,10 +50,16 @@
 
 
         <!--数据库链接地址账号密码，当JDBC驱动不在classpath下时，通过前面的classPathEntry标签指定 -->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://120.26.213.52/ydl?serverTimezone=Hongkong&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;tinyInt1isBit=false"
-                        userId="ydl"
-                        password="tt12345">
+        <!--<jdbcConnection driverClass="com.mysql.jdbc.Driver"-->
+                        <!--connectionURL="jdbc:mysql://120.26.213.52/ydl?serverTimezone=Hongkong&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;tinyInt1isBit=false"-->
+                        <!--userId="ydl"-->
+                        <!--password="tt12345">-->
+        <!--</jdbcConnection>-->
+
+        <jdbcConnection driverClass="${druid.pool.driverClassName}"
+                        connectionURL="${druid.pool.jdbcUrl}"
+                        userId="${druid.pool.username}"
+                        password="${druid.pool.password}">
         </jdbcConnection>
 
         <!--Oracle数据库配置，remarksReporting用于JDBC获取数据库表的注释信息-->
