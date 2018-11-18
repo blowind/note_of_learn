@@ -18,7 +18,7 @@ import java.util.List;
 public class MyMvcConfig extends WebMvcConfigurerAdapter {
     /*  返回基本的视图模板的配置  */
     @Bean
-    public InternalResourceViewResolver viewResolver() {
+    public ViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setPrefix("/WEB-INF/classes/views/");
         viewResolver.setSuffix(".jsp");
