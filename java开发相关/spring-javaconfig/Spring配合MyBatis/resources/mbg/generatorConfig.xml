@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!--可选，最多配置一个，用于指定后续要使用的各种外部属性，引入属性文件后，可以使用${property}的形式进行引用-->
+    <!--resource指定classpath下的文件，与url配置互斥，注意只支持.properties文件，不支持.yml文件-->
+    <!--<properties resource="application.properties"/>-->
+    <!--url指定系统路径下的文件，与resource配置互斥，注意只支持.properties文件，不支持.yml文件-->
+    <properties url="file:///E:\mine\test_mbg\mybatis-generator\src\main\resources\application.properties"/>
+
+    <!--可选，可配置多个，多用于指定驱动路径，可以使用${driver}形式指定-->
+    <!--<classPathEntry location="e:\driver\mysql-connector-java-5.1.47.jar"/>-->
+
+    <!--最少配置一个，注意内部配置属性的先后顺序有要求-->
+    <!--defaultModelType： 指定MBG如何生成实体类
+            conditional（默认，表中只有一个字段时，不生成实体类），
+            flat（为每个表生成实体类），
+            hierarchical（将表中BLOB类型单独抽取出来做表类的子实体类）
+
+        targetRuntime: 指定生成的代码的运行时环境
+            Mybatis3: 默认值
+            Mybatis3Simple: 不生成与Example相关的方法-->
+    <context id="context1" defaultModelType="flat" targetRuntime="MyBatis3Simple">
+        <!-- 指定生成的java文件的编码,没有直接生成到项目时中文可能会乱码 -->
+        <property name="javaFileEncoding" value="UTF-8" />
+
+        <!--关键字自动加分隔符区分，MySql是``，SQLServer是[]-->
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <!--支持配置一个或多个插件，此处配置xml映射文件cache标签相关插件-->
+        <!--<plugin type="org.mybatis.generator.plugin.CachePlugin">-->
+            <!--<property name="cache_eviction" value="LRU"/>-->
+            <!--<property name="cache_size" value="1024"/>-->
+        <!--</plugin>-->
+
+        <!--当前仅MySQL和配置过的Oracle支持-->
+        <!-- 这里的type里写的是你的实现类的类全路径，使用自定义的注释handler -->
+        <!--<commentGenerator type="com.ydl.common.helper.CommentGeneratorHelper">-->
+        <commentGenerator>
+            <!--配置不生成注释，默认为false-->
+            <property name="suppressAllComments" value="false"/>
+            <!--注释中不加入时间戳，默认为false，配置为true避免每次修改的时间戳影响文件版本控制-->
+            <property name="suppressDate" value="true"/>
+            <!--注释是否添加数据库表的注释信息，默认为false-->
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+
+
+        <!--数据库链接地址账号密码，当JDBC驱动不在classpath下时，通过前面的classPathEntry标签指定 -->
+        <!--<jdbcConnection driverClass="com.mysql.jdbc.Driver"-->
+                        <!--connectionURL="jdbc:mysql://120.26.213.52/ydl?serverTimezone=Hongkong&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;tinyInt1isBit=false"-->
+                        <!--userId="ydl"-->
+                        <!--password="tt12345">-->
+        <!--</jdbcConnection>-->
+
+        <jdbcConnection driverClass="${druid.pool.driverClassName}"
+                        connectionURL="${druid.pool.jdbcUrl}"
+                        userId="${druid.pool.username}"
+                        password="${druid.pool.password}">
+        </jdbcConnection>
+
+        <!--Oracle数据库配置，remarksReporting用于JDBC获取数据库表的注释信息-->
+        <!--<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"-->
+                        <!--connectionURL="jdbc:oracle:thin:@//localhost:1521/orcl"-->
+                        <!--userId="mybatis"-->
+                        <!--password="mybatis">-->
+            <!--<property name="remarksReporting" value="true"/>-->
+        <!--</jdbcConnection>-->
+
+        <!--最多一个，指定JDBC类型和Java类型如何转换-->
+        <javaTypeResolver>
+            <!--是否强制将DECIMAL和NUMERIC类型的JDBC字段转换为Java类型的BigDecimal，默认为false-->
+            <!--  转换规则：
+                    精度>0或者长度>18，BigDecimal
+                    精度=0并且10<=长度<=18，Long
+                    精度=0并且5<=长度<=9，Integer
+                    精度=0并且长度<5，Short
+            -->
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+
+        <!--配置生成Model类的各POJO存放位置 -->
+        <!--多模块情况下输出到另一个模块的路径下，注意到需要跳一层猜到项目总目录下，也可以指定决定路径-->
+        <!-- <javaModelGenerator targetProject="..\ydl-content-intf\src\main\java"> -->
+        <javaModelGenerator targetPackage="com.zxf.mybatis.generator.model" targetProject="src\main\java">
+            <!--只对MyBatis3有效，为true会使用构造方法入参，为false使用setter方法，默认为false-->
+            <property name="constructorBased" value="false"/>
+            <!--为true根据catalog和schema生成子包，为false直接使用targetPackage属性，默认为false-->
+            <property name="enableSubPackages" value="true" />
+            <!--为true使用构造方法入参，不会生成setter方法，为false会生成所有属性setter方法，默认为false-->
+            <property name="immutable" value="false"/>
+            <!--设置所有实体类的基类，要使用全限定名-->
+            <!--<property name="rootClass" value=""/>-->
+            <!--是否对数据库查询结果进行trim操作，默认为false-->
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+
+        <!--配置SQL映射生成器Mapper.xml文件的相关属性，可选，最多一个-->
+        <!--javaClientGenerator需要配置XML文件时，本配置才是必须的-->
+        <sqlMapGenerator targetPackage="com.zxf.mybatis.generator.mapper" targetProject="src\main\resources">
+            <!--为true根据catalog和schema生成子包，为false直接使用targetPackage属性，默认为false-->
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!--配置Mapper接口的相关属性，可选，最多一个-->
+        <!--  type根据context的targetRuntime不同进行分类
+                MyBatis3：
+                    ANNOTATEDMAPPER:基于注解的Mapper接口，不会有对应的XML映射文件
+                    MIXEDMAPPER:XML和注解的混合形式
+                    XMLMAPPER：所有方法都在XML中，接口调用依赖XML文件
+                MyBatis3Simple：
+                    ANNOTATEDMAPPER：基于注解的Mapper接口，不会有对应的XML映射文件
+                    XMLMAPPER：所有方法都在XML中，接口调用依赖XML文件
+        -->
+        <javaClientGenerator targetPackage="com.zxf.mybatis.generator.mapper" targetProject="src\main\java"
+                             type="XMLMAPPER"/>
+
+        <!--通配数据库里面所有表-->
+        <!--<table tableName="%" />-->
+
+        <!--生成对应表及类名 -->
+        <table tableName="favorite">
+            <generatedKey column="id" sqlStatement="MySql"/>
+        </table>
+    </context>
+</generatorConfiguration>
