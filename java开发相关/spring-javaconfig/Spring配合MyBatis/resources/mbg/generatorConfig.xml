@@ -5,9 +5,9 @@
 <generatorConfiguration>
     <!--可选，最多配置一个，用于指定后续要使用的各种外部属性，引入属性文件后，可以使用${property}的形式进行引用-->
     <!--resource指定classpath下的文件，与url配置互斥，注意只支持.properties文件，不支持.yml文件-->
-    <!--<properties resource="application.properties"/>-->
+    <properties resource="application.properties"/>
     <!--url指定系统路径下的文件，与resource配置互斥，注意只支持.properties文件，不支持.yml文件-->
-    <properties url="file:///E:\mine\test_mbg\mybatis-generator\src\main\resources\application.properties"/>
+    <!--<properties url="file:///E:\mine\test_mbg\mybatis-generator\src\main\resources\application.properties"/>-->
 
     <!--可选，可配置多个，多用于指定驱动路径，可以使用${driver}形式指定-->
     <!--<classPathEntry location="e:\driver\mysql-connector-java-5.1.47.jar"/>-->
@@ -56,10 +56,10 @@
                         <!--password="tt12345">-->
         <!--</jdbcConnection>-->
 
-        <jdbcConnection driverClass="${druid.pool.driverClassName}"
-                        connectionURL="${druid.pool.jdbcUrl}"
-                        userId="${druid.pool.username}"
-                        password="${druid.pool.password}">
+        <jdbcConnection driverClass="${spring.datasource.driver-class-name}"
+                        connectionURL="${spring.datasource.url}"
+                        userId="${spring.datasource.username}"
+                        password="${spring.datasource.password}">
         </jdbcConnection>
 
         <!--Oracle数据库配置，remarksReporting用于JDBC获取数据库表的注释信息-->
@@ -86,7 +86,7 @@
         <!--配置生成Model类的各POJO存放位置 -->
         <!--多模块情况下输出到另一个模块的路径下，注意到需要跳一层猜到项目总目录下，也可以指定决定路径-->
         <!-- <javaModelGenerator targetProject="..\ydl-content-intf\src\main\java"> -->
-        <javaModelGenerator targetPackage="com.zxf.mybatis.generator.model" targetProject="src\main\java">
+        <javaModelGenerator targetPackage="com.zxf.spring.mybatis.model" targetProject="src\main\java">
             <!--只对MyBatis3有效，为true会使用构造方法入参，为false使用setter方法，默认为false-->
             <property name="constructorBased" value="false"/>
             <!--为true根据catalog和schema生成子包，为false直接使用targetPackage属性，默认为false-->
@@ -102,7 +102,7 @@
 
         <!--配置SQL映射生成器Mapper.xml文件的相关属性，可选，最多一个-->
         <!--javaClientGenerator需要配置XML文件时，本配置才是必须的-->
-        <sqlMapGenerator targetPackage="com.zxf.mybatis.generator.mapper" targetProject="src\main\resources">
+        <sqlMapGenerator targetPackage="com.zxf.spring.mybatis.mapper" targetProject="src\main\resources">
             <!--为true根据catalog和schema生成子包，为false直接使用targetPackage属性，默认为false-->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
@@ -117,14 +117,14 @@
                     ANNOTATEDMAPPER：基于注解的Mapper接口，不会有对应的XML映射文件
                     XMLMAPPER：所有方法都在XML中，接口调用依赖XML文件
         -->
-        <javaClientGenerator targetPackage="com.zxf.mybatis.generator.mapper" targetProject="src\main\java"
+        <javaClientGenerator targetPackage="com.zxf.spring.mybatis.dao" targetProject="src\main\java"
                              type="XMLMAPPER"/>
 
         <!--通配数据库里面所有表-->
         <!--<table tableName="%" />-->
 
         <!--生成对应表及类名 -->
-        <table tableName="favorite">
+        <table tableName="user">
             <generatedKey column="id" sqlStatement="MySql"/>
         </table>
     </context>
