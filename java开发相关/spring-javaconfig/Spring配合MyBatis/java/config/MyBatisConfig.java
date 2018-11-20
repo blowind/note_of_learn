@@ -26,15 +26,15 @@ import java.util.Properties;
 
 /**
  * @ClassName: MyBatisConfig
- * @Description: MyBatisÅäÖÃÀà
+ * @Description: MyBatisé…ç½®ç±»
  * @Author: ZhangXuefeng
  * @Date: 2018/11/19 23:36
  * @Version: 1.0
  **/
 /*
-×î»ù±¾µÄÊ¹ÓÃÊ±£¬Í¨¹ı×¢½â@MapperScan¼ÓÉÏapplication.propertiesÎÄ¼ş¾Í¿É¼òµ¥Ê¹ÓÃ
-½Ï¸´ÔÓµÄÊ¹ÓÃÊ±£¬Í¨¹ı×¢½â@MapperScan¼ÓÉÏapplication.propertiesÎÄ¼şÖ¸¶¨mybatis-config.xmlÎÄ¼şÎ»ÖÃ²¢ÔÚmybatis-config.xmlÎÄ¼şÖĞ½øĞĞ¶¨ÖÆ»¯ÅäÖÃ£»
-Ò»´ÎĞÔÊ¹ÓÃÊ±£¬Ò²¿ÉÒÔÍ¨¹ı×¢½â@MapperScan¼ÓÉÏÏÂÊöJava´úÂëÅäÖÃµÄ·½Ê½Ê¹ÓÃ
+æœ€åŸºæœ¬çš„ä½¿ç”¨æ—¶ï¼Œé€šè¿‡æ³¨è§£@MapperScanåŠ ä¸Šapplication.propertiesæ–‡ä»¶å°±å¯ç®€å•ä½¿ç”¨
+è¾ƒå¤æ‚çš„ä½¿ç”¨æ—¶ï¼Œé€šè¿‡æ³¨è§£@MapperScanåŠ ä¸Šapplication.propertiesæ–‡ä»¶æŒ‡å®šmybatis-config.xmlæ–‡ä»¶ä½ç½®å¹¶åœ¨mybatis-config.xmlæ–‡ä»¶ä¸­è¿›è¡Œå®šåˆ¶åŒ–é…ç½®ï¼›
+ä¸€æ¬¡æ€§ä½¿ç”¨æ—¶ï¼Œä¹Ÿå¯ä»¥é€šè¿‡æ³¨è§£@MapperScanåŠ ä¸Šä¸‹è¿°Javaä»£ç é…ç½®çš„æ–¹å¼ä½¿ç”¨
 */
 @Configuration
 @MapperScan(basePackages = "com.zxf.spring.mybatis.dao", annotationClass = Repository.class)
@@ -44,10 +44,10 @@ public class MyBatisConfig {
     /*@Autowired
     private SqlSessionFactory sqlSessionFactory;*/
 
-    /*×°Åä¼ÓÔØËùÓĞµÄMapper½Ó¿Ú×Ü¹²ÓĞÈıÖÖ·½Ê½£º
-    1¡¢ÀàMapperFactoryBean£¬Õë¶ÔÒ»¸ö¸ö½Ó¿Ú½øĞĞÅäÖÃ
-    2¡¢ÀàMapperScannerConfigurer£¬Í¨¹ıJava´úÂëÅäÖÃÉ¨Ãè×°Åä£¬ÅúÁ¿ÅäÖÃ
-    3¡¢×¢½â@MapperScan£¬Í¨¹ı×¢½âÉ¨Ãè×°Åä£¬ÅúÁ¿ÅäÖÃ
+    /*è£…é…åŠ è½½æ‰€æœ‰çš„Mapperæ¥å£æ€»å…±æœ‰ä¸‰ç§æ–¹å¼ï¼š
+    1ã€ç±»MapperFactoryBeanï¼Œé’ˆå¯¹ä¸€ä¸ªä¸ªæ¥å£è¿›è¡Œé…ç½®
+    2ã€ç±»MapperScannerConfigurerï¼Œé€šè¿‡Javaä»£ç é…ç½®æ‰«æè£…é…ï¼Œæ‰¹é‡é…ç½®
+    3ã€æ³¨è§£@MapperScanï¼Œé€šè¿‡æ³¨è§£æ‰«æè£…é…ï¼Œæ‰¹é‡é…ç½®
     */
 
    /* @Bean
@@ -61,18 +61,18 @@ public class MyBatisConfig {
 /*    @Bean
     public MapperScannerConfigurer mapperScannerConfigurer() {
         MapperScannerConfigurer configurer = new MapperScannerConfigurer();
-//        ¼ÓÔØSqlSessionFactory£¬SpringBoot»á×Ô¶¯Éú³ÉÏàÓ¦Bean
+//        åŠ è½½SqlSessionFactoryï¼ŒSpringBootä¼šè‡ªåŠ¨ç”Ÿæˆç›¸åº”Bean
         configurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
-//        ¶¨ÒåÉ¨ÃèµÄ°ü
+//        å®šä¹‰æ‰«æçš„åŒ…
         configurer.setBasePackage("com.zxf.spring.mybatis.*");
-//        ÏŞ¶¨±»±ê×¢@RepositoryµÄ½Ó¿Ú²Å±»É¨Ãè
+//        é™å®šè¢«æ ‡æ³¨@Repositoryçš„æ¥å£æ‰è¢«æ‰«æ
         configurer.setAnnotationClass(Repository.class);
-//        ÏŞÖÆ¼Ì³ĞÄ³¸ö½Ó¿ÚµÄ²Å±»É¨Ãè£¬Ê¹ÓÃµÄ²»¶à
+//        é™åˆ¶ç»§æ‰¿æŸä¸ªæ¥å£çš„æ‰è¢«æ‰«æï¼Œä½¿ç”¨çš„ä¸å¤š
 //        configurer.setMarkerInterface();
         return configurer;
     }*/
 
-    /*ÒÔÏÂÊ¹ÓÃJava´úÂëÅäÖÃĞÎÊ½¶ø²»ÊÇ mybatis-config.xml ·½Ê½Éú³ÉMyBatisÏà¹ØÅäÖÃ*/
+    /*ä»¥ä¸‹ä½¿ç”¨Javaä»£ç é…ç½®å½¢å¼è€Œä¸æ˜¯ mybatis-config.xml æ–¹å¼ç”ŸæˆMyBatisç›¸å…³é…ç½®*/
 
     private String username;
     private String password;
@@ -130,6 +130,8 @@ public class MyBatisConfig {
         return factoryBean;
     }
 
+    /*
+     DataSourceTransactionManageræ˜¯mybatis-spring-boot-starteråŒ…é»˜è®¤çš„äº‹åŠ¡ç®¡ç†å™¨ï¼Œåƒspring-boot-starter-data-jpaåŒ…ä¼šä½¿ç”¨JpaTransactionManager*/
     @Bean
     public DataSourceTransactionManager transactionManager(DruidDataSource druidDataSource) {
         DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();

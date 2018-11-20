@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @ClassName: SpringApplication
- * @Description: Ö÷³ÌĞòÈë¿Ú
+ * @Description: ä¸»ç¨‹åºå…¥å£
  * @Author: ZhangXuefeng
  * @Date: 2018/11/19 22:43
  * @Version: 1.0
