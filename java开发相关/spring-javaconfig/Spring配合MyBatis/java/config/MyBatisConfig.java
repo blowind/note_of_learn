@@ -130,8 +130,17 @@ public class MyBatisConfig {
         return factoryBean;
     }
 
+
+
     /*
-     DataSourceTransactionManager是mybatis-spring-boot-starter包默认的事务管理器，像spring-boot-starter-data-jpa包会使用JpaTransactionManager*/
+     DataSourceTransactionManager是mybatis-spring-boot-starter包默认的事务管理器，
+     像spring-boot-starter-data-jpa包会使用JpaTransactionManager
+        常见事务管理器：
+        DataSourceTransactionManager： JDBC事务管理器
+        HibernateTransactionManager:  Hibernate事务管理器
+        JpaTransactionManager: JPA事务管理器
+        JtaTransactionManager: JTA事务管理器
+     */
     @Bean
     public DataSourceTransactionManager transactionManager(DruidDataSource druidDataSource) {
         DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();

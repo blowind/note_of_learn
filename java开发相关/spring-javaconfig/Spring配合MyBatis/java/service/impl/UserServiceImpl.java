@@ -26,12 +26,14 @@ public class UserServiceImpl implements UserService {
         return userMapper.getUser(id);
     }
 
+	
+	/* @Transactional 只能被应用到public方法上, 
+	   对于其它非public的方法,如果标记了@Transactional也不会报错,但方法没有事务功能 */
     /*
     isolation：事务隔离级别
     propagation：传播行为
     timeout：事物超时时间，单位为秒
-    readOnly：是否只读事务
-    */
+    readOnly：是否只读事务      */
     @Override
     @Transactional(isolation = Isolation.REPEATABLE_READ,
                     propagation = Propagation.NESTED,
