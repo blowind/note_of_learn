@@ -69,7 +69,7 @@ public class PersonService {
 		return operations.get(key);
 	}
 
-	/**************        串行化批量操作示例        *********/
+	/**************   串行化批量操作示例（同一个连接下执行多个Redis命令）   *********/
 
 	/**	添加zset的pipeline操作  **/
 	public void processBatchedCmd() {
@@ -82,6 +82,49 @@ public class PersonService {
 			return null;
 		});
 	}
+
+	/*需要处理底层的转换规则，除非有定制，否则不推荐*/
+	public void useRedisCallback(RedisTemplate redisTemplate) {
+		redisTemplate.execute(new RedisCallback() {
+			@Override  /*此处可改造成lambda表达式*/
+			public Object doInRedis(RedisConnection redisConnection) throws DataAccessException {
+				redisConnection.set("key1".getBytes(), "value1".getBytes());
+				redisConnection.hSet("hash".getBytes(), "field".getBytes(), "hvalue".getBytes());
+				return null;
+			}
+		});
+	}
+	/*高级接口，推荐*/
+	public void useSessionCallback(RedisTemplate redisTemplate) {
+		redisTemplate.execute(new SessionCallback() {
+			@Override
+			public Object execute(RedisOperations redisOperations) throws DataAccessException {
+				redisOperations.opsForValue().set("key1", "value1");
+				redisOperations.opsForHash().put("hast", "field", "hvalue");
+				return null;
+			}
+		});
+	}
+
+	/*
+	单个操作的接口:
+	redisTemplate.opsForValue()
+	redisTemplate.opsForHash()
+	redisTemplate.opsForList()
+	redisTemplate.opsForSet()
+	redisTemplate.opsForZSet()
+	redisTemplate.opsForGeo()
+	redisTemplate.opsForHyperLogLog()
+
+	连续操作的接口: 注意是指定一个键之后，后面连续对该键指定的值进行多次操作，而单操作里面每次都要指定键
+	redisTemplate.boundValueOps("string")
+	redisTemplate.boundHashOps("hash")
+	redisTemplate.boundListOps("list")
+	redisTemplate.boundSetOps("set")
+	redisTemplate.boundZSetOps("zset")
+	redisTemplate.boundGeoOps("geo")
+
+	*/
 
 
 	/**************        基本操作示例区        *********/

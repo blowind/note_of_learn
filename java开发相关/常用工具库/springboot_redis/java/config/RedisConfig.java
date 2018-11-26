@@ -39,6 +39,12 @@ public class RedisConfig {
 	@ConfigurationProperties(prefix = "spring.redis.jedis.pool")
 	public JedisPoolConfig getRedisConfig() {
 		JedisPoolConfig config = new JedisPoolConfig();
+    
+    /* 使用properties配置文件后可以省略的JAVA代码配置方式
+    config.setMaxIdle(30);   最大空闲数
+    config.setMaxTotal(50);   最大连接数
+    config.setMaxWaitMillis(2000);  最大等待毫秒数
+    */
 		return config;
 	}
 
