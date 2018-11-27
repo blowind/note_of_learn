@@ -1,12 +1,14 @@
 package com.zxf.mongodb.service.impl;
 
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import com.zxf.mongodb.model.User;
 import com.zxf.mongodb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    /*根据id精确查找一个元素*/
     @Override
     public User getUser(Long id) {
         return mongoTemplate.findById(id, User.class);
@@ -33,6 +36,7 @@ public class UserServiceImpl implements UserService {
 //        return mongoTemplate.findOne(queryId, User.class);
     }
 
+    /*批量查找*/
     @Override
     public List<User> findUser(String userName, String note, int skip, int limit) {
         Criteria criteria = Criteria.where("userName").regex(userName).and("note").regex(note);
@@ -56,5 +60,22 @@ public class UserServiceImpl implements UserService {
         Query query = Query.query(criteriaId);
         DeleteResult result = mongoTemplate.remove(query, User.class);
         return result;
+    }
+
+    @Override
+    public UpdateResult updateUser(Long id, String userName, String note) {
+        /*确定要更新的对象*/
+        Criteria criteriaId = Criteria.where("id").is(id);
+        Query query = Query.query(criteriaId);
+        /*定义更新对象，通过Update的构造方法设置对userName的更新，通过set方法设置对note的更新*/
+        Update update = Update.update("userName", userName);
+        update.set("note", note);
+
+        /*更新满足要求的第一个文档*/
+        UpdateResult result = mongoTemplate.updateFirst(query, update, User.class);
+        /*更新满足要求的多个文档*/
+        /*UpdateResult result = mongoTemplate.updateMulti(query, update, User.class);*/
+        return result;
+
     }
 }

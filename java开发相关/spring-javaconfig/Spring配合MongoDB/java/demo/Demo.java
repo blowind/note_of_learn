@@ -1,8 +1,10 @@
 package com.zxf.mongodb.demo;
 
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import com.zxf.mongodb.model.Role;
 import com.zxf.mongodb.model.User;
+import com.zxf.mongodb.service.UserRepository;
 import com.zxf.mongodb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -10,6 +12,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @ClassName: Demo
@@ -22,6 +25,9 @@ import java.util.Arrays;
 public class Demo implements ApplicationListener<ContextRefreshedEvent> {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private void addUser() {
         User user = new User();
@@ -43,13 +49,50 @@ public class Demo implements ApplicationListener<ContextRefreshedEvent> {
         userService.saveUser(user);
     }
 
-    private DeleteResult deleteUser(Long id) {
-        return userService.deleteUser(id);
+    private void deleteUser(Long id) {
+        DeleteResult result = userService.deleteUser(id);
+        System.out.println(result.toString());
+        return;
+    }
+
+    private void updateUser(Long id) {
+        UpdateResult result =  userService.updateUser(id, "new_name_after_updated", "new_note_after_updated");
+        System.out.println(result.toString());
+        return;
+    }
+
+    private void listUsers() {
+        List<User> userList =  userRepository.findByUserNameLike("name");
+        for(User u: userList) {
+            System.out.println(u.toString());
+        }
+    }
+
+    private void useFindQuery() {
+        User user = userRepository.find(1L, "user_name_1");
+        if(user != null) {
+            System.out.println(user.toString());
+        }else{
+            System.out.println("====== user is null =======");
+        }
+    }
+
+    private void findByConventionImpl() {
+        User user = userRepository.findUserByIdOrUserName(3L, "user_name_1");
+        if(user != null) {
+            System.out.println(user.toString());
+        }else{
+            System.out.println("====== user is null =======");
+        }
     }
 
     @Autowired
     public void onApplicationEvent(ContextRefreshedEvent e) {
-        DeleteResult result = deleteUser(1L);
-        System.out.println("1111");
+//        addUser();
+//        updateUser(1L);
+//        listUsers();
+//        deleteUser(1L);
+//        useFindQuery();
+        findByConventionImpl();
     }
 }
