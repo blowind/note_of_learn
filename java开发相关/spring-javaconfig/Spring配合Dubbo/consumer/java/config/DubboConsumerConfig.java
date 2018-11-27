@@ -1,6 +1,7 @@
 package com.zxf.consumer.config;
 
 import com.alibaba.dubbo.config.ApplicationConfig;
+import com.alibaba.dubbo.config.ProtocolConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.spring.context.annotation.DubboComponentScan;
 import org.springframework.context.annotation.Bean;
@@ -17,18 +18,18 @@ import org.springframework.context.annotation.Configuration;
 //@DubboComponentScan("com.zxf.consumer")
 public class DubboConsumerConfig {
 
-    @Bean
-    public ApplicationConfig applicationConfig() {
-        ApplicationConfig applicationConfig = new ApplicationConfig();
-        applicationConfig.setName("zxf-dubbo-consumer");
-        return applicationConfig;
-    }
-
-    @Bean
-    public RegistryConfig registryConfig() {
-        RegistryConfig registryConfig = new RegistryConfig();
-        registryConfig.setAddress("N/A");
-        return registryConfig;
-    }
+//    @Bean
+//    public ApplicationConfig applicationConfig() {
+//        ApplicationConfig applicationConfig = new ApplicationConfig();
+//        applicationConfig.setName("zxf-dubbo-consumer");
+//        return applicationConfig;
+//    }
+//
+//    @Bean
+//    public RegistryConfig registryConfig() {
+//        RegistryConfig registryConfig = new RegistryConfig();
+//        registryConfig.setAddress("N/A");
+//        return registryConfig;
+//    }
 
 }

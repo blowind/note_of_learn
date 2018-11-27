@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Date: 2018/11/26 19:00
  * @Version: 1.0
  **/
+/*使用@EnableDubboConfig注解配合application.properties的配置
+代替@DubboComponentScan注解配合其中的各个配置Bean，更Spring Boot风格*/
 @SpringBootApplication
 @EnableDubboConfig
 public class ConsumerApplication {

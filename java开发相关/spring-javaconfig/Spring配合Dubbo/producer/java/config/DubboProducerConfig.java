@@ -33,10 +33,38 @@ public class DubboProducerConfig {
         return applicationConfig;
     }
 
+    /*
+    可以使用Multicast、Redis、Zookeeper、Simple这四个作为注册中心
+
+    multicast: 不需要启动任何中心节点，只要广播地址就可以互相返现
+    zookeeper：使用zookeeper作为注册中心
+    redis： 使用redis作为注册中心
+    simple：普通的dubbo服务，减少第三方依赖
+    */
+
+    /*不使用注册中心，在消费者中使用@Reference指定url强行连接*/
+    /*@Bean
+    public RegistryConfig registryConfig() {
+        *//*可以使用Multicast、Redis、Zookeeper、Simple这四个作为注册中心*//*
+        RegistryConfig registryConfig = new RegistryConfig();
+        registryConfig.setAddress("N/A");
+        return registryConfig;
+    }*/
+
+    /*不使用注册中心，使用广播方式互相发现*/
+    /*@Bean
+    public RegistryConfig registryConfig() {
+        RegistryConfig registryConfig = new RegistryConfig();
+        registryConfig.setAddress("multicast://224.5.6.7:56789");  // 广播地址：scope: 224.0.0.0 - 239.255.255.255
+        return registryConfig;
+    }*/
+
     @Bean
     public RegistryConfig registryConfig() {
         RegistryConfig registryConfig = new RegistryConfig();
-        registryConfig.setAddress("N/A");
+        registryConfig.setAddress("redis://47.75.50.16:6379");
+        registryConfig.setUsername("root");
+        registryConfig.setPassword("1qaz2wsxHZ");
         return registryConfig;
     }
 
@@ -48,6 +76,7 @@ public class DubboProducerConfig {
         return protocolConfig;
     }
 
+    /*此处通过添加事务管理器的打印配合验证Dubbo Service的事务功能*/
     @Bean
     @Primary
     public PlatformTransactionManager transactionManager() {
