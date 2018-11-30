@@ -32,6 +32,9 @@ git reset --hard    ##   清除本地修改
 git checkout -b feature_name        ## 切换本地到 feature_name 分支
 
 
+git rev-parse HEAD           ##  显示最后一次修改的SHA1值
+git rev-parse --short HEAD   ##  显示最后一次修改的SHA1值的短码
+
 
 设置用户名和邮箱
 git config --global user.name "username"

@@ -10,14 +10,14 @@ import org.springframework.context.annotation.Configuration;
 //@ComponentScan("com.zxf.service")
 public class DiConfig {
 	
-	/*  Ê¹ÓÃ@Bean×¢½âÉùÃ÷µ±Ç°·½·¨·µ»ØÖµÊÇÒ»¸öbean£¬beanµÄÃû³ÆÊÇ·½·¨Ãû */
+	/*  ä½¿ç”¨@Beanæ³¨è§£å£°æ˜å½“å‰æ–¹æ³•è¿”å›å€¼æ˜¯ä¸€ä¸ªbeanï¼Œbeançš„åç§°æ˜¯æ–¹æ³•å */
     @Bean
     public FunctionService functionService() {
         return new FunctionService();
     }
 
-	/*  ÁíÒ»ÖÖ×¢½â·½Ê½£¬Ö±½Ó½«FunctionService×÷Îª²ÎÊı¸øuseFunctionService()£¬
-		Ö»ÒªÈİÆ÷ÖĞ´æÔÚÄ³¸öBean£¬¾Í¿ÉÒÔÔÚÁíÒ»¸öBeanµÄÉùÃ÷·½·¨µÄ²ÎÊıÖĞĞ´Èë  */
+	/*  å¦ä¸€ç§æ³¨è§£æ–¹å¼ï¼Œç›´æ¥å°†FunctionServiceä½œä¸ºå‚æ•°ç»™useFunctionService()ï¼Œ
+		åªè¦å®¹å™¨ä¸­å­˜åœ¨æŸä¸ªBeanï¼Œå°±å¯ä»¥åœ¨å¦ä¸€ä¸ªBeançš„å£°æ˜æ–¹æ³•çš„å‚æ•°ä¸­å†™å…¥  */
     @Bean
     public UseFunctionService useFunctionService(FunctionService functionService) {
         UseFunctionService useFunctionService = new UseFunctionService();
