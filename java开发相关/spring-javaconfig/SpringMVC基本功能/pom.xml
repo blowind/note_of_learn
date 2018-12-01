@@ -30,6 +30,25 @@
             <version>5.5.13</version>
         </dependency>
 
+        <!--生成excel文档的依赖包-->
+        <!-- 同时支持的xls和xlsx， artifactId为poi的版本仅支持xls -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.17</version>
+        </dependency>
+
+        <!--使用jsp逻辑视图的依赖包-->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>9.0.13</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
 
 
         <dependency>
@@ -51,6 +70,12 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
             </plugin>
         </plugins>
     </build>

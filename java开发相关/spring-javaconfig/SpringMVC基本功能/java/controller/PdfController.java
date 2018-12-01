@@ -27,14 +27,8 @@ import java.awt.*;
 @RequestMapping("/pdf")
 public class PdfController {
 
-    private User getUser(String userName, String note) {
-        User user = new User();
-        user.setUserName(userName);
-        user.setNote(note);
-        return user;
-    }
-
-    private PdfExportService exportSerivce() {
+    /*提供具体的PdfExportService实现类*/
+    private PdfExportService getExportService() {
         /*使用lambda表达式，本质上实现了匿名类的效果，即提供了PdfExportService的基本功能
         * 此处实现较简单，仅使用了document和model两个变量的内容*/
         return ((model, document, writer, request, response) -> {
@@ -93,8 +87,8 @@ public class PdfController {
 
     @GetMapping("/export")
     public ModelAndView exportPdf(String userName, String note) {
-        User user = getUser(userName, note);
-        View view = new PdfView(exportSerivce());
+        User user = new User(userName, note);
+        View view = new PdfView(getExportService());
         ModelAndView mv = new ModelAndView();
         mv.setView(view);
         mv.addObject("user", user);

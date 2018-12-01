@@ -3,8 +3,6 @@ package com.zxf.springmvc.pdf;
 import com.lowagie.text.Document;
 import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.web.servlet.view.document.AbstractPdfView;
-import org.springframework.web.servlet.view.document.AbstractXlsxView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -25,7 +23,8 @@ public class PdfView extends AbstractPdfView {
         this.pdfExportService = pdfExportService;
     }
 
-    /*抽象出来的业务相关方法，主要是往document写入具体的业务相关内容*/
+    /*抽象出来的业务相关方法，主要是往document写入具体的业务相关内容
+    * 其中model是之前controller中已放入模型中的各种对象，document是已经生成好的PDF文档对象*/
     @Override
     protected void buildPdfDocument(Map<String, Object> model, Document document, PdfWriter writer, HttpServletRequest request, HttpServletResponse response) throws Exception {
         pdfExportService.make(model, document, writer, request, response);
