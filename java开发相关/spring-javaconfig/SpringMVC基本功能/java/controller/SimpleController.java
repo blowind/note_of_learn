@@ -21,15 +21,6 @@ import java.util.Map;
 @RequestMapping("/simple")
 public class SimpleController {
 
-    /*
-    @GetMapping
-    @PostMapping
-    @PatchMapping
-    @PutMapping
-    @DeleteMapping
-    这5中Mapping只是在@RequestMapping注解上进一步指定了method内容*/
-
-
     /***
      无注解参数，参数名称必须与请求中的参数名完全一致，好处是允许参数为空
      http://localhost:8080/simple/paramNoAnnotation?intVal=11&longVal=2222

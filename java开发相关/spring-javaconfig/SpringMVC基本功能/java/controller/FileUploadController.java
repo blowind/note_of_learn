@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * @ClassName: FileUploadController
- * @Description:  文件上传相关处理
+ * @Description:  文件上传相关处理，依赖Servlet API提供的StandardServletMultipartResolver
  * @Author: ZhangXuefeng
  * @Date: 2018/12/1 16:06
  * @Version: 1.0
@@ -34,11 +34,13 @@ public class FileUploadController {
         return "upload";
     }
 
+    /*使用HttpServletRequest作为入参*/
     @PostMapping("/upload/request")
     @ResponseBody
     public Map<String, Object> upload(HttpServletRequest request) {
         boolean flag = false;
         MultipartHttpServletRequest mreq = null;
+        /*强制转换为MultipartHttpServletRequest接口类型后才能使用相关方法(具体的类也要求是这种类型)*/
         if(request instanceof MultipartHttpServletRequest) {
             mreq = (MultipartHttpServletRequest)request;
         }else{
@@ -57,6 +59,7 @@ public class FileUploadController {
         return dealResultMap(true, "上传成功");
     }
 
+    /*使用Spring MVC的MultipartFile类作为参数*/
     @PostMapping("/upload/multipart")
     @ResponseBody
     public Map<String, Object> uploadMultipartFile(MultipartFile file) {
@@ -71,9 +74,11 @@ public class FileUploadController {
         return dealResultMap(true, "上传成功");
     }
 
+    /*使用Servlet的API Part作为参数*/
     @PostMapping("/upload/part")
     @ResponseBody
     public Map<String, Object> uploadPart(Part file) {
+        /*获取提交文件名称*/
         String fileName = file.getSubmittedFileName();
         try{
             file.write(fileName);
