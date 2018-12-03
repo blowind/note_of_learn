@@ -20,7 +20,7 @@ public class UserService {
     List<UserPO> database = new ArrayList<>();
 
     public UserPO insertUser(UserPO userPO) {
-        Long id = database.size() > 0 ? database.get(-1).getId() + 1L : 1L;
+        Long id = database.size() > 0 ? database.get(database.size()-1).getId() + 1L : 1L;
         userPO.setId(id);
         database.add(userPO);
         return userPO;
@@ -54,6 +54,32 @@ public class UserService {
             toUpdate.setUserName(userPO.getUserName());
             toUpdate.setNote(userPO.getNote());
             toUpdate.setSex(userPO.getSex());
+            return 1;
+        }catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public int updateUserName(Long id, String userName) {
+        try{
+            UserPO toUpdate = database.stream()
+                    .filter(e -> {
+                        return e.getId().equals(id);
+                    }).collect(Collectors.toList()).get(0);
+            toUpdate.setUserName(userName);
+            return 1;
+        }catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public int deleteUser(Long id) {
+        try{
+            UserPO toDelete = database.stream()
+                    .filter(e -> {
+                        return e.getId().equals(id);
+                    }).collect(Collectors.toList()).get(0);
+            database.remove(toDelete);
             return 1;
         }catch (Exception e) {
             return 0;
