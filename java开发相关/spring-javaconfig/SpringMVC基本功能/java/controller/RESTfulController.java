@@ -7,6 +7,9 @@ import com.zxf.springmvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @ClassName: RESTfulController
  * @Description: 展示REST ful接口的各项设计
@@ -47,16 +50,46 @@ public class RESTfulController {
         return userVO;
     }
 
-    /*创建一个用户*/
-    @PostMapping("/user")
-    public UserPO insertUser(@RequestBody UserVO userVo) {
-        UserPO userPO = this.changeToPO(userVo);
-        return userService.insertUser(userPO);
+    private List<UserVO> changeToVOes(List<UserPO> userPOList) {
+        return userPOList.stream().map(this::changeToVO).collect(Collectors.toList());
     }
 
+    /*创建一个用户*/
+    @PostMapping("/user")
+    public UserVO insertUser(@RequestBody UserVO userVo) {
+        UserPO userPO = this.changeToPO(userVo);
+        return changeToVO(userService.insertUser(userPO));
+    }
+
+    /*查询单个用户*/
     @GetMapping("/user/{id}")
     public UserVO getUser(@PathVariable("id") Long id) {
         UserPO userPO = userService.getUser(id);
         return changeToVO(userPO);
+    }
+
+    /*查询符合要求的用户*/
+    @GetMapping("/users/{userName}/{note}/{start}/{limit}")
+    public List<UserVO> findUsers(@PathVariable("userName") String userName,
+                                  @PathVariable("note") String note,
+                                  @PathVariable("start") int start,
+                                  @PathVariable("limit") int limit) {
+        List<UserPO> userPOList = userService.findUsers(userName, note, start, limit);
+        return this.changeToVOes(userPOList);
+    }
+
+    /*修改用户的全部信息*/
+    /*HTTP PUT请求按照REST风格要求传递所有的属性*/
+    @PutMapping("/user/{id}")
+    public UserVO updateUser(@PathVariable("id") Long id, @RequestBody UserVO userVO) {
+        UserPO userPO = changeToPO(userVO);
+        userPO.setId(id);
+        userService.updateUser(userPO);
+        return changeToVO(userPO);
+    }
+
+    @PatchMapping("/user/{id}/{userName}")
+    public UserVO changeUserName(@PathVariable("id") Long id, @PathVariable("userName" ) String userName) {
+        int result = userService.updateUserName(id, userName);
     }
 }

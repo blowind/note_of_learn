@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: UserService
@@ -19,7 +20,7 @@ public class UserService {
     List<UserPO> database = new ArrayList<>();
 
     public UserPO insertUser(UserPO userPO) {
-        Long id = database.size() + 1L;
+        Long id = database.size() > 0 ? database.get(-1).getId() + 1L : 1L;
         userPO.setId(id);
         database.add(userPO);
         return userPO;
@@ -34,5 +35,29 @@ public class UserService {
             }
         }
         return null;
+    }
+
+    public List<UserPO> findUsers(String userName, String note, int start, int end) {
+        List<UserPO> userPOList = database.stream()
+                .filter(e -> {
+                    return e.getUserName().equals(userName) && e.getNote().equals(note);
+                }).collect(Collectors.toList());
+        return userPOList.subList(start, end);
+    }
+
+    public int updateUser(UserPO userPO) {
+        try{
+            UserPO toUpdate = database.stream()
+                    .filter(e -> {
+                        return e.getId() == userPO.getId();
+                    }).collect(Collectors.toList()).get(0);
+            toUpdate.setUserName(userPO.getUserName());
+            toUpdate.setNote(userPO.getNote());
+            toUpdate.setSex(userPO.getSex());
+            return 1;
+        }catch (Exception e) {
+            return 0;
+        }
+
     }
 }
