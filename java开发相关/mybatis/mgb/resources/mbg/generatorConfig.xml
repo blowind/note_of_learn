@@ -124,8 +124,14 @@
         <!--<table tableName="%" />-->
 
         <!--生成对应表及类名 -->
-        <table tableName="favorite">
+		<!-- 这些enable语句默认配置为true，会生成相应的SQL语句， -->
+		<!-- 通过指定为false表名默认不生成相关语句，全局为false时不会生成相关mapper.xml文件，此时一般开放enableSelectByPrimaryKey语句 -->
+        <table tableName="favorite" enableInsert="false" enableSelectByPrimaryKey="false" enableSelectByExample="false" enableUpdateByPrimaryKey="false" enableDeleteByPrimaryKey="false" enableDeleteByExample="false"  enableCountByExample="false"  enableUpdateByExample="false" selectByPrimaryKeyQueryId="false" selectByExampleQueryId="false">
+			<!-- 指定表的主键，生成MySql类型的SQL语句 -->
             <generatedKey column="id" sqlStatement="MySql"/>
+			<!-- 当数据库里content字段内容为text时，生成的SQL语句中content字段会作为LONGVARCHAR类型生成WithBLOBs样式的resultMap -->
+			<!-- 此时通过下面设置强行指定content字段类型识别为VARCHAR，不额外派生resultMap -->
+			<columnOverride column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
         </table>
     </context>
 </generatorConfiguration>
