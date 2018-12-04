@@ -19,8 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @Date: 2018/12/4 11:20
  * @Version: 1.0
  **/
-@Configuration
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+//@Configuration
+public class WebSecurityInMemoryConfig extends WebSecurityConfigurerAdapter {
 
 
     /**  用来配置用户签名服务，主要是user-details机制，可以给用户赋予角色
