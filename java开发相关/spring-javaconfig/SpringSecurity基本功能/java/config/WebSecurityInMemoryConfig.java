@@ -52,10 +52,12 @@ public class WebSecurityInMemoryConfig extends WebSecurityConfigurerAdapter {
         /*withUser()方法本质上生成用户详情构造器UserDetailsBuilder*/
         userConfig.withUser("myuser2")
                 .password(passwordEncoder.encode("654321"))
+                    /* roles()方法底层实际使用的方法，此处需要补上ROLE_前缀的完整形式*/
                 .authorities("ROLE_USER");
     }
 
     /** 主要用来配置Filter链的内容，可以配置Filter链忽略哪些内容
+     *  即哪些页面需要验证，哪些不用验证直接放行
      * @param web  Spring Web Security对象
      */
     @Override
