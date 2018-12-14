@@ -67,10 +67,29 @@ public class WebSecurityInMemoryConfig extends WebSecurityConfigurerAdapter {
 
     /** 用来配置拦截保护的请求，哪些请求放行，哪些请求需要验证
      * 即指定用户、角色与对应URL的访问权限
+     *
+     * 此处展示了配置请求路径访问权限的基本形式，其他两个配置Class同名函数还展示了其他配置样式
      * @param http  http安全请求对象
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+        /*此处的配置，采取先配置优先的原则，
+        例如此处配置其他路径可以签名访问，后面紧接着又配置了允许匿名访问，最终签名访问生效*/
+        /*限定签名后的权限*/
+        http.authorizeRequests()
+                /*限定/user/welcome这两个请求赋予角色ROLE_USER或者ROLE_ADMIN*/
+                .antMatchers("/user/welcome", "/user/details").hasAnyRole("USER", "ADMIN")
+                /*采用ant风格的路径匹配方式 限定/admin/下所有请求权限赋予角色ROLE_ADMIN*/
+                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                  /*采用正则表达式风格的路径匹配方式，效果同上*/
+                /*.regexMatchers("/admin/.*").hasAuthority("ROLE_ADMIN")*/
+                /*其他路径允许签名后访问*/
+                .anyRequest().permitAll()
+                /*and代表连接词，对于没有配置权限的其他请求允许匿名访问*/
+                .and().anonymous()
+                /*使用Spring Security默认的登录页面*/
+                .and().formLogin()
+                /*启动HTTP基础验证*/
+                .and().httpBasic();
     }
 }
