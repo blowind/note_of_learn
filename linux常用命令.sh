@@ -135,6 +135,9 @@ netstat -a      ##  查看套接字情况
 netstat -a -tcp ##  查看所有激活(-a)的tcp连接情况
 
 
+dig www.bing.com +trace   ### 查看www.bing.com网址的详细DNS解析信息，需要安装bind-utils包
+
+
 12、iptables
 
 iptables -t nat -L      ##  查看iptables功能是否使能

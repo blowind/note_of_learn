@@ -63,4 +63,12 @@ $ jmap -histo 11951
 -Djava.security.egd=file:/dev/./urandom
 
 
+### 设置JVM中缓存的DNS解析结果的时间
+1、设置启动参数，如下，单位为秒
+-Dsun.net.inetaddr.ttl=xxxx
+2、修改%JAVA_HOME%\lib\security\java.security文件中的下面两项配置
+networkaddress.cache.ttl=-1   ## 正确解析结果的缓存时间，-1表示永不失效
+networkaddress.cache.negative.ttl=10  ##失败的解析结果的缓存时间，10表示缓存10秒
+
+
 jps | grep Bootstrap      ## 查看Tomtcat的JVM上是否还有保留的tomcat进程

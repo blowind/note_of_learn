@@ -65,6 +65,22 @@ public class SimpleController {
     }
 
     /***
+     *  传递对象，请求一般还是content-type为x-www-form-urlencoded格式的key-value请求
+     *  如此处body内容为 userName=thisismyname&note=hahahaha 的形式
+     *  此处模型字符串名要与变量名一致
+     *
+     *  使用postman发送请求http://localhost:8080/simple/requestObject
+     *  在Header中设置Content-Type为application/x-www-form-urlencoded
+     *  在Body中选择x-www-form-urlencoded，内容填写userName=thisismyname和note=hahahaha的key-value形式
+     ***/
+    @PostMapping("/requestObject")
+    @ResponseBody
+    public User toJson(@ModelAttribute("user") User user) {
+        System.out.println(user);
+        return user;
+    }
+
+    /***
      * 传递JSON，直接在入参映射成一个对象，多用于REST Ful接口
      * @RequestBody 邀请处理器用请求体的内容进行参数转换
 

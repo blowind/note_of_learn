@@ -1,6 +1,7 @@
 package com.zxf.springmvc.config;
 
 import com.zxf.springmvc.interceptor.MyInterceptor;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
@@ -9,6 +10,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.*;
 
+import javax.servlet.MultipartConfigElement;
+import java.io.File;
 import java.util.Locale;
 
 /**
@@ -64,5 +67,22 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         /*给处理器添加国际化拦截器*/
         registry.addInterceptor(localeChangeInterceptor());
+    }
+
+    /**
+     * 设置http请求中上传的文件的临时存储目录，等价于properties文件中的server.tomcat.basedir配置
+     * @return
+     */
+    @Bean
+    MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        /*String location = System.getProperty("user.dir") + "/data/tmp";*/
+        String location = "e:/tmp";
+        File tmpFile = new File(location);
+        if(!tmpFile.exists()) {
+            tmpFile.mkdir();
+        }
+        factory.setLocation(location);
+        return factory.createMultipartConfig();
     }
 }
