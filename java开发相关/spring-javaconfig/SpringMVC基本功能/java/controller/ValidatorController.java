@@ -72,6 +72,9 @@ public class ValidatorController {
      * 使用自定义的验证机制
      * 使用@InitBinder注解的方法在执行本控制器方法前被执行，此时绑定自定义验证器，作用在本控制的所有相关方法上
      * 此处额外设置日期格式的验证，表明所有入参类型为Date的参数，都按照指定格式转换,效果等价于使用@DateTimeFormat注解定义日志格式化
+     *
+     * Spring MVC中对于requestBody中发送的数据转换不是通过databind来实现，而是使用HttpMessageConverter来实现具体的类型转换。
+     * 因此此处initBinder仅对get类请求生效
      * */
     @InitBinder
     public void initBinder(WebDataBinder binder) {
