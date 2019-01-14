@@ -1,5 +1,6 @@
 package com.zxf.myspring.demo;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -7,10 +8,13 @@ import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-
+import java.io.IOException;
 
 /**
  * @author zhangxuefeng
@@ -19,12 +23,15 @@ import javax.annotation.PreDestroy;
  * @date 2018/10/29 09:49
  */
 //@Component
-public class SimpleBean implements BeanNameAware, BeanFactoryAware, ApplicationContextAware, InitializingBean {
+public class SimpleBean implements BeanNameAware, BeanFactoryAware, ApplicationContextAware, InitializingBean,
+		ResourceLoaderAware {
 
-    /*Configuration设置后，在Bean初始化时调用*/
-    public void init() {
-        System.out.println("类【" + this.getClass().getSimpleName() + "】的对象执行@Bean注解中init属性指定的方法");
-    }
+	private ResourceLoader loader;
+
+	/*Configuration设置后，在Bean初始化时调用*/
+	public void init() {
+		System.out.println("类【" + this.getClass().getSimpleName() + "】的对象执行@Bean注解中init属性指定的方法");
+	}
 
     /*Configuration设置后，在Bean销毁时调用*/
     public void destroy() {
@@ -66,4 +73,21 @@ public class SimpleBean implements BeanNameAware, BeanFactoryAware, ApplicationC
     public void afterPropertiesSet() throws Exception {
         System.out.println("类【" + this.getClass().getSimpleName() + "】调用InitializingBean接口的afterPropertiesSet()方法");
     }
+
+	/* 这个接口方法是给spring容器去填入loader对象  */
+	@Override
+	public void setResourceLoader(ResourceLoader resourceLoader) {
+		this.loader = resourceLoader;
+	}
+
+	public void outputResult() {
+		Resource resource = loader.getResource("classpath:test.txt");
+		try{
+			System.out.println("ResourceLoader加载的文件内容为: " + IOUtils
+					.toString(resource.getInputStream(), "UTF-8"));
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

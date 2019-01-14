@@ -2,7 +2,6 @@ package com.zxf.myspring.config;
 
 import com.zxf.myspring.demo.SimpleBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -12,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
  * @date 2018/10/29 10:09
  */
 @Configuration
-@ComponentScan("com.zxf.myspring")
 public class BeanConfig {
 
 	/* @Bean注解不能使用在类的标注上，主要用在方法上，可以指定额外的初始化函数和销毁函数 */
