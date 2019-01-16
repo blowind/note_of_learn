@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue 示例</title>
+</head>
+<body>
+	<div id="app">
+
+		<!------------------------ v-指令的展示 ------------------------>
+
+		<!-- v-model指定将输入的值实时更新到nickname变量 -->
+		<input type="text" v-model="nickname" placeholder="名字">
+		<!-- 最基本的插值方法，插入data中绑定的数据nickname，实时更新 -->
+		<h1>你好, {{nickname}}</h1>
+
+		<!-- 输出HTML元素，使用v-html -->
+		<span v-html="link"></span>
+		</br>
+		<!-- 通过v-pre跳过这个元素和子元素的编译过程，此时保留{{}}符号的显示 -->
+		<span v-pre>{{这里的内容不会被编译}}</span>
+
+		</br>
+
+		<!-- 绑定事件监听器，主要有click，dbclick，keyup，mousemove -->
+		<button v-on:click="handleClose">点击显示/隐藏</button>
+		<button @click="handleClose">v-on缩写的按钮</button>
+
+
+		<!-- if判断的指令 -->
+		<p v-if="show">显示这段文本</p>
+
+		<!-- 动态更新HTML元素的属性，此处url的值变更时，指向的超链接实时更新 -->
+		<a v-bind:href="url">链接</a>
+		<a :href="url">v-bind缩写的链接</a>
+
+		
+		<!------------------------ 数据的基本处理 ------------------------>
+
+		<!-- 插入时间，会根据date值的变动实时更新，此处通过过滤器格式化时间输出格式 -->
+		<h2>{{date | formatDate}}</h2>
+
+		<!-- 通过{{}}进行基本的表达式运算 -->
+		</br>
+		{{ number / 10}}
+		</br>
+		<!-- {{}}内部不能使用if语句，只能使用三元运算符 -->
+		{{ isOK ? 'ok' : 'not ok'}}
+		</br>
+		{{ text.split(',').reverse().join(',')}}
+
+
+
+	</div>
+	<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+	<script>
+		var myData = {
+			haha : "haha"
+		}
+
+		/*月份、日期、小时补0函数*/
+		var padDate = function(value) {
+			return value < 10 ? '0' + value : value;
+		};
+
+		var app = new Vue({
+			el : '#app',  /* 另一种js的写法 document.getElementById('app'),  */
+			data : {
+				nickname : '',
+				haha : myData,
+				date: new Date(),
+				link: '<a href="#">这是一个链接</a>',
+				number: 100,
+				isOK: false,
+				text: '123, 456',
+				show: true,
+				url: "http://www.bing.com"
+			},
+
+			filters: {
+				/*过滤器中定义日期格式化函数*/
+				formatDate: function(value) {
+					var date = new Date(value);
+					var year = date.getFullYear();
+					var month = padDate(date.getMonth() + 1);
+					var day = padDate(date.getDate());
+					var hours = padDate(date.getHours());
+					var minutes = padDate(date.getMinutes());
+					var seconds = padDate(date.getSeconds());
+					return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+				}
+			},
+
+			methods: {
+				handleClose: function() {
+					this.show = !this.show;
+				}
+			},
+
+			created: function() {
+				console.log("实例创建完后调用，尚未挂载");
+			},
+			mounted: function() {
+				console.log("el挂载到实例上后调用,第一个业务逻辑开始的地方");
+
+				var _this = this;  // 声明一个变量指向Vue实例this，保证作用域一致
+				this.timer = setInterval(function() {
+					_this.date = new Date();  /*修改数据date*/
+				}, 1000);
+			},
+			beforeDestory: function() {
+				console.log("实例销毁之前调用，主要解绑addEventListener监听的事件");
+
+				if(this.timer) {
+					clearInterval(this.timer);  // 在Vue实例销毁前清除定时器
+				}
+			}
+		});
+		console.log(app.haha.haha);
+		myData.haha = "hehe"
+		console.log(app.haha.haha);
+
+	</script>
+</body>
+</html>
