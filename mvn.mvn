@@ -1,13 +1,75 @@
 mvn help:system    // 下载maven-help-plugin 包括pom文件和jar文件
 
-mvn clean compile  
-clean告诉Maven清理输出目录target/，compile告诉Maven编译项目主代码
+【清理】
+mvn clean 
+清理输出目录target/，下面所有命令都可以和clean连用
 
-mvn clean test
+mvn eclipse:clean
+清除eclipse的一些系统设置，不会动target目录
+
+【编译】
+mvn compile  
+编译项目主代码
+
+【单元测试编译】
+mvn test-compile
+编译测试代码
+
+【单元测试执行】
+mvn test
 执行测试
 
-mvn clean package
-打包文件
+mvn site
+生成site
 
-mvn clean install
-安装部署
+【打包】
+mvn package
+打包文件，根据pom.xml文件中packaging标签指定的类型打包
+
+mvn jar:jar
+只打jar包
+
+【部署】
+mvn install
+安装部署到本地Repository
+
+【发布】
+mvn deploy
+将项目发布到远程仓库
+
+【依赖查看】
+mvn dependency:tree
+显示本项目的依赖树
+
+mvn dependency:list
+显示本项目依赖列表，不如依赖树直观
+
+
+【跳过单元测试的两种方法】
+mvn clean install -DskipTests
+跳过单元测试，src/test目录下的文件会被编译，但不会添加到编译好的项目中
+
+mvn clean install -Dmaven.test.skip=true
+跳过单元测试，测试类不会被编译或者即使被编译也不会被添加到路径，与上面一个没区别
+
+
+【执行】
+mvn exec:java -Dexec.mainClass="com.zxf.qrcode.QRCodeUtil"
+运行Main主程序
+
+
+【工程生成】
+mvn eclipse:eclipse
+生成eclipse项目
+
+mvn idea:idea
+生成idea项目
+
+
+【项目生成】
+mvn archetype:generate -DgroupId=com.zxf -DartifactId=mvn
+创建Maven的普通java项目
+
+mvn archetype:generate -DgroupId=com.zxf -DartifactId=myartifact -DarchetypeArtifactId=maven-archetype-webapp 
+创建Maven的Web项目，会生成webapp文件夹和jsp文件，对现在spring boot类项目意义不大
+

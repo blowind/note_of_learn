@@ -11,7 +11,17 @@
     </parent>
 
     <artifactId>ydl-content-service</artifactId>
+	<!-- 指定生成的打包文件格式，大部分情况下是jar，偶尔是war，
+		 使用pom是作为其他文件父pom的一种写法 -->
+	<packaging>pom</packaging>
     <url>http://maven.apache.org</url>
+	
+	<!-- 指定源码 , 编译器的编码为 UTF-8 编码 -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+	</properties>
 
     <dependencies>
 
