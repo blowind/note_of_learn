@@ -13,32 +13,29 @@
 		<!-- 业务中较少使用，多用于优化性能 -->
 		<span v-once>{{message}}</span>
 
-		<!-- v-model指定将输入的值实时更新到nickname变量 -->
-		<input type="text" v-model="nickname" placeholder="名字">
-		<!-- 最基本的插值方法，插入data中绑定的数据nickname，实时更新 -->
-		<h1>你好, {{nickname}}</h1>
+		<hr>
 
 		<!-- 输出HTML元素，使用v-html -->
 		<span v-html="link"></span>
-		</br>
+		<hr>
 		<!-- 通过v-pre跳过这个元素和子元素的编译过程，此时保留{{}}符号的显示 -->
 		<span v-pre>{{这里的内容不会被编译}}</span>
-		</br>
+		<hr>
 
 		<!-- 数组遍历/对象属性遍历 v-for，语法: item in items 或者 item of items-->
 		<ul>
 			<!-- <li v-for="book of books">{{book.name}}</li> -->
 			<li v-for="book in books">{{book.name}}</li>
-			</br>
+			<br>
 			<!-- 使用可选参数作为当前项的索引 -->
 			<li v-for="(book, index) in books">{{index}} - {{book.name}}</li>
-			</br>
+			<br>
 			<!-- 使用内置标签<template>让v-for作用到多个dom元素 -->
 			<template v-for="book in books">
 				<li>书名: {{book.name}}</li>
 				<li>作者: {{book.auther}}</li>
 			</template>
-			</br>
+			<br>
 			<!-- 对象属性遍历，分别对应值、键、索引，后两项可选 -->
 			<li v-for="(value, key, index) in user">
 				{{index}} - {{key}} : {{value}}
@@ -74,12 +71,9 @@
 		</template>
 		<button @click="handleToggleClick">切换输入类型</button>
 
-		<!-- if判断的指令 -->
-		<p v-if="show">显示这段文本</p>
-	
-		<!-- 绑定事件监听器，主要有click，dbclick，keyup，mousemove -->
-		<button v-on:click="handleClose">点击显示/隐藏</button>
-		<button @click="handleClose">v-on缩写的按钮</button>
+		
+
+		<!--------- v-bind 缩写为: 将DOM元素标签绑定到Vue实例数据 ---------->
 
 		<!-- 动态更新HTML元素的属性，此处url的值变更时，指向的超链接实时更新 -->
 		<a v-bind:href="url">链接</a>
@@ -108,6 +102,13 @@
 
 
 		<!-- 方法与事件 -->
+		<!-------------------- v-on 缩写为@ 为DOM元素绑定事件 -------------------->
+	
+		<!-- if判断的指令 -->
+		<p v-if="show">显示这段文本</p>
+		<!-- 绑定事件监听器，主要有click，dbclick，keyup，mousemove -->
+		<button v-on:click="handleClose">点击显示/隐藏</button>
+		<button @click="handleClose">v-on缩写的按钮</button>
 
 		点击次数:{{counter}}
 		<!-- 直接使用表达式 -->
@@ -126,19 +127,78 @@
 		<!-- 修饰符可以串联 -->
 		<a @click.stop.prevent="handle">stop.prevent</a>
 
+		<!-------------------- 表单与v-model -------------------->
+
+		<hr>
+
+		<!-- 使用v-model双向绑定数据，在数据输入的同时实时进行绑定 -->
+		<!-- v-model指定将输入的值实时更新到nickname变量 -->
+		<input type="text" v-model="nickname" placeholder="名字">
+		<!-- 最基本的插值方法，插入data中绑定的数据nickname，实时更新 -->
+		<h1>你好, {{nickname}}</h1>
+
+		<!-- 文本域输入中v-model的使用 -->
+		<textarea v-model="text2" placeholder="输入..."></textarea>
+		<p>输入的内容是:</p>
+		<p style="white-space: pre">{{text2}}</p>
+
+		<!-- 对中文拼音输入来说，前述v-modle仅在选定中文后才实时显示，
+				通过@input代替v-modle可以在拼音输入阶段实时显示 -->
+		<input type="text" @input="handleInput" placeholder="输入...">
+		<p>输入的内容是：{{message2}}</p>
+
+		<!-- 单选按钮绑定一个布尔值 -->
+		<input type="radio" :checked="picked">
+		<label>单选按钮</label>	
+
+		<hr>
+		<!-- 通过v-model和value配合来实现选项互斥选择的效果，
+				即数据pickedValue的值与单选按钮的value值一致时，选中该项 -->
+		<input type="radio" v-model="pickedValue" value="html" id="html">
+		<label for="html">HTML</label>
+		<input type="radio" v-model="pickedValue" value="js" id="js">
+		<label for="js">JavaScript</label>
+		<input type="radio" v-model="pickedValue" value="css" id="css">
+		<label for="css">CSS</label>
+		<br>
+		<p>选择的项是:{{pickedValue}}</p>
+
+		<hr>
+		<!-- 复选框的实现，也是通过v-model和value配合来实现，
+					其中checked为数组，存储所有被选中的value -->
+		<input type="checkbox" v-model="checked" value="html" id="html2">
+		<label for="html2">HTML</label>
+		<br>
+		<input type="checkbox" v-model="checked" value="js" id="js2">
+		<label for="js2">JavaScript</label>
+		<br>
+		<input type="checkbox" v-model="checked" value="css" id="css2">
+		<label for="css2">CSS</label>
+		<br>
+		<p>选择的项是:{{checked}}</p>
+
+		<hr>
+		<!-- 单选选择列表实现，绑定的数据字段selected存储选中的选项的value -->
+		<select v-model="selected">
+			<option>html</option>
+			<option value="js">JavaScript</option>
+			<option>css</option>
+		</select>
+		<p>选择的是:{{selected}}</p>
+
 		
 		<!------------------------ 数据的基本处理 ------------------------>
 
+		<hr>
+
 		<!-- 插入时间，会根据date值的变动实时更新，此处通过过滤器格式化时间输出格式 -->
 		<h2>{{date | formatDate}}</h2>
-
 		<!-- 通过{{}}进行基本的表达式运算 -->
-		</br>
-		{{ number / 10}}
-		</br>
+		{{number/10}}
+		<br>
 		<!-- {{}}内部不能使用if语句，只能使用三元运算符 -->
 		{{ isOK ? 'ok' : 'not ok'}}
-		</br>
+		<br>
 		<!-- 此处可以将计算属性里reversedText对应的函数的内容填充到下面，也可以直接使用计算属性 -->
 		{{text.split(',').reverse().join(',')}}
 		|
@@ -165,7 +225,6 @@
 
 			/*基本数据属性*/
 			data : {
-				nickname : '',
 				haha : myData,
 				date: new Date(),  /*此处不会缓存，而是实时刷新*/
 				link: '<a href="#">这是一个链接</a>',
@@ -217,6 +276,15 @@
 				},
 
 				counter: 0,
+
+				nickname : '',
+				text2: '',
+				message2: '',
+
+				picked: true,
+				pickedValue: 'js',
+				checked: ['html', 'css'],
+				selected: 'css',
 			},
 
 			/*过滤器*/
@@ -251,6 +319,9 @@
 				},
 				handle: function() {
 					console.log("基本演示");
+				},
+				handleInput: function(e) {
+					this.message2 = e.target.value;
 				},
 			},
 
