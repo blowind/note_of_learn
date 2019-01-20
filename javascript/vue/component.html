@@ -6,6 +6,9 @@
 </head>
 <body>
 	<div id="app">
+
+		<!------------------------------ 父组件通过props发送信息给子组件 ------------------------------>
+		<!-- 此处通过v-bind绑定的message指向父组件的data字段，然后props数组中声明message来实现，除了传数组，还可以传对象 -->
 		<global-component :message='myprint' :init-count="1"></global-component>
 		<local-component></local-component>
 
@@ -14,10 +17,19 @@
 			<tbody is="local-component"></tbody>
 		</table>
 
+		<!------------------------------ 子组件通过事件发送消息给父组件 ------------------------------>
+		<p>总数: {{total}}</p>
+		<!-- 父组件在子组件上通过v-on绑定两个自定义标签increase和reduce来监听事件，
+				然后与父组件的handleGetTotal方法绑定实现调用父组件该方法的效果 -->
+		<my-component @increase="handleGetTotal" @reduce="handleGetTotal"></my-component>
+		<my-component v-on:click.native="handleClick"></my-component>
+
+
 		<hr>
 		<my-button></my-button>
 		<br>
 		<my-button></my-button>
+
 	</div>
 <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
 <script>
@@ -68,10 +80,30 @@
 					return value > 10;
 				}
 			},
-
-
 		}
 	})
+
+	Vue.component('my-component', {
+		template: '\
+			<div>\
+				<button @click="handleIncrease">+1</button>\
+				<button @click="handleReduce">-1</button>\
+			</div>',
+			data: function() {
+				return {counter : 0}
+			},
+			methods: {
+				/*子组件发射事件给父组件，此处发生事件increase，并使用本地的counter值作为参数*/
+				handleIncrease: function() {
+					this.counter++,
+					this.$emit('increase', this.counter);
+				},
+				handleReduce: function() {
+					this.counter--,
+					this.$emit('reduce', this.counter);
+				}
+			}
+	});
 
 	
 	var data = { counter: 0};
@@ -101,8 +133,16 @@
 		},
 		data:{
 			myprint: "来自父组件的数据",
+			total: 0,
 		},
-
+		methods: {
+			handleGetTotal: function(total) {
+				this.total = total;
+			}
+			handleClick: function() {
+				console.log("在子组件上点击了一下");
+			}
+		},
 	})
 </script>
 </body>
