@@ -28,12 +28,19 @@ git show 356f6def9d3fb7f3b9032ff5aa4b9110d4cca87e   ##  显示该hash值下文�
 
 
 git reset --hard    ##   清除本地修改
+git reset --hard  <commit-hashId>  ## 清除本地commit但是未push的代码到<commit-hashId>指定的提交
 
 git checkout -b feature_name        ## 切换本地到 feature_name 分支
 
 
 git rev-parse HEAD           ##  显示最后一次修改的SHA1值
 git rev-parse --short HEAD   ##  显示最后一次修改的SHA1值的短码
+
+【将分支dev的部分修改合并到分支master】
+1、查看dev上要合并的那次修改的<commit-hashId>
+2、git checkout master，不做其他处理，保证本地仓库master内容与线上一致
+3、git cherry-pick <commit-hashId> 将分支dev在<commit-hashId>的修改合入到主干master 
+
 
 
 设置用户名和邮箱

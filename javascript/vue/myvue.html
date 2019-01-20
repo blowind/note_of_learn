@@ -164,6 +164,17 @@
 		<p>选择的项是:{{pickedValue}}</p>
 
 		<hr>
+		<!-- 一般来说v-model绑定的是一个静态字符串或者布尔值，在需要绑定动态值时，可以结合v-bind来实现
+			 如下当被选中时，picked的值变为123，即value2的值
+			 此处逻辑是input这个DOM的值由value标签与value2绑定，
+			 而v-model双向绑定的效果又将picked2的值与input这个DOM绑定 -->
+		<input type="radio" v-model="picked2" :value="value2">
+		<label>单选按钮</label>
+		<p>{{picked2}}</p>
+		<p>{{value2}}</p>
+
+
+		<hr>
 		<!-- 复选框的实现，也是通过v-model和value配合来实现，
 					其中checked为数组，存储所有被选中的value -->
 		<input type="checkbox" v-model="checked" value="html" id="html2">
@@ -178,6 +189,15 @@
 		<p>选择的项是:{{checked}}</p>
 
 		<hr>
+		<!-- 结合v-model和v-bind实现toggle值动态绑定非 <静态字符粗和布尔> 值 -->
+		<input type="checkbox" v-model="toggle" :true-value="value3" :false-value="value4">
+		<label>复选框</label>
+		<p>{{toggle}}</p>
+		<p>{{value3}}</p>
+		<p>{{value4}}</p>
+
+
+		<hr>
 		<!-- 单选选择列表实现，绑定的数据字段selected存储选中的选项的value -->
 		<select v-model="selected">
 			<option>html</option>
@@ -185,6 +205,24 @@
 			<option>css</option>
 		</select>
 		<p>选择的是:{{selected}}</p>
+
+		<hr>
+		<!-- 多选列表实现，加multiple属性，此时v-model绑定一个数组 -->
+		<select v-model="selected2" multiple>
+			<option>html</option>
+			<option value="js">JavaScript</option>
+			<option>css</option>
+		</select>
+		<p>选择的是:{{selected2}}</p>
+
+		<hr>
+		<!-- 结合v-model和v-bind实现selected3 动态绑定非 <静态字符粗和布尔> 值-->
+		<select v-model="selected3">
+			<option :value="{ number: 123}">123</option>
+		</select>
+		{{selected3.number}}
+
+		
 
 		
 		<!------------------------ 数据的基本处理 ------------------------>
@@ -285,6 +323,15 @@
 				pickedValue: 'js',
 				checked: ['html', 'css'],
 				selected: 'css',
+				selected2: 'js',
+				picked2: false,
+				value2: 123,
+
+				toggle: false,
+				value3: 'a',
+				value4: 'b',
+
+				selected3:'',
 			},
 
 			/*过滤器*/

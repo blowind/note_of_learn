@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue 示例</title>
+</head>
+<body>
+	<div id="app">
+		<global-component :message='myprint' :init-count="1"></global-component>
+		<local-component></local-component>
+
+		<!-- 对于html元素<table>中规定只能出现<tr><td><th>导致直接使用组件无效的情况，通过is属性来挂载 -->
+		<table>
+			<tbody is="local-component"></tbody>
+		</table>
+
+		<hr>
+		<my-button></my-button>
+		<br>
+		<my-button></my-button>
+	</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+	/*所有组件都必须是DOM元素，直接摆内容是无法识别的*/
+
+	/*注册全局组件my-component */
+	Vue.component('global-component', {
+		/*使用props来声明需要从父级接收的数据，与data属性的主要区别是数据来自父级，
+			message是自定义的接收标签，传递多个数据的时候可以自己继续往数组添加，
+			这些数据可以在本组件的template, computed,methods等属性中使用
+			html标签不区分大小写，所以横线自动转驼峰*/
+		props: ['message', 'initCount'],
+		template: '<div>全局注册的组件: {{message}}</div>',
+		data: function() {
+			/*在组件内部使用外部传入的数据时，建议在data内部再声明对象存储，做到与入参隔离*/
+			return { count : this.initCount }
+		}
+	});
+
+	/*验证父级传入参数的写法，
+		可以验证的类型： String, Number, Boolean, Object, Array, Function*/
+	Vue.component('comp-validate', {
+		props: {
+			/*必须传入数字*/
+			propA: Number,  
+			/*必须传入数字或者字符串*/
+			propB: [String, Number],
+			/*传入布尔值，没有定义的话默认是true*/
+			propC: {
+				type: Boolean,
+				default: true
+			},
+			/*数字，而且必传*/
+			propD: {
+				type: Number,
+				required: true
+			},
+			/*如果是数组或对象，默认值必须是一个函数来返回*/
+			propE: {
+				type: Array,
+				default: function() {
+					return [];
+				}
+			},
+			/*自定义验证函数*/
+			propF: {
+				validator: function(value) {
+					return value > 10;
+				}
+			},
+
+
+		}
+	})
+
+	
+	var data = { counter: 0};
+	Vue.component('my-button', {
+		template: '<buttion @click="counter++">{{counter}}</buttion>',
+		data: function() {
+			/*内部定义的对象，与每个组件本身绑定，在组件之间不相互影响*/
+			return { counter : 0 };
+			/*组件引用同一个外部对象时，修改产生的效果对所有该组件生效*/
+			/*return data;*/
+		}
+	});
+
+	var Child = {
+		template: '<div>局部注册的组件</div>',
+		/*组件内部的data必须是函数*/
+		data: function() {
+			return { message: '组件内容'}
+		}
+	};
+
+	var app = new Vue({
+		el: '#app',
+		/*使用components属性注册局部组件*/
+		components: {
+			'local-component': Child
+		},
+		data:{
+			myprint: "来自父组件的数据",
+		},
+
+	})
+</script>
+</body>
+</html>

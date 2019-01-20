@@ -14,6 +14,8 @@ import java.util.Date;
  */
 public class TimelineUtils {
 
+	/* HH标记表示使用24小时制，hh表示使用12小时制 */
+	/* private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); */
 	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	private static SimpleDateFormat DAY_START_FORMAT = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
 	private static SimpleDateFormat DAY_END_FORMAT = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
