@@ -22,7 +22,16 @@
 		<!-- 父组件在子组件上通过v-on绑定两个自定义标签increase和reduce来监听事件，
 				然后与父组件的handleGetTotal方法绑定实现调用父组件该方法的效果 -->
 		<my-component @increase="handleGetTotal" @reduce="handleGetTotal"></my-component>
+		<!-- 使用.native修饰符监听原生事件click，监听的是该组件的根元素 -->
 		<my-component v-on:click.native="handleClick"></my-component>
+
+		<p>total2： {{total2}}</p>
+		<!-- 使用v-model来绑定数据total2，而不是使用v-on绑定事件，达到同样的效果 -->
+		<my-component2 v-model="total2"></my-component2>
+
+		<!-- 定义一个Vue对象用户在非父子组件之间传递数据 -->
+		<p>{{message}}</p>
+		<component-a></component-a>
 
 
 		<hr>
@@ -92,17 +101,39 @@
 			data: function() {
 				return {counter : 0}
 			},
-			methods: {
-				/*子组件发射事件给父组件，此处发生事件increase，并使用本地的counter值作为参数*/
-				handleIncrease: function() {
-					this.counter++,
-					this.$emit('increase', this.counter);
-				},
-				handleReduce: function() {
-					this.counter--,
-					this.$emit('reduce', this.counter);
-				}
+		methods: {
+			/*子组件发射事件给父组件，此处发生事件increase，并使用本地的counter值作为参数*/
+			handleIncrease: function() {
+				this.counter++,
+				this.$emit('increase', this.counter);
+			},
+			handleReduce: function() {
+				this.counter--,
+				this.$emit('reduce', this.counter);
 			}
+		}
+	});
+
+
+	Vue.component('my-component2', {
+		props: ['value'],
+		/*此处自定义子组件的表单输入组件，进行数据双向绑定*/
+		template: '<input :value="value" @input="updateValue">',
+		methods: {
+			updateValue: function(event) {
+				this.$emit('input', event.target.value);
+			}
+		}
+	});
+
+	var bus = new Vue();
+	Vue.component('component-a', {
+		template: '<button @click="handleEvent">传递事件</button>',
+		methods: {
+			handleEvent: function() {
+				bus.$emit('on-message', '来自组件component-a的内容');
+			}
+		}
 	});
 
 	
@@ -134,14 +165,22 @@
 		data:{
 			myprint: "来自父组件的数据",
 			total: 0,
+			total2: 0,
+			message: '',
 		},
 		methods: {
 			handleGetTotal: function(total) {
 				this.total = total;
-			}
+			},
 			handleClick: function() {
 				console.log("在子组件上点击了一下");
 			}
+		},
+		mounted: function() {
+			var _this = this;
+			bus.$on('on-message', function(msg) {
+				_this.message = msg;
+			});
 		},
 	})
 </script>
