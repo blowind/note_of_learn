@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Vue自定义指令示例</title>
+</head>
+<body>
+  <div id="app">
+    <input type="text" v-focus>
+  </div>
+
+  <div v-test:msg.a.b="message"></div>
+
+  <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+  <script>
+    /*全局注册自定义指令*/
+    Vue.directive('focus', {
+      /*每个投资函数都有如下参数可用
+        el：指令所绑定的元素，可以用来直接操作DOM
+        binding：一个对象，包含如下属性：
+                 name：指令名，不包括v-前缀 
+                 value：指令的绑定值
+                 oldValue：指令绑定的前一个值，仅在update和componentUpdated钩子中可用
+                 expression： 绑定值的字符串形式，如v-my-d="1+1"，则表达式是"1+1"
+                 arg：传给指令的参数，如v-my-d:foo 则参数是foo
+                 modifiers：一个包含修饰符的对象 如v-my-d.foo.bar，则其值为{foo:true, bar:true}
+        vnode：Vue编译生成的虚拟节点
+        oldVnode：上一个虚拟节点，仅在update和componentUpdated钩子中可用*/
+
+      /*被绑定元素插入父节点时调用*/
+      inserted: function(el) {
+        el.focus();
+      }
+    });
+
+    Vue.directive('test', {
+      bind: function(el, binding, vnode) {
+        var keys = [];
+        for(var i in vnode) {
+          keys.push(i);
+        }
+        el.innerHTML = 
+          'name: ' + binding.name + '<br>' +
+          'value: ' + binding.value + '<br>' +
+          'expression: ' + binding.expression + '<br>' +
+          'argument: ' + binding.argument + '<br>' +
+          'modifiers: ' + JSON.stringify(binding.modifiers) + '<br>' +
+          'vnode keys: ' + keys.join(', ')
+      }
+    });
+
+    var app = new Vue({
+      el: '#app',
+      directives: {
+        /*局部注册自定义指令*/
+        focusLocal: {},
+      },
+      data: {
+        message:'some text'
+      }
+    })
+  </script>
+</body>
+</html>

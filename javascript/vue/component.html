@@ -2,10 +2,12 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Vue 示例</title>
+	<title>Vue组件示例</title>
 </head>
 <body>
 	<div id="app">
+
+		<!-- props传递数据、events触发事件、slot内容分发构成Vue组件的3个API来源 -->
 
 		<!------------------------------ 父组件通过props发送信息给子组件 ------------------------------>
 		<!-- 此处通过v-bind绑定的message指向父组件的data字段，然后props数组中声明message来实现，除了传数组，还可以传对象 -->
@@ -25,20 +27,59 @@
 		<!-- 使用.native修饰符监听原生事件click，监听的是该组件的根元素 -->
 		<my-component v-on:click.native="handleClick"></my-component>
 
+		<hr>
+
 		<p>total2： {{total2}}</p>
 		<!-- 使用v-model来绑定数据total2，而不是使用v-on绑定事件，达到同样的效果 -->
 		<my-component2 v-model="total2"></my-component2>
 
-		<!-- 定义一个Vue对象用户在非父子组件之间传递数据 -->
-		<p>{{message}}</p>
-		<component-a></component-a>
+		<hr>
 
+		<!------------------------------ 非父子组件的消息传递 ------------------------------>
+
+
+		<!-- 定义一个Vue对象bus在非父子组件之间传递数据，即其中一个组件$emit发射事件，一个组件在mounted中$on接受事件 -->
+		<p>{{message}}</p>
+		<!-- 用特殊属性ref为子组件指定一个索引名，可以在父组件中使用 -->
+		<component-a ref="comA"></component-a>
+
+		<!------------------------------ 插槽slot ------------------------------>
+
+		<hr>
+		<!-- 在html主题部分所有{{}}框定的内容都是父组件的内容，
+		因为此处是在父组件作用域内，因而使用父组件的内容编译 -->
+		<child-component>
+			<!-- 具名slot，指定name，此时可以在子组件里指定并使用 -->
+			<h2 slot="header">标题</h2>
+			<p>正文内容</p>
+			<p>{{myprint}}</p>
+			<div slot="footer">底部信息</div>
+		</child-component>
+
+		<hr>
+
+		<child-component2>
+			<!-- 作用域插槽，此处props临时变量用来访问子组件插槽的数据msg -->
+			<template scope="props">
+				<p>来自父组件的内容</p>
+				<p>{{props.msg}}</p>				
+			</template>
+		</child-component2>
 
 		<hr>
 		<my-button></my-button>
 		<br>
 		<my-button></my-button>
 
+	</div>
+
+	<hr>
+	<div id="mount-div">
+	</div>
+
+	<hr>
+	<div id="app2">
+		<input-number v-model="value" :max="10" :min="0"></input-number>
 	</div>
 <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
 <script>
@@ -48,7 +89,7 @@
 	Vue.component('global-component', {
 		/*使用props来声明需要从父级接收的数据，与data属性的主要区别是数据来自父级，
 			message是自定义的接收标签，传递多个数据的时候可以自己继续往数组添加，
-			这些数据可以在本组件的template, computed,methods等属性中使用
+			这些数据可以在本组件的template, computed, methods等属性中使用
 			html标签不区分大小写，所以横线自动转驼峰*/
 		props: ['message', 'initCount'],
 		template: '<div>全局注册的组件: {{message}}</div>',
@@ -129,11 +170,17 @@
 	var bus = new Vue();
 	Vue.component('component-a', {
 		template: '<button @click="handleEvent">传递事件</button>',
+		data: function() {
+			return {sonMsg: "子组件的数据"}
+		},
 		methods: {
 			handleEvent: function() {
 				bus.$emit('on-message', '来自组件component-a的内容');
+				/*通过$parent访问父链，进而可以做任何操作（包括修改），此处读取相关属性内容
+					不建议使用，因为影响父组件的封闭性，最多可以用来读数据*/
+				console.log("子组件中打印: " + this.$parent.myprint);
 			}
-		}
+		},
 	});
 
 	
@@ -148,6 +195,45 @@
 		}
 	});
 
+	/*使用特殊的<slot>元素为子组件开启插槽，
+	如果父组件没有在子组件标签内插入内容则使用无匿名的默认slot内容替代，
+	使用具名slot指定名字后，其中内容会使用父组件里该名字对应的DOM元素*/
+	Vue.component('child-component', {
+		/*给组件命名*/
+		name: 'child-component',
+		template: '\
+				<div class="container">\
+					<div class="header">\
+						<slot name="header"></slot>\
+					</div>\
+					<div class="main">\
+						<slot>\
+							<p>如果父组件没有插入内容，此处作为默认出现</p>\
+						</slot>\
+					</div>\
+					<div class="footer">\
+						<slot name="footer"></slot>\
+					</div>',
+					/*通过$slots反问某个具名slot，
+					this.$slots.default包含所有没被包含在具名slot里的节点*/
+		mounted: function() {
+			var header = this.$slots.header;
+			var main = this.$slots.default;
+			var footer = this.$slots.footer;
+			console.log(footer);
+			console.log("访问slot数据：" + footer[0].elm.innerHTML);
+		},
+	});
+
+	/*全局注册组件的方式*/
+	Vue.component('child-component2', {
+		template: '\
+			<div class="container">\
+				<slot msg="来自子组件的内容"></slot>\
+			</div>'
+	});
+
+	/*局部注册组件的方式*/
 	var Child = {
 		template: '<div>局部注册的组件</div>',
 		/*组件内部的data必须是函数*/
@@ -173,16 +259,119 @@
 				this.total = total;
 			},
 			handleClick: function() {
-				console.log("在子组件上点击了一下");
+				console.log("父组件中打印: " + "在子组件上点击了一下");
 			}
 		},
 		mounted: function() {
 			var _this = this;
 			bus.$on('on-message', function(msg) {
 				_this.message = msg;
+				/*通过在子组件加ref标签用于父组件使用$refs.{name}引用来访问使用，可读写*/
+				console.log("父组件中打印: " + _this.$refs.comA.sonMsg);
 			});
 		},
-	})
+	});
+
+	/*Vue.extend是基础Vue构造器，创建一个子类，
+	对于实例化时没有el选项的Vue实例，都处于未挂载状态，使用$mount手动挂载到一个DOM上*/
+	var MyComponent = Vue.extend({
+		template: '<div>Hello: {{name}}</div>',
+		data: function() {
+			return { name: 'Aresn'}
+		}
+	});
+	new MyComponent().$mount('#mount-div');
+
+	/*********** 一下为input-number组件相关所有代码，正式写法应该放到单独的input-number.js文件中 ***********/
+	function isValueNumber(value) {
+		/*正则表达式检测，分别匹配带符号小数、带符号整数、带符号0三种场景*/
+		return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value + '');
+	};
+
+	Vue.component('input-number', {
+		template: '\
+			<div class="input-number">\
+				<input \
+					type="text" \
+					:value="currentValue" \
+					@change="handleChange"> \
+				<button \
+					@click="handleDown" \
+					:disabled="currentValue <= min">-</button> \
+				<button \
+					@click="handleUp" \
+					:disabled="currentValue >= max">+</button> \
+			</div>',
+		props: {
+			max: {
+				type: Number,
+				default: Infinity
+			},
+			min: {
+				type: Number,
+				default: -Infinity
+			},
+			value: {
+				type: Number,
+				default: 0
+			}
+		},
+		data: function() {
+			return { currentValue: this.value}
+		},
+		watch: {
+			currentValue: function(val) {
+				this.$emit('input', val);
+				/*on-change事件当前未使用*/
+				this.$emit('on-change', val);
+			},
+			value: function(val) {
+				this.updateValue(val);
+			}
+		},
+		methods: {
+			updateValue: function(val) {
+				if(val > this.max) val = this.max;
+				if(val < this.min) val = this.min;
+				this.currentValue = val;
+			},
+			handleDown: function() {
+				if(this.currentValue <= this.min) return;
+				this.currentValue -= 1;
+			},
+			handleUp: function() {
+				if(this.currentValue >= this.max) return;
+				this.currentValue += 1;
+			},
+			handleChange: function(event) {
+				var val = event.target.value.trim();
+				var max = this.max;
+				var min = this.min;
+				if(isValueNumber(val)) {
+					val = Number(val);
+					this.currentValue = val;
+
+					if(val > max) {
+						this.currentValue = max;
+					}else if(val < min) {
+						this.currentValue = min;
+					}else{
+						event.target.value = this.currentValue;
+					}
+				}
+			}
+		},
+		mounted: function() {
+			this.updateValue(this.value);
+		}
+	});
+
+	var app2 = new Vue({
+		el: '#app2',
+		data: {
+			value: 5
+		}
+	});
 </script>
 </body>
 </html>
