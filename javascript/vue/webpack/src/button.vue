@@ -1,7 +1,9 @@
 <template>
-	<button @click="handleClick" :style="styles">
-		<slot></slot>
-	</button>
+	<div>
+		<button @click="handleClick" :style="styles">
+			<slot></slot>
+		</button>
+	</div>
 </template>
 <script>
 	export default {
@@ -12,7 +14,7 @@
 			}
 		},
 		computed: {
-			styles () {
+			styles() {
 				return { background: this.color}
 			}
 		},
@@ -32,7 +34,7 @@
  	}
  	button:active {
  		position: relative;
- 		top: 1px
+ 		top: 1px;
  		left: 1px;
  	}
 </style>

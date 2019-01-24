@@ -1,12 +1,14 @@
 var path = require('path');
+/*抽取散落的css生成单独css文件的插件*/
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+/*Vue-loader在15.*之后的版本vue-loader的使用都是需要伴生VueLoaderPlugin的*/
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 var config = {
   mode: 'development',
   /*配置入库，webpack从main.js开始工作*/
   entry: {
-    main: './main'
+    main: './src/main'
   },
   output: {
     /*指定打包后文件输出目录*/
@@ -43,13 +45,17 @@ var config = {
           use: 'css-loader',
           fallback: 'style-loader'
         })
+      },
+      {
+        test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/,
+        /*如果这个文件小于1kb，则以base64的形式加载，不会生成一个文件*/
+        loader: 'url-loader?limit=1024'
       }
     ]
   },
   plugins: [
     /*指定提取后的css文件的名字*/
     new ExtractTextPlugin("main.css"),
-    /*Vue-loader在15.*之后的版本vue-loader的使用都是需要伴生 VueLoaderPlugin的*/
     new VueLoaderPlugin()
   ]
 };
