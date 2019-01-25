@@ -1,15 +1,22 @@
 /*导入Vue框架*/
 import Vue from 'vue';
-/*导入本地app.vue文件*/
-import App from './app.vue';
 /*加载前端路由组件*/
 import VueRouter from 'vue-router';
+/*加载组件通信插件Vuex*/
+import Vuex from 'vuex';
+/*导入本地app.vue文件*/
+import App from './app.vue';
+
 
 /*不使用vue单文件的写法*/
 /*document.getElementById('app').innerHTML = 'Hello, webpack.';*/
 
 /*使用Vue.use()加载前端路由插件*/
 Vue.use(VueRouter);
+/*使用Vuex组件通信插件*/
+Vue.use(Vuex);
+
+/*******************************    路由相关配置   *******************************/
 
 /*const类似java里面的final声明*/
 const Routers = [
@@ -62,10 +69,69 @@ router.afterEach((to, from, next) => {
   window.scrollTo(0, 0);
 });
 
+
+/*******************************    Vuex相关配置   *******************************/
+
+const store = new Vuex.Store({
+  /* state内存储数据，用于给所有组件使用
+    数据保存在state字段内，此处定义计数器count并初始化为0，外部通过$store.state.count使用
+    在组件内来自state的数据只能读取，不能手动修改，修改的唯一途径是使用mutations */
+  state: {
+    count: 0,
+    list: [1, 5, 8, 10, 30, 50]
+  },
+  /* mutations用于提供方法给组件调用，一般用于操作state内的数据
+   组件内通过this.$store.commit方法来执行mutations里定义的函数
+   在mutations函数里不要异步操作数据，改变数据时用mutations，有业务逻辑代码时用actions*/
+  mutations: {
+    increment(state) {
+      state.count++;
+    },
+    incrementBy5(state, n = 5) {
+      state.count += n;
+    },
+    incrementByObject(state, params) {
+      state.count += params.count;
+    },
+    decrease(state) {
+      state.count--;
+    }
+  },
+  /*getters用于将各组件共用的过滤state数据的功能提取出来，
+    在组件内部使用this.$store.getters.filteredList调用 */
+  getters: {
+    filteredList: state => {
+      return state.list.filter(item => item < 10);
+    },
+    /*调用getters内部的方法，将getters作为第二个参数传递*/
+    listCount: (state, getters) => {
+      return getters.filteredList.length;
+    }
+  },
+  /*与mutation大同小异，内部提交的是mutation操作，但可以使用异步操作业务逻辑
+    在组件内使用this.$store.dispatch调用
+    改变数据时用mutations，有业务逻辑代码时用actions*/
+  actions: {
+    /*此处实现是同步的，与mutation中直接increment没有功能上的差别*/
+    incrementByAction(context) {
+      context.commit('increment');
+    },
+    asyncIncrement(context) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          context.commit('increment');
+          resolve();
+        }, 1000)
+      });
+    }
+  }
+});
+
 /*创建Vue根实例*/
 new Vue({
   el: '#app',
   router: router,
+  store: store,
   render: h => {
     return h(App)
   }
