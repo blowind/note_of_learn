@@ -6,16 +6,16 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 var config = {
   mode: 'development',
-  /*配置入库，webpack从main.js开始工作*/
+  /*配置入口，webpack从main.js开始递归解析出所有依赖的模块*/
   entry: {
-    main: './src/main'
+    main: './src/main.js'
   },
   output: {
     /*指定打包后文件输出目录*/
     path: path.join(__dirname, './dist'),
     /*资源文件引用目录，此处可以填cdn网址*/
     publicPath: '/dist/',
-    /*指定输出文件名称*/
+    /*指定输出文件名称，将入口所依赖的所有模块打包成一个文件main.js输出*/
     filename: 'main.js'
   },
   module: {

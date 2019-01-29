@@ -1,0 +1,18 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- 使用extract-text-webpack-plugin插件抽取css生成单独文件后，使用link引入 -->
+	<!-- <link rel="stylesheet" type="text/css" href="./dist/main_cbf9aa194453a5b1cbdd.css" -->
+
+	<!-- 使用webpack-dev-server开发时，由于生成文件在内存中而不是/dist目录下，因此要修改引用路径 -->
+	<link rel="stylesheet" type="text/css" href="main.css"
+</head>
+<body>
+	<div id="app"></div>
+	<!-- 导入webpack输出的JavaScript文件，build时(webpack)引用此位置 -->
+	<!-- <script src="./dist/bundle.js"></script> -->
+
+	<!-- 使用webpack-dev-server开发时，由于生成文件在内存中而不是/dist目录下，因此要修改引用路径 -->
+	<script src="bundle.js"></script>
+</body>
+</html>
