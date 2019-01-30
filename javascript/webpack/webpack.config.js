@@ -4,18 +4,74 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 /* 通过CommonJS规范导出一个描述如何构建的Object对象 */
 module.exports = {
+
 	/*指定当前的编译模式，有development和production两种常用选项，或者使用none什么都不选*/
 	"mode": "development",
-	/*JavaScript执行入口文件*/
+
+	/* 模块入口文件，字符串写法，只会生成一个Chunk */
 	entry: './main.js',
+
+	/*数组写法的入口文件，只会生成一个Chunk*/
+	/*entry: ['./main2.js', 'main3.js']*/
+
+	/*使用对象的写法，配置多个入口生成多个Chunk，每个入口生成一个Chunk，Chunk名是对象中的键*/
+	/*entry: {
+		a: './main2.js',
+		b: ['./main3.js', './main4.js']
+	}*/
+
+	/*配置成函数动态的生成入口对象，可以指定某个目录为Chunk专用目录，通过函数动态实现读取目录里文件最后单独编译输出成各个Chunk打包结果*/
+	/*entry: () => {
+		return new Promise((resolve) => {
+			resolve({
+				a: './main2.js',
+				b: './main3.js'
+			});
+		});
+	},*/
+
+
+	/*配置根目录，一般不配置，默认为执行启动Webpack所在当前目录，该值必须配成绝对路径字符串，也可以在webpack命令中用--context来设置*/
+	context: path.resolve(__dirname),
+
+	/* 配置如何输出最终想要的代码 */
 	output: {
 		/*将所有依赖的模块合并输出到一个bundle.js文件中*/
 		filename: 'bundle.js',
-		/*将输出文件都放到dist目录下*/
+
+		/*多个输出文件的写法，根据Chunk名映射，hash是Chunk唯一标识的Hash值，chunkhash是内容的hash值*/
+		// filename: '[name]_[chunkhash:20].js',
+		// filename: '[name]_[hash:8].js',
+
+
+		/* 配置输出文件存在本地的目录，必须是绝对路径*/
 		path: path.resolve(__dirname, './dist'),
+
+		/* 配置输出文件为异步加载的cdn文件等，例如如下配置最终生成的HTML引入的样子为 
+		   <script src='https://cdn.example.com/assets/bundle.js'</script> */
+		/*publicPath: 'https://cdn.example.com/assets/',*/
+
+		/*构建一个可以被其他模块导入的库 libraryTarget配置以何种方式导出  library配置导出库的名称]
+			libraryTarget有             引入的文件中使用方法
+			1、var  默认选择               LibraryName.doSth();
+			2、commonjs                   require('library-name-in-npm')['LibraryName'].doSth();
+			3、commonjs2                  require('library-name-in-npm').doSth();
+			4、this                       this.LibraryName.doSth();
+			5、window                     window.LibraryName.doSth();
+			6、global                     global.LibraryName.doSth();
+			六种配置，其中配置为commonjs2时library配置无意义	*/
+		/*
+		library: 'LibraryName',
+		libraryTarget: "commonjs",
+		*/
 	},
+
+	/* 配置处理模块的规则 */
 	module: {
-		/*webpack打包过程中依赖的处理规则*/
+		/* 配置webpack打包过程中读取和解析规则，通常用来配置Loader，大致通过以下方式配置
+		   1、条件匹配：通过test、include、exclude三个配置项来选中Loader要应用的规则文件
+		   2、应用规则：对选中的文件通过use配置项来应用Loader，Loader应用顺序为从后向前
+		   3、重置顺序：通过enforce选项将某个Loader执行顺序放到最前或者最后 */
 		rules: [
 			{
 				/*使用正则表达式去匹配要用Loader转换的css文件，webpack打包时不能直接处理css文件*/
@@ -39,14 +95,156 @@ module.exports = {
 					/*指定转换.css文件需要使用的Loader*/
 					use: ['css-loader'],
 				}),
+			},
+
+			{
+				/*匹配JS文件*/
+				test: /\.js$/,
+				/*使用babel-loader转换js文件， ?cacheDirectory表示传给babel-loader的参数，用于缓存babel的编译结果，加快重新编译速度*/
+				// use: ['babel-loader?cacheDirectory'],
+
+				/*传入多个参数进行配置的写法，使用对象*/
+				use: [
+					{
+						loader: 'babel-loader',
+						options: {
+							cacheDirectory: true,
+						}
+					},
+				],
+
+				/*只命中本目录下的js文件，加快webpack搜索速度*/
+				include: [
+					path.resolve(__dirname),
+					path.resolve(__dirname, 'src'),
+				],
+
+				/*细粒度的配置那些模块语法被解析，哪些不被解析*/
+				parser: {
+					amd: false, // 禁用AMD
+					commonjs: false,  // 禁用CommonJS
+					system: false,  // 禁用SystemJS
+					harmony: true,  // 启用ES6 import/export
+					requireInclude: false,  // 禁用 require.include
+					requireEnsure: false,  // 禁用 require.ensure
+					requireContext: false,  // 禁用 require.context
+					browserify: false,  // 禁用 browserify
+					requireJs: false,   // 禁用 requirejs
+				}
+			},
+
+			{
+				/*匹配SCSS文件*/
+				test: /\.scss$/,
+				/*使用一组Loader去处理scss文件，处理顺序从后到前*/
+				use: ['style-loader', 'css-loader', 'sass-loader'],
+				/*排除node_modules目录下的文件*/
+				exclude: [
+					path.resolve(__dirname, 'node_modules'),
+					path.resolve(__dirname, 'anther_one'),
+				]
+			},
+
+			{
+				/*对非文本文件采用file-loader加载*/
+				test: /\.(gif|png|jpe?g|eot|woff|ttf|svg|pdf)$/,
+				use: ['file-loader'],
 			}
-		]
+		],
+
+		/*让webpack忽略部分没有采用模块化的文件的递归解析和处理，提高构建性能，像jQuery、ChartJs就没有采用模块化标准*/
+		noParse: /jquery|chartjs/,
+		/*  // 函数式写法，content代表一个模块的文件路径
+			noParse: (content) => {
+			// 返回true或者false
+			return /jquery|chartjs/.test(content);
+		}*/
 	},
-	/*webpack打包过程中依赖的插件*/
+
+	/* 配置寻找模块的规则 */
+	resolve: {
+		/*通过别名将原导入路径映射成新的导入路径，
+		如文件中的 import Button form 'components/button' 替换成 import Button form './src/components/button'*/
+		alias: {
+			// 所有 import
+			components: './src/components'
+			// 通过$缩小命中范围，只命中react结尾的导入语句
+			/*'react$': '/path/to/react.min.js'*/
+		},
+		/*引入第三方模块时，针对package.json文件里的不同入口文件，指定引用优先级，不设置时默认值如下*/
+		mainFields: ['browser', 'main'],
+		/*在导入语句没带文件后缀时，用以匹配文件时自动追加的后缀，默认值如下*/
+		extensions: ['.js', '.json'],
+		/*配置webpack去哪些目录下寻找第三方模块，配置后可以将诸如 import '../../components/button' 的写法简写成 import 'button' 默认值如下*/
+		modules: ['node_modules'],
+		/*配置描述第三方模块的文件名称，默认值如下*/
+		descriptionFiles: ['package.json'],
+		/*要求import所有导入语句都必须带诸如js遮掩的文件后缀*/
+		enforceExtension: false,
+		/*效果同上，但只对node_modules下的模块生效，多配合enforceExtension为true的情况下设置为false以避免第三方模块不符合要求告警太多*/
+		enforceModuleExtension: false,
+	},
+
+
+	/* 配置webpack打包过程中依赖的插件 */
 	plugins: [
 		/*指定提取后的css文件的名字*/
     	new ExtractTextPlugin({
     		filename: `[name]_[md5:contenthash:hex:20].css`,
     	}),
-	]
+	],
+
+	/*配置开发服务器，只有通过webpack-dev-server启动时才有意义，webpack本身无法识别devServer配置项*/
+	devServer: {
+		/*开启模块热替换*/
+		hot: true,
+		/*是否开启代理客户端自动注入，不开启时通过iframe方式运行要开发的网页，默认开启*/
+		inline: true,
+		/*方便开发使用了HTML5 history API的单页应用，这类应用要求服务器在针对任何命中的路由都返回一个对应的HTML文件，只能用于只有一个HTML文件的应用*/
+		historyApiFallback: true,
+
+		/*由多个单页应用组成时的写法，使用正则匹配命中路由 */
+		/*
+		historyApiFallback: {
+			rewrites: [
+				{ from: /^\/user/, to: '/user.html' },
+				{ from: /^\/game/, to: '/game.html' },
+				{ from: /./, to: '/index.html' },
+			]
+		}
+		*/
+
+		/*配置DevServer HTTP服务器的文件根目录，默认为当前的执行目录即项目根目录*/
+		contentBase: path.join(__dirname, 'public'),
+
+		/*在HTTP相应中注入一些HTTP响应头*/
+		headers: {
+			'X-foo', 'bar'
+		},
+
+		/*配置白名单列表，在列表里的HTTP请求才会正常返回*/
+		allowdHosts: [
+			'host.com',
+			'sub.host.com',
+			'.host2.com'
+		],
+
+		/*开启https，DevServer会自动生成一份HTTPS证书*/
+		https: true,
+		/*使用自己的HTTPS证书的方法*/
+		/*https: {
+			key: fs.readFileSync('path/to/server.key'),
+			cert: fs.readFileSync('path/to/server.crt'),
+			ca: fs.readFileSync('path/to/ca.pem')
+		}*/
+
+		/*浏览器开发者工具控制台的日志输出等级，有none，error，warning，info，默认为info*/
+		clientLogLevel: info,
+
+		/*是否启用Gzip压缩*/
+		compress: false,
+
+		/*在DevServer启动且第一次构建完时，使用默认浏览器打开要开发的网页 通过openPage配置打开指定URL的网页*/
+		open: true,
+	}
 };
