@@ -74,6 +74,11 @@
 		
 
 		<!--------- v-bind 缩写为: 为DOM元素绑定Vue实例数据，可以是data数据或者computed计算属性 ---------->
+		<!-- 凡是对标签的class进行样式绑定必然是绑定到判断对象上的，不能直接写CSS类名，
+		     即使要绑定一个固定的CCS类也要写成 :class="{'btn':true}" 这样
+			 简单来说，无论绑定的是样式类还是样式属性，:class和:style表达式内一定是一个JSON对象
+			 :class的JSON对象的值一定是布尔型的，true表示加上样式，false表示移除样式类
+			 :style的JSON对象则是一个样式配置项，key声明属性名，value则是样式属性的具体值-->
 
 		<!-- 动态更新HTML元素的属性，此处url的值变更时，指向的超链接实时更新 -->
 		<a v-bind:href="url">链接</a>
@@ -334,7 +339,7 @@
 				selected3:'',
 			},
 
-			/*过滤器*/
+			/*过滤器  过滤器中是没有this引用的，该值是一个undefined，因此不要在过滤器内引用组件实例内的变量或者方法*/
 			filters: {
 				/*过滤器中定义日期格式化函数*/
 				formatDate: function(value) {
