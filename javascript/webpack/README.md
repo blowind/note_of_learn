@@ -16,6 +16,8 @@ webpack --config webpack.config.js  --watch  //  --config 指定配置文件  --
 // --devtool source-map 开启Source Map用于保持开发运行界面代码格式一致，便于断点调试
 webpack-dev-server --open --hot  --devtool source-map  --history-api-fallback --config webpack.config.js --host 127.0.0.1 --port 8080
 
+// 查看webpack支持的所有参数
+webpack -h
 
 
 

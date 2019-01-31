@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 /*抽取散落的css生成单独css文件的插件*/
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
@@ -8,10 +9,10 @@ module.exports = {
 	/*指定当前的编译模式，有development和production两种常用选项，或者使用none什么都不选*/
 	"mode": "development",
 
-	/* 模块入口文件，字符串写法，只会生成一个Chunk */
+	/* 模块入口文件，字符串写法，只有一个入口，只会生成一个Chunk */
 	entry: './main.js',
 
-	/*数组写法的入口文件，只会生成一个Chunk*/
+	/*数组写法的入口文件，只有一个入口，入口有两个文件，只会生成一个Chunk*/
 	/*entry: ['./main2.js', 'main3.js']*/
 
 	/*使用对象的写法，配置多个入口生成多个Chunk，每个入口生成一个Chunk，Chunk名是对象中的键*/
@@ -31,15 +32,14 @@ module.exports = {
 	},*/
 
 
-	/*配置根目录，一般不配置，默认为执行启动Webpack所在当前目录，该值必须配成绝对路径字符串，也可以在webpack命令中用--context来设置*/
-	context: path.resolve(__dirname),
-
 	/* 配置如何输出最终想要的代码 */
 	output: {
 		/*将所有依赖的模块合并输出到一个bundle.js文件中*/
 		filename: 'bundle.js',
 
-		/*多个输出文件的写法，根据Chunk名映射，hash是Chunk唯一标识的Hash值，chunkhash是内容的hash值*/
+		/*多个输出文件的写法，根据Chunk名映射，用于浏览器长时间缓存文件
+			hash是Chunk唯一标识的Hash值，chunkhash是内容的hash值*/
+		// filename: '[name].js',
 		// filename: '[name]_[chunkhash:20].js',
 		// filename: '[name]_[hash:8].js',
 
@@ -50,6 +50,9 @@ module.exports = {
 		/* 配置输出文件为异步加载的cdn文件等，例如如下配置最终生成的HTML引入的样子为 
 		   <script src='https://cdn.example.com/assets/bundle.js'</script> */
 		/*publicPath: 'https://cdn.example.com/assets/',*/
+
+		/*放到指定目录下*/
+		/*publicPath: '/assets',*/
 
 		/*构建一个可以被其他模块导入的库 libraryTarget配置以何种方式导出  library配置导出库的名称]
 			libraryTarget有             引入的文件中使用方法
@@ -63,6 +66,31 @@ module.exports = {
 		/*
 		library: 'LibraryName',
 		libraryTarget: "commonjs",
+		*/
+	
+		/*是否包含有用的文件路径信息到生成的代码里*/
+		pathinfo: true,
+
+		/*附加Chunk的文件名称*/
+		/* 
+		chunkFilename: '[id].js',
+		chunkFilename: '[chunkhash].js',
+		*/
+	
+		/*JSONP异步加载资源时的回调函数名称，需要和服务端搭配使用*/
+		/*jsonpFunction: 'myWebpackJsonp',*/
+
+		/*生成的Source Map文件的名称*/
+		sourceMapFilename: '[file].map',
+
+		/*浏览器开发者工具里显示的源码模块名称*/
+		/*devtoolModuleFilenameTemplate: 'webpack:///[resource-path]',*/
+
+		/*异步加载跨域的资源时使用的方式*/
+		/* 
+		crossOriginLoading: 'use-credentials',
+		corssOriginLoading: 'anonymous',
+		crossOriginLoading: false,
 		*/
 	},
 
@@ -119,17 +147,17 @@ module.exports = {
 					path.resolve(__dirname, 'src'),
 				],
 
-				/*细粒度的配置那些模块语法被解析，哪些不被解析*/
+				/*细粒度的配置那些模块语法被解析，哪些不被解析，默认都是启用的，这边可以配置false达到禁用的效果*/
 				parser: {
-					amd: false, // 禁用AMD
-					commonjs: false,  // 禁用CommonJS
-					system: false,  // 禁用SystemJS
+					amd: true, // 启用AMD
+					commonjs: true,  // 启用CommonJS
+					system: true,  // 启用SystemJS
 					harmony: true,  // 启用ES6 import/export
-					requireInclude: false,  // 禁用 require.include
-					requireEnsure: false,  // 禁用 require.ensure
-					requireContext: false,  // 禁用 require.context
-					browserify: false,  // 禁用 browserify
-					requireJs: false,   // 禁用 requirejs
+					requireInclude: true,  // 启用 require.include
+					requireEnsure: true,  // 启用 require.ensure
+					requireContext: true,  // 启用 require.context
+					browserify: true,  // 启用 browserify
+					requireJs: true,   // 启用 requirejs
 				}
 			},
 
@@ -165,12 +193,13 @@ module.exports = {
 	resolve: {
 		/*通过别名将原导入路径映射成新的导入路径，
 		如文件中的 import Button form 'components/button' 替换成 import Button form './src/components/button'*/
-		alias: {
+		/*alias: {
 			// 所有 import
 			components: './src/components'
 			// 通过$缩小命中范围，只命中react结尾的导入语句
-			/*'react$': '/path/to/react.min.js'*/
-		},
+			//'react$': '/path/to/react.min.js'
+		},*/
+
 		/*引入第三方模块时，针对package.json文件里的不同入口文件，指定引用优先级，不设置时默认值如下*/
 		mainFields: ['browser', 'main'],
 		/*在导入语句没带文件后缀时，用以匹配文件时自动追加的后缀，默认值如下*/
@@ -192,10 +221,18 @@ module.exports = {
     	new ExtractTextPlugin({
     		filename: `[name]_[md5:contenthash:hex:20].css`,
     	}),
+
+    	/*配合 --hot --inline 两个标签的插件*/
+    	new webpack.HotModuleReplacementPlugin(),
 	],
 
 	/*配置开发服务器，只有通过webpack-dev-server启动时才有意义，webpack本身无法识别devServer配置项*/
 	devServer: {
+		/*代理到后端服务接口*/
+		/*proxy: {
+			'/api': 'http://localhost:8080',
+		},*/
+
 		/*开启模块热替换*/
 		hot: true,
 		/*是否开启代理客户端自动注入，不开启时通过iframe方式运行要开发的网页，默认开启*/
@@ -215,22 +252,22 @@ module.exports = {
 		*/
 
 		/*配置DevServer HTTP服务器的文件根目录，默认为当前的执行目录即项目根目录*/
-		contentBase: path.join(__dirname, 'public'),
+		/*contentBase: path.join(__dirname, 'public'),*/
 
 		/*在HTTP相应中注入一些HTTP响应头*/
 		headers: {
-			'X-foo', 'bar'
+			'X-foo': 'bar'
 		},
 
 		/*配置白名单列表，在列表里的HTTP请求才会正常返回*/
-		allowdHosts: [
+		/*allowdHosts: [
 			'host.com',
 			'sub.host.com',
 			'.host2.com'
-		],
+		],*/
 
 		/*开启https，DevServer会自动生成一份HTTPS证书*/
-		https: true,
+		https: false,
 		/*使用自己的HTTPS证书的方法*/
 		/*https: {
 			key: fs.readFileSync('path/to/server.key'),
@@ -239,12 +276,61 @@ module.exports = {
 		}*/
 
 		/*浏览器开发者工具控制台的日志输出等级，有none，error，warning，info，默认为info*/
-		clientLogLevel: info,
+		clientLogLevel: 'info',
 
 		/*是否启用Gzip压缩*/
 		compress: false,
 
 		/*在DevServer启动且第一次构建完时，使用默认浏览器打开要开发的网页 通过openPage配置打开指定URL的网页*/
 		open: true,
+	},
+
+	/*配置根目录，一般不配置，默认为执行启动Webpack所在当前目录，该值必须配成绝对路径字符串，也可以在webpack命令中用--context来设置*/
+	context: path.resolve(__dirname),
+
+	/*配置source-map类型*/
+	devtool: 'source-map',
+
+	/*配置输出代码的运行环境，可选项： 
+	web(默认), 浏览器
+	webworker, WebWorker
+	node,    Node.js 使用require语句加载Chunk代码 
+	async-node,  Node.js  异步加载Chunk代码
+	node-webkit,   nw.js
+	electron-main,   electron主线程
+	electron-renderer,  electron渲染线程*/
+	target: 'web',
+
+	/*告诉webpack在JavaScript运行环境已经内置了哪些全局变量，不再将这些全局变量打包到代码中，而是可以直接使用*/
+	externals: {
+		// 将本地代码中导入语句的jquery替换成运行环境里的全局变量jQuery
+		jquery: 'jQuery'
+	},
+
+	/*控制台输出日志控制*/
+	stats: {
+		assets: true,
+		colors: true,
+		errors: true,
+		errorDetails: true,
+		hash: true,
+	},
+
+	/*是否捕捉webpack构建的性能信息，用于分析构建性能瓶颈*/
+	profile: true,
+
+	/*是否启用缓存来提升构建速度*/
+	cache: false,
+
+	/*开启监听模式，webpack下默认关闭，devServer下默认开启*/
+	watch: true,
+	/*监听模式选项配置*/
+	watchOptions: {
+		// 不监听的文件或者文件夹，支持正则，默认为空
+		ignored: /node_modules/,
+		// 监听到变化后，等300ms再执行动作，防止更新太快导致编译频率太快，默认为300ms
+		aggregateTimeout: 300,
+		// 查询文件是否变化的轮询间隔，默认每秒1000次
+		poll: 1000
 	}
 };
