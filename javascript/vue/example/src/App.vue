@@ -1,53 +1,25 @@
 <template>
   <div id="app">
-    <div class="tabs">
-      <ul>
-          <!-- router-link组件支持用户在具有路由功能的应用中导航，通过to属性指定目标地址
-                默认渲染后输出成 <a href="#">的超链接标签，tag="li"表示输出成<li>标签 -->
-          <!-- 通过名称引用路由(命名路由)，注意此处是:to 
-               如果直接使用字符串写明路由，则是to="/home" -->
-          <router-link :to="{name: 'Home'}" tag="li" exact>
-            <div><img src="../assets/images/home.svg"></div>
-            <div>首页</div>
-          </router-link>
+      <tabs></tabs>
 
-          <router-link :to="{ name: 'Categories' }" tag="li">
-            <div>
-                <img src="../assets/images/category.svg">
-            </div>
-            <div>分类</div>
-          </router-link>
-
-          <router-link :to="{ name: 'Cart' }" tag="li">
-            <div><img src="../assets/images/cart.svg"></div>
-            <div>购物车</div>
-          </router-link>
-
-          <router-link :to="{ name: 'Me'}" tag="li">
-            <div><img src="../assets/images/me.svg"></div>
-            <div>我</div>
-          </router-link>
-      </ul>
-    </div>
-
-    <div class="content">
-      <!-- 使用router-view渲染视图 -->
-      <router-view></router-view>
-    </div>
+      <div class="content">
+        <!-- 使用router-view渲染视图，此处根据具体的点击的页面显示对应内容 -->
+        <router-view></router-view>
+      </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+/*引入首页底层的tabs标签栏，用来导航*/
+import Tabs from './components/vue/tabs.vue'
+/*引入全站的全局css布局文件*/
+import "./assets/less/site.less"
 
 export default {
   name: 'app',
+    /*引入部件Tabs，在template中使用tabs标签使用，即首字符大写不转-的驼峰转-形式*/
   components: {
-    HelloWorld
+      Tabs
   }
 }
 </script>
-
-<style>
-
-</style>
