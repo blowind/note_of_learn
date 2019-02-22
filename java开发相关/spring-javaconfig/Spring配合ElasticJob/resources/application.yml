@@ -1,0 +1,26 @@
+regCenter:
+  zookeeperList: 127.0.0.1:2181
+  namespace: my-elastic-job-example
+
+simpleJobOne:
+  cron: 0/5 * * * * ?
+  shardingTotalCount: 3
+  shardingItemParameters: 0=Beijing,1=Shanghai,2=Guangzhou
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8&verifyServerCertificate=false&useSSL=false&requireSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+    username: test
+    password: test
+    tomcat:
+      max-wait: 10000
+      min-idle: 0
+      initial-size: 25
+      validation-query: SELECT 1
+      test-on-borrow: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 18800
+      remove-abandoned: true
+      remove-abandoned-timeout: 180
