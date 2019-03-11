@@ -105,3 +105,16 @@ git reset --soft HASH   #返回到某个节点。保留修改
  
 【fatal: unable to access ‘https://github.com/xingbuxing/TA-Lib-in-chinese.git/‘: OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443】 env命令设置GIT_SSL_NO_VERIFY环境变量为”ture”，并同时调用正常的git clone命令
  env GIT_SSL_NO_VERIFY=true git clone https://<host_name>/git/project.git  
+ 
+ 
+ 
+ 
+================================================ git flow使用 ================================================
+git flow init   ## 按照git flow的流程初始化相关分支
+git flow hotfix start hotfix_name   ## 从master上拉取并建立hotfix/hotfix_name分支，用于开发
+git add xxx / git commit            ## 进行修改操作并commit到本地
+git flow hotfix finish hotfix_name  ## 把代码合并到指定的master和dev分支
+git checkout master 
+git push                            ## 将commit的修改push到master
+git checkout dev
+git push                            ## 将commit的修改push到dev

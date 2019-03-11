@@ -306,6 +306,9 @@ log0428_   指定分割后文件名的相同前缀
 date -d "@1279592730"  ## 转换成
 
 date +%s       ## 以时间戳来显示当前时间  1527165067
+date +%F_%I    ## 获取当前时间的年月日和时针时间，如 2019-02-27_11  %F为full date; same as %Y-%m-%d  %I为hour (00..23)
+date +%s.%N    ## 获取当前时间相对于1970年起点的时间长度  如 1551237799.650062159 %s为seconds since 1970-01-01 00:00:00 UTC  %N为nanoseconds (000000000..999999999)
+
 
 21、查看当前用户的计划任务
 crontab -l 
@@ -351,6 +354,9 @@ cat /proc/vmstat | egrep "dirty|writeback"
 
 29、linux查看当前文件系统的格式
 df -T
+
+30、查看二进制文件
+od -c colors.MYI
 
 
 
