@@ -250,7 +250,7 @@ public class Artists {
 2、指向任意类型实例方法的方法引用        如 String::length
 3、指向现有对象的实例方法的方法引用      如 this::getColor
 
-对应的可以用来重构lambda表达式的三中方法
+对应的可以用来重构lambda表达式的三种方法
 1、(args) -> ClassName.staticMethod(args)      重构为    ClassName::staticMethod
 2、(arg0, rest) -> arg0.instanceMethod(rest)   重构为    ClassName::instanceMethod   arg0是ClassName类型
 3、(args) -> expr.instanceMethod(args)         重构为    expr::instanceMethod        expr是一个外部对象
@@ -636,6 +636,18 @@ Stream<double[]> pythagoreanTriples2 = IntStream.rangeClosed(1, 100).boxed()
 																.mapToObj(b -> new double[]{a, b, Math.sqrt(a*a+b*b)})
 																.filter(t -> t[2] % 1 == 0));
 											 
+// 下面是lambda表达式给 Map 操作带来的一些语法糖
+
+//  Map作为本地缓存使用，有键值对时直接返回，无键值对查找填入并返回的的场景
+//  当前可以使用 computeIfPresent 直接实现
+Map<String, String> artistCache = new HashMap<>();
+// 此处调用本地封装类中的 readArtistFromDB 方法，然后将readArtistFromDB方法返回结果放入Map并作为computeIfAbsent结果返回
+artistCache.computeIfAbsent(name, this::readArtistFromDB);  
+
+//  Map中value为List，计算List元素做统计分析的场景，forEach接收一个BiConsumer对象，该对象接受两个参数，返回void
+Map<Artist, Integer> countOfAlbums = new HashMap<>();
+albumsByArtist.forEach( (artist, albums) -> { countOfAlbums.put(artist, albums.size()); } );
+
 											 
 public class StringExercises {
 	/**  计算一个字符串中小写字母的个数 **/
@@ -718,19 +730,55 @@ List<Integer> sameOrder = numbers.stream().sorted().collect(Collectors.toList())
 【使用收集器】    以下大部分情况默认引入了Collectors的静态方法，即 import static java.util.stream.Collectors.*
 1、转换成指定集合
 //  除了Collectors传统的toList(),  toSet(),  还有  toCollection(),  toMap()   
-例如：
-numbers.stream().collect(Collectors.toCollection(TreeSet::new));          //  指定生成的集合的类型，此处为TreeSet
+
+------toList:
 
 // 把流中所有项目收集到给定的供应源创建的集合
 Collection<Dish> dishes = menuStream.collect(toCollection(), ArrayList::new);
 
+------toSet:
+
+例如：
+numbers.stream().collect(Collectors.toCollection(TreeSet::new));          //  指定生成的集合的类型，此处为TreeSet
+
+------toMap:
+
+生成测试数据源，Emp是有id和name两个属性的POJO
 emps = IntStream.range(0, 10).mapToObj(x -> new Emp(x % 3, x % 5 == 0 ? null : "name" + x)).toArray(Emp[]::new);
+
+一、生成Map的最基本写法：
+Stream.of(emps).collect(Collectors.toMap(Emp::getId, Emp::getName));
+
+这种写法有两个问题：
+1）Key重复时，会抛出java.lang.IllegalStateException: Duplicate key异常；
+2）Value为NULL时，会抛出java.lang.NullPointerException异常
+
+二、改良写法，解决Key重复问题
 Stream.of(emps).collect(Collectors.toMap(Emp::getId, Emp::getName,(k,v)->v));
+
+说明：
+提供一个BinaryOperator<U> mergeFunction（即lambda表达式(k,v)->v)来解决Key重复问题
+
+三、改良写法，解决Key重复问题和Value为NULL问题
 Stream.of(emps).collect(Collector.of(HashMap::new, 
                                      (m,emp) -> m.put(emp.getId(),emp.getName()), 
 									 (k,v) -> { k.putAll(v); return k; },       // 此处为了防止parallel下数据丢失，非parallel下(k,v)->v即可
 									 Characteristics.IDENTITY_FINISH));
+									 
+此处生成一个Collector对象，给出4个参数：
+Supplier<R> supplier
+BiConsumer<R, T> accumulator
+BinaryOperator<R> combiner
+Characteristics... characteristics
+
+四、终极写法，支持并发多线程									 
 Stream.of(emps).collect(HashMap::new, (m, emp) -> m.put(emp.getId(), emp.getName()), HashMap::putAll);
+
+直接给归并的元素，给出3个参数：
+Supplier<R> supplier
+BiConsumer<R, ? super T> accumulator
+BiConsumer<R, R> combiner
+
 
 
 2、转换成值   maxBy,  minBy,   averagingInt,   summingInt
@@ -895,7 +943,9 @@ Map<Boolean, Dish> mostCaloricPartitionedByVegetarian = menu.stream().collect(
 menu.stream().collect(partitioningBy(Dish::isVegetarian, counting()));
 
 
+/*********************************          自己实现收集器举例          *****************************************/
 
+【【实现ToList收集器】】
 
 实现Collector接口实现自己的收集器举例：
 import java.util.*;
@@ -956,6 +1006,9 @@ List<Dish> dishes = menuStream.collect(new ToListCollector<Dish>());
 使用collect的重载方法快速实现上述功能：（只需提供supplier，accumulator，combiner）
 // 由于不能传递Characteristics参数，所以他永远都是一个 IDENTITY_FINISH和CONCURRENT的收集器
 List<Dish> dishes = menuStream.collect(ArrayList::new, List::add, List::addAll); // 注意和HashMap的使用对比
+
+
+【【实现按Boolean分类的List收集器】】
 
 /*   构造复杂的收集器，收集给定范围内的素数和合数，分类存放  */
 import java.util.*;
@@ -1044,20 +1097,87 @@ public Map<Boolean, List<Integer>> partitionPrimesWithCustomCollector(int n) {
 			});
 }
 
-// 下面是lambda表达式给 Map 操作带来的一些语法糖
 
-//  Map作为本地缓存使用，有键值对时直接返回，无键值对查找填入并返回的的场景
-//  当前可以使用 computeIfPresent 直接实现
-Map<String, String> artistCache = new HashMap<>();
-// 此处调用本地封装类中的 readArtistFromDB 方法，然后将readArtistFromDB方法返回结果放入Map并作为computeIfAbsent结果返回
-artistCache.computeIfAbsent(name, this::readArtistFromDB);  
+【【实现基本Map收集器】】：支持多线程并发
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
+ 
+public class ForceToMapCollector<T, K, V> implements Collector<T, Map<K, V>, Map<K, V>> {
+ 
+	private Function<? super T, ? extends K> keyMapper;
+ 
+	private Function<? super T, ? extends V> valueMapper;
+ 
+	public ForceToMapCollector(Function<? super T, ? extends K> keyMapper,
+			Function<? super T, ? extends V> valueMapper) {
+		super();
+		this.keyMapper = keyMapper;
+		this.valueMapper = valueMapper;
+	}
+ 
+	@Override
+	public BiConsumer<Map<K, V>, T> accumulator() {
+		return (map, element) -> map.put(keyMapper.apply(element), valueMapper.apply(element));
+	}
+ 
+	@Override
+	public Supplier<Map<K, V>> supplier() {
+		return HashMap::new;
+	}
+ 
+	@Override
+	public BinaryOperator<Map<K, V>> combiner() {
+		return null;
+	}
+ 
+	@Override
+	public Function<Map<K, V>, Map<K, V>> finisher() {
+		return null;
+	}
+ 
+	@Override
+	public Set<Characteristics> characteristics() {
+		return Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
+	}
+ 
+}
 
-//  Map中value为List，计算List元素做统计分析的场景，forEach接收一个BiConsumer对象，该对象接受两个参数，返回void
-Map<Artist, Integer> countOfAlbums = new HashMap<>();
-albumsByArtist.forEach( (artist, albums) -> { countOfAlbums.put(artist, albums.size()); } );
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collector;
+public final class MyCollectors {
+ 
+	public static <T, K, V> Collector<T, ?, Map<K, V>> toMap(Function<T, K> f1, Function<T, V> f2) {
+		return new ForceToMapCollector<T, K, V>(f1, f2);
+	}
+ 
+}
+使用示例：
+import java.util.Map;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+public class Test {
+	public static void main(String[] args) {
+		Emp[] emps = IntStream.range(0, 10).mapToObj(x -> new Emp(x % 3, x % 5 == 0 ? null : "name" + x))
+				.toArray(Emp[]::new);
+		Map<Integer, String> map = Stream.of(emps).collect(MyCollectors.toMap(Emp::getId, Emp::getName));
+		System.out.println(map);
+	}
+ 
+}
 
 
-并行数据处理： 
+/*********************************          并行数据处理          *****************************************/
+
+
 流的处理过程中使用parallel()并行化，使用sequential()串行化，
 不能同时使用，以流操作中最后出现的并行/串行调用为整个流的标记（该调用本质上是在内部设置了一个boolean标志）
 
