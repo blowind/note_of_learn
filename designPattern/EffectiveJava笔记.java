@@ -67,7 +67,8 @@ NutritionFacts cocaCola = new NutritionFacts.Builder(240, 8).calories(100).sodiu
 带继承的写法举例：
 // 父类
 public abstract class Pizza {
-	public enum Topping {HAM, MUSHROOM, ONION, PEPPER, SAUSAGE}
+	// 此处把所有可选的配料抽取到基类作共性部分
+	public enum Topping {HAM, MUSHROOM, ONION, PEPPER, SAUSAGE};
 	final Set<Topping> toppings;
 	
 	abstract static class Builder<T extends Builder<T>> {
@@ -78,13 +79,15 @@ public abstract class Pizza {
 			return self();  // 返回子类的buidler，所以此处不能返回Pizza.Builder，要用self()获取
 		}
 		
+		// build()方法做成抽象的，因为子类的必须项可能各有差异
 		abstract Pizza build();
 		// 子类必须复写的用来返回this的方法，因为此处要返回子类类型的实例
-		protected abstract self();
-		
-		Pizza(Builder<?> builder) {
-			toppings = builder.toppings.clone();
-		}
+		protected abstract T self();
+	}
+	
+	Pizza(Builder<?> builder) {
+		// 将构造器的枚举参数内容拷贝到基类的域变量，此处枚举比较特别，一般不同类型的参数都是使用=进行赋值
+		toppings = builder.toppings.clone();
 	}
 }
 // 子类1
@@ -94,7 +97,7 @@ public class NyPizza extends Pizza {
 	
 	public static class Builder extends Pizza.Builder<Builder> {
 		private final Size size;
-		// 必须设置的参数使用构造函数实现
+		// 必须设置的参数使用构造方法设定，添加构造方法
 		public Builder(Size size) {
 			this.size = Objects.requiresNonNull(size);
 		}
@@ -115,7 +118,7 @@ public class NyPizza extends Pizza {
 		size = builder.size;
 	}
 }
-// 子类2
+// 子类2  没有必须添加的元素，则不覆写Builder构造方法
 public class Calzone extends Pizza {
 	private final boolean sauceInside;
 	

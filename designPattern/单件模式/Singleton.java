@@ -12,30 +12,55 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Singleton {
 
 	/********************************       全局引用场景        ************************/
+	
+	
+	/**
+	*  使用公有的静态局部变量，外部调用时直接使用，在类加载时就实例化
+	*  缺点：1、不想作为单例时没法不影响外部调用代码
+	*        2、不支持泛型
+	*  优点：1、final变量在类加载时就初始化，因此外部引用永远返回同一个实例
+	*        2、最简单的实现
+	*/
+	public static final Singleton instance = new Singleton();
+	private Singleton() {}
+	
 
-	/** 饿汉式：使用静态局部变量，在类加载时就实例化
+	/** 饿汉式：使用私有静态局部变量，在类加载时就实例化
 	 *  优点：1、支持多线程并发
+	 *        2、在不想作为单例时可以直接修改getInstance()方法实现而不影响对外API，调用代码不感知
+	 *        3、支持泛型
+	 *        4、可以作为方法引用Singleton::getInstance用于lambda表达式
 	 *  缺点：1、不是懒加载模式（lazy initialization），类加载时就实例化，如果对象很大且使用不多时浪费资源
-	 *       2、有些场景无法使用：譬如 Singleton 实例的创建是依赖参数或者配置文件的，在外部调用getInstance()之前必须配置一些参数
+	 *        2、有些场景无法使用：譬如 Singleton 实例的创建是依赖参数或者配置文件的，在外部调用getInstance()之前必须配置一些参数
 	 *
 	 */
-
 	private static final Singleton instance = new Singleton();  // 声明的同时实例化
-
 	private Singleton() {}
 	public static Singleton getInstance() { return instance; }
+	
 
-	/** 饿汉式：使用静态内部类
+	/** 饿汉式：使用私有静态内部类
 	 *  优点：1、同上，使用JVM本身机制保证线程安全性；
-	 *  	 2、lazy loading，私有内部类对外不可见，仅在getInstance()第一次被调用创建实例
+	 *  	  2、lazy loading，私有内部类对外不可见，仅在getInstance()第一次被调用创建实例
 	 *
 	 */
 	private static class SingletonHolder {
 		private static final Singleton INSTANCE = new Singleton(); // 声明的同时实例化
 	}
-
 	private Singleton() {}
 	public static final Singleton getInstance() { return SingletonHolder.INSTANCE; }
+	
+	
+	/*******  !!!!!!  上述方法实现的单例要序列化时注意事项   !!!!!!    *******/
+	/**
+	*  1、所有的域变量必须声明为transient
+	*  2、必须提供readResolve()方法，具体如下
+	*      private Object readResolve() {
+	*		  return instance;
+	*	   }
+	*  否则在通过网络序列化和反序列化后，本地会存在两个单例实例
+	*/
+	
 
 	/** 饱汉式： 声名狼藉，不建议使用
 	 *  优点：1、双重判空支持多线程并发
@@ -58,7 +83,6 @@ public class Singleton {
 	 *  在 volatile 变量的赋值操作后面会有一个内存屏障（生成的汇编代码上），读操作不会被重排序到内存屏障之前。
 	 */
 	private volatile static Singleton instance = NULL;  // 仅声明不实例化，因此必须声明成volatile
-
 	private Singleton() {}
 	public static Singleton getInstance() {
 		if(instance == null) {
