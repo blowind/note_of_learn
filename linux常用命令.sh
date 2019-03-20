@@ -137,6 +137,14 @@ netstat -a -tcp ##  查看所有激活(-a)的tcp连接情况
 
 dig www.bing.com +trace   ### 查看www.bing.com网址的详细DNS解析信息，需要安装bind-utils包
 
+---- 查看当前机器访问的本地DNS
+cat /etc/resolv.conf
+
+----  清空域名缓存
+service nscd restart
+
+cat /proc/net/netstat  ## 查看TCP的统计信息
+cat /proc/net/snmp     ## 查看当前系统的连接情况
 
 12、iptables
 
@@ -321,6 +329,19 @@ yum install iptables-services   ##  centos 7 需要安装iptables服务
 23、查看linux系统网络流量
 ifstat
 
+cat /proc/sys/net/ipv4/ip_local_port_range  ## 查看当前主机可用的端口范围
+
+cat /proc/sys/net/ipv4/tcp_fin_timeout   ## 设置tcp连接最大保存时间，通过修改文件里的值可以修改等待时间
+
+netstat -n | awk '/^tcp/ {++state[$NF]} END {for(key in state) print key, "\t", state[key]}'  ##  统计当前所有TCP连接各状态的数目
+结果示例：
+LAST_ACK 5 （正在等待处理的请求数）
+SYN_RECV 30  （一个连接请求已经到达，等待确认 ）
+ESTABLISHED 1597 （正常数据传输状态） 
+FIN_WAIT1 51 
+FIN_WAIT2 504 
+TIME_WAIT 1057 （处理完毕，等待超时结束的请求数） 
+
 
 24、查看yum安装的软件包信息
 
@@ -358,7 +379,8 @@ df -T
 30、查看二进制文件
 od -c colors.MYI
 
-
+31、查看磁盘性能参数
+iostat
 
 
                    ##################    例子shell小程序           #############
