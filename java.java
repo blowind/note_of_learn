@@ -10,6 +10,14 @@ Arrays.asList( new int[]{1,2,3,4,5} );
 int[] realArray = new int[]{5,6,7,8,9};
 Arrays.asList(realArray);
 
+// 创建一个newLength大小的新数组，使用System.arraycopy()将原original数组的中的内容都拷贝到新数组，
+// 新数组容量更大时多的部分填null，新数组更小时只截取满足容量的前部
+// 基本数据类型和类型不变的情况，不用指定第三个参数
+Arrays.copyOf(U[] original, int newLength, Class<? extends T[]> newType)
+使用:
+Object[] elements = new Object[10];
+elements = Arrays.copyOf(elements, 2*10);
+
 //  定义一个静态方法的内部匿名类，注意filter的参数必须是final，因为匿名类内部使用来自该类范围之外的对象必须符合这个要求
 public static FilenameFilter filter(final String regex) {
 	return new FilenameFilter() {
@@ -1890,3 +1898,244 @@ private static final Map<String, String> templdateMap = new ConcurrentHashMap<St
 		put("1006", "%s您好，您的订单%s已标记付款，请查询入账并及时处理订单");
 	}
 };
+
+WeakHashMap实现了Map接口，是HashMap的一种实现，他使用弱引用作为内部数据的存储方案，
+WeakHashMap可以作为简单缓存表的解决方案，当系统内存不够的时候，垃圾收集器会自动的清除没有在其他任何地方被引用的键值对。
+如果需要用一张很大的HashMap作为缓存表，那么可以考虑使用WeakHashMap，当键值不存在的时候添加到表中，存在即取出其值。
+所谓的强引用，即赋值给某个变量，所谓弱引用，即除了在WeakHashMap作为key，没有在其他地方被其他变量引用
+public static void main(String[] args) {
+	WeakHashMap<AA, People1> weakMap1 = new WeakHashMap<AA, People1>();
+	String b = new String("louhang1");
+	AA a = new AA(b);
+	BB bb = new BB(a);
+	People1 p1 = new People1(bb);
+	weakMap1.put(p1.getB().getAA(), p1);
+	p1.getB().setAA(null);// 去除对象a的强引用
+	a = null;// 去除对象a的强引用,并让垃圾收集器回收AA对象在堆中的内存
+	System.gc();
+	Iterator i = weakMap1.entrySet().iterator();
+	while (i.hasNext()) {
+	Map.Entry en = (Map.Entry) i.next();
+	System.out.println("weakMap:" + en.getKey() + ":" + en.getValue());  // 没有任何输出结果，因为gc后map中弱引用全部清除，没有元素了
+	}
+}
+class AA {
+  private String a;
+  public AA(String a) {
+    this.a = a;
+  }
+  public String getA() {
+    return a;
+  }
+  public void setA(String a) {
+    this.a = a;
+  }
+}
+class BB {
+  private AA a;
+  public BB(AA a) {
+    this.a = a;
+  }
+  public AA getAA() {
+    return a;
+  }
+  public void setAA(AA a) {
+    this.a = a;
+  }
+}
+class People1 {
+  private BB b;
+  public People1(BB b) {
+    this.b = b;
+  }
+  public BB getB() {
+    return b;
+  }
+  public void setB(BB b) {
+    this.b = b;
+  }
+}
+
+
+/****                         Serializable序列化与反序列化                         ****/
+
+序列化针对的是对象的状态，具体来说就是成员变量，不针对类方法
+a）序列化时，只对对象的状态进行保存，而不管对象的方法；
+b）当一个父类实现序列化，子类自动实现序列化，不需要显式实现Serializable接口；
+c）当一个对象的实例变量引用其他对象，序列化该对象时也把引用对象进行序列化；
+d）并非所有的对象都可以序列化，,至于为什么不可以，有很多原因了,比如：
+1.安全方面的原因，比如一个对象拥有private，public等field，
+   对于一个要传输的对象，比如写到文件，或者进行rmi传输等等，
+   在序列化进行传输的过程中，这个对象的private等域是不受保护的。
+2. 资源分配方面的原因，比如socket，thread类，如果可以序列化，进行传输或者保存，也无法对他们进行重新的资源分配
+
+1、transient指定不被序列化的属性
+2、writeObject()序列化时定制处理相关的属性，一般这些属性都是transient修饰的，否则同一个变量序列化存储两次(定制和非定制)，意义不大
+3、readObject()反序列化时定制恢复相关的属性
+4、writeReplace()在writeObject()之前执行，可以进行一些预处理动作
+5、readResolve()在readObject()之后执行，对反序列化的对象进一步处理，一般在单例模式时用本地单例替换反序列化生成的对象，达到JVM中唯一单例目的
+6、static修饰符修饰的属性不会参与序列化和反序列化，因为是类的属性，不随对象走
+
+// 示例1：一般序列化及使用
+public static void main(String[] args) throws Exception {
+	// Person对象文件路径
+	String path = "e:/person.dat";
+	// 创建一个Person对象
+	Person p1 = new Person("张三", 18);
+
+	// 序列化Person对象
+	ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path));
+	out.writeObject(p1);
+	out.close();
+	
+	Person.level = 999; // 修改static属性，反序列化的值也会随之变化为999
+
+	/**
+	 * 使用new初始化时调用本构造方法，但是反序列化时不调用本构造方法直接生成，
+	 * 此时JVM里存在两个内容一样的Person对象
+	 */
+	// 反序列化
+	ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));
+	Person p2 = (Person) in.readObject();
+	in.close();
+	// 打印反序列化的结果
+	// 正常处理时age是18，transient标记时age是0，
+	// transient标记加writeObject处理但readObject不恢复时age是28
+	System.out.println("p2: " + p2);
+	// 反序列化后对象的内存地址和原来的地址不同，是深拷贝。此处返回 p1 == p2 is: false
+	System.out.println("p1 == p2 is: " + (p1 == p2));
+}
+
+public class Person implements Serializable {
+	private String name;
+
+	/** transient用于序列化中的诸如密码等隐私字段，
+	*   被修饰的变量不会被序列化，不做额外处理时反序列化后值为基本类型默认值，此处age反序列化后得到0
+	*/
+	private transient int age;
+	
+	/* 静态变量属于类，也不会参与序列化与反序列化 */
+	public static int level = 7;
+
+	public Person() {
+		System.out.println("I am constructor");
+	}
+
+	public Person(String name, int age) {
+		System.out.println("I am constructor, too.");
+		this.name = name;
+		this.age = age;
+	}
+
+	/**
+	 * 序列化transient修饰的字段,通过ObjectOutputStream把想要序列化的transient字段写出去。
+	 * 访问控制符必须是private，
+	 * 一定要先执行out.defaultWriteObject();把其他正常序列化的字段内容写入
+	 */
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+		// 此处单独处理age字段，一般是对敏感数据做加密处理，此处是在值上加10扰乱数据
+		out.writeInt(age + 10);
+	}
+
+	/**
+	 * 反序列化transient修饰的字段，通过ObjectInputStream把transient字段读出来
+	 * 访问控制符必须是private，
+	 * 一定要先执行in.defaultReadObject();把其他正常序列化的字段内容读出
+	 *
+	 */
+	private void readObject(ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
+		in.defaultReadObject();
+		// 单独处理age字段，读取出来后要在加密数据上做解密，此处减去用于扰乱的增量10
+		age = in.readInt() - 10;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	@Override
+	public String toString() {
+		return "Person{" +
+				"name='" + name + '\'' +
+				", age=" + age +
+				", level=" + level + "}";
+	}
+}
+
+// 示例2：单例序列化及使用
+public static void main(String[] args) throws IOException,ClassNotFoundException {
+	String path = "e:/singleton.dat";
+	Singleton singleton = Singleton.getInstance();
+
+	// 序列化Singleton对象
+	ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path));
+	out.writeObject(singleton);
+	out.close();
+
+	// 反序列化
+	ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));
+	Singleton Singleton2 = (Singleton) in.readObject();
+	in.close();
+
+	// 反序列化后对象的内存地址和原来的地址相同。
+	System.out.println(singleton == Singleton2);
+	
+	// 执行结果：
+	// writeReplace
+	// writeObject
+	// readObject
+	// readResolve
+	// true
+}
+public class Singleton implements Serializable {
+	private static final Singleton INSTANCE = new Singleton();
+	private Singleton() {}
+
+	public static Singleton getInstance() {
+		return INSTANCE;
+	}
+
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		System.out.println("writeObject");
+	}
+
+	private void readObject(ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
+		System.out.println("readObject");
+	}
+
+	/**
+	 * writeReplace方法会在writeObject方法之前执行。
+	 * ObjectOutputStream会把writeReplace方法返回的对象序列化写出去。
+	 * 注意本方法必须是private
+	 */
+	private Object writeReplace() throws ObjectStreamException {
+		System.out.println("writeReplace");
+		return INSTANCE;
+	}
+
+	/**
+	 * readResolve方法会在readObject方法之后执行，可以再次修改readObject方法返回的对象数据。
+	 * 注意本方法必须是private
+	 */
+	private Object readResolve() throws ObjectStreamException {
+		System.out.println("readResolve");
+		// 本质上是此处用本地的INSTANCE替换了反序列化生成的Singleton对象，这样保证了JVM里面单例的唯一性
+		// 因为所有使用该单例的JVM在反序列化之前已经加载单例CLASS，此时单例的实例已经生成
+		return INSTANCE;
+	}
+}
