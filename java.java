@@ -2139,3 +2139,98 @@ public class Singleton implements Serializable {
 		return INSTANCE;
 	}
 }
+
+/****                        Comparable和Comparator的区别                        ****/
+
+package java.lang;
+public interface Comparable<T> {
+    public int compareTo(T o);
+}
+
+package java.util;
+@FunctionalInterface
+public interface Comparator<T> {
+    int compare(T o1, T o2);
+    boolean equals(Object obj);
+	...
+}
+
+Comparable<T>
+1、内部比较器，由需要比较的类implements该接口并@Override compareTo方法，主要使类有自比较的特性；当然由于泛型T的存在也可以是无关类型的比较，这种使用很少见；
+2、一般有大小关系的值类都建议实现，这样可以直接使用集合的排序功能，或者可以作为有序映射TreeMap的键或者有序集合TreeSet的元素直接使用，扩大使用范围；
+
+Comparator<T>
+1、外部比较器，实现类一般命名为 待比较实体类ClassName + Comparator， compare(T o1, T o2)方法签名限制了只能在同一个类型上比较，equals可以不覆写沿用公共基类Object的
+2、多用于（1）没有实现自比较功能的类 （2）已有比较关系不满足要求的类 （3）特定场景下比较方法需要定制的类
+3、典型的策略模式，不浸入被比较的类从而不影响该类的实现，有点C++泛型算法的意思
+
+public class Student implements Comparable<Student>{
+	private String name;
+	private int age;
+
+	public Student(String name, int age) {
+		super();
+		this.name = name;
+		this.age = age;
+	}
+
+	@Override
+	public String toString() {
+		return "name: " + name + ", age: " + age;
+	}
+
+	@Override
+	public int hashCode() {
+		return name.hashCode() + age*34;
+	}
+
+	@Override  // 名字和年纪一样就认为是同一个人
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Student)) {
+			throw new ClassCastException("类型不匹配");
+		}
+		Student s = (Student)obj;
+		return this.name.equals(s.name) && this.age == age;
+	}
+
+	@Override // 先按年纪排序，再按名字排序，区分大小写
+	public int compareTo(Student o) {
+		int num = new Integer(this.age).compareTo(new Integer(o.age));
+		if(num == 0) {
+			return this.name.compareTo(o.name);
+		}else{
+			return num;
+		}
+	}
+
+	public String getName() {
+		return name;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+}
+// 认为Student自带的比较方法不好或者不适用时自定义比较器
+public class StudentComparator implements Comparator<Student> {
+	@Override  // 先不区分大小写的比较名字，再比较年纪
+	public int compare(Student s1, Student s2) {
+		int num = s1.getName().compareToIgnoreCase(s2.getName());
+		if(num == 0) {
+			return s1.getAge() - s2.getAge();
+		}else{
+			return num;
+		}
+	}
+}
+使用：
+List<Student> listStudent = Arrays.asList(...);
+Collections.sort(listStudent);  // 使用Comparable的比较方法
+Arrays.sort(listStudent);  // 同上，进行数组内部的比较重排
+
+Collections.sort(listStudent, new StudentComparator());  // 使用Comparator的比较方法

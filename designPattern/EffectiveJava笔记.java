@@ -149,3 +149,41 @@ public class Calzone extends Pizza {
 // 使用代码：
 NyPizza pizza = new NyPizza.Builder(SMALL).addTopping(SAUSAGE).addTopping(ONION).build();
 Calzone calzone = new Calzone.Builder().addTopping(HAM).sauceInside().build();
+
+
+覆写equals方法的准则
+1、使用 == 操作符判断比较的是否是自己，若是返回true
+2、使用 instanceof 操作符检查入参类型是否正确，不正确返回false，由于instanceof的左操作数为NULL永远返回false，因此节省了入参判空操作
+   instanceof的右操作数可以是接口类型，用于在实现了同一个接口的类中进行比较
+3、将入参强制转换为正确的类型，一般为instanceof的右操作数
+4、对每个重要的属性进行一一对比
+5、对非float和double的所有基本类型，使用==操作符进行比较，对类类型使用对应的equals方法比较，
+   对float使用Float.compare(float, float)比较，对double使用Double.compare(double, double);
+   对可能为NULL的属性，使用Objects.equals(Object, Object)比较
+6、不要比较存储锁的属性，不要比较通过本地属性组合计算出来的属性除非该属性可以作为对象的特性签名提高性能
+7、永远要保证反身性，对称性，传递性，一致性和非空型的原则
+8、入参类型一定要是Object否则不会Override要覆写的equals方法，一定不允许重载equals方法
+9、使用google的AutoValue开源框架写equals()和hashCode()方法，尽量不要自己手写！！！！！！
+10、覆写equals()方法时一定要覆写hashCode()方法，否则在HashMap和HashSet中使用对象做key时使用equals的对象读取不到存入的值
+11、对于要新增扩展属性的情况，使用组合(策略模式)而不是使用继承(extends)
+
+示例：
+public final class PhoneNumber {
+	private final short areaCode, prefix, lineNum;
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o == this)  return true;
+		if(!(o instanceof PhoneNumber)) return false;
+		PhoneNumber pn = (PhoneNumber)o;
+		return pn.lineNum == lineNum && pn.prefix == prefix && pn.areaCode == areaCode;
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = Short.hashCode(areaCode);
+		result = 31*result + Short.hashCode(prefix);
+		result = 31*result + Short.hashcode(lineNum);
+		return result;
+	}
+}
