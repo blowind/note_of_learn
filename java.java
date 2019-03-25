@@ -1,3 +1,8 @@
+
+// JDK1.7引入的用下划线_分割数字的写法，这些下划线不产生实质作用，仅仅用于增加数字可读性
+public static final double ELECTRON_MASS = 9.109_383_56;
+
+
 Set对每个值都只保存一个对象
 Map允许将某些对象与其他一些对象关联起来形成关联数组
 
@@ -2234,3 +2239,53 @@ Collections.sort(listStudent);  // 使用Comparable的比较方法
 Arrays.sort(listStudent);  // 同上，进行数组内部的比较重排
 
 Collections.sort(listStudent, new StudentComparator());  // 使用Comparator的比较方法
+
+/****                        接口Interface                        ****/
+
+接口本质上是表示一个类还能做什么，是除去类的主要特性（定义类之所以为类的核心内容）之外的附加行为特性(Optional Function)
+// 接口的基本内容
+public interface A {
+	/**  接口内部变量是没什么实质意义的功能，反而暴露了一个永远要维护的对外变量，不建议使用  **/
+	// 在接口中定义成员变量，所有接口中的数据成员自动用public static final修饰，所以必须初始化，本质上都是常量而不是变量
+	String str = "Hello";
+	int FEBRUARY = 2;
+	// 因为成员变量都是static，所以只会在加载时初始化，后续不会再变化，此处VAL_A值在加载后永不改变直到JVM重新运行
+	int VAL_A = (int)(Math.random() * 10);
+
+	// 最原始的接口，所有方法都是虚的，没有实现，JDK1.8之前全部是public abstract
+	void X();
+
+	// 默认方法，JDK1.8加入，只能具体实例对象调用，不允许定义与Object对象的equals、hashCode和toString方法同样签名的默认方法
+	default String defaultMethod(String aa) {
+		System.out.println("default method in interface after JDK1.8");
+		return "ok";
+	}
+
+	// 默认方法，JDK1.8加入，只能所在的接口调用
+	static void staticMethod(String bb) {
+		System.out.println("static method in interface after JDK1.8, get: " + bb);
+	}
+}
+
+// 接口继承和内部接口，待补充
+public interface B extends A, D {
+	String str = "World";  // 会屏蔽接口A里面的同名变量
+	interface C {
+		static void methodOfC() {
+			System.out.println("Method of interface C");
+		}
+	}
+}
+
+public static void main(String[] args) {
+	System.out.println(A.FEBRUARY * 11);
+	System.out.println(A.str);
+	for(int i = 0; i < 10; i++) {
+		System.out.println(A.VAL_A);
+	}
+	A.staticMethod("call");
+	System.out.println(B.str);
+	B.C.methodOfC();
+	// B.staticMethod("call");  // 不能使用子接口调用父接口的静态方法
+
+}
