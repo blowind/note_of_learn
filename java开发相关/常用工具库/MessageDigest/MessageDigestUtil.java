@@ -79,6 +79,28 @@ public class MessageDigestUtil {
 		}
 		return null;
 	}
+	
+	/**
+	 * HMAC是密钥相关的哈希运算消息认证码（Hash-based Message Authentication Code）,HMAC运算利用哈希算法，以一个密钥和一个消息为输入，生成一个消息摘要作为输出
+	 * HMAC是需要一个密钥的。所以，HMAC_SHA1也是需要一个密钥的，而SHA1不需要
+	 * HMAC-SHA1是一种安全的基于加密 hash函数和共享密钥的消息认证协议
+	 * HMAC-SHA1消息认证机制的成功在于一个加密的 hash函数、一个加密的随机密钥和一个安全的密钥交换机制
+	 */
+	public static String hamcSha1(String key, String data) {
+		try{
+			SecretKeySpec keySpec = new SecretKeySpec(key.getBytes("UTF-8"), "HmacSHA1");
+			Mac mac = Mac.getInstance("HmacSHA1");
+			mac.init(keySpec);
+			return Hex.encodeHexString(mac.doFinal(data.getBytes("UTF-8")));
+		}catch (NoSuchAlgorithmException nsae) {
+			nsae.printStackTrace();
+		}catch (UnsupportedEncodingException uee) {
+			uee.printStackTrace();
+		}catch (InvalidKeyException ike) {
+			ike.printStackTrace();
+		}
+		return null;
+	}
 
 	public static void usage(String src) {
 		try{

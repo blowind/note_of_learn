@@ -16,9 +16,11 @@ public class TimelineUtils {
 
 	/* HH标记表示使用24小时制，hh表示使用12小时制 */
 	/* private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); */
-	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-	private static SimpleDateFormat DAY_START_FORMAT = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
-	private static SimpleDateFormat DAY_END_FORMAT = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	private static final SimpleDateFormat DAY_START_FORMAT = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+	private static final SimpleDateFormat DAY_END_FORMAT = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+	// GMT时间常用场景：HTTP头中的时间戳，设置Locale.US保证结果按照英文输出而不是本地默认语言（可能是中文字符）
+	private static final SimpleDateFormat GMT_FORMAT = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
 
 	/**
 	 *  获取今天开始时间
@@ -252,6 +254,18 @@ public class TimelineUtils {
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return sdf.format(cal.getTime());
 	}
+	
+	/**
+	 * 获取GMT格式的时间字符串，
+	 * 结果样例： Thu, 28 Mar 2019 02:42:11 GMT
+	 */
+	public static String nowInGMT() {
+		Calendar cal = Calendar.getInstance();
+		GMT_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
+		return GMT_FORMAT.format(cal.getTime());
+	}
+	
+	
 
 	public static void main(String[] argv) {
 		try{

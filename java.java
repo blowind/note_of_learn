@@ -2289,3 +2289,26 @@ public static void main(String[] args) {
 	// B.staticMethod("call");  // 不能使用子接口调用父接口的静态方法
 
 }
+
+
+/****                        内部类                        ****/
+总共四种内部类：
+1、静态成员类 static member class
+2、非静态成员类  nonstatic member class
+3、匿名类    anonymous class
+4、局部类    local class
+
+外部类的所有成员和函数（包括私有的）都对内部类可见，内部类一般用做外部类的辅助类
+如果内部类不需要操作外部类的属性，一般建议使用静态成员类，不建议使用非静态成员类，
+因为非静态成员类的实例与外部实例绑定，可以获得外部类的引用，操作不当可能导致GC无法回收内存导致内存泄漏
+
+public class Outside() {
+	public class Inside() {
+		// 非静态成员类中通过内部类获取外部类实例对象
+		public Outside getOutside() {
+			return OutSide.this;
+		}
+	}
+}
+Outside o = new Outside();
+o.new Inside();   // 创建非静态成员类对象的一种方式，可行，不推荐
