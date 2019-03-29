@@ -2240,6 +2240,149 @@ Arrays.sort(listStudent);  // 同上，进行数组内部的比较重排
 
 Collections.sort(listStudent, new StudentComparator());  // 使用Comparator的比较方法
 
+/****                        枚举Enum                        ****/
+
+任意枚举类型可用的随机获取器，只包含静态属性和静态方法，做成了完全的工具类
+public class Enums {
+    private static Random rand = new Random(47);
+	// 此方法主要对外，指定具体枚举类型后就获取到该类型的随机值
+    public static <T extends Enum<T>> T random(Class<T> ec) {
+        // 利用所有枚举类都有的getEnumConstants()获得具体枚举的所有实例
+        return random(ec.getEnumConstants());
+    }
+	// 此方法主要对内，应该外部很少会传入一个枚举的全部值。
+    public static <T> T random(T[] values) {
+        return values[rand.nextInt(values.length)];
+    }
+}
+
+使用接口管理枚举，使用Food接口将所有的食物归总，然后按食物的细类继续划分各个枚举，在外部可以使用Food存放所有具体食物
+public enum Course {
+    APPRTIZER(Food.Appetizer.class),
+    MAINCOURSE(Food.MainCourse.class),
+    DESSERT(Food.Dessert.class),
+    COFFEE(Food.Coffee.class);
+
+    private Food[] values;
+    private Course(Class<? extends Food> kind) {
+        values = kind.getEnumConstants();
+    }
+    public Food randomSelection() {
+        return Enums.random(values);
+    }
+
+    public interface Food {
+        enum Appetizer implements Food {
+            SALAD, SOUP, SPRING_ROLLS;
+        }
+        enum MainCourse implements Food {
+            LASAGNE,BURRITO, PAD_THAI,
+            LENTILS, HUMMOUS, VINDALOO;
+        }
+        enum Dessert implements Food {
+            TIRAMISU, GELATO, BLACK_FOREST_CAKE,
+            FRUIT, CREME_CARAMEL;
+        }
+        enum Coffee implements Food {
+            BLACK_COFFEE, DECAF_COFFEE, ESPRESSO,
+            LATTE, CAPPUCCINO, TEA, HERB_TEA;
+        }
+    }
+    
+    public static void main(String[] args) {
+        for(int i = 0; i < 5; i++) {
+            for(Course course : Course.values()) {
+                Food food = course.randomSelection();
+                System.out.println(food);
+            }
+            System.out.println("======");
+        }
+    }
+}
+
+EnumSet和EnumMap使用举例
+public enum AlarmPoints {
+    STAIR1, STAIR2, LOBBY, OFFICE1, OFFICE2, OFFICE3,
+    OFFICE4, BATHROOM, UTILITY, KITCHEN
+}
+// EnumSet
+public class EnumSets {
+	// EnumSet中输出元素的次序完全按照对应存储的enum定义时的次序，与元素add的顺序无关
+    public static void main(String[] args) {
+        EnumSet<AlarmPoints> points = EnumSet.noneOf(AlarmPoints.class);
+        points.add(BATHROOM);
+        System.out.println(points);
+        points.addAll(EnumSet.of(STAIR1, STAIR2, KITCHEN));
+        System.out.println(points);
+        points = EnumSet.allOf(AlarmPoints.class);
+        points.removeAll(EnumSet.of(STAIR1, STAIR2, KITCHEN));
+        System.out.println(points);
+        points.removeAll(EnumSet.range(OFFICE1, OFFICE4));
+        System.out.println(points);
+        points = EnumSet.complementOf(points);
+        System.out.println(points);
+    }
+}
+// EnumMap
+@FunctionalInterface
+interface Command { void action(); }
+public class EnumMaps {
+    public static void main(String[] args) {
+		// 所有的枚举类型实例都会在EnumMap作为键存在，只是没有put操作的话，对应的值都为NULL，强行调用返回空指针异常
+        EnumMap<AlarmPoints, Command> em = new EnumMap<>(AlarmPoints.class);
+        em.put(KITCHEN, () -> System.out.println("Kitchn fire!"));
+        em.put(BATHROOM, () -> System.out.println("Bathroom alert!"));
+        for(Map.Entry<AlarmPoints, Command> e : em.entrySet()) {
+            System.out.print(e.getKey() + ": ");
+            e.getValue().action();
+        }
+    }
+}
+
+通过为enum定义一个或多个abstract方法让每个enum实例定制自己的行为
+public enum ConstantSpecificMethod {
+    DATE_TIME {
+        String getInfo() {
+            return DateFormat.getDateInstance().format(new Date());
+        }
+    },
+    CLASSPATH {
+        String getInfo() {
+            return System.getenv("CLASSPATH");
+        }
+    },
+    VERSION {
+        String getInfo() {
+            return System.getProperty("java.version");
+        }
+    };
+    abstract String getInfo();
+    public static void main(String[] args) {
+        for(ConstantSpecificMethod csm : values()) {
+            System.out.println(csm.getInfo());
+        }
+    }
+}
+定义普通方法并针对部分枚举实例进行覆写
+public enum OverrideConstantSpecific {
+    NUT, BOLT,
+    WASHER {
+        void f() {
+            System.out.println("Overridden method");
+        }
+    };
+    void f() {
+        System.out.println("default behavior");
+    }
+    public static void main(String[] args) {
+        for(OverrideConstantSpecific ocs : values()) {
+            System.out.print(ocs + ": ");
+            ocs.f();
+        }
+    }
+}
+
+
 /****                        接口Interface                        ****/
 
 接口本质上是表示一个类还能做什么，是除去类的主要特性（定义类之所以为类的核心内容）之外的附加行为特性(Optional Function)
