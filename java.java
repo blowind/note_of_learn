@@ -489,6 +489,9 @@ public class Stack<E> {
 		return ret;
 	}
 }
+
+PECS原则：Producer-extends, Consumer-super，即参数作为生产者给本类供给内容时使用extends扩展，作为消费者消费本类的元素时作为super扩展
+返回类型不要使用PECS原则进行扩展，该返回什么类型就返回什么类型，否则等于强制使用代码也使用通配类型
 /* 使用有限通配符提升API的灵活性  PECS原则 */
 public class Stack<E> {
 	//  传入一个集合元素，集合的元素只需要是E的子类型(包括E)就可以放入，放入的集合是生产者
@@ -510,6 +513,9 @@ interface UnaryFunction<T> { T apply(T arg); }
 private static UnaryFunction<Object> IDENTITY_FUNCTION = new UnaryFunction<Object>() { 
 																	public Object apply(Object arg) { return arg; }
 };
+// JDK1.8之后提升的lambda表达式写法，与上面的写法效果完全一致
+private static UnaryFunction<Object> IDENTITY_FUNCTION = (t) -> t;
+
 @SuppressWarnings("unchecked")
 // 泛型静态方法作为类型，调用其静态方法apply返回入参本身，同时由于类型推断，变量声明时的类型限制了传入参数的类型
 public static <T> UnaryFunction<T> identityFunction() {  
@@ -548,9 +554,55 @@ public static <T extends Comparable<? super T>> T max(List<? extends T> list) {
 }
 // 交换方法的两种泛型写法，第一种使用类型参数，第二种使用通配符
 public static <E> void swap(List<E> list, int i, int j) { list.set(i, list.set(j, list.get(i))); }
-// 这种方法需要包装上一种写法来运行，因为 List<?>类型不能添加除null之外的元素
+// 这种方法需要包装上一种写法来运行，因为 List<?>类型不能添加除null之外的元素，及仅list.add(null)不会报编译错误
+// 此处的情况使用?的方法更好，因为他接受任何List类型，选取原则：如果类型在一个方法声明中仅出现一次，使用?替换那个类型E
 public static void swap(List<?> list, int i, int j); 
 
+实际实现：
+public Swap {
+	// 对外接口简洁，不需要根据每个具体的E声明一个接口，使用此处唯一对外通配的接口给用户代码使用
+	public static void swap(List<?> list, int i, int j) {
+		// list.set(i, list.set(j, list.get(i)));  报错，因为List<?>类型只能放null元素，放入其他元素都报错
+		swapHelper(list, i, j);
+	}
+	
+	// 内部封装了泛型E的方法类做具体实现，克服List<?>元素放入的限制
+	private static <E> void swapHelper(List<E> list, int i, int j) {
+		list.set(i, list.set(j, list.get(i)));
+	}
+}
+
+// 类型安全的多态容器，这类容器不能传入泛型类型，因为不存在List<String>.class和List<Integer>.class的写法，仅有List.class，而该类型不建议使用
+public class Favorites {
+	// Map中的key是通配的，此处Class<?>编译时指代各种具体的Class<T>
+	// Map的value都是Object，丢失了值的具体类型信息，但通过与键的关联找回
+	private Map<Class<?>, Object> favorites = new HashMap<>();
+
+	public <T> void putFavorite(Class<T> type, T instance) {
+		// 此处的type.cast动态类型转换保证运行时类型安全，保证在外部用户代码错误使用时第一时间抛异常
+		favorites.put(Objects.requireNonNull(type), type.cast(instance));
+	}
+
+	public <T> T getFavorite(Class<T> type) {
+		// Map中存储的是Object类型，所以此处要做动态类型转换
+		return type.cast(favorites.get(type));
+	}
+}
+
+// 对Class<?>类型的数据，需要在参数为Class<? extends AAA>函数中使用的用法举例：
+// 使用asSubclass()方法将参数转为AAA子类而不产生编译告警，Class类都有asSubclass方法
+// 此处演示用的getAnnotation()方法，查看了下JDK1.8的源码并没有要求Class<? extends Annotation>参数，此处转换纯属多余，仅演示用
+static Annotation getAnnotation(AnnotatedElement element, String annotationTypeName) {
+	Class<?> annotationType = null;  // 无限制类型标识符
+	try{
+		annotationType = Class.forName(annotationTypeName);
+	}catch (ClassNotFoundException cnfe) {
+		throw new IllegalArgumentException(cnfe);
+	}
+	// 通过asSubclass()方法将Class<?>类型的annotationType转化为Class<? extends Annotation>的结果返回
+	// 仅在annotationType确实是Annotation的子类时转换成功，否则抛出ClassCastException异常
+	return element.getAnnotation(annotationType.asSubclass(Annotation.class));
+}
 
 
 /****                                               类的泛型                                        ****/
@@ -1026,6 +1078,11 @@ public class SimpleDynamicProxy {
 
 		
 /****                                               多线程                                        ****/
+多线程下使用的随机数生成器
+Random r = ThreadLocalRandom.current();
+r.nextInt(10);
+
+
 1、Java的线程锁是可重入锁，即对象A调用synchronized方法A的时候，在A内部也可以同时调用synchronized方法B，锁计数会加1，如果不可重入，则会造成死锁，同时可重入锁在继承性环境同样成立，即子类synchronized方法A可以调用父类synchronized方法B
 2、出现异常时，当前持有的锁会自动释放
 3、synchronized 标记不具有继承性，子类中override的方法必须依然加 synchronized 标记
