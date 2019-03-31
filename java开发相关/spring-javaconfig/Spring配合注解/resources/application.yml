@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: annotation-elastic-job
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password:
+    url: mysql://localhost:3306/mybatis?autoReconnect=true&failOverReadOnly=false&tinyInt1isBit=false&zeroDateTimeBehavior=round
+
+regCenter:
+  zookeeperList: 47.75.50.16:2181
+  namespace: my-elastic-job
