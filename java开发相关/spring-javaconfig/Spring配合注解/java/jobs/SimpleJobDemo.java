@@ -11,6 +11,12 @@ import java.util.Date;
 /**
  * @ClassName: SimpleJobDemo
  * @Description:
+ * 查看zookeeper上存活的服务节点的命令：
+ *  ./zkCli.sh -server 127.0.0.1:2181
+ *  ls /my-elastic-job/com.zxf.annotationjob.jobs.SimpleJobDemo/instances
+ *  路径一般是：
+ *  ls /[namespace]/[classPath]/instances
+ *
  * @Author: ZhangXuefeng
  * @Date: 2019/3/31 0:08
  * @Version: 1.0

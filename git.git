@@ -71,6 +71,34 @@ git push origin exchagne_au        ## 将新建的分支 exchagne_au 推送到�
 git branch --set-upstream-to=origin/exchange_au     ## 将本地的 exchange_au 关联要远端的 exchange_au
 git pull
 
+
+【gitlab创建仓库并在本地填充内容】
+git clone http://gitlab.xxxx.com/xxxx_java/xxx-center.git
+cd xxx-center
+touch README.md
+git add README.md
+git commit -m "add README"
+git push -u origin master
+
+【已写好代码但未绑定git，推到指定git仓库的方法】
+cd existing_folder
+git init
+git remote add origin http://gitlab.xxx.com/xxxx_java/xxx-center.git
+git add .
+git commit -m "Initial commit"
+### git判断remote仓库和本地仓库没有共同的commit所以不让提交，认为是写错了origin，
+### 此时先pull远程仓库已有内容，使用--allow-unrelated-histories告诉git允许不相关历史合并
+git pull origin master --allow-unrelated-histories    
+git push -u origin master
+
+【已有git仓库，将代码传到新仓库】
+cd existing_repo
+git remote rename origin old-origin
+git remote add origin http://gitlab.xxxx.com/xxxx_java/xxx-center.git
+git push -u origin --all
+git push -u origin --tags
+
+
 【查看分支创建信息】
 git reflog show --date=iso branch_name
 

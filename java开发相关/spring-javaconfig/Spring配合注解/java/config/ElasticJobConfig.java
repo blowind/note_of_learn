@@ -4,8 +4,8 @@ import com.dangdang.ddframe.job.api.simple.SimpleJob;
 import com.dangdang.ddframe.job.config.JobCoreConfiguration;
 import com.dangdang.ddframe.job.config.JobTypeConfiguration;
 import com.dangdang.ddframe.job.config.simple.SimpleJobConfiguration;
+import com.dangdang.ddframe.job.event.JobEventConfiguration;
 import com.dangdang.ddframe.job.event.rdb.JobEventRdbConfiguration;
-import com.dangdang.ddframe.job.executor.handler.impl.DefaultExecutorServiceHandler;
 import com.dangdang.ddframe.job.lite.config.LiteJobConfiguration;
 import com.dangdang.ddframe.job.lite.spring.api.SpringJobScheduler;
 import com.dangdang.ddframe.job.reg.zookeeper.ZookeeperRegistryCenter;
@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 import java.util.Map;
 
 /**
@@ -42,9 +43,12 @@ public class ElasticJobConfig {
     @Autowired
     private ZookeeperRegistryCenter registryCenter;
 
-    @PostConstruct
-    public void initAllElasticJob() {
-        Map<String, SimpleJob> simpleMap = context.getBeansOfType(SimpleJob.class);
+	@Autowired
+	private DataSource dataSource;
+
+	@PostConstruct
+	public void initAllElasticJob() {
+		Map<String, SimpleJob> simpleMap = context.getBeansOfType(SimpleJob.class);
 
         for(Map.Entry<String, SimpleJob> entry : simpleMap.entrySet()) {
             SimpleJob bean = entry.getValue();
@@ -52,24 +56,42 @@ public class ElasticJobConfig {
                 throw new RuntimeException(bean.getClass().getSimpleName() + " has no ElasticSimpleJob annotation !");
             }
 
-            Class<?> clazz = bean.getClass();
-            ElasticSimpleJob anno = clazz.getAnnotation(ElasticSimpleJob.class);
-            JobCoreConfiguration coreConfig = JobCoreConfiguration.newBuilder(
-                    clazz.getName(), anno.cron(), anno.shardingTotalCount())
-                    .shardingItemParameters(anno.shardingItemParameters())
-                    .jobParameter(anno.jobParameter())
-                    .description(anno.description())
-                    .build();
+			Class<?> clazz = bean.getClass();
+
+			ElasticSimpleJob anno = clazz.getAnnotation(ElasticSimpleJob.class);
+			JobCoreConfiguration coreConfig = JobCoreConfiguration.newBuilder(
+					clazz.getName(), anno.cron(), anno.shardingTotalCount())
+					.shardingItemParameters(anno.shardingItemParameters())
+					.jobParameter(anno.jobParameter())
+					.failover(anno.failover())
+					.misfire(anno.misfire())
+					.description(anno.description())
+					.build();
 
             JobTypeConfiguration typeConfig = new SimpleJobConfiguration(coreConfig,
                     clazz.getCanonicalName());
 
-            LiteJobConfiguration liteConfig = LiteJobConfiguration.newBuilder(typeConfig)
-                                                .overwrite(anno.overwrite())
-                                                .build();
+			LiteJobConfiguration.Builder liteBuilder = LiteJobConfiguration.newBuilder(typeConfig)
+					.overwrite(anno.overwrite());
+			if(anno.monitorPort() > 0) {
+				liteBuilder.monitorPort(anno.monitorPort());
+			}
+			LiteJobConfiguration liteConfig = liteBuilder.build();
 
-            SpringJobScheduler scheduler = new SpringJobScheduler(bean, registryCenter, liteConfig, new LogElasticJobListener());
-            scheduler.init();
-        }
-    }
+			SpringJobScheduler scheduler;
+			if(anno.logJobStatusInDB()) {
+				/*  JobEventConfiguration用于配置数据库事件追踪功能  */
+				if(dataSource == null) {
+					throw new RuntimeException("No dataSource to log event when open the log job event attribute");
+				}
+				JobEventConfiguration eventConfig = new JobEventRdbConfiguration(dataSource);
+				scheduler = new SpringJobScheduler(bean, registryCenter, liteConfig, eventConfig, new LogElasticJobListener());
+			}else{
+				scheduler = new SpringJobScheduler(bean, registryCenter, liteConfig);
+				//, new LogElasticJobListener()
+			}
+			scheduler.init();
+
+		}
+	}
 }

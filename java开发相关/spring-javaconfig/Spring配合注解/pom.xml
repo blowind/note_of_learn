@@ -54,7 +54,7 @@
             <version>5.1.47</version>
         </dependency>
 
-        <!--druid数据库连接池-->
+        <!--druid数据库连接池，仅仅在开启job状态记录到数据库功能时需要，其他时候不需要数据库连接池-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>

@@ -136,6 +136,8 @@
                 </executions>
             </plugin>
 
+			
+			<!-- 运行带tomcat的jar包的命令是 java -jar xxxx.jar 不要漏了 -jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
