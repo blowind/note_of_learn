@@ -9,10 +9,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.File;
+import java.io.*;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.zxf.springmvc.util.Base64Util.gzipCompress;
+import static com.zxf.springmvc.util.Base64Util.gzipUncompress;
+import static com.zxf.springmvc.util.Base64Util.loadFile;
 
 /**
  * @ClassName: FileUploadController
@@ -94,5 +100,93 @@ public class FileUploadController {
         result.put("success", success);
         result.put("msg", msg);
         return result;
+    }
+
+    @GetMapping("/download")
+    public String getButtonPage() {
+        return "download";
+    }
+
+    /**
+     * 返回json格式的二进制文件（通过BASE64编码二进制文件）
+     */
+    @GetMapping("/picture")
+    @ResponseBody
+    public Map<String, Object> getPicture() {
+        try{
+            String filePath = "E:\\crisis_intervention.jpg";
+            String filename = filePath.substring(filePath.lastIndexOf("\\") + 1);
+            String fileInBASE64 = new String(Base64.getMimeEncoder().encode(loadFile(filePath)), "utf-8");
+
+            Map<String, Object> ret = new HashMap<>();
+            ret.put("code", 0);
+            ret.put("filename", filename);
+            ret.put("fileInBase64", fileInBASE64);
+            return ret;
+        }catch (UnsupportedEncodingException uee) {
+            uee.printStackTrace();
+        }
+        return null;
+    }
+
+    @GetMapping("/txt")
+    @ResponseBody
+    public Map<String, Object> getTxt() {
+        try{
+            String filePath = "E:\\abc.txt";
+            String filename = filePath.substring(filePath.lastIndexOf("\\") + 1);
+            String fileInBASE64 = new String(Base64.getMimeEncoder().encode(loadFile(filePath)), "utf-8");
+
+            Map<String, Object> ret = new HashMap<>();
+            ret.put("code", 0);
+            ret.put("filename", filename);
+            ret.put("fileInBase64", fileInBASE64);
+            return ret;
+        }catch (UnsupportedEncodingException uee) {
+            uee.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 一般来说BASE64编码是为了任意编码的内容转成ASCII码字符便于网络传输，
+     * 因此gzip压缩一定在Base64编码之前，否则gzip压缩后可能又破坏了Base64的成果
+     */
+    @GetMapping("/string")
+    @ResponseBody
+    public Map<String, Object> getString() {
+        try{
+            String text = new String(Base64.getMimeEncoder().encode(gzipCompress("发送的新内容".getBytes())), "utf-8");
+            Map<String, Object> ret = new HashMap<>();
+            ret.put("code", 0);
+            ret.put("text", text);
+            return ret;
+        }catch (UnsupportedEncodingException uee) {
+            uee.printStackTrace();
+        }
+        return null;
+    }
+
+    @PostMapping("/gzipData")
+    @ResponseBody
+    public String getGzipData(HttpServletRequest request, HttpServletResponse res) {
+        try{
+//            String contentEncoding = request.getHeader("Content-Encoding");
+//            if(contentEncoding != null && contentEncoding.equals("customedGzip")) {
+                BufferedReader reader = request.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+                byte[] bytes = sb.toString().getBytes("UTF-8");
+                String params = new String(gzipUncompress(bytes), "UTF-8");
+                System.out.println(params);
+                return "ok";
+//            }
+        }catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return "error";
     }
 }
