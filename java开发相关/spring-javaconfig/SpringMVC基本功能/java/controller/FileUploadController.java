@@ -1,5 +1,6 @@
 package com.zxf.springmvc.controller;
 
+import com.zxf.springmvc.util.HttpHeaderUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -103,7 +104,8 @@ public class FileUploadController {
     }
 
     @GetMapping("/download")
-    public String getButtonPage() {
+    public String getButtonPage(HttpServletRequest request) {
+        System.out.println(HttpHeaderUtil.getIp(request));
         return "download";
     }
 
