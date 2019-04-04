@@ -295,6 +295,17 @@
 		</selectKey>
 		insert into t_role(id, role_name, note) values (#{id}, #{roleName}, #{note})
 	</insert>
+	
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterMap="java.util.Map">
+        insert into deposit_quality_cfg
+        (cfg_type, scope_start, scope_end, calc_type, fixed_amount, percentage, create_time, update_time)
+        values
+        <foreach item="toAdd" collection="toAdds" separator="," >
+            (#{toAdd.cfgType}, #{toAdd.scopeStart}, #{toAdd.scopeEnd}, #{toAdd.calcType},
+             #{toAdd.fixedAmount}, #{toAdd.percentage}, #{toAdd.createTime}, #{toAdd.updateTime})
+        </foreach>
+    </insert>
 
 
 	<!-- 注意此处的类型string是在xml配置文件的typeHandler中定义的映射类型，此处显示其应用
@@ -458,6 +469,66 @@
     	</set>
     	where role_no = #{roleNo}
     </update>
+	
+	<!-- 批量更新数据，方案一：通过多个update语句实现 -->
+	<update id="updateBatch"  parameterType="java.util.List">  
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update course
+			<set>
+				name=${item.name}
+			</set>
+			where id = ${item.id}
+		</foreach>      
+	</update>
+	
+	<!-- 批量更新数据，方案二：通过case when实现 -->
+	<update id="updateBatch" parameterType="list">
+		update course
+		<!-- 每个end后面都有,所以要通过trim去最后多余的, -->
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="name = case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.name != null">
+						when id=#{item.id} then #{item.name}
+                    </if>
+                </foreach>
+            </trim>
+			<trim prefix="title =case" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="item.title != null">
+						when id=#{item.id} then #{item.title}
+					</if>
+				</foreach>
+			</trim>
+		</trim>
+		where
+		<foreach collection="list" separator="or" item="item" index="index">
+            id=#{item.id}
+        </foreach>
+	</update>
+	
+	<!-- 批量更新数据，方案三：通过case when实现，加入非空判断有条件插入，
+	     注意：没有第二个if时，collection中没有符合条件的数据时，会产生case end, 异常语句 -->
+	<update id="updateBatch" parameterType="java.util.List">
+        update mydata_table
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="status = case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                     <if test="item.status !=null and item.status != -1">
+                         when id=#{item.id} then #{item.status}
+                     </if>
+                     <if test="item.status == null or item.status == -1">
+                         when id=#{item.id} then mydata_table.status    <!-- 原数据 -->
+                     </if>
+                 </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id, jdbcType=BIGINT}
+        </foreach>
+	</update>
+	
 
     <!-- foreach进行集合遍历，一般处理数据、List和Set接口的集合，多用于SQL中的in关键字 -->
    	<select id="findUserBySex" resultType="user">
