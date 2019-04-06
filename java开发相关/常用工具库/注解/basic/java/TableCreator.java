@@ -1,12 +1,11 @@
 package com.zxf.run;
 
-import com.zxf.annotation.Constraints;
-import com.zxf.annotation.DBTable;
-import com.zxf.annotation.SQLInteger;
-import com.zxf.annotation.SQLString;
+import com.zxf.annotation.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +76,49 @@ public class TableCreator {
 			// 去掉最后一次尾部多加的,符号并结尾
 			String tableCreate = createCommand.substring(0, createCommand.length() - 1) + "\n);";
 			System.out.println("Table Creation SQL for " + className + " is :\n" + tableCreate);
+
+			int tests = 0;
+			int passed = 0;
+			for(Method m : cl.getDeclaredMethods()) {
+				if(m.isAnnotationPresent(Test.class)) {
+					tests++;
+					try{
+						m.invoke(null);
+						passed++;
+					}catch (InvocationTargetException wrappedExc) {
+						/* 被执行的函数内部抛出的异常，被InvocationTargetException捕获，通过getCause()获取 */
+						Throwable exc = wrappedExc.getCause();
+						System.out.println(m + " failed: " + exc);
+					}catch (Exception exc) {
+						/* 不正确的使用@Test注解，则抛出非InvocationTargetException异常，
+						   比如示例将@Test注解应用在非静态函数上，由于m.invoke(null);的用法不是非静态函数用法，
+						   因此在执行这个语句时抛出异常，
+						   类似的还有用在带参数的静态函数上，用在没有访问权限的函数上
+						   这些异常都是m.invoke(null)这个调用语句本身导致的 */
+						System.out.println("Invalid @Test: " + m);
+					}
+				}
+
+				if(m.isAnnotationPresent(ExceptionTest.class)) {
+					tests++;
+					try{
+						m.invoke(null);
+						/* 未抛出指定异常的处理代码放在此处，运行到这里时执行的函数未抛出任何异常 */
+						System.out.println("Test %s failed: no exception %n" + m);
+					}catch (InvocationTargetException wrappedEx) {
+						Throwable exc = wrappedEx.getCause();
+						Class<? extends Throwable> excType = m.getAnnotation(ExceptionTest.class).value();
+						if(excType.isInstance(exc)) {
+							passed++;
+						}else{
+							System.out.printf("Test %s failed: expected %s, got %s%n", m, excType.getName(), exc);
+						}
+					}catch (Exception exc) {
+						System.out.println("Invalid @Test: " + m);
+					}
+				}
+			}
+			System.out.printf("Passed: %d, Failed: %d%n", passed, tests - passed);
 		}
 	}
 

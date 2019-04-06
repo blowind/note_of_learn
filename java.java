@@ -2357,6 +2357,8 @@ public enum Course {
     }
 }
 
+使用接口中带枚举的方式，可以将export到外部的门面接口里面，限定该接口专用的部分枚举的作用范围，比如常用的Facade中带相关枚举
+
 EnumSet和EnumMap使用举例
 public enum AlarmPoints {
     STAIR1, STAIR2, LOBBY, OFFICE1, OFFICE2, OFFICE3,
@@ -2395,6 +2397,71 @@ public class EnumMaps {
         }
     }
 }
+
+
+/*根据花园里所有植物统计各种生命周期的植物有哪些*/	
+public class Plant {
+	enum LifeCycle {ANNUAL, PERENNIAL, BIENNIAL}
+
+	final String name;
+	final LifeCycle lifeCycle;
+
+	Plant(String name, LifeCycle lifeCycle) {
+		this.name = name;
+		this.lifeCycle = lifeCycle;
+	}
+
+	public static void main(String[] args) {
+		/* 方案一：生成Map和Set统计结构，使用for循环遍历放入数据 */
+		Map<LifeCycle, Set<Plant>> plantsByLifeCycle = new EnumMap<>(Plant.LifeCycle.class);
+		for(Plant.LifeCycle lc : Plant.LifeCycle.values()) {
+			plantsByLifeCycle.put(lc, new HashSet<>());
+		}
+		for(Plant p : garden) {
+			plantsByLifeCycle.get(p.lifeCycle).addAll(p);
+		}
+		/* 方案二：使用stream，但此处使用普通Map，效率比较低 */
+		Arrays.stream(garden).collect(groupingBy(p -> p.lifeCycle));
+		/* 方案三：使用stream并指定使用EnumMap，效率最高 */
+		Arrays.stream(garden).collect(groupingBy(p -> p.lifeCycle,
+				() -> new EnumMap<>(LifeCycle.class), toSet()));
+	}
+}
+
+/* 对于多个常量级联的多重数组形式的映射，用EnumMap实现比用多维数组实现更安全易扩展（直接新枚举值，不需要修改数组映射处理的其他代码）
+   此处实现一个固液气三态转换的名称映射表 */
+public enum Phase {
+	SOLID, LIQUID, GAS;
+
+	public enum Transition {
+		MELT(SOLID, LIQUID),
+		FREEZE(LIQUID, SOLID),
+		BOIL(LIQUID, GAS),
+		CONDENSE(GAS, LIQUID),
+		SUBLIME(SOLID, GAS),
+		DEPOSIT(GAS, SOLID);
+
+		private final Phase from;
+		private final Phase to;
+
+		Transition(Phase from, Phase to) {
+			this.from = from;
+			this.to = to;
+		}
+
+		private static final Map<Phase, Map<Phase, Transition>> m =
+			Stream.of(values()).collect(
+				groupingBy(t -> t.from, ()->new EnumMap<>(Phase.class),
+						// 此处(x, y)->y无意义，只是为了满足toMap的参数要求
+						toMap(t->t.to, t->t, (x, y)->y, ()->new EnumMap<>(Phase.class))));
+
+		public static Transition from(Phase from, Phase to) {
+			return m.get(from).get(to);
+		}
+	}
+}
+
+
 
 通过为enum定义一个或多个abstract方法让每个enum实例定制自己的行为
 public enum ConstantSpecificMethod {
