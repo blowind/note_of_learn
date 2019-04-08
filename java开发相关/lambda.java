@@ -470,7 +470,21 @@ try(Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCha
 					   .distinct()          // 删除重复项
 					   .count();       // 统计数值
 }catch(IOException e) {}
-	
+
+// 统计字典中所有的变位词（字母完全相同但位置不同的单词）并将其归类到List，输出那些List元素个数超过指定值的List
+Path dictionary = Paths.get(args[0]);
+final int minGroupSize = Integer.parseInt(args[1]);
+try(Stream<String> words = Files.lines(dictionary)) {
+	words.collect(groupingBy(word -> alphabetize(word))) // 生成字母序为key的Map<String, List<String>>结果
+		.values().stream()  // 获取map中的所有value并生成stream
+		.filter(group -> group.size() >= minGroupSize)  // 过滤元素个数小于指定书目的List
+		.forEach(g -> System.out.println(g.size() + ":" + g));  // 打印符合要求的List
+}
+private static String alphabetize(String s) {  // 将字符串里的所有字符重组成字母表顺序的字符串输出
+	char[] a = s.toCharArray();
+	Arrays.sort(a);
+	return new String(a);
+}
 	
 /*********************************          流处理/过滤方法示例          *****************************************/
 	

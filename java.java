@@ -2505,6 +2505,53 @@ public enum OverrideConstantSpecific {
         }
     }
 }
+/* 定义一个计算一周中每日工资的枚举，其中工作日和双休的加班工资计算公式不同
+   如果每个枚举值直接附上加班工资计算函数，重复样板太多；
+   通过switch函数综合处理则添加新枚举值时会忘记补充该枚举的case；
+   此处通过内部枚举抽取共性方法达到消除重复代码同时在添加新枚举值不忘记指定处理函数的效果 */
+public enum PayrollDay {
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY(PayType.WEEKEND),
+    SUNDAY(PayType.WEEKEND);
+
+    private final PayType payType;
+    PayrollDay(PayType payType) {
+        this.payType = payType;
+    }
+    PayrollDay() {
+        this(PayType.WEEKDAY);
+    }
+
+    int pay(int minutesWorked, int payRate) {
+        return payType.pay(minutesWorked, payRate);
+    }
+
+    private enum PayType {
+        WEEKDAY {
+            int overtimePay(int minsWorked, int payRate) {
+                return minsWorked <= MINS_PER_SHIFT ? 0 :
+                        (minsWorked - MINS_PER_SHIFT) * payRate / 2;
+            }
+        },
+        WEEKEND {
+            int overtimePay(int minsWorked, int payRate) {
+                return minsWorked * payRate / 2;
+            }
+        };
+
+        abstract int overtimePay(int mins, int payRate);
+        private static final int MINS_PER_SHIFT = 8*60;
+
+        int pay(int minsWorked, int payRate) {
+            int basePay = minsWorked * payRate;
+            return basePay + overtimePay(minsWorked, payRate);
+        }
+    }
+}
 
 
 /****                        接口Interface                        ****/
@@ -2562,7 +2609,7 @@ public static void main(String[] args) {
 总共四种内部类：
 1、静态成员类 static member class
 2、非静态成员类  nonstatic member class
-3、匿名类    anonymous class
+3、匿名类    anonymous class  // 匿名类里面的this指向匿名对象，而lambda表达式中的this指向包裹lambda的对象
 4、局部类    local class
 
 外部类的所有成员和函数（包括私有的）都对内部类可见，内部类一般用做外部类的辅助类
