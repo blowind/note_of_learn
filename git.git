@@ -36,6 +36,12 @@ git checkout -b feature_name        ## 切换本地到 feature_name 分支
 git rev-parse HEAD           ##  显示最后一次修改的SHA1值
 git rev-parse --short HEAD   ##  显示最后一次修改的SHA1值的短码
 
+git fetch origin dev         ##  从远程dev分支获取最新版本到本地dev，不会自动merge
+git log -p dev..origin/dev   ##  比较本地的dev分支和origin/dev分支的差别
+git merge origin/dev         ##  将远程dev分支的代码合并到本地dev
+
+git pull origin dev          ##  从远程获取origin/dev最新版本并merge到本地，等价于git fetch加git merge
+
 【将分支dev的部分修改合并到分支master】
 1、查看dev上要合并的那次修改的<commit-hashId>
 2、git checkout master，不做其他处理，保证本地仓库master内容与线上一致
@@ -102,6 +108,16 @@ git push -u origin --tags
 【查看分支创建信息】
 git reflog show --date=iso branch_name
 
+【本地内容与远程分支冲突时的合并】
+git stash
+git pull
+git unstash
+
+## IDEA中操作
+git -> Stash Changes ->  输入Message标记本次Stash  ->Create Stash
+git pull
+git -> Unstash Changes -> 指定冲突文件中留下的部分apply
+
 
 【删除git分支】
 
@@ -119,9 +135,22 @@ git branch -d exchange_au                      ## 删除本地的exchange_au分�
 
 【删除提交到本地的修改】
 git checkout .          #本地所有修改的。没有的提交的，都返回到原来的状态
-git stash               #把所有没有提交的修改暂存到stash里面。可用git stash pop回复。
+git stash               #把所有没有提交的修改暂存到stash里面。可用git stash pop恢复。
 git reset --hard HASH   #返回到某个节点，不保留修改。
 git reset --soft HASH   #返回到某个节点。保留修改
+
+
+【You have not concluded your merge (MERGE_HEAD exists) 保留本地修改的处理】
+git merge --abort
+git reset --merge
+git commit .
+git pull
+
+【You have not concluded your merge (MERGE_HEAD exists) 下载线上代码,抛弃本地的修改】
+git fetch --all
+git reset --hard origin/master
+git fetch         // 从远程分支获取最新版本到本地本分支，不会自动merge
+
 
 
 【提示出错信息：fatal: remote origin already exists.】

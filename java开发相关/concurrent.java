@@ -38,16 +38,18 @@ public class LoggingWidget extends Widget {
 }
 
 
-
-
 加锁机制既可以确保可见性又可以确保原子性，而volatile变量只能确保可见性。
-
-
 
 当且仅当满足以下所有条件时，才应该使用volatile变量：
 1、对变玲啊的写入操作不依赖变量的当前值，或者能确保只有单个线程更新变量的值；
 2、变量不会与其他状态变量一起纳入不变性条件中；
 3、在访问变量时不需要加锁。
+
+
+线程安全的容器类：
+Hashtable(不建议使用), SynchronizedMap<K,V>, ConcurrentMap
+Vector(不建议使用), SynchronizedList<E>, SynchronizedSet<E>, CopyOnWriteArrayList, CopyOnWriteArraySet,
+BlockingDeque<E>, ConcurrentLinkedDeque<E>
 
 
 多线程下使用的随机数生成器
@@ -298,8 +300,9 @@ void createMap(Thread t, T firstValue) {
 2、通过set(T value)方法设置值，被设置的值不要在其他地方被引用
 
 【使用限制】
-每个ThreadLocal对象只能通过set(value)/get()存储一个值，
+每个ThreadLocal对象只能通过set(value)/get()存储一个对象，
 而且由于ThreadLocalMap保存在对应线程的threadLocals变量里，每个线程实际上也只能有一个ThreadLocalMap（ThreadLocal实际上是ThreadLocalMap的封装工具类，本身不存储数据）
+需要存储较多数据时，定义一个数据类并生成对象后放入ThreadLocal。
 
 
 【用法举例】
@@ -706,7 +709,6 @@ public class ThisEscape {
 	}
 }
 解决方法：使用私有构造函数配合工厂方法返回类实例
-
 public class SafeListener {
 	private final EventListener listener;
 	/* 私有构造函数，对外封闭了构造过程 */

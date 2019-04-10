@@ -2027,6 +2027,15 @@ public static void main(String[] args) {
 2、用static的变量引用匿名内部类的实例或将匿名内部类的实例化操作放到外部类的静态方法中
 所有的静态上下文，都不会持有外部对象的this隐式引用，毕竟静态对象/方法是可以通过类直接调用的，这时候都不存在外部类对象
 
+// 非静态成员类的初始化
+public class A {
+	public class B {
+	}
+}
+A a = new A();
+A.B ab = a.new B();  // 必须使用外部类的实例来new一个内部类实例，因为非静态内部类实例有归属问题
+
+
 
 /* 匿名内部类引用外部对象的示例及分析 */
 public class Test {
