@@ -24,6 +24,43 @@
 重入的一种实现方式是为每个所关联一个获取计数值和所有者线程引用，多次重入时计数值递增，线程退出同步代码块时计数器递减，减到0时释放锁。
 
 
+/****                                          Java锁升级机制                                    ****/
+
+【偏向锁】
+所谓的偏向锁是指在对象实例的Mark Word（说白了就是对象内存中的开头几个字节保留的信息，如果把一个对象序列化后明显可以看见开头的这些信息），
+为了在线程竞争不激烈的情况下，减少加锁及解锁的性能损耗（轻量级锁涉及多次CAS操作）在Mark Word中有保存着上次使用这个对象锁的线程ID信息，
+如果这个线程再次请求这个对象锁，那么只需要读取该对象上的Mark Word的偏向锁信息（也就是线程id）跟线程本身的id进行对比，
+如果是同一个id就直接认为该id获得锁成功，而不需要再进行真正的加解锁操作。
+其实说白了就是你上次来过了，这次又来，并且在这两次之间没有其他人来过，对于这个线程来说，锁对象的资源随便用都是安全的。
+这是用缓存来换取性能的做法，不过偏向锁在锁竞争不激烈的情景下使用才能获取比较高的效率。当使用CAS竞争偏向锁失败，表示竞争比较激烈，偏向锁升级为轻量级锁。
+
+【轻量级锁】
+所谓轻量级锁是比偏向锁更耗资源的锁。
+实现机制是,线程在竞争轻量级锁前,在线程的栈内存中分配一段空间作为锁记录空间(就是轻量级锁对应的锁对象的对象头的字段的拷贝),拷贝好后,线程通过CAS去竞争这个对象锁，试图把锁对象的对象头子段改成指向锁记录空间，
+如果成功则说明获取轻量级锁成功，如果失败，则进入自旋（说白了就是循环）去试着获取锁。
+如果自旋到一定次数还是不能获取到锁，则进入重量级锁。
+
+【自旋锁】
+说白了就是获取锁失败后，为了避免直接让线程进入阻塞状态而采取的循环一定次数去试着获取锁的行为。
+（线程进入阻塞状态和退出阻塞状态是涉及到操作系统管理层面的，需要从用户态进入内核态，非常消耗系统资源），
+为什么能这样做呢，是因为试验证明，锁的持有时间一般是非常短的，所以一般多次尝试就能竞争到锁。
+
+【重量级锁】
+所谓的重量级锁，其实就是最原始和最开始java实现的阻塞锁。在JVM中又叫对象监视器。
+这时的锁对象的对象头字段指向的是一个互斥量，所有线程竞争重量级锁，竞争失败的线程进入阻塞状态（操作系统层面），并且在锁对象的一个等待池中等待被唤醒，被唤醒后的线程再次去竞争锁资源。
+
+【总结】
+所谓的锁升级，其实就是从偏向锁 -> 轻量级锁(自旋锁) -> 重量级锁，之前一直被这几个概念困扰，网上的 文章解释的又不通俗易懂。
+其实说白了，一切一切的开始源于java对synchronized同步机制的性能优化，最原始的synchronized同步机制是直接跳过前几个步骤，直接进入重量级锁的。
+而重量级锁因为需要线程进入阻塞状态（从用户态进入内核态）这种操作系统层面的操作非常消耗资源，这样的话，synchronized同步机制就显得很笨重，效率不高。
+那么为了解决这个问题，java才引入了偏向锁，轻量级锁，自旋锁这几个概念。拿这几个锁有何优化呢？网上也没有通俗易懂的解释。
+其实说白了就是，偏向锁是为了避免CAS操作，尽量在对比对象头就把加锁问题解决掉，只有冲突的情况下才指向一次CAS操作。
+而轻量级锁和自旋锁呢，其实两个是一体使用的，为的是尽量避免线程进入内核的阻塞状态，这对性能非常不利，试图用CAS操作和循环把加锁问题解决掉。
+而重量级锁是最终的无奈解决方案。
+说白了就是“通过内存读取判断解决加速问题” 优于 “通过CAS操作和空循环” 优于 “CPU阻塞/唤醒线程”。
+
+
+
 public class Widget {
 	public synchronized void doSomething() {
 		...
@@ -426,6 +463,7 @@ public class CachedThreadPool {
 		/* newCachedThreadPool 一般会创建与所需数量相同的线程 */
 		ExecutorService exec = Executors.newCachedThreadPool();
 		for(int i=0; i<5; i++) 
+			/* execute()用来运行没有返回值的Runnable任务，submit()用来运行有返回值的Callable任务  */
 			exec.execute(new MyTask());
 		/* shutdown() 防止新任务被提交给Executor */
 		exec.shutdown();
@@ -444,7 +482,8 @@ public class CachedThreadPool {
 	}
 }
 
-从任务中产生返回值， 使用callable 接口代替 runnable 接口
+从任务中产生返回值， 使用Callable 接口代替 Runnable 接口，所有实现Callable接口的类只能被线程池生成的ExecutorService或者FutureTask执行
+使用线程池执行Callable任务时，只要其中一个任务抛出未捕获异常中止，则剩余未执行完毕的任务都停止执行
 import java.util.concurrent.*;
 import java.util.*;
 /* 接口中的泛型表明返回值的类型 */
@@ -728,3 +767,144 @@ public class SafeListener {
 		return safe;
 	}
 }
+
+
+/*********************************          CompletableFuture          *****************************************/
+
+public class Shop {
+	static List<Shop> shops = Arrays.asList(
+			new Shop("BestPrice"),
+			new Shop("LetsSaveBig"),
+			new Shop("MyFavoriteShop"),
+			new Shop("BuyItAll"));
+	String name;
+
+	public Shop(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public static void delay() {
+		try{
+			Thread.sleep(1000L);
+		}catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private double calculatePrice(String product) {
+		delay();
+		Random random = new Random();
+		return random.nextDouble()*product.charAt(0) + product.charAt(1);
+	}
+
+	public double getPrice(String product) {
+		return calculatePrice(product);
+	}
+
+	public Future<Double> getPriceAsync2(String product) {
+		// 使用CompletableFuture的工厂方法，包括异常处理在内的实现与getPriceAsync完全等价
+		// 交由ForkJoinPool池中的某个执行线程Executor运行
+		// 具体线程数等于 Runtime.getRuntime().availableProcessors()的返回值
+		return CompletableFuture.supplyAsync(() -> calculatePrice(product));
+	}
+
+	public Future<Double> getPriceAsync(String product) {
+		CompletableFuture<Double> futurePrice = new CompletableFuture<>();
+		new Thread( () -> {
+			try{
+				double price = calculatePrice(product);
+				// 价格计算正常结束，完成future操作并设置商品价格
+				futurePrice.complete(price);
+			}catch (Exception ex) {
+				// 抛出导致异常的失败，完成本次future操作
+				futurePrice.completeExceptionally(ex);
+			}
+		}).start();
+		return futurePrice;
+	}
+
+	public static void main(String[] argv) {
+		Shop shop = new Shop("best shop");
+		Future<Double> futurePrice = shop.getPriceAsync("my favorite");
+		// do something else
+		try{
+			double price = futurePrice.get();
+		}catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public List<String> findPrices(String product) {
+		// 串行执行，大概4秒多
+		return shops.stream().map(shop ->
+			String.format("%s price is %.2f", shop.getName(), shop.getPrice(product))).collect(Collectors.toList());
+	}
+
+	public List<String> findPrices(String product) {
+		// 并行执行，大概1秒多
+		return shops.parallelStream().map(shop -> String.format("%s price is %.2f", shop.getName(), shop.getPrice(product))).collect(Collectors.toList());
+	}
+
+	public List<String> findPrices(String product) {
+		// 分两次并行执行，此处大概2秒多（注意不是用parallelStream）
+		// 此处分两次流处理的原因是，如果是一个流中，必须等每次CompletableFuture结果计算出来后，才会进行下个元素处理，即到join操作执行完毕，这样就变成完全串行的执行了
+		List<CompletableFuture<String>> priceFutures = shops.stream()
+				.map(shop -> CompletableFuture.supplyAsync(
+						() -> shop.getName() + " price is " + shop.getPrice(product))
+				).collect(Collectors.toList());
+		// 使用join连接各个元素的结果
+		return priceFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
+	}
+
+	private static final Executor executor = Executors.newFixedThreadPool(
+						Math.min(shops.size(),
+						100),
+						new ThreadFactory() {
+							public Thread newThread(Runnable r) {
+								Thread t = new Thread(r);
+								// 将线程标记为守护进程，意味着程序退出时它也会被回收
+								t.setDaemon(true);
+								return t;
+							}}
+						);
+
+	public List<String> findPrices(String product) {
+		List<CompletableFuture<String>> priceFutures = shops.stream()
+				// 提供定制的执行器/线程池executor，用于根据实际机器的内核数并行，提高性能
+				.map(shop -> CompletableFuture.supplyAsync(
+						() -> shop.getName() + " price is " + shop.getPrice(product),
+						executor)
+				).collect(Collectors.toList());
+		// 使用join连接各个元素的结果
+		return priceFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
+	}
+}
+
+// 多个并行任务的连接执行
+public List<String> findPrices(String product) {
+	// 此处三个map都是在同一个线程顺序执行，并且以shops里面元素为单位并行
+	List<CompletableFuture<String>> priceFutures = shops.stream()
+					// 此处getPrice()涉及到异步的远程调用，使用了线程池executor
+					// 每个元素为CompletableFuture<String>类型
+					.map(shop -> CompletableFuture.supplyAsync(
+									() -> shop.getPrice(product), executor))
+					// 此处parse()是个本地函数，不存在异步，因此用thenApply
+					// 每个元素为CompletableFuture<Quote>类型
+					.map(future -> future.thenApply(Quote::parse))
+					// 此处applyDiscount()涉及到异步远程调用，同样使用线程池executor，使用thenCompose联结
+					// 还有thenComposeAsync版本，第二个参数用于指定切换一个新的线程池执行
+					.map(future -> future.thenCompose(quote ->
+								CompletableFuture.supplyAsync(
+									() -> Discount.applyDiscount(quote))))
+					.collect(toList());
+	return priceFutures.stream().map(CompletableFuture::join).collect(toList());
+}
+
+
+/*********************************          分支/合并框架          *****************************************/
+
+分支/合并框架：Fork/Join
