@@ -624,73 +624,6 @@ public long timeTasks(int nThreads, final Runnable task) throws InterruptedExcep
 	return end - start;                    //  将所有并行任务线程从启动到结束的运行时间作为结果返回
 }
 
-阻塞等待返回值的任务(FutureTask)，通过Callable实现，相当于可生成结果的Runnable。
-Future.get的行为取决于任务状态，如果任务已经完成，get会立即返回结果，否则get阻塞直到任务完成，或者抛出异常。结果进行跨线程传递
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-//  强制将未检查的Throwable转换为RuntimeException
-public static RuntimeException launderThrowable(Throwable t) {
-	if(t instanceof RuntimeException)
-		return (RuntimeException) t;
-	else if(t instanceof Error) 
-		throw (Error) t;
-	else
-		throw new IllegalStateException("Not unchecked", t);
-}
-public class Preloader {
-	private final Future<ProductInfo> future =  //  创建一个任务，该任务返回ProductInfo对象
-			new Future<productInfo>(new Callable<ProductInfo> {
-				public ProductInfo call() throws DataLoadException {
-					return loadProductInfo();
-				}
-			});
-	private final Thread thread = new Thread(future);   //  启用子线程调用该任务
-	public void start()	 { thread.start(); }            //  提供start()方法给外部启动线程
-	public ProductInfo get() throws DataLoadExceptioin, InterruptedException {
-		try {
-			return future.get();        //  阻塞等待任务在子线程中完成并返回结果ProductInfo对象
-		}catch(ExecutionException e) {
-			Throwable cause = e.getCause();
-			if(cause instanceof DataLoadException)
-				throw (DataLoadException) cause;
-			else
-				throw launderThrowable(cause);
-		}
-	}		
-}
-
-信号量：计数信号量用来控制同时访问某个特定资源的操作数量，或者同时执行某个指定操作的数量。也可以用来实现某种资源池，或者对容器施加边界
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.Semaphore;
-public class BoundedHashSet<T> {  // 实现一个有界的阻塞容器，信号量的计数值会初始化成容器容量的最大值
-	private final Set<T> set;
-	private final Semaphore sem;       //  声明一个信号量变量
-	
-	public BoundedHashSet(int bound) {
-		this.set = Collections.synchronizedSet(new HashSet<T>());   //  装饰模式，将HashSet使用synchronizedSet装饰，支持并发
-		sem = new Semaphore(bound);    //  初始化信号量，有bound个信号量资源
-	}
-	public boolean add(T o) throws InterruptedException {
-		sem.acquire();                //  占用一个信号量资源，如果当前没有信号量资源，则阻塞在此
-		boolean wasAdded = false;
-		try {
-			wasAdded = set.add(o);
-			return wasAdded;             //  将添加结果状态返回
-		}finally {
-			if(!wasAdded)
-				sem.release();         //  如果添加元素失败，释放信号量资源
-		}
-	}
-	public boolean remove(Object o) {
-		boolean wasRemoved = set.remove(o);
-		if(wasRemoved) 
-			sem.release();
-		return wasRemoved;
-	}
-}
-
 栅栏：类似于闭锁，阻塞一组线程直到某个事件发生。栅栏与闭锁的关键区别在于，所有线程必须同时到达栅栏位置，才能继续执行。闭锁用于等待事件，而栅栏用于等待其他线程。
 public class CellularAutomata {
 	private final Board mainBoard;
@@ -732,6 +665,66 @@ public class CellularAutomata {
 	}
 }
 
+《《《闭锁和栅栏的区别》》》
+【闭锁】
+场景1：任务执行前线程的集结，此时线程都没开始执行具体的任务，等集合完毕后使用latch.countDown()开闸放水大家一起跑。
+操作： 闭锁计数为1的时候，子线程集各自先到达集结点，主线程通过countDown()来开闸。
+针对的问题域：一般用于等待前置条件和资源ready后线程一起并行实行任务。
+本场景下的差异：执行开闸操作的是子线程集之外的线程，理论上仅通过闭锁不能确保开闸时所有子线程都到了集结点
+
+场景2：全部任务执行完毕后的收尾，此时每个子线程各自减去计数，收尾线程await()等待所有子线程运行完毕后进行收尾工作。
+操作：闭锁计数为n的时候一般是各个子线程各自countDown()声明到达集结点，最后执行countDown()的操作来开闸，然后收尾线程（一般是主线程）来进行收尾工作。
+针对的问题域：一般用于并行任务执行完毕后进行资源回收和结果聚集返回。
+本场景下的差异：每个到达集结点的子线程可以继续往下走，只有收尾线程被阻塞等待。
+
+【栅栏】
+场景1：任务执行前线程的集结，此时线程都没开始执行具体的任务，每个达到集结点的线程通过barrier.await()通知栅栏到达集结点，最后一个通知到达的线程开闸放水。
+操作：生成Barrier对象时设置要集结的线程数目，然后每个执行线程完成任务后通过barrier.await()通知栅栏到达集结点，
+      栅栏内部维持一个计数器用于统计到达集结点的线程数，内部计数器为0时所有线程开闸放水一起跑
+针对的问题域：一般用于等待前置条件和资源ready后线程一起并行实行任务。
+本场景下的差异：执行开闸操作的是子线程集里最后到达的线程，保证开闸时所有线程都达到集结点。
+
+场景2：任务执行完毕后的集结收尾
+操作：生成Barrier对象时设置要集结的线程数目，然后每个执行线程完成任务后通过barrier.await()通知栅栏到达集结点，
+      栅栏内部维持一个计数器用于统计到达集结点的线程数，内部计数器为0时所有线程开闸放水一起跑
+针对的问题域：一般用于并行任务执行完毕后进行资源回收和结果聚集返回。
+本场景下的差异：每个到达集结点的子线程都被阻塞，最后一个到达的子线程开闸放水，各个子线程再继续执行各自的任务。
+
+
+
+信号量：计数信号量用来控制同时访问某个特定资源的操作数量，或者同时执行某个指定操作的数量。也可以用来实现某种资源池，或者对容器施加边界
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.Semaphore;
+public class BoundedHashSet<T> {  // 实现一个有界的阻塞容器，信号量的计数值会初始化成容器容量的最大值
+	private final Set<T> set;
+	private final Semaphore sem;       //  声明一个信号量变量
+	
+	public BoundedHashSet(int bound) {
+		this.set = Collections.synchronizedSet(new HashSet<T>());   //  装饰模式，将HashSet使用synchronizedSet装饰，支持并发
+		sem = new Semaphore(bound);    //  初始化信号量，有bound个信号量资源
+	}
+	public boolean add(T o) throws InterruptedException {
+		sem.acquire();                //  占用一个信号量资源，如果当前没有信号量资源，则阻塞在此
+		boolean wasAdded = false;
+		try {
+			wasAdded = set.add(o);
+			return wasAdded;             //  将添加结果状态返回
+		}finally {
+			if(!wasAdded)
+				sem.release();         //  如果添加元素失败，释放信号量资源
+		}
+	}
+	public boolean remove(Object o) {
+		boolean wasRemoved = set.remove(o);
+		if(wasRemoved) 
+			sem.release();
+		return wasRemoved;
+	}
+}
+
+
 
 
 /*  多线程情况下构造函数中使用匿名类导致外部对象逸出的情况，因为非静态内部对象含有外部对象的this引用，
@@ -767,6 +760,60 @@ public class SafeListener {
 		return safe;
 	}
 }
+
+
+/*********************************          Future和FutureTask          *****************************************/
+
+Future是接口，一般用来修饰返回值变量，
+例如：
+Future<Integer> ret = threadPool.submit(new CallableTask(i + 1))
+
+FutureTask是通过RunnableFuture接口进而实现了Future接口和Runnable接口的实现类，一般就是用来修饰FutureTask实例化结果，
+例如： 
+FutureTask<Integer> futureTask = new FutureTask<>(new CallableTask(i + 1));
+threadPool.submit(futureTask);
+
+
+阻塞等待返回值的任务(FutureTask)，通过Callable实现，相当于可生成结果的Runnable。
+Future.get的行为取决于任务状态，如果任务已经完成，get会立即返回结果，否则get阻塞直到任务完成，或者抛出异常。结果进行跨线程传递
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+//  强制将未检查的Throwable转换为RuntimeException
+public static RuntimeException launderThrowable(Throwable t) {
+	if(t instanceof RuntimeException)
+		return (RuntimeException) t;
+	else if(t instanceof Error) 
+		throw (Error) t;
+	else
+		throw new IllegalStateException("Not unchecked", t);
+}
+public class Preloader {
+	private final Future<ProductInfo> future =  //  创建一个任务，该任务返回ProductInfo对象
+			new Future<productInfo>(new Callable<ProductInfo> {
+				public ProductInfo call() throws DataLoadException {
+					return loadProductInfo();
+				}
+			});
+	private final Thread thread = new Thread(future);   //  启用子线程调用该任务
+	public void start()	 { thread.start(); }            //  提供start()方法给外部启动线程
+	public ProductInfo get() throws DataLoadExceptioin, InterruptedException {
+		try {
+			return future.get();        //  阻塞等待任务在子线程中完成并返回结果ProductInfo对象
+		}catch(ExecutionException e) {
+			Throwable cause = e.getCause();
+			if(cause instanceof DataLoadException)
+				throw (DataLoadException) cause;
+			else
+				throw launderThrowable(cause);
+		}
+	}		
+}
+
+/*********************************          CompletionService          *****************************************/
+
+CompletionService：
+内部通过阻塞队列+FutureTask，实现了任务先完成可优先获取到，即结果按照完成先后顺序排序
+
 
 
 /*********************************          CompletableFuture          *****************************************/
