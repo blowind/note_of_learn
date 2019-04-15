@@ -24,6 +24,10 @@
 重入的一种实现方式是为每个所关联一个获取计数值和所有者线程引用，多次重入时计数值递增，线程退出同步代码块时计数器递减，减到0时释放锁。
 
 
+【分段锁Lock Striping】
+ConcurrentHashMap内部使用的一种细粒度锁，将整个Map键值对分成各个segment，在每个segment上加锁，
+缺点是在容器遍历迭代中只保证弱一致性Weakly Consistent，弱一致性最大的缺陷是size()/isEmpty()这类函数只能给出一个估计值
+
 /****                                          Java锁升级机制                                    ****/
 
 【偏向锁】
@@ -87,6 +91,49 @@ public class LoggingWidget extends Widget {
 Hashtable(不建议使用), SynchronizedMap<K,V>, ConcurrentMap
 Vector(不建议使用), SynchronizedList<E>, SynchronizedSet<E>, CopyOnWriteArrayList, CopyOnWriteArraySet,
 BlockingDeque<E>, ConcurrentLinkedDeque<E>
+
+非线程安全容器：
+ArrayList
+LinkedList
+
+HashSet
+TreeSet
+
+HashMap
+TreeMap
+
+
+古老的同步容器(一般不建议使用)：
+Hashtable
+Vector
+SynchronizedList(包装类)
+
+SortedSet
+SynchronizedSet(包装类)
+
+SortedMap
+SynchronizedMap(包装类)
+
+
+并发容器：
+CopyOnWriteArrayList
+
+ConcurrentSkipListSet
+
+ConcurrentHashMap
+ConcurrentSkipListMap
+
+
+其他容器：
+ConcurrentLinkedQueue
+PriorityQueue
+LinkedBlockingQueue
+ArrayBlockingQueue
+PriorityBlockingQueue
+SynchronousQueue
+
+Deque
+BlockingDeque
 
 
 多线程下使用的随机数生成器
