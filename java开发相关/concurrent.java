@@ -811,6 +811,13 @@ public class SafeListener {
 
 /*********************************          Future和FutureTask          *****************************************/
 
+jdk1.5中引入了Future接口和相关的类，从而将“阻塞并切换线程”这套套路操作从基本的join()/sleep()样板代码操作中抽取出来
+
+问题：
+1、使用原始版本的future.get()获取结果时，如果另外的线程永远不返回，当前线程永远阻塞在此处，
+   可以使用带时间参数的重载版本future.get(1, TimeUnit.SECOND)设置超时时间
+2、多线程同时运行时，获取结果的for循环在依次
+
 Future是接口，一般用来修饰返回值变量，
 例如：
 Future<Integer> ret = threadPool.submit(new CallableTask(i + 1))
@@ -864,6 +871,14 @@ CompletionService：
 
 
 /*********************************          CompletableFuture          *****************************************/
+jdk1.8引入的返回Future结果的新版实现：CompletableFuture
+
+相比jdk1.5引入的功能，增强的可应对场景
+1、将两个异步计算合并为一个（两个异步计算之间相互独立，同时第二个又依赖于第一个的结果）；
+2、等待Future集合中的所有任务都完成
+3、仅等待Future集合汇总最快结束的任务完成（使用不同的计算方式计算同一个问题时）并返回它的结果；
+4、通过编程方式完成一个Future任务的执行（手工设定异步操作结果的方法）；
+5、应对Future的完成事件
 
 public class Shop {
 	static List<Shop> shops = Arrays.asList(
@@ -889,6 +904,7 @@ public class Shop {
 		}
 	}
 
+	// 通过sleep模拟远程耗时调用的方法
 	private double calculatePrice(String product) {
 		delay();
 		Random random = new Random();
@@ -898,27 +914,29 @@ public class Shop {
 	public double getPrice(String product) {
 		return calculatePrice(product);
 	}
-
-	public Future<Double> getPriceAsync2(String product) {
-		// 使用CompletableFuture的工厂方法，包括异常处理在内的实现与getPriceAsync完全等价
-		// 交由ForkJoinPool池中的某个执行线程Executor运行
-		// 具体线程数等于 Runtime.getRuntime().availableProcessors()的返回值
-		return CompletableFuture.supplyAsync(() -> calculatePrice(product));
-	}
-
+	
 	public Future<Double> getPriceAsync(String product) {
 		CompletableFuture<Double> futurePrice = new CompletableFuture<>();
+		// 单独起个线程运行价格计算的操作
 		new Thread( () -> {
 			try{
 				double price = calculatePrice(product);
 				// 价格计算正常结束，完成future操作并设置商品价格
 				futurePrice.complete(price);
 			}catch (Exception ex) {
-				// 抛出导致异常的失败，完成本次future操作
+				// 抛出导致异常的失败，完成本次future操作，否则主线程不知道工作线程这边有异常，
+				// 要么一直阻塞等待，要么通过超时继续运行，但主线程永远无法得知从线程发生的具体异常
 				futurePrice.completeExceptionally(ex);
 			}
 		}).start();
 		return futurePrice;
+	}
+
+	public Future<Double> getPriceAsync2(String product) {
+		// 使用CompletableFuture的工厂方法，包括异常处理在内的实现与getPriceAsync完全等价
+		// 交由ForkJoinPool池中的某个执行线程Executor运行
+		// 具体线程数等于 Runtime.getRuntime().availableProcessors()的返回值
+		return CompletableFuture.supplyAsync(() -> calculatePrice(product));
 	}
 
 	public static void main(String[] argv) {
@@ -944,19 +962,21 @@ public class Shop {
 	}
 
 	public List<String> findPrices(String product) {
-		// 分两次并行执行，此处大概2秒多（注意不是用parallelStream）
-		// 此处分两次流处理的原因是，如果是一个流中，必须等每次CompletableFuture结果计算出来后，才会进行下个元素处理，即到join操作执行完毕，这样就变成完全串行的执行了
+		// 分两次并行执行，此处大概2秒多（注意不是用parallelStream，使用的4核处理器，默认最多起4个线程运行任务）
+		// 此处分两次流处理的原因是，如果是使用一个流进行所有处理，必须等每次CompletableFuture结果计算出来后，才会进行下个元素处理，
+		// 即1个元素的supplyAsync() -> join() 两步操作执行完毕，才会执行下一个元素的supplyAsync()和join()，这样就变成完全串行的执行了
+		// 像下面这种写法使用两次stream()，则第1次会聚合起所有CompletableFuture对象，然后每个对象再依次等待join()，而不是join()再创建下一个对象
 		List<CompletableFuture<String>> priceFutures = shops.stream()
 				.map(shop -> CompletableFuture.supplyAsync(
 						() -> shop.getName() + " price is " + shop.getPrice(product))
 				).collect(Collectors.toList());
-		// 使用join连接各个元素的结果
+		// 使用join连接各个元素的结果作为一个List返回，join不会抛出任何检测到的异常，所以运行失败跑异常的线程结果会被忽略
 		return priceFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
 	}
 
+	// 定制线程池
 	private static final Executor executor = Executors.newFixedThreadPool(
-						Math.min(shops.size(),
-						100),
+						Math.min(shops.size(), 100),
 						new ThreadFactory() {
 							public Thread newThread(Runnable r) {
 								Thread t = new Thread(r);
@@ -967,6 +987,7 @@ public class Shop {
 						);
 
 	public List<String> findPrices(String product) {
+		// 定制的线程池，根据任务数生成对应个数的线程，可以将运行时间缩短到1秒
 		List<CompletableFuture<String>> priceFutures = shops.stream()
 				// 提供定制的执行器/线程池executor，用于根据实际机器的内核数并行，提高性能
 				.map(shop -> CompletableFuture.supplyAsync(
@@ -978,7 +999,7 @@ public class Shop {
 	}
 }
 
-// 多个并行任务的连接执行
+// 多个并行任务使用CompletableFuture连续异步执行
 public List<String> findPrices(String product) {
 	// 此处三个map都是在同一个线程顺序执行，并且以shops里面元素为单位并行
 	List<CompletableFuture<String>> priceFutures = shops.stream()
@@ -986,7 +1007,7 @@ public List<String> findPrices(String product) {
 					// 每个元素为CompletableFuture<String>类型
 					.map(shop -> CompletableFuture.supplyAsync(
 									() -> shop.getPrice(product), executor))
-					// 此处parse()是个本地函数，不存在异步，因此用thenApply
+					// 此处parse()是个本地函数，不存在异步，因此用thenApply的同步调用
 					// 每个元素为CompletableFuture<Quote>类型
 					.map(future -> future.thenApply(Quote::parse))
 					// 此处applyDiscount()涉及到异步远程调用，同样使用线程池executor，使用thenCompose联结

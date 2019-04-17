@@ -2120,3 +2120,196 @@ public class Outside() {
 }
 Outside o = new Outside();
 o.new Inside();   // 创建非静态成员类对象的一种方式，可行，不推荐
+
+
+/*********************************          Optional          *****************************************/
+
+
+语义上的作用：定义一个变量类型，该类型表示变量包含一个可能的封装类型结果，也可能不包含。
+对物理世界与代码的认知提升：通过类型系统让域模型中隐藏的知识显示的体现在代码中，比如有些域变量在业务上可能为空，有些不允许为空
+
+注意：Optional没有实现序列化，所以如果作为修饰类型应用到的域变量可能会被序列化，可能引发程序故障
+
+Optional的使用： 该对象相当于一个值的容器，是一个容器对象
+Optional<String> a = Optional.of("a");    // 通过of工厂方法包装对象创建一个Optional实例
+assertEquals("a", a.get());            //  可以通过get方法获取容器中的值
+
+例如：
+public class Person {
+	/* 一个人可能拥有一辆车，也可能没有，实际代码效果可能等同于null的场景，
+	   但是避免了NullPointerException异常并将这种不存在的可能体现在了代码中  */
+	private Optional<Car> car;   
+	public Optional<Car> getCar() { return car; }
+}
+
+public class Car {
+	private Optional<Insurance> insurance;
+	public Optional<Insurance> getInsurance() { return insurance; }
+}
+
+public class Insurance {
+	private String name;
+	public String getName() { return name; }
+}
+
+生成Optional对象：
+【empty】返回一个空的 Optional 实例
+Optional<Car> optCar = Optional.empty();
+
+
+【of】将指定值用Optional封装之后返回，如果该值为 null ，则抛出一个NullPointerException异常
+Optional<Car> optCar = Optional.of(car);
+
+
+【ofNullable】将指定值用 Optional 封装之后返回，如果该值为 null ，则返回一个空的 Optional 对象
+Car car = null;
+Optional<Car> optCar = Optional.ofNullable(car);  // ofNullable工厂方法允许创建一个空值对象
+
+
+处理Optional对象：
+【map】如果值存在，就对该值执行提供的 mapping函数调用，如果值为null，就什么都不做直接返回Optional.empty()
+Optional<Insurance> optInsurance = Optional.ofNullable(insurance);
+Optional<String> name = optInsurance.map(Insurance::getName);  // 使用map从Optional中提取和转换值，注意接收者类型也是Optional
+
+
+【flatMap】
+对于一个Optional的对象，如果包装的值存在，就对该值执行提供的mapping函数调用，返回一个Optional类型的值，
+否则直接就返回一个空的Optional对象，不执行中间的lambda表达式，同时将嵌套的多层Optional展开摊平成一层Optional
+
+注意: 此处的可以为null其实是person要么Optional.empty()，要么非null。若person非null，连带着要求类嵌套的car -> insurance 域变量内容都不为null，若这两个域变量未赋值，还是会抛出NullPointerException
+public String getCarInsuranceName(Optional<Person> person) {
+	// 对应的无Optional非空强约束写法  person.getCar().getInsurance().getName(); 链中任意元素为null就抛NullPointerException异常
+	// 注意person是Optional类型
+	return person.flatMap(Person::getCar)    // Optional<Person>有值的时候，调用Person::getCar方法，返回Optional<Car>并在返回时将传入的Optional和返回的Optional合二为一
+				 .flatMap(Car::getInsurance)  // Optional<Car>有值的时候，调用Car::getInsurance方法，返回Optional<Insurance>并在返回时将传入的Optional和返回的Optional合二为一
+				 .map(Insurance::getName)     // getName返回String，所以不存在两个Optional需要合二为一的问题，传入Optional然后返回Optional
+				 .orElse("Unknown");
+}
+
+		
+
+【filter】如果值存在并且满足提供的谓词，就返回包含该值的 Optional 对象；否则返回一个空的Optional对象
+Optional<Insurance> optInsurance = ...;
+// 通过filter过滤Optional对象，如果为true返回原对象，如果为false将Optional置空
+optInsurance.filter(insurance -> "CambridgeInsurance".equals(insurance.getName()))
+			.ifPresent(x -> System.out.println("ok"));
+			
+public String getCarInsuranceName(Optional<Person> person, int minAge) {
+	return person.filter(p -> p.getAge() >= minAge)  // 谓词操作为true不做任何操作直接返回输入，否则将该值直接过滤掉将Optional置为空
+				.flatMap(Person::getCar)
+				.flatMap(Car::getInsurance)
+				.map(Insurance::getName)
+				.orElse("Unknown");
+}
+			
+			
+【isPresent】如果值存在就返回 true ，否则返回 false
+public Optional<Insurance> nullSafeFindCheapestInsurance(Optional<Person> person, Optional<Car> car) {
+	if(person.isPresent() && car.isPresent()) {
+		return Optional.Of(findCheapestInsurance(person.get(), car.get());
+	} else {
+		return Optional.empty();
+	}
+}
+等效改写：
+public Optional<Insurance> nullSafeFindCheapestInsurance(Optional<Person> person, Optional<Car> car) {
+	return person.flatMap(p -> car.map(c -> findCheapestInsurance(p, c)));  // 利用Optional元素内容为空时不执行flatMap/map包含的lambda表达式直接返回Optional.empty()的特性简化
+}
+
+
+				 
+解引用Optional对象：
+【get】如果该值存在，将该值用 Optional封装返回，否则抛出一个NoSuchElementException异常
+Car car = optCar.get();  // 简单不安全，除非确定不会为null，否则不建议使用
+
+
+【orElse】如果有值则将其返回，否则返回一个默认值
+
+
+【orElseGet(Supplier<? extends T> other)】如果有值则将其返回，否则返回一个由指定的 Supplier 接口生成的值
+orElse方法延迟调用版，创建默认返回值耗费比较大时使用本版本提升性能
+
+
+【orElseThrow(Supplier<? extends X> exceptionSupplier)】 如果有值则将其返回，否则抛出一个由指定的 Supplier 接口生成的异常
+一般用于定制抛出的异常类型
+
+
+【ifPresent(Consumer<? super T>)】如果值存在，就执行使用该值的方法调用，否则什么也不做
+
+
+
+Optional emptyOptional = Optional.empty();           //  通过工厂方法得到为空的Optional对象
+Optional alsoEmpty = Optional.ofNullable(null);      //  将空值转换成Optional对象，最终效果同上
+
+assertFalse(emptyOptional.isPresent());       //     isPresent() 方法判断Optional对象中是否有值
+assertTrue(a.isPresent());                    //   同上
+
+assertEquals("b", emptyOptional.orElse("b"));          //   orElse() 方法在Optional为空时提供备选值
+assertEquals("c", emptyOptional.orElseGet(() -> "c"));   //  为空时接受一个Supplier对象并调用
+
+
+
+遗留代码转化为Optional代码示例：从键值类Properties中根据key取出value，当值是正数字符串时转为数字返回，其他情况返回0
+遗留代码：
+public int readDuration(Properties props, String name) {
+	String value = props.getProperty(name);
+	if(value != null) {
+		try{
+			int i = Integer.parseInt(value);
+			if(i > 0) {
+				return i;
+			}
+		}catch (NumberFormatException nfe) {}
+	}
+	return 0;
+}
+改造后的代码：
+public int readDuration(Properties props, String name) {
+	return Optional.ofNullable(props.getProperty(name))
+					.flatMap(OptionalUtility::stringToInt) // 自有的将String转为Optional(Integer)的工具类，抛异常时返回Optional.empty()
+					.filter(i -> i > 0)
+					.orElse(0);
+}
+
+
+
+基础类型的Optional对象(不推荐使用):  OptionalInt, OptionalLong, OptionalDouble 
+因为基础类型的Optional对象不支持map、flatMap、filter方法，而这些事Optional类最有用的方法
+
+/* 使用Optional改造已有的方法  */
+public class Artists {
+	private List<Artist> artists;
+	public Artists(List<Artist> artists) {
+		this.artists = artists;
+	}
+//	public Artist getArtist(int index) {
+//		if(index < 0 || index >= artists.size()) {
+//			indexExcetipn(index);
+//		}
+//		return artists.get(index);
+//	}
+
+//	public void indexExcetipn(int index) {
+//		throw new IllegalArgumentException(index + "doesn't correspond to an Artist");
+//	}
+//
+//	public String getArtistName(int index) {
+//		try{
+//			Artist artist = getArtist(index);
+//			return artist.getName();
+//		}catch (IllegalArgumentException e) {
+//			return "unknown";
+//		}
+//	}
+	public Optional<Artist> getArtist(int index) {
+		if(index < 0 || index >= artists.size()) {
+			return Optional.empty();
+		}else{
+			return Optional.of(artists.get(index));
+		}
+	}
+	public String getArtistName(int index) {
+		Optional<Artist> artist = getArtist(index);
+		return artist.map(Artist::getName).orElse("unknown");
+	}
+}
