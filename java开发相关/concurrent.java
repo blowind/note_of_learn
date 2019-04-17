@@ -999,7 +999,8 @@ public class Shop {
 	}
 }
 
-// 多个并行任务使用CompletableFuture连续异步执行
+// 多个并行任务使用thenCompose连接两个有前后依赖关系的异步操作
+// 此处实现一个分别异步查询商品价格和计算商品折扣价格，最后按照“商品名:价格:折扣代码”形式字符串返回结果的需求
 public List<String> findPrices(String product) {
 	// 此处三个map都是在同一个线程顺序执行，并且以shops里面元素为单位并行
 	List<CompletableFuture<String>> priceFutures = shops.stream()
@@ -1019,6 +1020,35 @@ public List<String> findPrices(String product) {
 	return priceFutures.stream().map(CompletableFuture::join).collect(toList());
 }
 
+
+// 多个并行任务使用thenCombine合并任务的结果
+// 使用thenCombine函数吗，第二个参数接收BiFunction类型的lambda处理具体的结果合并事宜
+// 还有thenCombineAsync版本，使用第三个参数传入的线程池执行具体合并动作
+// 此处实现一个分别异步查询商品欧元价格和欧元对美元汇率，最终把价格按照美元返回的需求
+Future<Double> futurePriceInUSD = CompletableFuture.supplyAsync( () -> shop.getPrice(product)) // 此处使用lambda异步获取价格
+									               // 连接另一个CompletableFuture异步任务
+												   .thenCombine( CompletableFuture.supplyAsync(
+																	() -> exchangeService.getRate(Money.EUR, Money.USD)),
+																 // BiFunction类型第二个参数，指定合并结果的具体操作
+																 (price, rate) -> price * rate
+													);
+									
+// 多个并行任务使用thenAccept针对每个流元素直接运行结果，而不是收集完所有元素再返回
+public Stream<CompletableFuture<String>> findPricesStream(String product) {
+	return shops.stream()
+			.map(shop -> CompletableFuture.supplyAsync( ()->shop.getPrice(product), executor))
+			.map(future -> future.thenApply(Quote::parse))
+			.map(future -> future.thenCompose(quote -> CompletableFuture.supplyAsync(
+										() -> Discount.applyDiscount(quote), executor)));
+}
+// 同样提供thenAcceptAsync的异步版本，使用额外提供的线程池运行
+CompletableFuture[] futures = findPriceStream("myPhone")
+            .map(f -> f.thenAccept(System.out::println)) // 此处返回Stream<CompletableFuture<Void>>类型
+			.toArray(size -> new CompletableFuture[size]); // 将上一行运行的结果放到数组
+CompletableFuture.allOf(futures).join();  // 数组中所有对象执行完成后，返回一个CompletableFuture<Void>对象
+// 返回由第一个执行完毕的CompletableFuture对象的返回值构成的CompletableFuture<Object>
+CompletableFuture<Object> ret = CompletableFuture.anyOf(futures);  
+									
 
 /*********************************          分支/合并框架          *****************************************/
 
