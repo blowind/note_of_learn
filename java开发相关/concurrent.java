@@ -136,6 +136,16 @@ Deque
 BlockingDeque
 
 
+
+原子类：
+AtomicBoolean
+AtomicInteger
+AtomicLong
+
+AtomicReference
+AtomicStampedReference 带标记的原子引用类，带了一个版本字段stamp，用于解决cas操作中的ABA问题（初次读取和准备修改时都读到A，实际中间被修成成B后又改回A）
+
+
 多线程下使用的随机数生成器
 Random r = ThreadLocalRandom.current();
 r.nextInt(10);

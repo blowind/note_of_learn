@@ -2313,3 +2313,178 @@ public class Artists {
 		return artist.map(Artist::getName).orElse("unknown");
 	}
 }
+
+
+/****                                               时间处理                                        ****/
+老时间接口和类的问题；
+jdk1.0引入的Date  年份起始选择是1900年，月份从0开始计数，如 Date date = new Date(114, 2, 18); 表示2014/03/18，DateFormat方法只适合Date并且线程不安全
+jdk1.1引入的Calendar  月份依然是从0开始计算
+
+
+【LocalDate】 提供了简单的日期功能（不包含时间），不带时区，不可变对象/线程安全
+
+LocalDate date = LocalDate.of(2019, 4, 18);  // 工厂方法生成日期
+LocalDate today = LocalDate.now();   // 获得今天日期的工厂方法
+LocalDate date2 = LocalDate.parse("2019-04-25");  // 通过字符串生成日期
+
+
+int year = date.getYear();     //  2019
+Month month = date.getMonth();       // 4月
+int day = date.getDayOfMonth();         // 18
+DayOfWeek dow = date.getDayOfWeek();  // THURSDAY
+int len = date.lengthOfMonth();      // 30  指定月的天数
+boolean leap = date.isLeapYear();   //  是否闰年
+
+
+// 使用TemporalField接口获取具体字段，ChronoField枚举是该接口的实现之一
+int year2 = date.get(ChronoField.YEAR);
+int month2 = date.get(ChronoField.MONTH_OF_YEAR);
+int day2 = date.get(ChronoField.DAY_OF_MONTH);
+
+
+【LocalTime】 提供时间功能（不包含日期），不可变对象/线程安全
+LocalTime time = LocalTime.of(13,45, 20);
+LocalTime time2 = LocalTime.parse("09:38:21");
+
+
+int hour = time.getHour();
+int minute = time.getMinute();
+int second = time.getSecond();
+
+
+【LocalDateTime】 提供日期和时间功能，不带时区信息，不可变对象/线程安全
+LocalDateTime dt1 = LocalDateTime.of(2014, Month.MARCH, 18, 13, 15, 20);  // 完成的赋值
+LocalDateTime dt2 = LocalDateTime.of(date, time);   
+LocalDateTime dt3 = date.atTime(12, 34, 56);   // 只修改参数指定的部分，其他保留
+LocalDateTime dt4 = date.atTime(time);         // 只修改参数指定的部分，其他保留
+LocalDateTime dt5 = time.atDate(date);         // 只修改参数指定的部分，其他保留
+
+LocalDate date3 = dt1.toLocalDate();   // 抽取日期
+LocalTime time3 = dt1.toLocalTime();   // 抽取时间
+
+
+【Instant】 机器时间，从1970-01-01T00:00:00开始计数的秒，本类除了域变量秒之外还有纳秒，用于精确修正秒的值  ，不可变对象/线程安全
+下面3个示例都表示1970-01-01T00:00:03  其中第二个参数是用于修正的纳秒
+Instant.ofEpochSecond(3);
+Instant.ofEpochSecond(3, 0);
+Instant.ofEpochSecond(2, 1_000_000_000);
+Instant.ofEpochSecond(4, -1_000_000_000);
+
+
+【Duration】计算时间差（秒级或者纳秒级） 用于LocalTime对象、LocalDateTime对象、Instant对象内部算差值，不能混用，不能用于LocalDate
+计算差值：
+Duration d = Duration.between(time, time2);   // PT-4H-6M-59S
+Duration d2 = Duration.between(dt1, dt2);     // PT44400H30M
+
+
+通过工厂方法生成差值实例：
+Duration threeMinutes = Duration.ofMinutes(3);
+Duration threeMinutes2 = Duration.of(3, ChronoUnit.SECONDS);
+
+【Period】年月日度量的差值建模，可用于LocalDate
+计算差值：
+Period tenDays = Period.between(LocalDate.of(2014, 3, 8), LocalDate.of(2014, 3, 18));
+
+
+通过工厂方法生成差值实例：
+Period tenDays2 = Period.ofDays(10);
+Period threeWeeks = Period.ofWeeks(3);
+Period twoYearsSixMonthsOneDay = Period.of(2, 6, 1);
+
+
+【操纵】
+使用with开头的方法获取指定新时间，注意这些方法都创建对象的新副本，不会修改原对象。通过get/with两大类方法租到读取/修改分离
+LocalDate date4 = LocalDate.of(2014, 3, 19);
+LocalDate date5 = date4.withYear(2011);
+LocalDate date6 = date5.withDayOfMonth(25);
+LocalDate date7 = date6.with(ChronoField.MONTH_OF_YEAR, 9);
+
+以相对变量方式获取新值，主要是plus/minus前缀方法，同样新对象都是原对象的副本，线程安全
+LocalDate date8 = date4.plusWeeks(1);
+LocalDate date9 = date8.minusYears(3);
+LocalDate date10 = date9.plus(6, ChronoUnit.MONTHS);
+
+
+通过 TemporalAdjusters 实现类的静态工厂方法调整时间，主要是按照时间节点特性获取具体时间
+LocalDate date11 = LocalDate.of(2019, 4, 18);
+LocalDate date12 = date11.with(nextOrSame(DayOfWeek.SUNDAY));
+LocalDate date13 = date12.with(lastDayOfMonth());
+
+
+通过实现TemporalAdjuster接口定制日期修改类
+public class NextWorkingDay implements TemporalAdjuster {
+	@Override
+	public Temporal adjustInto(Temporal temporal) {
+		DayOfWeek dow = DayOfWeek.of(temporal.get(ChronoField.DAY_OF_WEEK));
+		int dayToAdd = 1;
+		if(dow == DayOfWeek.FRIDAY) {
+			dayToAdd = 3;
+		}else if(dow == DayOfWeek.SATURDAY) {
+			dayToAdd = 2;
+		}
+		return temporal.plus(dayToAdd, ChronoUnit.DAYS);
+	}
+
+	public static void main(String[] args) {
+		LocalDate date = LocalDate.of(2019, 4, 19);
+		System.out.println(date.with(new NextWorkingDay()));
+	}
+}
+
+通过 TemporalAdjusters 类的静态工厂方法通过lambda表达式生成 TemporalAdjuster 对象
+TemporalAdjuster nextWorkingDay = TemporalAdjusters.ofDateAdjuster(
+		temporal -> {
+			DayOfWeek dow = DayOfWeek.of(temporal.get(ChronoField.DAY_OF_WEEK));
+			int dayToAdd = 1;
+			if(dow == DayOfWeek.FRIDAY) {
+				dayToAdd = 3;
+			}else if(dow == DayOfWeek.SATURDAY) {
+				dayToAdd = 2;
+			}
+			return temporal.plus(dayToAdd, ChronoUnit.DAYS);
+		}
+);
+LocalDate date = LocalDate.of(2019, 4, 19);
+System.out.println(date.with(nextWorkingDay));
+
+
+【解析/格式化日期】使用DateTimeFormatter，该类所有实例都是线程安全的，所以可以使用单例模式构建格式器
+// 按照类库提供的指定格式转化为时间字符串
+String s1 = date11.format(DateTimeFormatter.BASIC_ISO_DATE);  //  20190418
+String s2 = date11.format(DateTimeFormatter.ISO_LOCAL_DATE);  //  2019-04-18
+
+// 按照指定格式解析字符串到LocalDate
+LocalDate date14 = LocalDate.parse("20190419", DateTimeFormatter.BASIC_ISO_DATE);
+LocalDate date15 = LocalDate.parse("2019-04-19", DateTimeFormatter.ISO_LOCAL_DATE);
+
+// 按照指定格式在时间字符串和LocalDate之间转换
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+String formattedDate = date11.format(formatter);
+LocalDate date16 = LocalDate.parse(formattedDate, formatter);
+
+// 创建本地化的DateTimeFormatter
+DateTimeFormatter italianFormatter = DateTimeFormatter.ofPattern("d. MMMM yyyy", Locale.ITALIAN);
+
+// 通过细粒度的设置创建同上的DateTimeFormatter
+DateTimeFormatter italianFormatter2 = new DateTimeFormatterBuilder()
+						.appendText(ChronoField.DAY_OF_MONTH)
+						.appendLiteral(". ")
+						.appendText(ChronoField.MONTH_OF_YEAR)
+						.appendLiteral(" ")
+						.appendText(ChronoField.YEAR)
+						.parseCaseInsensitive()
+						.toFormatter(Locale.ITALIAN);
+						
+【时区】ZoneId类，包含40个实例
+
+ZoneId romeZone = ZoneId.of("Europe/Rome");  // 根据字符串获取指定地区ZoneId
+ZoneId zoneId = TimeZone.getDefault().toZoneId();  // 根据老的TimeZone对象获取对应的ZoneId对象
+
+LocalDate date = LocalDate.of(2014, Month.MARCH, 18);
+ZonedDateTime zdt1 = date.atStartOfDay(romeZone);  // LocalDate设置时区
+
+LocalDateTime dateTime = LocalDateTime.of(2014, Month.MARCH, 18, 13, 45);
+ZonedDateTime zdt2 = dateTime.atZone(romeZone);   // LocalDateTime设置时区
+
+Instant instant = Instant.now();
+ZonedDateTime zdt3 = instant.atZone(romeZone);   // Instant设置时区
