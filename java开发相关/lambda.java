@@ -1191,3 +1191,58 @@ public void simpleMovingAverage() {
 							.limit(3)
 							.peek(x -> System.out.println("after limit: " + x))
 							.collect(toList());
+							
+							
+							
+/*********************************              递归和迭代          *****************************************/
+
+// 迭代式的阶乘计算
+static int factorialIterative(int n) {
+	int r = 1;
+	for(int i = 1; i <= n; i++) {
+		r *= i;
+	}
+	return r;
+}
+// 递归式的阶乘计算
+static long factorialRecursive(long n) {
+	return n == 1 ? 1 : n * factorialRecursive(n-1);
+}
+// 基于Stream的阶乘
+static long factorialStreams(long n) {
+	return LongStream.rangeClosed(1, n).reduce(1, (long a, long b)-> a*b);
+}
+// 基于“尾-递”的阶乘，递归调用发生在方法最后。使得不需要再不同的栈帧上保存每次递归计算的中间值，编译器能够自行决定复用某个栈帧进行计算
+// 此处立即数（阶乘计算的中间结果）直接作为桉树传递给了该方法，不用为每个递归调用分配单独的栈帧用于跟踪每次递归调用的中间值，通过方法的参数能直接访问这些值
+// 此处执行factorialTailRecursive(4)只会使用factorialHelper的一个栈帧，不过当前Java不支持这个优化，Scala和Groovy支持
+static long factorialTailRecursive(long n) {
+	return factorialHelper(1, n);
+}
+static long factorialHelper(long acc, long n) {
+	return n == 1 ? acc : factorialHelper(acc * n, n-1);
+}
+
+/*********************************              科里化          *****************************************/
+科里化是一种将具备2个参数（比如， x 和 y ）的函数 f 转化为使用一个参数的函数 g ，并
+且这个函数的返回值也是一个函数，它会作为新函数的一个参数。后者的返回值和初始函数的
+返回值相同，即 f(x,y) = (g(x))(y)
+
+
+做单位转换的一些普遍需求，原有函数写法：
+static double converter(double x, double f, double b) {
+	return x * f + b;
+}
+
+科里化写法，将公共的操作部分提取出来作为函数，然后由调用方传入被操作的基数，
+此处返回一个函数类型DoubleUnaryOperator，该类型定义了一个applyAsDouble方法用于传入基数
+static DoubleUnaryOperator curriedConverter(double f, double b) {
+	return (double x) -> x * f + b;
+}
+
+DoubleUnaryOperator convertCtoF = curriedConverter(9.0/5, 32);
+DoubleUnaryOperator convertUSDtoGBP = curriedConverter(0.6, 0);
+DoubleUnaryOperator convertKmtoMi = curriedConverter(0.6214, 0);
+// 具体的客户端使用代码
+double gbp = convertUSDtoGBP.applyAsDouble(1000);
+
+

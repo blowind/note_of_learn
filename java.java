@@ -2488,3 +2488,24 @@ ZonedDateTime zdt2 = dateTime.atZone(romeZone);   // LocalDateTime设置时区
 
 Instant instant = Instant.now();
 ZonedDateTime zdt3 = instant.atZone(romeZone);   // Instant设置时区
+
+// 通过ZoneId做LocalDateTime和Instant类型的相互转换
+LocalDateTime dateTime = LocalDateTime.of(2014, Month.MARCH, 18, 13, 45);
+Instant instantFromDateTime = dateTime.toInstant(romeZone);
+
+Instant instant = Instant.now();
+LocalDateTime timeFromInstant = LocalDateTime.ofInstant(instant, romeZone);
+
+// ZoneOffset是ZoneId的子类，用于表示时间差
+ZoneOffset newYorkOffset = ZoneOffset.of("-05:00");  
+LocalDateTime dateTime = LocalDateTime.of(2014, Month.MARCH, 18, 13, 45);
+OffsetDateTime dateTimeInNewYork = OffsetDateTime.of(dateTime, newYorkOffset);
+
+使用其他的日志系统，主要有 ThaiBuddhistDate 、MinguoDate 、 JapaneseDate 、 HijrahDate
+LocalDate date = LocalDate.of(2014, Month.MARCH, 18);
+JapaneseDate japaneseDate = JapaneseDate.from(date);
+
+// 为某个Locale显示的创建日历系统， Chronology 接口建模了一个日历系统，使用ofLocale工厂方法得到一个实例
+// 建议使用LocalDate而不要使用ChronoLocalDate，主要是自定义的日历系统维护成本高
+Chronology japaneseChronology = Chronology.ofLocale(Locale.JAPAN);
+ChronoLocalDate now = japaneseChronology.dateNow();
