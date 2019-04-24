@@ -37,7 +37,7 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
     /* 服务端返回应答消息时，channelRead方法被调用 */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception{
-        /*不考虑粘包/拆包问题，直接读取服务端返回数据的写法*/
+        /*不考虑粘包/拆包问题，直接读取服务端返回数据的写法，此时buf里面是TCP运送过来的码流，有多少读多少，没有分段*/
         /*ByteBuf buf = (ByteBuf)msg;
         byte[] req = new byte[buf.readableBytes()];
         buf.readBytes(req);
