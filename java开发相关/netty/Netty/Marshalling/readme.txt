@@ -1,0 +1,3 @@
+common里面的SubscribeReq.java和SubscribeResp.java要打成jar包被client和server引入，否则需要在各个项目里同路径下放相同文件。
+
+MarshallingCodeCFacttory.java内容在client和server里都一样，也建议做成共享jar包。
