@@ -253,7 +253,8 @@ cp 文件复制相关
 cp [-adfilprsu] src1,src2,...dest    ###  将多个源文件拷贝到目的文件夹
 
 17、使用 tar 压缩/解压文件
-
+tar -zxcf abc.tar.gz  ## 解压缩文件 
+tar -zcvf tmp.tar.gz /tmp/    ##  将/tmp目录下的文件打包压缩成tmp.tar.gz，其中z表示gzip，c表示压缩，v表示显示打包详情，f表示指定文件名
 
 18、查看随机信息
 
