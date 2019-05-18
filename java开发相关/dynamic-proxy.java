@@ -1,23 +1,23 @@
 
-// æ¥å£å®šä¹‰
+// ½Ó¿Ú¶¨Òå
 public interface Calculator {
     int add(int a, int b);
 }
 
-// ç›®æ ‡ç±»ï¼ˆè¢«ä»£ç†å¯¹è±¡çš„ç±»ï¼‰å®šä¹‰
+// Ä¿±êÀà£¨±»´úÀí¶ÔÏóµÄÀà£©¶¨Òå
 public class CalculatorImpl implements Calculator {
     @Override
     public int add(int a, int b) {
-        System.out.println("ç›®æ ‡å¯¹è±¡æ–¹æ³•æ‰§è¡Œ");
+        System.out.println("Ä¿±ê¶ÔÏó·½·¨Ö´ĞĞ");
         return a + b;
     }
 }
 
-=============================    é™æ€ä»£ç†ç¤ºä¾‹   ============================= 
+=============================    ¾²Ì¬´úÀíÊ¾Àı   ============================= 
 
 /**
- *  é™æ€ä»£ç†ç¤ºä¾‹ï¼Œé€šè¿‡æ„é€ å‡½æ•°å¾—åˆ°ç›®æ ‡å¯¹è±¡åï¼ŒåŒ…è£…ç›®æ ‡å¯¹è±¡çš„æ‰€æœ‰æ–¹æ³•
- *  å…·ä½“é€šè¿‡ä¸šåŠ¡ä»£ç å®ç°å…¨éƒ¨æ–¹æ³•ï¼Œå¹¶ä¸”ä»£ç†ä¸åŒçš„ç±»å¯¹è±¡è¦å®ç°ä¸åŒçš„ä»£ç†ç±»
+ *  ¾²Ì¬´úÀíÊ¾Àı£¬Í¨¹ı¹¹Ôìº¯ÊıµÃµ½Ä¿±ê¶ÔÏóºó£¬°ü×°Ä¿±ê¶ÔÏóµÄËùÓĞ·½·¨
+ *  ¾ßÌåÍ¨¹ıÒµÎñ´úÂëÊµÏÖÈ«²¿·½·¨£¬²¢ÇÒ´úÀí²»Í¬µÄÀà¶ÔÏóÒªÊµÏÖ²»Í¬µÄ´úÀíÀà
  */
 public class StaticProxy implements Calculator {
     private Calculator calculator;
@@ -28,9 +28,9 @@ public class StaticProxy implements Calculator {
 
     @Override
     public int add(int a, int b) {
-        System.out.println("è°ƒç”¨ç›®æ ‡å¯¹è±¡æ–¹æ³•å‰çš„æ“ä½œ");
+        System.out.println("µ÷ÓÃÄ¿±ê¶ÔÏó·½·¨Ç°µÄ²Ù×÷");
         int result =  this.calculator.add(a, b);
-        System.out.println("è°ƒç”¨ç›®æ ‡å¯¹è±¡æ–¹æ³•åçš„æ“ä½œ");
+        System.out.println("µ÷ÓÃÄ¿±ê¶ÔÏó·½·¨ºóµÄ²Ù×÷");
         return result;
     }
 
@@ -41,67 +41,67 @@ public class StaticProxy implements Calculator {
     }
 }
 
-=============================    åŠ¨æ€ä»£ç†ç¤ºä¾‹   ============================= 
+=============================    ¶¯Ì¬´úÀíÊ¾Àı   ============================= 
 
 /**
- *  JDKåŠ¨æ€ä»£ç†è¯¦è§£ç¤ºä¾‹ï¼Œé€šè¿‡åå°„è®©JVMç»™ç”Ÿæˆä»£ç†ç±»ï¼Œä»£ç†ä¸åŒçš„ç±»å¯¹è±¡å¯ä»¥ç”¨ä¸€ä¸ªDynamicProxyå®Œæˆ
+ *  JDK¶¯Ì¬´úÀíÏê½âÊ¾Àı£¬Í¨¹ı·´ÉäÈÃJVM¸øÉú³É´úÀíÀà£¬´úÀí²»Í¬µÄÀà¶ÔÏó¿ÉÒÔÓÃÒ»¸öDynamicProxyÍê³É
  */
 public class DynamicProxy {
 
     /**
-     * ç”Ÿæˆä»£ç†å¯¹è±¡çš„è¾ƒè¯¦ç»†çš„è¿‡ç¨‹å†™æ³•ï¼Œä»JVMè‡ªå·±ç”Ÿæˆæ–°çš„Classå¯¹è±¡$proxy0åˆ°ç”Ÿæˆè¯¥ç±»å®ä¾‹å¹¶è¿”å›
+     * Éú³É´úÀí¶ÔÏóµÄ½ÏÏêÏ¸µÄ¹ı³ÌĞ´·¨£¬´ÓJVM×Ô¼ºÉú³ÉĞÂµÄClass¶ÔÏó$proxy0µ½Éú³É¸ÃÀàÊµÀı²¢·µ»Ø
      */
     private static Object getProxyDetail(final Object target) throws Exception {
         /*
-         * å‚æ•°1ï¼šå°†ç›®æ ‡ç±»åŠ è½½åˆ°å†…å­˜çš„åŠ è½½å™¨
-         * å‚æ•°2ï¼šç›®æ ‡å¯¹è±¡çš„ç»“æœ
-         * å…·ä½“æ“ä½œï¼šç”Ÿæˆä¸€ä¸ªå®ç°ç›®æ ‡å¯¹è±¡æ¥å£çš„Classå¯¹è±¡ï¼ˆç±»å®šä¹‰ï¼‰ï¼Œè¯¥ç±»è‡ªå¸¦æ„é€ å™¨
+         * ²ÎÊı1£º½«Ä¿±êÀà¼ÓÔØµ½ÄÚ´æµÄ¼ÓÔØÆ÷
+         * ²ÎÊı2£ºÄ¿±ê¶ÔÏóµÄ½á¹û
+         * ¾ßÌå²Ù×÷£ºÉú³ÉÒ»¸öÊµÏÖÄ¿±ê¶ÔÏó½Ó¿ÚµÄClass¶ÔÏó£¨Àà¶¨Òå£©£¬¸ÃÀà×Ô´ø¹¹ÔìÆ÷
         */
         Class proxyClazz = Proxy.getProxyClass(target.getClass().getClassLoader(), target.getClass().getInterfaces());
 
-        // å¾—åˆ°æœ‰å‚æ„é€ å™¨ com.sun.proxy.$Proxy0(InvocationHandler h)
+        // µÃµ½ÓĞ²Î¹¹ÔìÆ÷ com.sun.proxy.$Proxy0(InvocationHandler h)
         Constructor constructor = proxyClazz.getConstructor(InvocationHandler.class);
 
-        /* é€šè¿‡æœ‰å‚æ„é€ å™¨åå°„åˆ›å»ºä»£ç†å®ä¾‹ï¼Œä¼ å…¥InvocationHandlerå®ä¾‹ï¼Œ
-        * æ¯æ¬¡è°ƒç”¨ä»£ç†å¯¹è±¡çš„æ–¹æ³•æ—¶ï¼Œéƒ½ä¼šé€šè¿‡InvocationHandlerå®ä¾‹çš„invokeæ–¹æ³•è°ƒç”¨
-        * å› æ­¤åœ¨invokeæ–¹æ³•åšä¸šåŠ¡éœ€è¦çš„é¢å¤–æ“ä½œå¤„ç†
+        /* Í¨¹ıÓĞ²Î¹¹ÔìÆ÷·´Éä´´½¨´úÀíÊµÀı£¬´«ÈëInvocationHandlerÊµÀı£¬
+        * Ã¿´Îµ÷ÓÃ´úÀí¶ÔÏóµÄ·½·¨Ê±£¬¶¼»áÍ¨¹ıInvocationHandlerÊµÀıµÄinvoke·½·¨µ÷ÓÃ
+        * Òò´ËÔÚinvoke·½·¨×öÒµÎñĞèÒªµÄ¶îÍâ²Ù×÷´¦Àí
         *
-        * å®é™…åœ¨ç¬¬ä¸€æ­¥ç”Ÿæˆçš„ç±»å‹proxyClazzä¸­ï¼Œä¼šé™„å¸¦ç”Ÿæˆä¸€ä¸ªå­—æ®µ protected invocationHandler;
-        * åŒæ—¶è¯¥ç±»å‹å®ç°äº†ç›®æ ‡å¯¹è±¡æ¥å£çš„æ‰€æœ‰æ–¹æ³•ï¼Œå¹¶åœ¨æ¯ä¸ªæ–¹æ³•ä¸­æ‰§è¡ŒinvocationHandler.invoke(...);
-        * å› æ­¤ä¸ä¸‹é¢å®ä¾‹åŒ–æ“ä½œä¸­ä¼ å…¥çš„InvocationHandlerå¯¹è±¡è”ç³»èµ·æ¥
+        * Êµ¼ÊÔÚµÚÒ»²½Éú³ÉµÄÀàĞÍproxyClazzÖĞ£¬»á¸½´øÉú³ÉÒ»¸ö×Ö¶Î protected invocationHandler;
+        * Í¬Ê±¸ÃÀàĞÍÊµÏÖÁËÄ¿±ê¶ÔÏó½Ó¿ÚµÄËùÓĞ·½·¨£¬²¢ÔÚÃ¿¸ö·½·¨ÖĞÖ´ĞĞinvocationHandler.invoke(...);
+        * Òò´ËÓëÏÂÃæÊµÀı»¯²Ù×÷ÖĞ´«ÈëµÄInvocationHandler¶ÔÏóÁªÏµÆğÀ´
         */
         Object proxy = constructor.newInstance(new InvocationHandler() {
-            // methodå‚æ•°æ˜¯ä»£ç†å¯¹è±¡æœ¬æ¬¡æœ¬è°ƒç”¨çš„æ–¹æ³•å¯¹è±¡ï¼Œargsæ˜¯è¯¥æ–¹æ³•è°ƒç”¨æ—¶çš„å®å‚æ•°ç»„
+            // method²ÎÊıÊÇ´úÀí¶ÔÏó±¾´Î±¾µ÷ÓÃµÄ·½·¨¶ÔÏó£¬argsÊÇ¸Ã·½·¨µ÷ÓÃÊ±µÄÊµ²ÎÊı×é
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                System.out.println(method.getName() + "æ–¹æ³•å¼€å§‹æ‰§è¡Œ...");
-                // æ³¨æ„åˆ°æ­¤å¤„ä»£ç†å¯¹è±¡æ°¸ä¹…ä¿ç•™äº†ä¸€ä¸ªå¯¹ä¼ å…¥çš„ç›®æ ‡å¯¹è±¡çš„å¼•ç”¨ï¼Œä»£ç†å¯¹è±¡ä¸GCï¼Œç›®æ ‡å¯¹è±¡ä¸å¯èƒ½GC
+                System.out.println(method.getName() + "·½·¨¿ªÊ¼Ö´ĞĞ...");
+                // ×¢Òâµ½´Ë´¦´úÀí¶ÔÏóÓÀ¾Ã±£ÁôÁËÒ»¸ö¶Ô´«ÈëµÄÄ¿±ê¶ÔÏóµÄÒıÓÃ£¬´úÀí¶ÔÏó²»GC£¬Ä¿±ê¶ÔÏó²»¿ÉÄÜGC
                 Object result = method.invoke(target, args);
                 System.out.println(result);
-                System.out.println(method.getName() + "æ–¹æ³•ç»“æŸæ‰§è¡Œ...");
-                // è¿”å›ç›®æ ‡å¯¹è±¡æ‰§è¡Œçš„ç»“æœï¼Œæ­¤å¤„æ˜¯add()æ–¹æ³•çš„æ‰§è¡Œç»“æœï¼Œæœ¬returnæ˜¯åœ¨æ¯æ¬¡proxyå¯¹è±¡è°ƒç”¨add()æ—¶æ‰§è¡Œ
+                System.out.println(method.getName() + "·½·¨½áÊøÖ´ĞĞ...");
+                // ·µ»ØÄ¿±ê¶ÔÏóÖ´ĞĞµÄ½á¹û£¬´Ë´¦ÊÇadd()·½·¨µÄÖ´ĞĞ½á¹û£¬±¾returnÊÇÔÚÃ¿´Îproxy¶ÔÏóµ÷ÓÃadd()Ê±Ö´ĞĞ
                 return result;
             }
         });
-        // è¿”å›ç”Ÿæˆçš„ä»£ç†å¯¹è±¡ï¼Œæœ¬returnæ˜¯åœ¨æ¯æ¬¡getProxy()å‡½æ•°è°ƒç”¨æ—¶æ‰§è¡Œ
+        // ·µ»ØÉú³ÉµÄ´úÀí¶ÔÏó£¬±¾returnÊÇÔÚÃ¿´ÎgetProxy()º¯Êıµ÷ÓÃÊ±Ö´ĞĞ
         return proxy;
     }
 
     /**
-     * å®é™…å¸¸ç”¨çš„ä»£ç†è·å–æ–¹æ³•å†™æ³•
+     * Êµ¼Ê³£ÓÃµÄ´úÀí»ñÈ¡·½·¨Ğ´·¨
      */
     private static Object getProxy(final Object target) throws Exception {
-        /* é€šè¿‡newProxyInstance()æ–¹æ³•ç›´æ¥å®Œæˆ */
+        /* Í¨¹ınewProxyInstance()·½·¨Ö±½ÓÍê³É */
         Object proxy = Proxy.newProxyInstance(
-                target.getClass().getClassLoader(), // ç±»åŠ è½½å™¨
-                target.getClass().getInterfaces(),  // è®©ç›®æ ‡å¯¹è±¡å’Œä»£ç†å¯¹è±¡å®ç°ç›¸åŒæ¥å£
-                new InvocationHandler() {   // ä»£ç†ä¸­æ·»åŠ é¢å¤–å¤„ç†ä»£ç çš„åœ°æ–¹
+                target.getClass().getClassLoader(), // Àà¼ÓÔØÆ÷
+                target.getClass().getInterfaces(),  // ÈÃÄ¿±ê¶ÔÏóºÍ´úÀí¶ÔÏóÊµÏÖÏàÍ¬½Ó¿Ú
+                new InvocationHandler() {   // ´úÀíÖĞÌí¼Ó¶îÍâ´¦Àí´úÂëµÄµØ·½
                     @Override
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                        System.out.println(method.getName() + "æ–¹æ³•å¼€å§‹æ‰§è¡Œ.");
+                        System.out.println(method.getName() + "·½·¨¿ªÊ¼Ö´ĞĞ.");
                         Object result = method.invoke(target, args);
                         System.out.println(result);
-                        System.out.println(method.getName() + "æ–¹æ³•ç»“æŸæ‰§è¡Œ.");
+                        System.out.println(method.getName() + "·½·¨½áÊøÖ´ĞĞ.");
                         return result;
                     }
                 });
@@ -113,14 +113,14 @@ public class DynamicProxy {
         Calculator proxy = (Calculator)getProxyDetail(target);
         System.out.println(proxy.add(1, 2));
 
-        System.out.println(proxy.getClass().getName()); // æ‰“å°ç±»åcom.sun.proxy.$Proxy0
-        System.out.println(proxy instanceof Calculator); // $Proxy0æ˜¯Calculatoræ¥å£çš„å­ç±»
+        System.out.println(proxy.getClass().getName()); // ´òÓ¡ÀàÃûcom.sun.proxy.$Proxy0
+        System.out.println(proxy instanceof Calculator); // $Proxy0ÊÇCalculator½Ó¿ÚµÄ×ÓÀà
     }
 }
 
 
-ã€åŠ¨æ€ä»£ç†ã€‘
-JDKåŠ¨æ€ä»£ç†åŸºæœ¬ä½¿ç”¨ç¤ºä¾‹ï¼šï¼ˆé™åˆ¶ï¼šè°ƒç”¨çš„åœ°æ–¹å¿…é¡»è¦æä¾›ä»£ç†çš„æ¥å£æ‰èƒ½ä½¿ç”¨ï¼Œæ¯”å¦‚æ­¤å¤„çš„HelloWorldæ¥å£ï¼‰
+¡¾¶¯Ì¬´úÀí¡¿
+JDK¶¯Ì¬´úÀí»ù±¾Ê¹ÓÃÊ¾Àı£º£¨ÏŞÖÆ£ºµ÷ÓÃµÄµØ·½±ØĞëÒªÌá¹©´úÀíµÄ½Ó¿Ú²ÅÄÜÊ¹ÓÃ£¬±ÈÈç´Ë´¦µÄHelloWorld½Ó¿Ú£©
 public interface HelloWorld {
 	public void sayHelloWorld();
 }
@@ -132,33 +132,33 @@ public class HelloWorldImpl implements HelloWorld {
 }
 
 public class JdkProxyExample implements InvocationHandler {
-	/*å­˜æ”¾çœŸå®å¯¹è±¡*/
+	/*´æ·ÅÕæÊµ¶ÔÏó*/
 	private Object target = null;
 
-	/*ç»‘å®šä»£ç†å¯¹è±¡å’ŒçœŸå®å¯¹è±¡çš„ä»£ç†å…³ç³»ï¼Œè¿”å›ä»£ç†å¯¹è±¡*/
+	/*°ó¶¨´úÀí¶ÔÏóºÍÕæÊµ¶ÔÏóµÄ´úÀí¹ØÏµ£¬·µ»Ø´úÀí¶ÔÏó*/
 	public Object bind(Object target) {
-		// ä¿å­˜çœŸå®å¯¹è±¡targetåˆ°æœ¬å¯¹è±¡é‡Œ
+		// ±£´æÕæÊµ¶ÔÏótargetµ½±¾¶ÔÏóÀï
 		this.target = target;
-		/*å»ºç«‹å¹¶ç”Ÿæˆä»£ç†å¯¹è±¡
-		  å‚æ•°1:æŒ‡å®štargetæœ¬èº«çš„ç±»åŠ è½½å™¨ä½œä¸ºç±»åŠ è½½å™¨
-		  å‚æ•°2:æŒ‡å®šåŠ¨æ€ä»£ç†å¯¹è±¡æŒ‚è½½çš„æ¥å£ï¼Œæ­¤å¤„ä¸ºtargetå®ç°çš„æ¥å£
-		  å‚æ•°3:å®šä¹‰å®ç°æ–¹æ³•é€»è¾‘çš„ä»£ç†ç±»ï¼Œæ­¤å¤„ä¸ºå½“å‰å¯¹è±¡ï¼Œè¯¥å¯¹è±¡å¿…é¡»å®ç°InvocationHandleræ¥å£*/
+		/*½¨Á¢²¢Éú³É´úÀí¶ÔÏó
+		  ²ÎÊı1:Ö¸¶¨target±¾ÉíµÄÀà¼ÓÔØÆ÷×÷ÎªÀà¼ÓÔØÆ÷
+		  ²ÎÊı2:Ö¸¶¨¶¯Ì¬´úÀí¶ÔÏó¹ÒÔØµÄ½Ó¿Ú£¬´Ë´¦ÎªtargetÊµÏÖµÄ½Ó¿Ú
+		  ²ÎÊı3:¶¨ÒåÊµÏÖ·½·¨Âß¼­µÄ´úÀíÀà£¬´Ë´¦Îªµ±Ç°¶ÔÏó£¬¸Ã¶ÔÏó±ØĞëÊµÏÖInvocationHandler½Ó¿Ú*/
 		return Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), this);
 	}
 
 	@Override
-	/*å®ç°ä»£ç†é€»è¾‘æ–¹æ³•
-	* å‚æ•°1:ä»£ç†å¯¹è±¡ï¼Œå³å‰è¿°bindæ–¹æ³•ç”Ÿæˆçš„å¯¹è±¡
-	* å‚æ•°2:å½“å‰è°ƒåº¦çš„æ–¹æ³•
-	* å‚æ•°3:è°ƒåº¦æ–¹æ³•çš„å‚æ•°*/
+	/*ÊµÏÖ´úÀíÂß¼­·½·¨
+	* ²ÎÊı1:´úÀí¶ÔÏó£¬¼´Ç°Êöbind·½·¨Éú³ÉµÄ¶ÔÏó
+	* ²ÎÊı2:µ±Ç°µ÷¶ÈµÄ·½·¨
+	* ²ÎÊı3:µ÷¶È·½·¨µÄ²ÎÊı*/
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		System.out.println("è¿›å…¥ä»£ç†é€»è¾‘æ–¹æ³•");
-		System.out.println("åœ¨è°ƒåº¦çœŸå®å¯¹è±¡ä¹‹å‰çš„æœåŠ¡");
+		System.out.println("½øÈë´úÀíÂß¼­·½·¨");
+		System.out.println("ÔÚµ÷¶ÈÕæÊµ¶ÔÏóÖ®Ç°µÄ·şÎñ");
 		Object obj = method.invoke(target, args);
-		System.out.println("åœ¨è°ƒåº¦çœŸå®å¯¹è±¡ä¹‹åçš„æœåŠ¡");
+		System.out.println("ÔÚµ÷¶ÈÕæÊµ¶ÔÏóÖ®ºóµÄ·şÎñ");
 		return obj;
 	}
-	/* ä½¿ç”¨ä¸¾ä¾‹ */
+	/* Ê¹ÓÃ¾ÙÀı */
 	public static void main(String[] argv) {
 		JdkProxyExample jdk = new JdkProxyExample();
 		HelloWorld proxy = (HelloWorld)jdk.bind(new HelloWorldImpl());
@@ -166,31 +166,31 @@ public class JdkProxyExample implements InvocationHandler {
 	}
 }
 
-ä½¿ç”¨JDKåŠ¨æ€ä»£ç†å®ç°æ‹¦æˆªå™¨ï¼š
+Ê¹ÓÃJDK¶¯Ì¬´úÀíÊµÏÖÀ¹½ØÆ÷£º
 public interface Interceptor {
 	boolean before(Object proxy, Object target, Method method, Object[] args);
 	void around(Object proxy, Object target, Method method, Object[] args);
 	void after(Object proxy, Object target, Method method, Object[] args);
 }
-/*å¤–å±‚ä½¿ç”¨è€…æä¾›çš„æ‹¦æˆªå™¨å®ç°ï¼Œä¸ä¸šåŠ¡é€»è¾‘å¼ºç›¸å…³*/
+/*Íâ²ãÊ¹ÓÃÕßÌá¹©µÄÀ¹½ØÆ÷ÊµÏÖ£¬ÓëÒµÎñÂß¼­Ç¿Ïà¹Ø*/
 public class MyInterceptor implements Interceptor {
 	@Override
 	public boolean before(Object proxy, Object target, Method method, Object[] args) {
-		System.out.println("åå°„æ–¹æ³•å‰é€»è¾‘");
+		System.out.println("·´Éä·½·¨Ç°Âß¼­");
 		return false;
 	}
 
 	@Override
 	public void after(Object proxy, Object target, Method method, Object[] args) {
-		System.out.println("åå°„æ–¹æ³•åé€»è¾‘");
+		System.out.println("·´Éä·½·¨ºóÂß¼­");
 	}
 
 	@Override
 	public void around(Object proxy, Object target, Method method, Object[] args) {
-		System.out.println("å–ä»£è¢«ä»£ç†å¯¹è±¡çš„æ–¹æ³•");
+		System.out.println("È¡´ú±»´úÀí¶ÔÏóµÄ·½·¨");
 	}
 }
-/*æ‹¦æˆªé€»è¾‘å®ç°ï¼Œåº•å±‚æ¡†æ¶æä¾›è€…çš„ä»»åŠ¡*/
+/*À¹½ØÂß¼­ÊµÏÖ£¬µ×²ã¿ò¼ÜÌá¹©ÕßµÄÈÎÎñ*/
 public class InterceptorJdkProxy implements InvocationHandler {
 	private Object target;
 	private String interceptorClass = null;
@@ -200,29 +200,29 @@ public class InterceptorJdkProxy implements InvocationHandler {
 		this.interceptorClass = interceptorClass;
 	}
 
-	/*ç»‘å®šå®šåˆ¶åŒ–æ‹¦æˆªå™¨ï¼Œè¿”å›ä¸€ä¸ªä»£ç†å ä½*/
+	/*°ó¶¨¶¨ÖÆ»¯À¹½ØÆ÷£¬·µ»ØÒ»¸ö´úÀíÕ¼Î»*/
 	public static Object bind(Object target, String interceptorClass) {
 		return Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), new InterceptorJdkProxy(target, interceptorClass));
 	}
 
 	@Override
-	/*æ‹¦æˆªå™¨çš„æ‹¦æˆªé€»è¾‘æ”¾åœ¨æ­¤å¤„å®ç°*/
+	/*À¹½ØÆ÷µÄÀ¹½ØÂß¼­·ÅÔÚ´Ë´¦ÊµÏÖ*/
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		/*å¦‚æœæœªæ³¨å†Œè‡ªå®šä¹‰æ‹¦æˆªç±»(è®¾ç½®æ‹¦æˆªå™¨)ï¼Œåˆ™ç›´æ¥åå°„åŸæœ‰æ–¹æ³•*/
+		/*Èç¹ûÎ´×¢²á×Ô¶¨ÒåÀ¹½ØÀà(ÉèÖÃÀ¹½ØÆ÷)£¬ÔòÖ±½Ó·´ÉäÔ­ÓĞ·½·¨*/
 		if(interceptorClass == null) {
 			return method.invoke(target, args);
 		}
 
 		Object result = null;
-		/*é€šè¿‡åå°„ç”Ÿæˆæ‹¦æˆªå™¨*/
+		/*Í¨¹ı·´ÉäÉú³ÉÀ¹½ØÆ÷*/
 		Interceptor interceptor = (Interceptor)Class.forName(interceptorClass).newInstance();
-		/*è°ƒç”¨å‰ç½®æ–¹æ³•ï¼Œè¿”å›trueåˆ™åå°„åŸæœ‰æ–¹æ³•ï¼Œå¦åˆ™æ‰§è¡Œaroundæ‹¦æˆªæ–¹æ³•*/
+		/*µ÷ÓÃÇ°ÖÃ·½·¨£¬·µ»ØtrueÔò·´ÉäÔ­ÓĞ·½·¨£¬·ñÔòÖ´ĞĞaroundÀ¹½Ø·½·¨*/
 		if(interceptor.before(proxy, target, method, args)) {
 			result = method.invoke(target, args);
 		}else{
 			interceptor.around(proxy, target, method, args);
 		}
-		/*ç»Ÿä¸€è°ƒç”¨åç½®æ–¹æ³•*/
+		/*Í³Ò»µ÷ÓÃºóÖÃ·½·¨*/
 		interceptor.after(proxy,  target, method, args);
 		return result;
 	}
@@ -233,37 +233,37 @@ public class InterceptorJdkProxy implements InvocationHandler {
 	}
 }
 
-CGLIBåŠ¨æ€ä»£ç†ï¼š
+CGLIB¶¯Ì¬´úÀí£º
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 import java.lang.reflect.Method;
 public class CglibProxyExample implements MethodInterceptor {
-	/*ç”ŸæˆCGLIBä»£ç†å¯¹è±¡ï¼Œæ³¨æ„æ•´ä¸ªæ“ä½œè¿‡ç¨‹ä¸æ¶‰åŠä»£ç†æ¥å£*/
+	/*Éú³ÉCGLIB´úÀí¶ÔÏó£¬×¢ÒâÕû¸ö²Ù×÷¹ı³Ì²»Éæ¼°´úÀí½Ó¿Ú*/
 	public Object getProxy(Class cls) {
-		/*CGLIB enhanerå¢å¼ºç±»å¯¹è±¡*/
+		/*CGLIB enhanerÔöÇ¿Àà¶ÔÏó*/
 		Enhancer enhancer = new Enhancer();
-		/*è®¾ç½®å¢å¼ºç±»å‹ï¼Œæœ¬è´¨ä¸Šå°±æ˜¯è®¾ç½®è¢«ä»£ç†çš„å¯¹è±¡*/
+		/*ÉèÖÃÔöÇ¿ÀàĞÍ£¬±¾ÖÊÉÏ¾ÍÊÇÉèÖÃ±»´úÀíµÄ¶ÔÏó*/
 		enhancer.setSuperclass(cls);
-		/*å®šä¹‰ä»£ç†é€»è¾‘å¯¹è±¡ä¸ºå½“å‰å¯¹è±¡ï¼Œå³å½“å‰å¯¹è±¡ä¸ºä»£ç†äºº
-		  è¦æ±‚å½“å‰å¯¹è±¡å®ç°MethodInterceptoræ¥å£*/
+		/*¶¨Òå´úÀíÂß¼­¶ÔÏóÎªµ±Ç°¶ÔÏó£¬¼´µ±Ç°¶ÔÏóÎª´úÀíÈË
+		  ÒªÇóµ±Ç°¶ÔÏóÊµÏÖMethodInterceptor½Ó¿Ú*/
 		enhancer.setCallback(this);
-		/*è¿”å›ä»£ç†å¯¹è±¡*/
+		/*·µ»Ø´úÀí¶ÔÏó*/
 		return enhancer.create();
 	}
 
 	@Override
 	public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
-		System.out.println("è°ƒç”¨çœŸå®å¯¹è±¡å‰");
+		System.out.println("µ÷ÓÃÕæÊµ¶ÔÏóÇ°");
 		Object result = methodProxy.invokeSuper(proxy, args);
-		System.out.println("è°ƒç”¨çœŸå®å¯¹è±¡å");
+		System.out.println("µ÷ÓÃÕæÊµ¶ÔÏóºó");
 		return result;
 	}
 
 	public static void main(String[] argv) {
 		CglibProxyExample cpe = new CglibProxyExample();
 		ReflectServiceImpl obj = (ReflectServiceImpl)cpe.getProxy(ReflectServiceImpl.class);
-		obj.sayHello("å¼ ä¸‰");
+		obj.sayHello("ÕÅÈı");
 	}
 }
 
@@ -278,14 +278,14 @@ class RealObject implements MyInterface {
 	public void doSomething() { Print.print("doSomething"); }
 	public void somethingElse(String arg) { Print.print("somethingElse" + arg); }
 }
-/* override invoke()æ–¹æ³• */
+/* override invoke()·½·¨ */
 class DynamicProxyHandler implements InvocationHandler {
 	private Object proxied;
-	/* ä¼ å…¥å‚æ•°æ˜¯å…·ä½“è¦è¢«ä»£ç†çš„å¯¹è±¡ï¼Œä»£ç†èƒ½æ‰§è¡Œè¯¥å¯¹è±¡ä¸Šçš„æ‰€æœ‰æ–¹æ³•å¹¶ä¸”ä¼ é€’å¯¹åº”çš„å‚æ•° */
+	/* ´«Èë²ÎÊıÊÇ¾ßÌåÒª±»´úÀíµÄ¶ÔÏó£¬´úÀíÄÜÖ´ĞĞ¸Ã¶ÔÏóÉÏµÄËùÓĞ·½·¨²¢ÇÒ´«µİ¶ÔÓ¦µÄ²ÎÊı */
 	public DynamicProxyHandler(Object proxied) { this.proxied = proxied; }
 	
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		/* æ­¤å¤„æ˜¯ä»£ç†è¿›è¡ŒåŸæœ‰å¯¹è±¡æ“ä½œè¿›è¡Œå°è£…çš„åœ°æ–¹ï¼Œæ­¤å¤„ä»…åšæ‰“å°ï¼ŒçŒœæµ‹å¯ä»¥æ ¹æ®methodå‡½æ•°åç‰¹ç‚¹ä¿®æ”¹å…¥å‚åšæ›´æ”¹ï¼Ÿ */
+		/* ´Ë´¦ÊÇ´úÀí½øĞĞÔ­ÓĞ¶ÔÏó²Ù×÷½øĞĞ·â×°µÄµØ·½£¬´Ë´¦½ö×ö´òÓ¡£¬²Â²â¿ÉÒÔ¸ù¾İmethodº¯ÊıÃûÌØµãĞŞ¸ÄÈë²Î×ö¸ü¸Ä£¿ */
 		Print.print("*** proxy: " + proxy.getClass() + ", method: " + method + ", args: " + args);
 		if(args != null) {
 			for(Object arg: args) {
@@ -297,7 +297,7 @@ class DynamicProxyHandler implements InvocationHandler {
 	}
 }
 public class SimpleDynamicProxy {
-	/* consumerå±•ç¤ºäº†ä»£ç†çš„å…·ä½“ä½¿ç”¨ï¼Œå…¶å®æ²¡å•¥æ„ä¹‰ï¼ŒæŒ‰ç…§å·²çŸ¥æ¥å£é‡Œçš„æ–¹æ³•ç›´æ¥è°ƒç”¨å°±å¥½ */
+	/* consumerÕ¹Ê¾ÁË´úÀíµÄ¾ßÌåÊ¹ÓÃ£¬ÆäÊµÃ»É¶ÒâÒå£¬°´ÕÕÒÑÖª½Ó¿ÚÀïµÄ·½·¨Ö±½Óµ÷ÓÃ¾ÍºÃ */
 	public static void consumer(MyInterface mi) {
 		mi.doSomething();
 		mi.somethingElse("bonobo");
@@ -306,13 +306,13 @@ public class SimpleDynamicProxy {
 	public static void main(String[] args) {
 		RealObject ro = new RealObject();
 		consumer(ro);
-		/* è°ƒç”¨é™æ€æ–¹æ³•åˆ›å»ºåŠ¨æ€ä»£ç† */
+		/* µ÷ÓÃ¾²Ì¬·½·¨´´½¨¶¯Ì¬´úÀí */
 		MyInterface proxy = (MyInterface)Proxy.newProxyInstance(
-		/* ç¬¬ä¸€ä¸ªå‚æ•°æ˜¯ä¸ªç±»åŠ è½½å™¨ï¼Œæ­¤å¤„ç”¨è¿è¡Œçš„æ–¹æ³•çš„æ¥å£çš„ç±»åŠ è½½å™¨ */ 
+		/* µÚÒ»¸ö²ÎÊıÊÇ¸öÀà¼ÓÔØÆ÷£¬´Ë´¦ÓÃÔËĞĞµÄ·½·¨µÄ½Ó¿ÚµÄÀà¼ÓÔØÆ÷ */ 
 												MyInterface.class.getClassLoader(), 
-		/* ç¬¬äºŒä¸ªå‚æ•°æ˜¯ä»£ç†å®ç°çš„æ¥å£åˆ—è¡¨ï¼Œæ­¤å¤„(ä¸æ˜¯ç±»æˆ–æŠ½è±¡ç±»)ï¼Œæ­¤å¤„ç±»å¼•ç”¨æ•°ç»„æœ‰å•¥æ„ä¹‰ï¼Ÿï¼Ÿï¼Ÿï¼Ÿ */
+		/* µÚ¶ş¸ö²ÎÊıÊÇ´úÀíÊµÏÖµÄ½Ó¿ÚÁĞ±í£¬´Ë´¦(²»ÊÇÀà»ò³éÏóÀà)£¬´Ë´¦ÀàÒıÓÃÊı×éÓĞÉ¶ÒâÒå£¿£¿£¿£¿ */
 												new Class[]{ MyInterface.class}, 
-		/* ç¬¬ä¸‰ä¸ªå‚æ•°æ˜¯InvocationHandleræ¥å£çš„ä¸€ä¸ªå®ç°ï¼Œ */
+		/* µÚÈı¸ö²ÎÊıÊÇInvocationHandler½Ó¿ÚµÄÒ»¸öÊµÏÖ£¬ */
 												new DynamicProxyHandler(ro));
 		consumer(proxy);
 		proxy.doSomething();
