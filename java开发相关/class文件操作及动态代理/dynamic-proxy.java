@@ -424,6 +424,13 @@ CGLIB动态代理具体操作：
 3.将组成的字节码转换成相应的代理的class对象；
 4.实现 MethodInterceptor接口，用来处理对代理类上所有方法的请求（这个接口和JDK动态代理InvocationHandler的功能和角色是一样的）
 
+cglib有两种可选方式，继承和引用。
+第一种是基于继承实现的动态代理，所以可以直接通过super调用target方法，
+但是这种方式在spring中是不支持的，因为这样的话，这个target对象就不能被spring所管理，
+所以cglib还是采用类似jdk的方式，通过持有target对象来达到拦截方法的效果。
+
+
+缺点：被final修饰的类只能使用JDK动态代理，因为被final修饰的类不能被继承，而Cglib则是利用的继承原理实现代理的
 
 引入POM：
 <dependency>
@@ -441,9 +448,14 @@ public class Programer {
 }
 public class Hacker implements MethodInterceptor {
     @Override
-    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+	// 参数1：代理对象；参数2：拦截方法；参数3：拦截方法的参数；参数4：Method类的代理类
+    public Object intercept(Object target, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         System.out.println("**** I am a hacker,Let's see what the poor programmer is doing Now...");
-        proxy.invokeSuper(obj, args);
+		/* 原来的方法可能通过使用java.lang.reflect.Method对象的一般反射调用，
+		*  或者使用 net.sf.cglib.proxy.MethodProxy对象调用。
+		*  net.sf.cglib.proxy.MethodProxy通常被首选使用，因为它更快
+		*/
+        proxy.invokeSuper(target, args);
         System.out.println("****  Oh,what a poor programmer.....");
         return null;
     }

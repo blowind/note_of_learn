@@ -144,6 +144,7 @@ javassist是jboss的一个子项目，其主要的优点，在于简单，而且
 public class MyJavassistGenerator {
     public static void main(String[] args) {
         try{
+			// 获取class定义的容器ClassPool
             ClassPool pool = ClassPool.getDefault();
             //创建Programmer类
             CtClass cc= pool.makeClass("samples.Programer");
@@ -280,3 +281,13 @@ public class StationProxyGenerator {
         createProxy();
     }
 }
+
+
+javassist使用注意点：
+1、因为tomcat和jboss使用的是独立的classloader，而Javassist是通过默认的classloader加载类，因此直接对tomcat context中定义的类做toClass会抛出ClassCastException异常，可以用tomcat的classloader加载字节码。
+	CtClass cc = ...;
+	Class c = cc.toClass(bean.getClass().getClassLoader());
+2、发现在简单的测试中可以load的类，在tomcat中无法load。这是因为，ClassPool.getDefault()查找的路径和底层的JVM路径。而tomcat中定义了多个classloader，因此额外的class路径需要注册到ClassPool中。
+	pool.insertClassPath(new ClassClassPath(this.getClass()));
+3、我想在运行时修改类的一个方法，但是JVM是不允许动态的reload类定义的。一旦classloader加载了一个class，在运行时就不能重新加载这个class的另一个版本，调用toClass()会抛LinkageError。因此需要绕过这种方式定义全新的class。而toClass()其实是当前thread所在的classloader加载class。
+4、Javassist生成的字节码由于没有class声明，字节码创建变量及方法调用都需要通过反射。这点在在线的应用上的性能损失是不能接受的，受到NBeanCopyUtil实现的启发，可以定义一个Interface，Javassist的字节码实现这个Interface，而调用方通过这个接口调用字节码，而不是反射，这样避免了反射调用的开销。还有一点字节码new一个变量也是通过反射，因此通过代理的方法，将每个pv都需要new的字节码对象改为每次new一个代理对象，代理到常驻内存的字节码对象中，这样避免了每次反射的开销。
