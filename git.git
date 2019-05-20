@@ -57,6 +57,13 @@ git config --global user.email "email"
 git config user.name
 git config user.email
 
+修改git显示编码格式
+ git config --global gui.encoding utf-8
+ git config --global i18n.logoutputencoding utf-8
+
+忽略某个文件，不检查冲突和更新
+git update-index --assume-unchanged /master/text.txt(指定文件路径)       #强制忽略跟踪
+git update-index --no-assume-unchanged /master/text.txt(指定文件路径)    #恢复强制忽略跟踪
 
 
 【从命令行创建一个新的仓库】

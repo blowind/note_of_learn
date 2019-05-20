@@ -975,3 +975,19 @@ dir(exceptions)
 从可迭代的对象中获得迭代器
 it = iter([1, 2, 3])
 it.next()       ###  得到1
+
+
+
+读写二进制文件：
+
+from struct import *
+a = "1f 8b 08 00 e7 f9 96 45 4f a7 b6 3d 9d dc f8 74 c9 c6 17 5b 96 02 15 15 a5 16 97 e6 94 00 00 00"
+writeFile = "./responseBin"
+f = open(writeFile, "wb")
+binList = a.split(" ")
+
+for byteStr in binList:
+	byte = int("0x" + str(byteStr), 16)
+	print byte
+	data = pack("B", byte)
+	f.write(data)
