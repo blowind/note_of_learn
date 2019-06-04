@@ -147,7 +147,7 @@ git reset --hard HASH   #返回到某个节点，不保留修改。
 git reset --soft HASH   #返回到某个节点。保留修改
 
 
-【You have not concluded your merge (MERGE_HEAD exists) 保留本地修改的处理】
+【You have not concluded your merge (MERGE_HEAD exists) 保留本地修改的处理，然后pull远程的代码保存到本地，然后和本地代码一起commit/push】
 git merge --abort
 git reset --merge
 git commit .

@@ -590,5 +590,31 @@
     </insert>
 
 
+    <!-- #{}和${}的区别：
+    	MyBatis会在底层对所有sql语句使用JDBC中的PreparedStatement类包装后发送给数据库进行预编译，
+    	预编译后所有#{}位置都会被替换成?，真正execute执行sql语句时只将？位置的内容作为参数传给数据库
+    	本质上把参数化查询的事情做了一遍，所以使用#{}能达到防止SQL注入的效果。
+
+    	所有${}变量会在发送给数据库进行预编译前进行替换，使用替换后的语句参与SQL编译，因此无法防止SQL注入 
+    	涉及到动态表名和列名时，只能使用“${xxx}”这样的参数格式（有误，其实也可以使用#{}，参见前面分表处理的操作）
+    -->
+    <!-- 下面语句执行SQL预编译后返回  SELECT id,title,author,content FROM blog WHERE id = ? -->
+	<select id="getBlogById" resultType="Blog" parameterType=”int”>
+        SELECT id,title,author,content
+        FROM blog
+		WHERE id=#{id}
+	</select>
+	<!-- 下面语句执行SQL预编译后返回  SELECT id,title,author,content FROM blog WHERE id = 3  其中3是传入的参数 -->
+    <select id="getBlogById" resultType="Blog" parameterType=”int”>
+        SELECT id,title,author,content FROM blog
+		WHERE id=${id}
+	</select>
+	<!-- 下面语句是容易被SQL注入的示例，如果orderParam变量传入 "id; drop table blog;"，则被注入，执行后删除了blog表 -->
+	<select id="orderBlog" resultType="Blog" parameterType=”map”>
+        SELECT id,title,author,content
+        FROM blog
+		ORDER BY ${orderParam}
+	</select>
+
 
 </mapper>
