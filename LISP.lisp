@@ -1,67 +1,67 @@
-windowsÏÂlisp»·¾³ÅäÖÃ£º
+windowsä¸‹lispç¯å¢ƒé…ç½®ï¼š
 http://www.mohiji.org/2011/01/31/modern-common-lisp-on-windows/
 
 (load "C:\\path\\to\\quicklisp.lisp")      
-(quicklisp-quickstart:install :path "C:\\quicklisp\\")  ;;;Ä¬ÈÏ°²×°µ½ $HOME/quicklisp ÓÃ:pathĞŞ¸Ä°²×°Ä¿Â¼ Ö»Ğè°²×°Ò»´Î
+(quicklisp-quickstart:install :path "C:\\quicklisp\\")  ;;;é»˜è®¤å®‰è£…åˆ° $HOME/quicklisp ç”¨:pathä¿®æ”¹å®‰è£…ç›®å½• åªéœ€å®‰è£…ä¸€æ¬¡
 (load "~/quicklisp/setup.lisp")
-(ql:add-to-init-file)         ;;;  ½«quicklisp¼ÓÈëÄ¬ÈÏ¼ÓÔØÏî
+(ql:add-to-init-file)         ;;;  å°†quicklispåŠ å…¥é»˜è®¤åŠ è½½é¡¹
 
-To load a system, use: (ql:quickload "system-name")     ;;; Ìí¼Ó :verbose t ±êÇ©¿ÉÒÔÏÔÊ¾ÏêÏ¸µÄ¼ÓÔØĞÅÏ¢
-ÀıÈç£º   (ql:quickload "ieee-floats")  
+To load a system, use: (ql:quickload "system-name")     ;;; æ·»åŠ  :verbose t æ ‡ç­¾å¯ä»¥æ˜¾ç¤ºè¯¦ç»†çš„åŠ è½½ä¿¡æ¯
+ä¾‹å¦‚ï¼š   (ql:quickload "ieee-floats")  
 To find systems, use: (ql:system-apropos "term")
-ÀıÈç£º   (ql:system-apropos "xml")
+ä¾‹å¦‚ï¼š   (ql:system-apropos "xml")
 To load Quicklisp every time you start Lisp, use: (ql:add-to-init-file)
 
 
 
-Ô­Óï£º
-() »òÕß nil  ;;; ±í¿Õ£¬Ò²¿ÉÒÔ±íÊ¾false
+åŸè¯­ï¼š
+() æˆ–è€… nil  ;;; è¡¨ç©ºï¼Œä¹Ÿå¯ä»¥è¡¨ç¤ºfalse
 
-t  ±íÊ¾true
+t  è¡¨ç¤ºtrue
 
-¹Ø¼ü×Ö£º
-(quote x)    ;;; À¨ÆğÀ´ ¼òĞ´Îª  'x
-
-
-¹Ø¼ü×Ö£º
-(atom x)     ;;; xÊÇ·ñÊÇÔ­×Ó»òÕß¿ÕÁĞ±í  ÊÇ·µ»Øt ·ñ·µ»Ø()
+å…³é”®å­—ï¼š
+(quote x)    ;;; æ‹¬èµ·æ¥ ç®€å†™ä¸º  'x
 
 
-¹Ø¼ü×Ö£º
-(eq x y)     ;;; x,yÊÇ·ñÏàµÈ  ·µ»Ø t »òÕß ()
+å…³é”®å­—ï¼š
+(atom x)     ;;; xæ˜¯å¦æ˜¯åŸå­æˆ–è€…ç©ºåˆ—è¡¨  æ˜¯è¿”å›t å¦è¿”å›()
 
 
-¹Ø¼ü×Ö£º
-(car x)      ;;; ÆÚ´ıxÊÇ¸öÁĞ±í£¬·µ»ØÆäµÚÒ»¸öÔªËØ
+å…³é”®å­—ï¼š
+(eq x y)     ;;; x,yæ˜¯å¦ç›¸ç­‰  è¿”å› t æˆ–è€… ()
 
 
-¹Ø¼ü×Ö£º
-(cdr x)      ;;; ÆÚ´ıxÊÇ¸öÁĞ±í£¬·µ»Ø³ıµÚÒ»¸öÔªËØÖ®ÍâµÄËùÓĞÔªËØ
-(car (cdr (cdr '(a b c d))))       ;;; È¡µÃµÚÈı¸öÔªËØ
-(third '(a b c d))                 ;;; Í¬ÉÏ
+å…³é”®å­—ï¼š
+(car x)      ;;; æœŸå¾…xæ˜¯ä¸ªåˆ—è¡¨ï¼Œè¿”å›å…¶ç¬¬ä¸€ä¸ªå…ƒç´ 
 
 
-¹Ø¼ü×Ö£º
-(cons x y)   ;;; ÆÚ´ıyÊÇ¸öÁĞ±í£¬·µ»ØÒ»¸ö°üº¬x,yµÄÁĞ±í
+å…³é”®å­—ï¼š
+(cdr x)      ;;; æœŸå¾…xæ˜¯ä¸ªåˆ—è¡¨ï¼Œè¿”å›é™¤ç¬¬ä¸€ä¸ªå…ƒç´ ä¹‹å¤–çš„æ‰€æœ‰å…ƒç´ 
+(car (cdr (cdr '(a b c d))))       ;;; å–å¾—ç¬¬ä¸‰ä¸ªå…ƒç´ 
+(third '(a b c d))                 ;;; åŒä¸Š
 
 
-¹Ø¼ü×Ö£º
-(cond (p1 e1) ... (pn en))   ;;;  Ò»´ÎÆÀ¹Àp1µ½pn£¬ÈôÄ³¸öpi·µ»Øt, ·µ»Øei
-(cond (x y) ('t z))   ;;;  µÈ¼ÛÓÚ  if x then y else z
+å…³é”®å­—ï¼š
+(cons x y)   ;;; æœŸå¾…yæ˜¯ä¸ªåˆ—è¡¨ï¼Œè¿”å›ä¸€ä¸ªåŒ…å«x,yçš„åˆ—è¡¨
 
 
-¹Ø¼ü×Ö£º
-((lambda (p1 ... pn) e) a1 ... an)   ;;; º¯Êıµ÷ÓÃ£¬ÏÈ¼ÆËãa1£¬´úÈëe£¬¶ÔÓ¦p1ÊÇ·µ»Ø½á¹û
+å…³é”®å­—ï¼š
+(cond (p1 e1) ... (pn en))   ;;;  ä¸€æ¬¡è¯„ä¼°p1åˆ°pnï¼Œè‹¥æŸä¸ªpiè¿”å›t, è¿”å›ei
+(cond (x y) ('t z))   ;;;  ç­‰ä»·äº  if x then y else z
 
-(label f (lambda (p1 ... pn) e))     ;;; µİ¹é¶¨Òå£¬eÖĞ¿ÉÒÔ³öÏÖf
-(label subst (lambda (x y z)      ;;; µİ¹éÊµÏÖ subst(x y z)£¬ÆäÖĞzÊÇlist£¬Ìæ»»zÖĞËùÓĞÎªz
-			   ( cond ((atom z)     ;;; Èç¹ûzÒÑ¾­ÊÇ¸öÔ­×Ó
-			           (cond ((eq z y) x))    ;;; zµÈÓÚy ÔòÌæ»»
-							 ('t z)))         ;;; ²»µÈµÄ»°±£³Öz²»±ä
-					  ('t (cons (subst x y (car z))   ;;;  Èç¹ûz²»ÊÇÔ­×Ó£¬ÇĞ¸îzµÄÍ·²¢µİ¹é
-								(subst x y (cdr z))))))   ;;;z²»ÊÇÔ­×Ó£¬ÇĞ¸îÊ£ÏÂµÄ²¿·Öµİ¹é
 
-µÈ¼ÛÓÚ
+å…³é”®å­—ï¼š
+((lambda (p1 ... pn) e) a1 ... an)   ;;; å‡½æ•°è°ƒç”¨ï¼Œå…ˆè®¡ç®—a1ï¼Œä»£å…¥eï¼Œå¯¹åº”p1æ˜¯è¿”å›ç»“æœ
+
+(label f (lambda (p1 ... pn) e))     ;;; é€’å½’å®šä¹‰ï¼Œeä¸­å¯ä»¥å‡ºç°f
+(label subst (lambda (x y z)      ;;; é€’å½’å®ç° subst(x y z)ï¼Œå…¶ä¸­zæ˜¯listï¼Œæ›¿æ¢zä¸­æ‰€æœ‰ä¸ºz
+			   ( cond ((atom z)     ;;; å¦‚æœzå·²ç»æ˜¯ä¸ªåŸå­
+			           (cond ((eq z y) x))    ;;; zç­‰äºy åˆ™æ›¿æ¢
+							 ('t z)))         ;;; ä¸ç­‰çš„è¯ä¿æŒzä¸å˜
+					  ('t (cons (subst x y (car z))   ;;;  å¦‚æœzä¸æ˜¯åŸå­ï¼Œåˆ‡å‰²zçš„å¤´å¹¶é€’å½’
+								(subst x y (cdr z))))))   ;;;zä¸æ˜¯åŸå­ï¼Œåˆ‡å‰²å‰©ä¸‹çš„éƒ¨åˆ†é€’å½’
+
+ç­‰ä»·äº
 (defun subst (x y z)
 	( cond ((atom z)
 		   (cond ((eq z y) x)
@@ -70,169 +70,169 @@ t  ±íÊ¾true
 			        (subst(x y (cdr z))))))
 
 
-¹Ø¼ü×Ö£º					
-(cadr e)   ;;; µÈ¼ÛÓÚ  (car (cdr e))  È¡eÖĞµÚ¶ş¸öÔªËØ£¬Á¬ĞøµÄadĞÎÊ½×î¶àËÄ¸ö
-(third '(a b c))  ;; µÃµ½µÚÈı¸öÔªËØc  µÈ¼ÛÓÚ (caddr '(a b c))
+å…³é”®å­—ï¼š					
+(cadr e)   ;;; ç­‰ä»·äº  (car (cdr e))  å–eä¸­ç¬¬äºŒä¸ªå…ƒç´ ï¼Œè¿ç»­çš„adå½¢å¼æœ€å¤šå››ä¸ª
+(third '(a b c))  ;; å¾—åˆ°ç¬¬ä¸‰ä¸ªå…ƒç´ c  ç­‰ä»·äº (caddr '(a b c))
 
 
-¹Ø¼ü×Ö£º
-(list e1 ... en)  ;;;  µÈ¼ÛÓÚ (cons e1 ...(cons en '()) ...)
-(list '(+ 2 1) (+ 2 1))   ;; µÃµ½((+ 2 1) 3)  listÊÇº¯Êı£¬»á¼ÆËãÆäÃ¿¸ö²ÎÊı£¬³ı·ÇÓÃ'±ê¼Ç
+å…³é”®å­—ï¼š
+(list e1 ... en)  ;;;  ç­‰ä»·äº (cons e1 ...(cons en '()) ...)
+(list '(+ 2 1) (+ 2 1))   ;; å¾—åˆ°((+ 2 1) 3)  listæ˜¯å‡½æ•°ï¼Œä¼šè®¡ç®—å…¶æ¯ä¸ªå‚æ•°ï¼Œé™¤éç”¨'æ ‡è®°
 
 
-¹Ø¼ü×Ö£º
-(listp '(a b c))  ;;; ²ÎÊıÊÇlistÊ±£¬listp·µ»Øt
-(typep 27 'integer)   ;;; ÅĞ¶Ï¸ø¶¨²ÎÊıµÄÀàĞÍ
+å…³é”®å­—ï¼š
+(listp '(a b c))  ;;; å‚æ•°æ˜¯listæ—¶ï¼Œlistpè¿”å›t
+(typep 27 'integer)   ;;; åˆ¤æ–­ç»™å®šå‚æ•°çš„ç±»å‹
 
 
-¹Ø¼ü×Ö£º
-(null nil)        ;;; ²ÎÊıÊÇnil»òÕß()Ê±£¬null·µ»Øt
+å…³é”®å­—ï¼š
+(null nil)        ;;; å‚æ•°æ˜¯nilæˆ–è€…()æ—¶ï¼Œnullè¿”å›t
 
 
-¹Ø¼ü×Ö£º
-(not nil)         ;;; Í¬ÉÏ
+å…³é”®å­—ï¼š
+(not nil)         ;;; åŒä¸Š
 
 
-¹Ø¼ü×Ö£º
-(if (listp '(a b c)) (+ 1 2) (+ 5 6))   ;;; LISPµÄÌõ¼ş±í´ïÊ½£¬µÃµ½3
-(if (listp '(a b c))                    ;;; Í¬ÉÏ£¬Õı³£Ğ´·¨
+å…³é”®å­—ï¼š
+(if (listp '(a b c)) (+ 1 2) (+ 5 6))   ;;; LISPçš„æ¡ä»¶è¡¨è¾¾å¼ï¼Œå¾—åˆ°3
+(if (listp '(a b c))                    ;;; åŒä¸Šï¼Œæ­£å¸¸å†™æ³•
 	(+ 1 2)
 	(+ 5 6))
-(if (listp 27) (+ 2 3))   ;;;  Ö»ÓĞifÓï¾ä£¬Ã»ÓĞelseÓï¾äµÄĞ´·¨
+(if (listp 27) (+ 2 3))   ;;;  åªæœ‰ifè¯­å¥ï¼Œæ²¡æœ‰elseè¯­å¥çš„å†™æ³•
 
 (and t (+ 1 2))    
-;;; ³ıÁË×îºóÒ»¸ö²ÎÊı£¬ÆäËû¶¼ÊÇĞÎ²Î£¬×îºó²ÎÊıÊÇ·µ»ØÖµ£¬ÉÏÊö±í´ïÊ½·µ»Ø3£¬µ«ÊÇËùÓĞĞÎ²Î¶¼±ØĞëÊÇ·Çnil
-;;; ĞÎ²Î¼ÆËãÊ±ÓĞ¶ÌÂ·Âß¼­£¬ËùÒÔ¿ÉÄÜ·µ»ØµÄ²»ÊÇ×îºóÒ»¸ö±í´ïÊ½
+;;; é™¤äº†æœ€åä¸€ä¸ªå‚æ•°ï¼Œå…¶ä»–éƒ½æ˜¯å½¢å‚ï¼Œæœ€åå‚æ•°æ˜¯è¿”å›å€¼ï¼Œä¸Šè¿°è¡¨è¾¾å¼è¿”å›3ï¼Œä½†æ˜¯æ‰€æœ‰å½¢å‚éƒ½å¿…é¡»æ˜¯énil
+;;; å½¢å‚è®¡ç®—æ—¶æœ‰çŸ­è·¯é€»è¾‘ï¼Œæ‰€ä»¥å¯èƒ½è¿”å›çš„ä¸æ˜¯æœ€åä¸€ä¸ªè¡¨è¾¾å¼
 
 (format t "~A plus ~A equals ~A.~%" 2 3 (+ 2 3))      
-;;;  Êä³ö formatÊÇÊä³öº¯ÊıÃû t±íÊ¾Ä¬ÈÏÊä³öÎ»ÖÃ  ~A±íÊ¾ÒªÌî³äµÄµØ·½  ~%±íÊ¾»»ĞĞ
-(read)    ;;;  Ä¬ÈÏÊäÈë
+;;;  è¾“å‡º formatæ˜¯è¾“å‡ºå‡½æ•°å tè¡¨ç¤ºé»˜è®¤è¾“å‡ºä½ç½®  ~Aè¡¨ç¤ºè¦å¡«å……çš„åœ°æ–¹  ~%è¡¨ç¤ºæ¢è¡Œ
+(read)    ;;;  é»˜è®¤è¾“å…¥
 
-(let ((x 1) (y 1)) (+ x y))        ;;;  let ÒıÈë¾Ö²¿±äÁ¿
-(defun ask-number ()               ;;;  ĞÂº¯ÊıÎŞ²ÎÊı£¬ÓÃÓÚ¶ÁÈëÊı×Ö
+(let ((x 1) (y 1)) (+ x y))        ;;;  let å¼•å…¥å±€éƒ¨å˜é‡
+(defun ask-number ()               ;;;  æ–°å‡½æ•°æ— å‚æ•°ï¼Œç”¨äºè¯»å…¥æ•°å­—
 	(format t "Please enter a number. ")
 	(let ((val (read)))
 		(if (numberp val)
 			val
 			(ask-number))))
 
-(defparameter *glob* 99)       ;;;  ¶¨ÒåÈ«¾Ö±äÁ¿£¬±äÁ¿ÃûÇ°ºó¼Ó*ÊÇ¹ú¼Ê¹ßÀı
-(defconstant limit (+ *glob* 1))   ;;;  ¶¨ÒåÈ«¾Ö³£Á¿
-(boundp '*glob*)               ;;;  ²é¿´*glob* ÊÇ·ñÎªÈ«¾Ö±äÁ¿
+(defparameter *glob* 99)       ;;;  å®šä¹‰å…¨å±€å˜é‡ï¼Œå˜é‡åå‰ååŠ *æ˜¯å›½é™…æƒ¯ä¾‹
+(defconstant limit (+ *glob* 1))   ;;;  å®šä¹‰å…¨å±€å¸¸é‡
+(boundp '*glob*)               ;;;  æŸ¥çœ‹*glob* æ˜¯å¦ä¸ºå…¨å±€å˜é‡
 
 
-(setf *glob* 98)               ;;; ¸³ÖµÔËËã ¸ø±äÁ¿*glob*¸³Öµ
-(let ((n 10)) (setf n 2) n)    ;;;  let·µ»Ø±í´ïÊ½×îºóÒ»¸ö½á¹û£¬µÃµ½2
-(setf x (list 'a 'b 'c))       ;;;  x²»´æÔÚÊ±£¬×Ô¶¯´´½¨È«¾Ö±äÁ¿x
-(setf (car x) n)               ;;;  Ìæ»»xÖĞµÚÒ»¸öÔªËØ£¬µÃµ½(n b c)
-(setf a b c d e f)  ;;;  µÈ¼ÛÓÚ (setf a b) (setf c d) (setf e f)
+(setf *glob* 98)               ;;; èµ‹å€¼è¿ç®— ç»™å˜é‡*glob*èµ‹å€¼
+(let ((n 10)) (setf n 2) n)    ;;;  letè¿”å›è¡¨è¾¾å¼æœ€åä¸€ä¸ªç»“æœï¼Œå¾—åˆ°2
+(setf x (list 'a 'b 'c))       ;;;  xä¸å­˜åœ¨æ—¶ï¼Œè‡ªåŠ¨åˆ›å»ºå…¨å±€å˜é‡x
+(setf (car x) n)               ;;;  æ›¿æ¢xä¸­ç¬¬ä¸€ä¸ªå…ƒç´ ï¼Œå¾—åˆ°(n b c)
+(setf a b c d e f)  ;;;  ç­‰ä»·äº (setf a b) (setf c d) (setf e f)
 
 
-(remove 'a lst)         ;;;  ¿½±´Ò»¸ölst¸±±¾£¬ÒÆ³ıÆäÖĞµÄËùÓĞa²¢·µ»ØÕâ¸ö¸±±¾
+(remove 'a lst)         ;;;  æ‹·è´ä¸€ä¸ªlstå‰¯æœ¬ï¼Œç§»é™¤å…¶ä¸­çš„æ‰€æœ‰aå¹¶è¿”å›è¿™ä¸ªå‰¯æœ¬
 
-(defun show-squares (start end)         ;;;  µü´úµÄÊµÏÖ
-	(do ((i start (+ i 1)))             ;;; doµÄµÚÒ»¸ö²ÎÊıÊÇ(varialbe initial update)ĞÎÊ½
+(defun show-squares (start end)         ;;;  è¿­ä»£çš„å®ç°
+	(do ((i start (+ i 1)))             ;;; doçš„ç¬¬ä¸€ä¸ªå‚æ•°æ˜¯(varialbe initial update)å½¢å¼
 		((> i end) 'done)               
-	;;; µÚ¶ş¸ö²ÎÊıÊ×ÏÈ°üº¬½áÊøÅĞ¶Ïexpression£¬Ê£ÏÂµÄ²¿·ÖÒÀ´Î¼ÆËã£¬×îºóÒ»¸öÎªÕû¸öµü´ú·µ»ØÖµ
+	;;; ç¬¬äºŒä¸ªå‚æ•°é¦–å…ˆåŒ…å«ç»“æŸåˆ¤æ–­expressionï¼Œå‰©ä¸‹çš„éƒ¨åˆ†ä¾æ¬¡è®¡ç®—ï¼Œæœ€åä¸€ä¸ªä¸ºæ•´ä¸ªè¿­ä»£è¿”å›å€¼
 		(format t "~A ~A~%" i (* i i))))
 
-(defun show-squares (i end)            ;;;  ÉÏÊöµü´úµÄµİ¹éÊµÏÖ
+(defun show-squares (i end)            ;;;  ä¸Šè¿°è¿­ä»£çš„é€’å½’å®ç°
 	(if (> i end)
 		'done
-		(progn                ;;; progn ½ÓÊÕÈÎºÎÊıÄ¿±í´ïÊ½£¬ÒÀ´Î¼ÆËã£¬·µ»Ø×îºóÒ»¸öµÄÖµ
+		(progn                ;;; progn æ¥æ”¶ä»»ä½•æ•°ç›®è¡¨è¾¾å¼ï¼Œä¾æ¬¡è®¡ç®—ï¼Œè¿”å›æœ€åä¸€ä¸ªçš„å€¼
 			(format t "~A ~A~%" i (* i i))
 			(show-squares (+ i 1) end))))
 			
 			
-(defun our-length (lst)           ;;; ¼ÆËãlst³¤¶È
+(defun our-length (lst)           ;;; è®¡ç®—lsté•¿åº¦
 	(let ((len 0))
-		(dolist (obj lst)         ;;;  dolistµü´úlstÖĞµÄÔªËØ£¬Ã¿´Î°ÑlstÖĞµÄÖµ·ÅÈëobj
+		(dolist (obj lst)         ;;;  dolistè¿­ä»£lstä¸­çš„å…ƒç´ ï¼Œæ¯æ¬¡æŠŠlstä¸­çš„å€¼æ”¾å…¥obj
 		;;;  dolist (variable expression) expression
 			(setf len (+ len 1)))
 		len))
 		
-(defun our-length (lst)           ;;;  ÉÏÊöµü´úµÄµİ¹éÊµÏÖ
+(defun our-length (lst)           ;;;  ä¸Šè¿°è¿­ä»£çš„é€’å½’å®ç°
 	(if (null lst)
 		0
 		(+ 1 (our-length (cdr lst)))))
 
-(apply #'+ '(1 2 3))     ;;; apply µÚÒ»¸ö²ÎÊıÊÇº¯ÊıÃû£¬°Ñº¯Êı×÷ÓÃÓÚºóÃæµÄ²ÎÊı
-(apply #'+ 1 2 '(3 4 5))  ;;;  µÃµ½15
-(funcall #'+ 1 2 3)      ;;; Í¬ÉÏ£¬µ«ÊÇ²ÎÊı²»ÓÃµ±×ölist×é×°ÆğÀ´		
+(apply #'+ '(1 2 3))     ;;; apply ç¬¬ä¸€ä¸ªå‚æ•°æ˜¯å‡½æ•°åï¼ŒæŠŠå‡½æ•°ä½œç”¨äºåé¢çš„å‚æ•°
+(apply #'+ 1 2 '(3 4 5))  ;;;  å¾—åˆ°15
+(funcall #'+ 1 2 3)      ;;; åŒä¸Šï¼Œä½†æ˜¯å‚æ•°ä¸ç”¨å½“åšlistç»„è£…èµ·æ¥		
 
 
-(eql (cons 'a nil) (cons 'a nil))   ;;; eql½öÔÚ²ÎÊıÊÇÍ¬Ò»¸ö¶ÔÏóÊÇ·µ»Øtrue£¬ËùÒÔ´Ë´¦µÃµ½nil
-(equal (cons 'a nil) (cons 'a nil)) ;;; equalÔÚÖµÏàÍ¬Ê±·µ»ØT£¬ËùÒÔ´Ë´¦ÊÇT
+(eql (cons 'a nil) (cons 'a nil))   ;;; eqlä»…åœ¨å‚æ•°æ˜¯åŒä¸€ä¸ªå¯¹è±¡æ˜¯è¿”å›trueï¼Œæ‰€ä»¥æ­¤å¤„å¾—åˆ°nil
+(equal (cons 'a nil) (cons 'a nil)) ;;; equalåœ¨å€¼ç›¸åŒæ—¶è¿”å›Tï¼Œæ‰€ä»¥æ­¤å¤„æ˜¯T
 
-(setf x '(a b c))  ;;; µÃµ½(a b c)
-(setf y x)      ;;;  µÃµ½Ò»¸öÖ¸Õë£¬y,xÖ¸ÏòÍ¬ÑùµÄÄÚÈİ
-(setf x '(a b c) y (copy-list x))  ;;; ¿½±´(a b c)£¬yÖ¸ÏòĞÂµÄ¿½±´
-
-
-(cons 'a 'b)  ;;; consÖ»½ÓÊÕÁ½¸ö²ÎÊı£¬ºÏ²¢³ÉÒ»¸ölist
-(append '(a b) '(c d) 'e)  ;;; append½ÓÊÕ¶à¸ö²ÎÊı£¬°ÑËûÃÇºÏ²¢³ÉÒ»¸ölist
+(setf x '(a b c))  ;;; å¾—åˆ°(a b c)
+(setf y x)      ;;;  å¾—åˆ°ä¸€ä¸ªæŒ‡é’ˆï¼Œy,xæŒ‡å‘åŒæ ·çš„å†…å®¹
+(setf x '(a b c) y (copy-list x))  ;;; æ‹·è´(a b c)ï¼ŒyæŒ‡å‘æ–°çš„æ‹·è´
 
 
-(nth 0 '(a b c))    ;;; »ñµÃlistÖĞµÚ0¸öÔªËØ£¬µÃµ½a
-(nthcdr 2 '(a b c d e))   ;;;  »ñµÃµÚ2¸öcdr£¬µÃµ½(c d e)
-(last '(a b (c d)))    ;;;·µ»ØÍâ²ãlistÖĞµÄ×îºóÒ»¸öÔªËØ((c d))£¬×¢Òâµ½Õâ¸ölistµ±×öÒ»¸öÔªËØ
+(cons 'a 'b)  ;;; consåªæ¥æ”¶ä¸¤ä¸ªå‚æ•°ï¼Œåˆå¹¶æˆä¸€ä¸ªlist
+(append '(a b) '(c d) 'e)  ;;; appendæ¥æ”¶å¤šä¸ªå‚æ•°ï¼ŒæŠŠä»–ä»¬åˆå¹¶æˆä¸€ä¸ªlist
 
 
-(mapcar #'(lambda (x) (+ x 10)) '(1 2 3))    ;;;  µÃµ½(11 12 13)
-;; (mapcar function    one-or-more-list)ĞÎÊ½£¬Ã¿´Î¶Ô¸÷¸ölistÖĞÔªËØÒ»Æğµ÷ÓÃfunction
-(mapcar #'list '(a b c) '(1 2 3 4))       ;;;  µÃµ½((a 1) (b 2) (c 3))
-(maplist #'(lambda (x) x) '(a b c))   ;;;  µ÷ÓÃĞÎÊ½Í¬ÉÏ£¬²»¹ı×÷ÓÃÓÚcdr²¿·Ö
-;;;   µÃµ½((a b c) (b c) (c))
+(nth 0 '(a b c))    ;;; è·å¾—listä¸­ç¬¬0ä¸ªå…ƒç´ ï¼Œå¾—åˆ°a
+(nthcdr 2 '(a b c d e))   ;;;  è·å¾—ç¬¬2ä¸ªcdrï¼Œå¾—åˆ°(c d e)
+(last '(a b (c d)))    ;;;è¿”å›å¤–å±‚listä¸­çš„æœ€åä¸€ä¸ªå…ƒç´ ((c d))ï¼Œæ³¨æ„åˆ°è¿™ä¸ªlistå½“åšä¸€ä¸ªå…ƒç´ 
 
 
-(substitute 'y 'x '(a b c d x x x)) ;;;  (substitute new old list) µÃµ½(a b c d y y y)
-;;;   Ö»ÄÜÌæ»»listÕâÒ»²ãµÄÔªËØ
-(subst 'y 'x '(and (integerp x) (zerop (mod x 2))))   ;;;  Éî²ãÌæ»»
-;;;   µÃµ½(and (integerp y ) (zerop (mod y 2)))
+(mapcar #'(lambda (x) (+ x 10)) '(1 2 3))    ;;;  å¾—åˆ°(11 12 13)
+;; (mapcar function    one-or-more-list)å½¢å¼ï¼Œæ¯æ¬¡å¯¹å„ä¸ªlistä¸­å…ƒç´ ä¸€èµ·è°ƒç”¨function
+(mapcar #'list '(a b c) '(1 2 3 4))       ;;;  å¾—åˆ°((a 1) (b 2) (c 3))
+(maplist #'(lambda (x) x) '(a b c))   ;;;  è°ƒç”¨å½¢å¼åŒä¸Šï¼Œä¸è¿‡ä½œç”¨äºcdréƒ¨åˆ†
+;;;   å¾—åˆ°((a b c) (b c) (c))
 
 
-(member 'b '(a b c))  ;;;  ·µ»ØÆ¥Åä¿ªÊ¼µÄlist£¬Ä¬ÈÏ±È½Ïº¯ÊıÊÇeql  ´Ë´¦µÃµ½(b c)
-(member '(a) '((a) (z)) :test #'equal)   ;;; Í¬ÉÏ£¬µ«ÊÇÌæ»»±È½Ïº¯ÊıÎªequal
-;;;;  :symbal ÊÇ¹Ø¼ü×Ö²ÎÊı    ¹Ø¼ü×Ö²ÎÊı±ØĞë·ÅÔÚ×îºó£¬¶à¸ö¹Ø¼ü×Ö²ÎÊıÖ®¼äµÄÎ»ÖÃÃ»Ó°Ïì
-(member 'a '((a b) (c d)) :key #'car)     ;;;   µÃµ½((a b) (c d))
-;;;;   :key Ö¸¶¨ÔÚ±È½ÏÖ®Ç°×÷ÓÃÓÚ²ÎÊıµÄº¯Êı
-(member 2 '((1) (2)) :key #'car :test #'equal)  ;;;   µÃµ½((2))
+(substitute 'y 'x '(a b c d x x x)) ;;;  (substitute new old list) å¾—åˆ°(a b c d y y y)
+;;;   åªèƒ½æ›¿æ¢listè¿™ä¸€å±‚çš„å…ƒç´ 
+(subst 'y 'x '(and (integerp x) (zerop (mod x 2))))   ;;;  æ·±å±‚æ›¿æ¢
+;;;   å¾—åˆ°(and (integerp y ) (zerop (mod y 2)))
+
+
+(member 'b '(a b c))  ;;;  è¿”å›åŒ¹é…å¼€å§‹çš„listï¼Œé»˜è®¤æ¯”è¾ƒå‡½æ•°æ˜¯eql  æ­¤å¤„å¾—åˆ°(b c)
+(member '(a) '((a) (z)) :test #'equal)   ;;; åŒä¸Šï¼Œä½†æ˜¯æ›¿æ¢æ¯”è¾ƒå‡½æ•°ä¸ºequal
+;;;;  :symbal æ˜¯å…³é”®å­—å‚æ•°    å…³é”®å­—å‚æ•°å¿…é¡»æ”¾åœ¨æœ€åï¼Œå¤šä¸ªå…³é”®å­—å‚æ•°ä¹‹é—´çš„ä½ç½®æ²¡å½±å“
+(member 'a '((a b) (c d)) :key #'car)     ;;;   å¾—åˆ°((a b) (c d))
+;;;;   :key æŒ‡å®šåœ¨æ¯”è¾ƒä¹‹å‰ä½œç”¨äºå‚æ•°çš„å‡½æ•°
+(member 2 '((1) (2)) :key #'car :test #'equal)  ;;;   å¾—åˆ°((2))
 
 
 
-ĞÂº¯ÊıµÄ¶¨Òå£º
-#'+      ;;;; #'×÷Îª¶¨ÒåĞÂº¯ÊıµÄ¼òĞ´
+æ–°å‡½æ•°çš„å®šä¹‰ï¼š
+#'+      ;;;; #'ä½œä¸ºå®šä¹‰æ–°å‡½æ•°çš„ç®€å†™
 
-lambda ±í´ïÊ½ÊÇÎªÁËÇø·ÖlistºÍº¯Êı£¬ÒòÎªËûÃÇÔÚLISPÖĞÊÇÒ»ÑùµÄ´æ´¢½á¹¹
+lambda è¡¨è¾¾å¼æ˜¯ä¸ºäº†åŒºåˆ†listå’Œå‡½æ•°ï¼Œå› ä¸ºä»–ä»¬åœ¨LISPä¸­æ˜¯ä¸€æ ·çš„å­˜å‚¨ç»“æ„
 (lambda (parameters) (zero or more expressions))
-(lambda (x y) (+ x y))          ;;;  ¶¨ÒåÁËÒ»¸ö lambda±í´ïÊ½ »òÕßËµ º¯Êı
-((lambda (x) (+ x 100)) 1)      ;;;  Õû¸ölambda±í´ïÊ½±¾Éí¿ÉÒÔµ±×öº¯ÊıÃûÊ¹ÓÃ
-(funcall #'(lambda (x) (+ x 100)) 1)   ;; Í¬ÉÏ£¬ÁíÒ»ÖÖµ÷ÓÃ·¨
+(lambda (x y) (+ x y))          ;;;  å®šä¹‰äº†ä¸€ä¸ª lambdaè¡¨è¾¾å¼ æˆ–è€…è¯´ å‡½æ•°
+((lambda (x) (+ x 100)) 1)      ;;;  æ•´ä¸ªlambdaè¡¨è¾¾å¼æœ¬èº«å¯ä»¥å½“åšå‡½æ•°åä½¿ç”¨
+(funcall #'(lambda (x) (+ x 100)) 1)   ;; åŒä¸Šï¼Œå¦ä¸€ç§è°ƒç”¨æ³•
 
 (defun our-third (x) (car (cdr (cdr x))) )
-;;;   defunº¯ÊıÃû  ×Ô¶¨Òåº¯ÊıÃû  ĞÎ²ÎÁĞ±í  º¯ÊıÊµÏÖ  ¹¹³ÉÕû¸öº¯ÊıµÄ¶¨Òå
+;;;   defunå‡½æ•°å  è‡ªå®šä¹‰å‡½æ•°å  å½¢å‚åˆ—è¡¨  å‡½æ•°å®ç°  æ„æˆæ•´ä¸ªå‡½æ•°çš„å®šä¹‰
 
-(defun our-member (obj lst)       ;;;  µİ¹éÅĞ¶ÏÒ»¸öÔªËØÊÇ·ñÊÇÒ»¸ölistµÄ³ÉÔ±£¬·µ»ØÖµÊÇÒÔobj¿ªÍ·µÄÊ£Óàlist
+(defun our-member (obj lst)       ;;;  é€’å½’åˆ¤æ–­ä¸€ä¸ªå…ƒç´ æ˜¯å¦æ˜¯ä¸€ä¸ªlistçš„æˆå‘˜ï¼Œè¿”å›å€¼æ˜¯ä»¥objå¼€å¤´çš„å‰©ä½™list
 	(if (null lst)
 		nil
 		(if (eql (car lst) obj)
 			lst
 			(our-member obj (cdr lst)))))
 
-(defun null. (x)               ;;;  ÅĞ¶ÏxÊÇ·ñÎª¿Õ
+(defun null. (x)               ;;;  åˆ¤æ–­xæ˜¯å¦ä¸ºç©º
 	(eq x '()))
-(null. 'a)      ;;;  µÃµ½()
-(null. '())     ;;;  µÃµ½t
+(null. 'a)      ;;;  å¾—åˆ°()
+(null. '())     ;;;  å¾—åˆ°t
 
-(defun and. (x y)             ;;;   x,y¶¼·Ç¿ÕÊ±·µ»Øt
+(defun and. (x y)             ;;;   x,yéƒ½éç©ºæ—¶è¿”å›t
 	(cond (x (cond (y 't) ('t '())))
 		  ('t '())))
 		  
-(and. (atom 'a) (eq 'a 'a))   ;;;  µÃµ½t
-(and. (atom 'a) (eq 'a 'b))   ;;;  µÃµ½()
+(and. (atom 'a) (eq 'a 'a))   ;;;  å¾—åˆ°t
+(and. (atom 'a) (eq 'a 'b))   ;;;  å¾—åˆ°()
 
 
-(defun append. (x y)          ;;;   Æ´½ÓÁ½¸ölist x ºÍ y
+(defun append. (x y)          ;;;   æ‹¼æ¥ä¸¤ä¸ªlist x å’Œ y
 	(cond ((null. x) y)
 	      ('t (cons (car x) (append. (cdr x) y)))))
 		  

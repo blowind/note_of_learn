@@ -1,9 +1,9 @@
-sqlite_master   ÏµÍ³ÊÓÍ¼
+sqlite_master   ç³»ç»Ÿè§†å›¾
 
 
-SQLite  ÖĞµÄÊı¾İ½á¹¹£¬ÒòÎªÖ§³Ö¶¯Ì¬ÀàĞÍ£¬ÕâĞ©ÀàĞÍ¶ÔÓ¦µÄÁĞ¶¼¿ÉÒÔ´æ´¢±ğµÄÀàĞÍĞÅÏ¢
+SQLite  ä¸­çš„æ•°æ®ç»“æ„ï¼Œå› ä¸ºæ”¯æŒåŠ¨æ€ç±»å‹ï¼Œè¿™äº›ç±»å‹å¯¹åº”çš„åˆ—éƒ½å¯ä»¥å­˜å‚¨åˆ«çš„ç±»å‹ä¿¡æ¯
 
-integer  ×ÔÔöµÄintÀàĞÍ
+integer  è‡ªå¢çš„intç±»å‹
 
 int
 
@@ -16,21 +16,21 @@ blob
 null
 
 
-×Ö·û´®ÄÚÈİÇ¿ÁÒ½¨ÒéÓÃµ¥ÒıºÅ½ç¶¨£¬Èç¹û×Ö·û´®ÄÚÈİ°üÀ¨µ¥ÒıºÅ£¬Ê¹ÓÃÁ½¸öÁ¬ĞøµÄµ¥ÒıºÅ
+å­—ç¬¦ä¸²å†…å®¹å¼ºçƒˆå»ºè®®ç”¨å•å¼•å·ç•Œå®šï¼Œå¦‚æœå­—ç¬¦ä¸²å†…å®¹åŒ…æ‹¬å•å¼•å·ï¼Œä½¿ç”¨ä¸¤ä¸ªè¿ç»­çš„å•å¼•å·
 'Kenny''s chicken'   
 
-¿ÆÑ§¼ÆÊı·¨ 6.0221415E23
+ç§‘å­¦è®¡æ•°æ³• 6.0221415E23
 
-¶ş½øÖÆ  x'0ffe'   Ã¿Ò»Î»±ØĞëÊÇ16½øÖÆÊı
+äºŒè¿›åˆ¶  x'0ffe'   æ¯ä¸€ä½å¿…é¡»æ˜¯16è¿›åˆ¶æ•°
 
-µ¥ĞĞ×¢ÊÍÓÃ  --
-¶àĞĞ×¢ÊÍÓÃ  /*  */
+å•è¡Œæ³¨é‡Šç”¨  --
+å¤šè¡Œæ³¨é‡Šç”¨  /*  */
 
 
-SQLiteÖĞµÄÊ±¼ä/ÈÕÆÚº¯Êı£º
-datetime()    --  ²úÉúÈÕÆÚºÍÊ±¼ä
-datetime()µÄÓÃ·¨ÊÇ£º datetime(ÈÕÆÚ/Ê±¼ä,ĞŞÕı·û,ĞŞÕı·û...)
-ÔÚÊ±¼ä/ÈÕÆÚº¯ÊıÀï¿ÉÒÔÊ¹ÓÃÈçÏÂ¸ñÊ½µÄ×Ö·û´®×÷Îª²ÎÊı£º
+SQLiteä¸­çš„æ—¶é—´/æ—¥æœŸå‡½æ•°ï¼š
+datetime()    --  äº§ç”Ÿæ—¥æœŸå’Œæ—¶é—´
+datetime()çš„ç”¨æ³•æ˜¯ï¼š datetime(æ—¥æœŸ/æ—¶é—´,ä¿®æ­£ç¬¦,ä¿®æ­£ç¬¦...)
+åœ¨æ—¶é—´/æ—¥æœŸå‡½æ•°é‡Œå¯ä»¥ä½¿ç”¨å¦‚ä¸‹æ ¼å¼çš„å­—ç¬¦ä¸²ä½œä¸ºå‚æ•°ï¼š
 YYYY-MM-DD
 YYYY-MM-DD HH:MM
 YYYY-MM-DD HH:MM:SS
@@ -39,109 +39,109 @@ HH:MM
 HH:MM:SS
 HH:MM:SS.SSS
 now
-ÆäÖĞnowÊÇ²úÉúÏÖÔÚµÄÊ±¼ä¡£
-select datetime('now');        --    µÃµ½¸ñÁÖÍşÖÎÊ±ÇøµÄµ±Ç°Ê±¼ä
+å…¶ä¸­nowæ˜¯äº§ç”Ÿç°åœ¨çš„æ—¶é—´ã€‚
+select datetime('now');        --    å¾—åˆ°æ ¼æ—å¨æ²»æ—¶åŒºçš„å½“å‰æ—¶é—´
 select datetime('2006-10-17');  --    2006-10-17  12:00:00
-select datetime('2006-10-17 00:20:00',' 1 hour','-12 minute');  ---  °´²ÎÊıË³Ğò°¤¸ö¼Ó¼õ
-select datetime('now','start of year');    ---   2006-01-01 00:00:00  Ò»ÄêÊ±¼äµÄ¿ªÊ¼
-select datetime('now','start of month');   ---   2006-10-01 00:00:00  Ò»ÔÂµÄ¿ªÊ¼
-select datetime('now','start of day');     ---   2006-10-17 00:00:00  Ò»ÌìµÄ¿ªÊ¼
-select datetime('now',' 10 hour','start of day',' 10 hour');  -- 2006-10-17 10:00:00 °´²ÎÊıË³Ğò°¤¸ö´¦Àí
+select datetime('2006-10-17 00:20:00',' 1 hour','-12 minute');  ---  æŒ‰å‚æ•°é¡ºåºæŒ¨ä¸ªåŠ å‡
+select datetime('now','start of year');    ---   2006-01-01 00:00:00  ä¸€å¹´æ—¶é—´çš„å¼€å§‹
+select datetime('now','start of month');   ---   2006-10-01 00:00:00  ä¸€æœˆçš„å¼€å§‹
+select datetime('now','start of day');     ---   2006-10-17 00:00:00  ä¸€å¤©çš„å¼€å§‹
+select datetime('now',' 10 hour','start of day',' 10 hour');  -- 2006-10-17 10:00:00 æŒ‰å‚æ•°é¡ºåºæŒ¨ä¸ªå¤„ç†
 select datetime('now','localtime');
 
 
 
-                ###########ÔÚÏµÍ³shellÖĞÖ´ĞĞsqliteÃüÁî #############
+                ###########åœ¨ç³»ç»Ÿshellä¸­æ‰§è¡Œsqliteå‘½ä»¤ #############
 
-sqlite3 test.db   ÔÚÍâ²¿ÃüÁîĞĞÖĞ´´½¨Ò»¸öÊı¾İ¿â
+sqlite3 test.db   åœ¨å¤–éƒ¨å‘½ä»¤è¡Œä¸­åˆ›å»ºä¸€ä¸ªæ•°æ®åº“
 
-sqlite3 test.db .dump > test.sql    Êı¾İ¿âµ¼³öÎªsqlÓï¾ä£¬ËùÎ½µÄSQL×ª´¢
+sqlite3 test.db .dump > test.sql    æ•°æ®åº“å¯¼å‡ºä¸ºsqlè¯­å¥ï¼Œæ‰€è°“çš„SQLè½¬å‚¨
 
-sqlite3 test.db "select * from test"   ²éÑ¯ÃüÁî
+sqlite3 test.db "select * from test"   æŸ¥è¯¢å‘½ä»¤
 
-sqlite3 test2.db < test.sql            ¸ù¾İtest.sqlÖĞµÄsqlÓï¾äÉú³Étest2.dbÊı¾İ¿â
+sqlite3 test2.db < test.sql            æ ¹æ®test.sqlä¸­çš„sqlè¯­å¥ç”Ÿæˆtest2.dbæ•°æ®åº“
 
-sqlite3 -init test.sql test3.db .exit     Éú³ÉÊı¾İ¿âtest3.db²¢ÍË³öCLPÃüÁîĞĞÄ£Ê½    
+sqlite3 -init test.sql test3.db .exit     ç”Ÿæˆæ•°æ®åº“test3.dbå¹¶é€€å‡ºCLPå‘½ä»¤è¡Œæ¨¡å¼    
 
-sqlite3 test.db vacuum                    ÊÍ·ÅÒÑÉ¾³ı¶ÔÏóµÄ¿Õ¼ä
+sqlite3 test.db vacuum                    é‡Šæ”¾å·²åˆ é™¤å¯¹è±¡çš„ç©ºé—´
 
-               ############   SQLite ½»»¥Ä£Ê½CLP         #############
+               ############   SQLite äº¤äº’æ¨¡å¼CLP         #############
 
-.¿ªÍ·µÄÊÇsqlite½»»¥ÃüÁî£¬ÆäËû¶¼ÊÇSQLÓï¾äÃüÁî
-.h °ïÖú
-.e ÍË³ö
+.å¼€å¤´çš„æ˜¯sqliteäº¤äº’å‘½ä»¤ï¼Œå…¶ä»–éƒ½æ˜¯SQLè¯­å¥å‘½ä»¤
+.h å¸®åŠ©
+.e é€€å‡º
 
-.tables  ·µ»ØÊı¾İ¿âÖĞËùÓĞ±íºÍÊÓÍ¼Ãû×Ö
+.tables  è¿”å›æ•°æ®åº“ä¸­æ‰€æœ‰è¡¨å’Œè§†å›¾åå­—
 
-.indices [table name]   ÏÔÊ¾Ò»¸ö±íµÄË÷Òı
+.indices [table name]   æ˜¾ç¤ºä¸€ä¸ªè¡¨çš„ç´¢å¼•
 
-.schema   ·µ»ØËùÓĞÊı¾İ¿â¶ÔÏó(table index view triger)µÄ¶¨ÒåÓï¾ä
+.schema   è¿”å›æ‰€æœ‰æ•°æ®åº“å¯¹è±¡(table index view triger)çš„å®šä¹‰è¯­å¥
 
-.schema test    ·µ»Øtest±íµÄ¶¨Òå
+.schema test    è¿”å›testè¡¨çš„å®šä¹‰
 
-.output file.sql   ½«Êä³öÖØ¶¨Ïòµ½file.sqlÎÄ¼ş
-.output stdout     ½«Êä³öÖØ¶¨Ïòµ½±ê×¼Êä³ö
+.output file.sql   å°†è¾“å‡ºé‡å®šå‘åˆ°file.sqlæ–‡ä»¶
+.output stdout     å°†è¾“å‡ºé‡å®šå‘åˆ°æ ‡å‡†è¾“å‡º
 
-.dump  Õû¸öÊı¾İ¿âÊä³öÎªsqlÓï¾ä
+.dump  æ•´ä¸ªæ•°æ®åº“è¾“å‡ºä¸ºsqlè¯­å¥
 
-.read  µ¼ÈëÓÉSQLÓï¾ä¹¹³ÉµÄÎÄ¼ş£¬ÀıÈçdumpµÄµ¼³ö½á¹û
+.read  å¯¼å…¥ç”±SQLè¯­å¥æ„æˆçš„æ–‡ä»¶ï¼Œä¾‹å¦‚dumpçš„å¯¼å‡ºç»“æœ
 
-.import [file][table]  µ¼ÈëÀàËÆcsvÕâÀàÓĞ·Ö¸ô·ûµÄÊı¾İÎÄ¼ş
+.import [file][table]  å¯¼å…¥ç±»ä¼¼csvè¿™ç±»æœ‰åˆ†éš”ç¬¦çš„æ•°æ®æ–‡ä»¶
 
-.separator   Ö¸¶¨·Ö¸ô·û
+.separator   æŒ‡å®šåˆ†éš”ç¬¦
 
-.show  ÏÔÊ¾ÓÃ»§shellÖĞ¶¨ÒåµÄËùÓĞÉèÖÃ£¬°üÀ¨·Ö¸ô·û
+.show  æ˜¾ç¤ºç”¨æˆ·shellä¸­å®šä¹‰çš„æ‰€æœ‰è®¾ç½®ï¼ŒåŒ…æ‹¬åˆ†éš”ç¬¦
 
-.mode csv|column|html|insert|line|list|tabs|tcl   ÉèÖÃÊä³öÊı¾İµÄ¸ñÊ½£¬Ä¬ÈÏÎªcsv
+.mode csv|column|html|insert|line|list|tabs|tcl   è®¾ç½®è¾“å‡ºæ•°æ®çš„æ ¼å¼ï¼Œé»˜è®¤ä¸ºcsv
 
-.mode column   ÏÔÊ¾¸ñÊ½£¬ÒÔÁĞÄ£Ê½ÏÔÊ¾½á¹û
+.mode column   æ˜¾ç¤ºæ ¼å¼ï¼Œä»¥åˆ—æ¨¡å¼æ˜¾ç¤ºç»“æœ
 
-.headers on    ÏÔÊ¾¸ñÊ½£¬²éÑ¯½á¹û»á´øÓĞ×Ö¶ÎÃû
+.headers on    æ˜¾ç¤ºæ ¼å¼ï¼ŒæŸ¥è¯¢ç»“æœä¼šå¸¦æœ‰å­—æ®µå
 
-.nullvalue NULL   ÓÃÒ»¸ö×Ö·û´®NULLÀ´ÏÔÊ¾nullÖµ£¬Ä¬ÈÏÊÇ¿Õ´®
+.nullvalue NULL   ç”¨ä¸€ä¸ªå­—ç¬¦ä¸²NULLæ¥æ˜¾ç¤ºnullå€¼ï¼Œé»˜è®¤æ˜¯ç©ºä¸²
 
-.width     ÉèÖÃÊä³ö½á¹ûÖĞ¸÷¸öÁĞµÄ¿í¶È
-
-
+.width     è®¾ç½®è¾“å‡ºç»“æœä¸­å„ä¸ªåˆ—çš„å®½åº¦
 
 
-   £¡£¡£¡£¡£¡£¡£¡£¡£¡×¢Òâµ½ÏÂÃæÃüÁîÀïµÄ;¶¼²»ÄÜÉÙ £¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡
+
+
+   ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼æ³¨æ„åˆ°ä¸‹é¢å‘½ä»¤é‡Œçš„;éƒ½ä¸èƒ½å°‘ ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼
    
-´´½¨Ïà¹Ø::::::::::::::::::::::   
-´´½¨±í£ºcreate [temp] table table_name (column_definitions [, constraints]);
-			  ÁÙÊ±          ±íÃû           ÁĞ¶¨Òå				
+åˆ›å»ºç›¸å…³::::::::::::::::::::::   
+åˆ›å»ºè¡¨ï¼šcreate [temp] table table_name (column_definitions [, constraints]);
+			  ä¸´æ—¶          è¡¨å           åˆ—å®šä¹‰				
 											
 								
-create table test (id integer primary key, value text);   ´´½¨±ítest£¬´øÁ½ÁĞ
+create table test (id integer primary key, value text);   åˆ›å»ºè¡¨testï¼Œå¸¦ä¸¤åˆ—
 
 create table contacts (id integer primary key,
-						name text not null collate nocase,       ´ËÁĞ²»ÄÜÎªnull£¬ÅÅĞò²»·Ö´óĞ¡Ğ´
+						name text not null collate nocase,       æ­¤åˆ—ä¸èƒ½ä¸ºnullï¼Œæ’åºä¸åˆ†å¤§å°å†™
 						phone text not null default 'UNKNOWN',
-						unique (name, phone) );      ±í¼¶±ğµÄÔ¼Êø
+						unique (name, phone) );      è¡¨çº§åˆ«çš„çº¦æŸ
 
 
-´´½¨Ë÷Òı
-create index test_idx on test (value);    ´´½¨Ë÷Òı
+åˆ›å»ºç´¢å¼•
+create index test_idx on test (value);    åˆ›å»ºç´¢å¼•
 
 
-´´½¨ÊÓÍ¼
-create view schema as select * from sqlite_master;    ´´½¨ÊÓÍ¼
+åˆ›å»ºè§†å›¾
+create view schema as select * from sqlite_master;    åˆ›å»ºè§†å›¾
 
 
-ĞŞ¸ÄÏà¹Ø:::::::::::::
-ĞŞ¸Ä±í£ºalter table table_name { rename to name | add column column_def }
-                              ĞŞ¸Ä±íÃû             Ôö¼ÓĞÂÁĞ
+ä¿®æ”¹ç›¸å…³:::::::::::::
+ä¿®æ”¹è¡¨ï¼šalter table table_name { rename to name | add column column_def }
+                              ä¿®æ”¹è¡¨å             å¢åŠ æ–°åˆ—
 							  
 alter table contacts add column email text not null default '' collate nocase;
-ĞŞ¸Ä±ícontacts£¬Ôö¼ÓÁĞemail£¬ÀàĞÍÎªtext£¬·Ç¿Õ£¬Ä¬ÈÏÖµÎª''£¬²»Çø·Ö´óĞ¡Ğ´
+ä¿®æ”¹è¡¨contactsï¼Œå¢åŠ åˆ—emailï¼Œç±»å‹ä¸ºtextï¼Œéç©ºï¼Œé»˜è®¤å€¼ä¸º''ï¼Œä¸åŒºåˆ†å¤§å°å†™
 
-²åÈë£º
+æ’å…¥ï¼š
 insert into test (id, value) values(1, 'eenie');  
-Ïò±íÖĞ²åÈëÊı¾İ£¬Ç°Ò»¸öÔ²À¨ºÅÄÚÖ¸¶¨Òª²åÈëµÄÁĞ£¬ºóÒ»¸öÔ²À¨ºÅÄÚÖ¸¶¨²åÈëµÄÖµ
+å‘è¡¨ä¸­æ’å…¥æ•°æ®ï¼Œå‰ä¸€ä¸ªåœ†æ‹¬å·å†…æŒ‡å®šè¦æ’å…¥çš„åˆ—ï¼Œåä¸€ä¸ªåœ†æ‹¬å·å†…æŒ‡å®šæ’å…¥çš„å€¼
 
 
-²éÕÒÏà¹Ø:::::::::::::::::::
-²éÕÒ±í£º  select [distinct] heading from tables     ²ÎÊıÎª±í»òÕßÊÓÍ¼
+æŸ¥æ‰¾ç›¸å…³:::::::::::::::::::
+æŸ¥æ‰¾è¡¨ï¼š  select [distinct] heading from tables     å‚æ•°ä¸ºè¡¨æˆ–è€…è§†å›¾
 									where predicate
 									group by columns
 									having predicate
@@ -150,23 +150,23 @@ insert into test (id, value) values(1, 'eenie');
 
 
 
-select * from test;   ÏÔÊ¾ËùÓĞ½á¹û
+select * from test;   æ˜¾ç¤ºæ‰€æœ‰ç»“æœ
 
-select last_insert_rowid();        ×îºó²åÈëµÄ×Ô¶¯ÔöÁ¿Öµ
+select last_insert_rowid();        æœ€åæ’å…¥çš„è‡ªåŠ¨å¢é‡å€¼
 
 select type, name, tbl_name sql from sqlite_master order by type;    
-²éÕÒÏµÍ³ÊÓÍ¼Êı¾İ£¬»ñµÃÀàĞÍ£¬Ãû×Ö£¬¶ÔÓ¦µÄ±í£¬Éú³ÉÊ±µÄsqlÓï¾ä
+æŸ¥æ‰¾ç³»ç»Ÿè§†å›¾æ•°æ®ï¼Œè·å¾—ç±»å‹ï¼Œåå­—ï¼Œå¯¹åº”çš„è¡¨ï¼Œç”Ÿæˆæ—¶çš„sqlè¯­å¥
 
 select * from test where value like 'm%';
-²éÕÒtest±íÖĞÒÔ×ÖÄ¸m¿ªÍ·µÄÖµ
+æŸ¥æ‰¾testè¡¨ä¸­ä»¥å­—æ¯må¼€å¤´çš„å€¼
 
 
-É¾³ı:
+åˆ é™¤:
 delete from test where id=1;
 
-drop table test;    É¾³ı±ítest
+drop table test;    åˆ é™¤è¡¨test
 
-drop view schema;      É¾³ıÊÓÍ¼
+drop view schema;      åˆ é™¤è§†å›¾
 
 
 
@@ -180,7 +180,7 @@ UPDATE
 
 SELECT ON REPLACE
 
-ATTACH :   ½«µÚ¶ş¸öÊı¾İ¿â¸½µ½µ±Ç°Á¬½Ó
+ATTACH :   å°†ç¬¬äºŒä¸ªæ•°æ®åº“é™„åˆ°å½“å‰è¿æ¥
 ATTACH database bar.db as bar;
 
 

@@ -1,29 +1,29 @@
 
-// JDK1.7ÒıÈëµÄÓÃÏÂ»®Ïß_·Ö¸îÊı×ÖµÄĞ´·¨£¬ÕâĞ©ÏÂ»®Ïß²»²úÉúÊµÖÊ×÷ÓÃ£¬½ö½öÓÃÓÚÔö¼ÓÊı×Ö¿É¶ÁĞÔ
+// JDK1.7å¼•å…¥çš„ç”¨ä¸‹åˆ’çº¿_åˆ†å‰²æ•°å­—çš„å†™æ³•ï¼Œè¿™äº›ä¸‹åˆ’çº¿ä¸äº§ç”Ÿå®è´¨ä½œç”¨ï¼Œä»…ä»…ç”¨äºå¢åŠ æ•°å­—å¯è¯»æ€§
 public static final double ELECTRON_MASS = 9.109_383_56;
 
 
-Set¶ÔÃ¿¸öÖµ¶¼Ö»±£´æÒ»¸ö¶ÔÏó
-MapÔÊĞí½«Ä³Ğ©¶ÔÏóÓëÆäËûÒ»Ğ©¶ÔÏó¹ØÁªÆğÀ´ĞÎ³É¹ØÁªÊı×é
+Setå¯¹æ¯ä¸ªå€¼éƒ½åªä¿å­˜ä¸€ä¸ªå¯¹è±¡
+Mapå…è®¸å°†æŸäº›å¯¹è±¡ä¸å…¶ä»–ä¸€äº›å¯¹è±¡å…³è”èµ·æ¥å½¢æˆå…³è”æ•°ç»„
 
-Arrays.asList½ÓÊÜÒ»¸öÊı×é»òÊÇÒ»¸öÓÃ¶ººÅ·Ö¸ôµÄÔªËØÁĞ±í
-¶ººÅ·Ö¸ôµÄÔªËØÁĞ±í£º
+Arrays.asListæ¥å—ä¸€ä¸ªæ•°ç»„æˆ–æ˜¯ä¸€ä¸ªç”¨é€—å·åˆ†éš”çš„å…ƒç´ åˆ—è¡¨
+é€—å·åˆ†éš”çš„å…ƒç´ åˆ—è¡¨ï¼š
 Arrays.asList("second", "third", "forth", "fifth");
 
-Êı×é£º
+æ•°ç»„ï¼š
 Arrays.asList( new int[]{1,2,3,4,5} );
 int[] realArray = new int[]{5,6,7,8,9};
 Arrays.asList(realArray);
 
-// ´´½¨Ò»¸önewLength´óĞ¡µÄĞÂÊı×é£¬Ê¹ÓÃSystem.arraycopy()½«Ô­originalÊı×éµÄÖĞµÄÄÚÈİ¶¼¿½±´µ½ĞÂÊı×é£¬
-// ĞÂÊı×éÈİÁ¿¸ü´óÊ±¶àµÄ²¿·ÖÌînull£¬ĞÂÊı×é¸üĞ¡Ê±Ö»½ØÈ¡Âú×ãÈİÁ¿µÄÇ°²¿
-// »ù±¾Êı¾İÀàĞÍºÍÀàĞÍ²»±äµÄÇé¿ö£¬²»ÓÃÖ¸¶¨µÚÈı¸ö²ÎÊı
+// åˆ›å»ºä¸€ä¸ªnewLengthå¤§å°çš„æ–°æ•°ç»„ï¼Œä½¿ç”¨System.arraycopy()å°†åŸoriginalæ•°ç»„çš„ä¸­çš„å†…å®¹éƒ½æ‹·è´åˆ°æ–°æ•°ç»„ï¼Œ
+// æ–°æ•°ç»„å®¹é‡æ›´å¤§æ—¶å¤šçš„éƒ¨åˆ†å¡«nullï¼Œæ–°æ•°ç»„æ›´å°æ—¶åªæˆªå–æ»¡è¶³å®¹é‡çš„å‰éƒ¨
+// åŸºæœ¬æ•°æ®ç±»å‹å’Œç±»å‹ä¸å˜çš„æƒ…å†µï¼Œä¸ç”¨æŒ‡å®šç¬¬ä¸‰ä¸ªå‚æ•°
 Arrays.copyOf(U[] original, int newLength, Class<? extends T[]> newType)
-Ê¹ÓÃ:
+ä½¿ç”¨:
 Object[] elements = new Object[10];
 elements = Arrays.copyOf(elements, 2*10);
 
-//  ¶¨ÒåÒ»¸ö¾²Ì¬·½·¨µÄÄÚ²¿ÄäÃûÀà£¬×¢ÒâfilterµÄ²ÎÊı±ØĞëÊÇfinal£¬ÒòÎªÄäÃûÀàÄÚ²¿Ê¹ÓÃÀ´×Ô¸ÃÀà·¶Î§Ö®ÍâµÄ¶ÔÏó±ØĞë·ûºÏÕâ¸öÒªÇó
+//  å®šä¹‰ä¸€ä¸ªé™æ€æ–¹æ³•çš„å†…éƒ¨åŒ¿åç±»ï¼Œæ³¨æ„filterçš„å‚æ•°å¿…é¡»æ˜¯finalï¼Œå› ä¸ºåŒ¿åç±»å†…éƒ¨ä½¿ç”¨æ¥è‡ªè¯¥ç±»èŒƒå›´ä¹‹å¤–çš„å¯¹è±¡å¿…é¡»ç¬¦åˆè¿™ä¸ªè¦æ±‚
 public static FilenameFilter filter(final String regex) {
 	return new FilenameFilter() {
 		private Pattern pattern = Pattern.compile(regex);
@@ -33,13 +33,13 @@ public static FilenameFilter filter(final String regex) {
 	};
 }
 
-//  ¸ølist¸³³õÖµ£¬StringAddress¾ÍÒ»¸öË½ÓĞ»¯µÄStringÊôĞÔºÍÏàÓ¦µÄ¹¹ÔìÆ÷£¬listÖĞÓĞ4¸öÔªËØ£¬Æä×Ö·û´®±äÁ¿¾ùÎªHello×Ö·û´®
+//  ç»™listèµ‹åˆå€¼ï¼ŒStringAddresså°±ä¸€ä¸ªç§æœ‰åŒ–çš„Stringå±æ€§å’Œç›¸åº”çš„æ„é€ å™¨ï¼Œlistä¸­æœ‰4ä¸ªå…ƒç´ ï¼Œå…¶å­—ç¬¦ä¸²å˜é‡å‡ä¸ºHelloå­—ç¬¦ä¸²
 List<StringAddress> list = new ArrayList<StringAddress>(Collections.nCopies(4, new StringAddress("Hello")));
-// listÖĞÓĞ4¸öÔªËØ£¬Æä×Ö·û´®±äÁ¿¾ùÎªWorld×Ö·û´®£¬Ö®Ç°µÄ½á¹û±»¸²¸Ç£¬fillÖ»ÄÜÌæ»»ÒÑÓĞÔªËØ£¬²»ÄÜÌí¼ÓĞÂÔªËØ
+// listä¸­æœ‰4ä¸ªå…ƒç´ ï¼Œå…¶å­—ç¬¦ä¸²å˜é‡å‡ä¸ºWorldå­—ç¬¦ä¸²ï¼Œä¹‹å‰çš„ç»“æœè¢«è¦†ç›–ï¼Œfillåªèƒ½æ›¿æ¢å·²æœ‰å…ƒç´ ï¼Œä¸èƒ½æ·»åŠ æ–°å…ƒç´ 
 Collections.fill(list, new StringAddress("World"));
 
 
-×Ö·û´®Ê××ÖÄ¸´óĞ´Ğ´·¨
+å­—ç¬¦ä¸²é¦–å­—æ¯å¤§å†™å†™æ³•
 public static String captureName(String name) {
 	char[] cs = name.toCharArray();
 	cs[0] -= 32;
@@ -47,26 +47,26 @@ public static String captureName(String name) {
 }
 
 
-@SuppressWarning "unchecked"   //  ÆÁ±Î±àÒë¸æ¾¯£¬Ê¹ÓÃÔÚ¾¡Á¿Ğ¡µÄµ¥Î»ÉÏ£¬ÀıÈç Èç¹û½ö¶Ô·½·¨ÆÁ±Î£¬¾Í²»Òª½«´Ê±êÇ©·Åµ½ÀàÖ®Ç°
+@SuppressWarning "unchecked"   //  å±è”½ç¼–è¯‘å‘Šè­¦ï¼Œä½¿ç”¨åœ¨å°½é‡å°çš„å•ä½ä¸Šï¼Œä¾‹å¦‚ å¦‚æœä»…å¯¹æ–¹æ³•å±è”½ï¼Œå°±ä¸è¦å°†è¯æ ‡ç­¾æ”¾åˆ°ç±»ä¹‹å‰
 
-/****                                               ÈİÆ÷                                        ****/
+/****                                               å®¹å™¨                                        ****/
 
 List
 List<Pet> pets = new ArrayList<Pet>();
-Ìí¼ÓÔªËØ
+æ·»åŠ å…ƒç´ 
 pets.add(newPet);
-ÅúÁ¿Ìí¼ÓÔªËØ
+æ‰¹é‡æ·»åŠ å…ƒç´ 
 pets.addAll(Arrays.asList(pet1, pet2, pet3, pet4));
-É¾³ıÔªËØ
+åˆ é™¤å…ƒç´ 
 pets.remove(oldPet);
-»ñÈ¡ÔªËØË÷Òı£º
-int index = pets.indexOf(pet3);  //  µÃµ½2
-»ñÈ¡×ÓÁĞ±í
-List<Pet> sub = pets.subList(1,2);  // »ñÈ¡µÚ¶ş¸öÔªËØ×é³ÉµÄList
-ÅĞ¶Ï×ÓÁĞ±íÊÇ·ñÊÇ×Ó¼¯£º
+è·å–å…ƒç´ ç´¢å¼•ï¼š
+int index = pets.indexOf(pet3);  //  å¾—åˆ°2
+è·å–å­åˆ—è¡¨
+List<Pet> sub = pets.subList(1,2);  // è·å–ç¬¬äºŒä¸ªå…ƒç´ ç»„æˆçš„List
+åˆ¤æ–­å­åˆ—è¡¨æ˜¯å¦æ˜¯å­é›†ï¼š
 boolean isTrue = pets.containsAll(sub);
 
-ArrayList<T> µÄÊ¹ÓÃ
+ArrayList<T> çš„ä½¿ç”¨
 import java.util.ArrayList;
 class Apple {
 	private static long counter;
@@ -78,8 +78,8 @@ class Gala extends Apple {}
 class Fuji extends Apple {}
 public class GenericsAndUpcasting {
 	public static void main(String[] args) {
-		ArrayList<Apple> apples = new ArrayList<Apple>();   //  ArrayList<T> ±»ÏòÉÏ×ªĞÍÎª List<T>
-		//  ÈİÆ÷Ìí¼ÓÔªËØ²¢ÏòÉÏ×ªĞÍ
+		ArrayList<Apple> apples = new ArrayList<Apple>();   //  ArrayList<T> è¢«å‘ä¸Šè½¬å‹ä¸º List<T>
+		//  å®¹å™¨æ·»åŠ å…ƒç´ å¹¶å‘ä¸Šè½¬å‹
 		apples.add(new GrannySmith());
 		apples.add(new Gala());
 		apples.add(new Fuji());
@@ -87,7 +87,7 @@ public class GenericsAndUpcasting {
 			System.out.println(c);
 	}
 }
-ListµÄ»ù±¾ÓÃ·¨ÑİÊ¾  Ö÷ÒªÊÇArrayList<T> ÔÚËæ»ú·ÃÎÊÊ±ºòĞÔÄÜ×îÓÅ£¬²åÈë/É¾³ıÔªËØ½ÏÂı
+Listçš„åŸºæœ¬ç”¨æ³•æ¼”ç¤º  ä¸»è¦æ˜¯ArrayList<T> åœ¨éšæœºè®¿é—®æ—¶å€™æ€§èƒ½æœ€ä¼˜ï¼Œæ’å…¥/åˆ é™¤å…ƒç´ è¾ƒæ…¢
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -103,111 +103,111 @@ public class GenericsAndUpcasting {
 	public static void main(String[] args) {
 		ArrayList<Apple> apples = new ArrayList<Apple>();
 		Apple tmp = new GrannySmith();
-		/* Ö±½ÓÊ¹ÓÃArrays.asListµÄÊä³öÊ±£¬µ×²ãÊµ¼Ê»¹ÊÇÊı×é£¬²»ÄÜµ÷Õû³ß´ç£¬Ìí¼Ó/É¾³ıÔªËØÊ±»áÅ×³öÒì³£ */
-		/* ´Ó¼¯ºÏÖĞÌí¼ÓÔªËØ  addAll() */
+		/* ç›´æ¥ä½¿ç”¨Arrays.asListçš„è¾“å‡ºæ—¶ï¼Œåº•å±‚å®é™…è¿˜æ˜¯æ•°ç»„ï¼Œä¸èƒ½è°ƒæ•´å°ºå¯¸ï¼Œæ·»åŠ /åˆ é™¤å…ƒç´ æ—¶ä¼šæŠ›å‡ºå¼‚å¸¸ */
+		/* ä»é›†åˆä¸­æ·»åŠ å…ƒç´   addAll() */
 		apples.addAll(Arrays.asList(tmp, new Gala(), new Fuji()));
-		apples.addAll(1, Arrays.asList(new Fuji()));   //  ÔÚµÚÒ»¸öÔªËØÖ®ºó¼ÓÈëÒ»¸öĞÂµÄList
-		/* Ê¹ÓÃµü´úÆ÷±éÀúÔªËØ */
+		apples.addAll(1, Arrays.asList(new Fuji()));   //  åœ¨ç¬¬ä¸€ä¸ªå…ƒç´ ä¹‹ååŠ å…¥ä¸€ä¸ªæ–°çš„List
+		/* ä½¿ç”¨è¿­ä»£å™¨éå†å…ƒç´  */
 		for(Apple c : apples) 
 			System.out.println(c);
-		/* É¾³ı²»´æÔÚµÄÔªËØ£¬·µ»Ø false */
+		/* åˆ é™¤ä¸å­˜åœ¨çš„å…ƒç´ ï¼Œè¿”å› false */
 		Print.print(apples.remove(new GrannySmith()));
-		/* É¾³ıÖ¸¶¨ÔªËØ£¬·µ»Ø true */
+		/* åˆ é™¤æŒ‡å®šå…ƒç´ ï¼Œè¿”å› true */
 		Print.print(apples.remove(tmp));
-		/* É¾³ıË÷ÒıÖ¸¶¨µÄÔªËØ£¬·µ»Ø true£¬´ËÊ±¼¯ºÏ»¹Ê£Ò»¸öÔªËØ */
+		/* åˆ é™¤ç´¢å¼•æŒ‡å®šçš„å…ƒç´ ï¼Œè¿”å› trueï¼Œæ­¤æ—¶é›†åˆè¿˜å‰©ä¸€ä¸ªå…ƒç´  */
 		apples.remove(0);
 		
 		for(Apple c : apples) 
 			System.out.println(c);
-		/* Ìí¼Óµ¥¸öÔªËØ */
+		/* æ·»åŠ å•ä¸ªå…ƒç´  */
 		apples.add(tmp);
-		/* Ë÷ÒıÄ³¸öÔªËØµÄÏÂ±ê£¬ÒòÎªtmp¸Õ±»¼ÓÈë£¬Òò´Ë·µ»Ø×îºóÒ»¸öÔªËØµÄÏÂ±ê 1 */
+		/* ç´¢å¼•æŸä¸ªå…ƒç´ çš„ä¸‹æ ‡ï¼Œå› ä¸ºtmpåˆšè¢«åŠ å…¥ï¼Œå› æ­¤è¿”å›æœ€åä¸€ä¸ªå…ƒç´ çš„ä¸‹æ ‡ 1 */
 		Print.print(apples.indexOf(tmp));
-		/* »ñÈ¡µÚÒ»¸öÔªËØ£¬´Ë´¦ÊÇ Fuji() ¶ÔÏó */
+		/* è·å–ç¬¬ä¸€ä¸ªå…ƒç´ ï¼Œæ­¤å¤„æ˜¯ Fuji() å¯¹è±¡ */
 		Print.print(apples.get(0));
-		/* ½«µÚÒ»¸öÔªËØĞŞ¸Ä³É gala() */
+		/* å°†ç¬¬ä¸€ä¸ªå…ƒç´ ä¿®æ”¹æˆ gala() */
 		apples.set(0, new Gala());
 		
 		
-		/* »ñÈ¡ListµÄ×Ó¼¯£¬ ´Ë´¦µÃµ½°üº¬×îºóÒ»¸öÔªËØµÄList */
-		/* Ëù²úÉúµÄÁĞ±íµÄÄ»ºó¾ÍÊÇ³õÊ¼ÁĞ±í£¬Òò´Ë¶ÔsubµÄĞŞ¸Ä¶¼»á·´Ó³µ½³õÊ¼ÁĞ±íÖĞ */
+		/* è·å–Listçš„å­é›†ï¼Œ æ­¤å¤„å¾—åˆ°åŒ…å«æœ€åä¸€ä¸ªå…ƒç´ çš„List */
+		/* æ‰€äº§ç”Ÿçš„åˆ—è¡¨çš„å¹•åå°±æ˜¯åˆå§‹åˆ—è¡¨ï¼Œå› æ­¤å¯¹subçš„ä¿®æ”¹éƒ½ä¼šåæ˜ åˆ°åˆå§‹åˆ—è¡¨ä¸­ */
 		List<Apple> sub = apples.subList(0, 1);
 		Print.print(sub);
-		/* È¡applesºÍsubµÄ½»¼¯²¢×îÖÕ·ÅÈëapples */
+		/* å–appleså’Œsubçš„äº¤é›†å¹¶æœ€ç»ˆæ”¾å…¥apples */
 		apples.retainAll(sub);
-		/*  applesÊÇ·ñ°üº¬ÔªËØtmp£¬·µ»Øtrue */
+		/*  applesæ˜¯å¦åŒ…å«å…ƒç´ tmpï¼Œè¿”å›true */
 		apples.contains(tmp);
-		/* ·µ»Ø true £¬ subÊÇapplesµÄ×Ó¼¯ */
+		/* è¿”å› true ï¼Œ subæ˜¯applesçš„å­é›† */
 		Print.print(apples.containsAll(sub));
-		/* Ê¹ÓÃCollectionsÅúÁ¿¼ÓÈëÔªËØ£¬Òª×¢Òâ×îºóÓĞ¸ös£¬²»´øsµÄCollectionÖ»ÄÜ²Ù×÷Collection¶ÔÏó£¬ÏŞÖÆÌ«´ó */
+		/* ä½¿ç”¨Collectionsæ‰¹é‡åŠ å…¥å…ƒç´ ï¼Œè¦æ³¨æ„æœ€åæœ‰ä¸ªsï¼Œä¸å¸¦sçš„Collectionåªèƒ½æ“ä½œCollectionå¯¹è±¡ï¼Œé™åˆ¶å¤ªå¤§ */
 		Collections.addAll(apples, new Fuji(), new Fuji(), new Fuji(), new Apple());
 		for(Apple c : apples) 
 			System.out.print(c + " ");
 		
-		/* ¸øapplesÅÅĞò£¬´Ë´¦µ÷ÓÃÊ§°Ü£¬ÒòÎªApple¶ÔÏóÎ´ÊµÏÖ Comparable ½Ó¿Ú */
+		/* ç»™applesæ’åºï¼Œæ­¤å¤„è°ƒç”¨å¤±è´¥ï¼Œå› ä¸ºAppleå¯¹è±¡æœªå®ç° Comparable æ¥å£ */
 		//  Collections.sort(apples);
-		/* ´òÂÒapplesµÄË³Ğò */
+		/* æ‰“ä¹±applesçš„é¡ºåº */
 		Collections.shuffle(apples);
 		
-		/* Çå¿ÕËùÓĞÔªËØ */
+		/* æ¸…ç©ºæ‰€æœ‰å…ƒç´  */
 		apple.clear()
-		/* ÅĞ¶Ïµ±Ç°ListÊÇ·ñÎª¿Õ */
+		/* åˆ¤æ–­å½“å‰Listæ˜¯å¦ä¸ºç©º */
 		apple.isEmpty();
 		
-		/* Ö±½ÓÊ¹ÓÃArraysµÄasList()º¯Êı£¬ÀàĞÍÌáÉıÊ±ºòĞèÒª ÏÔÊ¾ÀàĞÍ²ÎÊıËµÃ÷ */
+		/* ç›´æ¥ä½¿ç”¨Arraysçš„asList()å‡½æ•°ï¼Œç±»å‹æå‡æ—¶å€™éœ€è¦ æ˜¾ç¤ºç±»å‹å‚æ•°è¯´æ˜ */
 		List<Apple> as = Arrays.<Apple>asList(new Gala(), new Fuji());
 		for(Apple c : as) 
 			System.out.print(c + " ");
 	}
 }
-LinkedList<T>  Ç¿ÓÚ²åÈë/É¾³ı£¬ÈõÓÚ²éÕÒ£¬ÊÊºÏµ±×ö¶ÓÁĞºÍÕ»
+LinkedList<T>  å¼ºäºæ’å…¥/åˆ é™¤ï¼Œå¼±äºæŸ¥æ‰¾ï¼Œé€‚åˆå½“åšé˜Ÿåˆ—å’Œæ ˆ
 public static void main(String[] args) {
 	LinkedList<String> numArray = new LinkedList<String>(Arrays.asList("zero", "one", "two", "three", "four", "five", "six", "seven", "eight"));
 	
 	Print.print(numArray);
-	/* »ñÈ¡µÚÒ»¸öÔªËØ£¬²¢²»ÒÆ³ı£¬Èç¹ûListÎª¿ÕÅ×³öNoSuchElementExceptionÒì³£ */
+	/* è·å–ç¬¬ä¸€ä¸ªå…ƒç´ ï¼Œå¹¶ä¸ç§»é™¤ï¼Œå¦‚æœListä¸ºç©ºæŠ›å‡ºNoSuchElementExceptionå¼‚å¸¸ */
 	Print.print(numArray.getFirst());
-	/* »ñÈ¡µÚÒ»¸öÔªËØ£¬¹¦ÄÜÍêÈ«Í¬ÉÏ*/
+	/* è·å–ç¬¬ä¸€ä¸ªå…ƒç´ ï¼ŒåŠŸèƒ½å®Œå…¨åŒä¸Š*/
 	Print.print(numArray.element());
-	/* ¹¦ÄÜÍêÈ«Í¬ÉÏ£¬Ö»ÊÇÔÚListÎª¿ÕÊ±²»Å×³öÒì³££¬¶øÊÇ·µ»Ønull */
+	/* åŠŸèƒ½å®Œå…¨åŒä¸Šï¼Œåªæ˜¯åœ¨Listä¸ºç©ºæ—¶ä¸æŠ›å‡ºå¼‚å¸¸ï¼Œè€Œæ˜¯è¿”å›null */
 	Print.print(numArray.peek());
 	
-	/* ÒÆ³ıµÚÒ»¸öÔªËØ²¢½«Æä×÷Îª·µ»ØÖµ£¬Èç¹ûListÎª¿ÕÅ×³öNoSuchElementExceptionÒì³£ */
+	/* ç§»é™¤ç¬¬ä¸€ä¸ªå…ƒç´ å¹¶å°†å…¶ä½œä¸ºè¿”å›å€¼ï¼Œå¦‚æœListä¸ºç©ºæŠ›å‡ºNoSuchElementExceptionå¼‚å¸¸ */
 	Print.print(numArray.remove());
-	/* ÒÆ³ıµÚÒ»¸öÔªËØ²¢½«Æä×÷Îª·µ»ØÖµ£¬¹¦ÄÜÍêÈ«Í¬ÉÏ */
+	/* ç§»é™¤ç¬¬ä¸€ä¸ªå…ƒç´ å¹¶å°†å…¶ä½œä¸ºè¿”å›å€¼ï¼ŒåŠŸèƒ½å®Œå…¨åŒä¸Š */
 	Print.print(numArray.removeFirst());
-	/* ÒÆ³ıµÚÒ»¸öÔªËØ²¢½«Æä×÷Îª·µ»ØÖµ£¬¹¦ÄÜÍêÈ«Í¬ÉÏ£¬Ö»ÊÇÔÚListÎª¿ÕÊ±²»Å×³öÒì³££¬¶øÊÇ·µ»Ønull */
+	/* ç§»é™¤ç¬¬ä¸€ä¸ªå…ƒç´ å¹¶å°†å…¶ä½œä¸ºè¿”å›å€¼ï¼ŒåŠŸèƒ½å®Œå…¨åŒä¸Šï¼Œåªæ˜¯åœ¨Listä¸ºç©ºæ—¶ä¸æŠ›å‡ºå¼‚å¸¸ï¼Œè€Œæ˜¯è¿”å›null */
 	Print.print(numArray.poll());
-	/* ÒÆ³ı×îºóÒ»¸öÔªËØ */
+	/* ç§»é™¤æœ€åä¸€ä¸ªå…ƒç´  */
 	Print.print(numArray.removeLast());
 	
-	/* ÔÚListÍ·Ìí¼ÓÔªËØ */
+	/* åœ¨Listå¤´æ·»åŠ å…ƒç´  */
 	numArray.addFirst("zero");
-	/* ÔÚÁĞ±íÄ©Î²Ìí¼ÓÒ»¸öÔªËØ */
+	/* åœ¨åˆ—è¡¨æœ«å°¾æ·»åŠ ä¸€ä¸ªå…ƒç´  */
 	numArray.offer("nine");
-	/* ÔÚÁĞ±íÄ©Î²Ìí¼ÓÒ»¸öÔªËØ£¬¹¦ÄÜÍêÈ«Í¬ÉÏ */
+	/* åœ¨åˆ—è¡¨æœ«å°¾æ·»åŠ ä¸€ä¸ªå…ƒç´ ï¼ŒåŠŸèƒ½å®Œå…¨åŒä¸Š */
 	numArray.add("ten");
-	/* ÔÚÁĞ±íÄ©Î²Ìí¼ÓÒ»¸öÔªËØ£¬¹¦ÄÜÍêÈ«Í¬ÉÏ */
+	/* åœ¨åˆ—è¡¨æœ«å°¾æ·»åŠ ä¸€ä¸ªå…ƒç´ ï¼ŒåŠŸèƒ½å®Œå…¨åŒä¸Š */
 	numArray.addLast("eleven");
 	
 	/*  [zero, three, four, five, six, seven, nine, ten, eleven]   */
 	Print.print(numArray);
 }
-Stack<T>ÀàĞÍ£¬²»ÒªÊ¹ÓÃjava×Ô´øStackÀàĞÍ£¬ÊµÏÖµÄ²»ºÃ£¬Ê¹ÓÃLinkedList´úÌæ£¬×Ô¼º·â×°
+Stack<T>ç±»å‹ï¼Œä¸è¦ä½¿ç”¨javaè‡ªå¸¦Stackç±»å‹ï¼Œå®ç°çš„ä¸å¥½ï¼Œä½¿ç”¨LinkedListä»£æ›¿ï¼Œè‡ªå·±å°è£…
 public class MyStack<T> {
 	private LinkedList<T> storage = new LinkedList<T>();
 	public void push(T e) { storage.addFirst(e); }
-	/* ·µ»ØµÚÒ»¸öÔªËØ£¬µ«ÊÇ²»É¾³ı  */
+	/* è¿”å›ç¬¬ä¸€ä¸ªå…ƒç´ ï¼Œä½†æ˜¯ä¸åˆ é™¤  */
 	public T peek() { return storage.getFirst(); }
-	/* É¾³ıµÚÒ»¸öÔªËØ²¢½«Æä×÷Îª·µ»ØÖµ·µ»Ø  */
+	/* åˆ é™¤ç¬¬ä¸€ä¸ªå…ƒç´ å¹¶å°†å…¶ä½œä¸ºè¿”å›å€¼è¿”å›  */
 	public T pop() { return storage.removeFirst(); }
 	public boolean empty() { return storage.isEmpty(); }
 	public String toString() { return storage.toString(); }
 }
-Set<T>ÀàĞÍ£¬Ö÷ÒªÓÃÀ´È¥ÖØ/²éÖØ£¬HashSet¶Ô²éÕÒÓĞÓÅ»¯£¬³ıÁË¶¼Ê¹ÓÃHashSet£¬Ã»É¶ºÃ¾À½áµÄ£¬ÓëCollectionÓĞÍêÈ«Ò»ÑùµÄ½Ó¿Ú
+Set<T>ç±»å‹ï¼Œä¸»è¦ç”¨æ¥å»é‡/æŸ¥é‡ï¼ŒHashSetå¯¹æŸ¥æ‰¾æœ‰ä¼˜åŒ–ï¼Œé™¤äº†éƒ½ä½¿ç”¨HashSetï¼Œæ²¡å•¥å¥½çº ç»“çš„ï¼Œä¸Collectionæœ‰å®Œå…¨ä¸€æ ·çš„æ¥å£
 public static void main(String[] args) {
 	Random rand = new Random(47);
-	/* HashSetÊ¹ÓÃÉ¢ÁĞº¯Êı */
+	/* HashSetä½¿ç”¨æ•£åˆ—å‡½æ•° */
 	Set<Integer> intSet = new HashSet<Integer>();
 	for(int i=0; i<10; i++) {
 		intSet.add(rand.nextInt(30));
@@ -215,10 +215,10 @@ public static void main(String[] args) {
 	Print.print(intSet.contains(9));
 	Print.print(intSet);
 }
-TreeSet<T> ½«ÔªËØ´æ´¢ÔÚºìºÚÊ÷ÖĞ£¬ÕâÑùµÃµ½ÁËÅÅĞòµÄÓ³Éä/×Öµä
+TreeSet<T> å°†å…ƒç´ å­˜å‚¨åœ¨çº¢é»‘æ ‘ä¸­ï¼Œè¿™æ ·å¾—åˆ°äº†æ’åºçš„æ˜ å°„/å­—å…¸
 public static void main(String[] args) {
 	Random rand = new Random(47);
-	/* Ê¹ÓÃºìºÚÊ÷µÄ TreeSet£¬µÃµ½µÄ×ÖµäÊÇÅÅĞòµÄ£¬²»¹ıÃ»ÓĞgetº¯Êı»ñÈ¡ÄÚÈİ */
+	/* ä½¿ç”¨çº¢é»‘æ ‘çš„ TreeSetï¼Œå¾—åˆ°çš„å­—å…¸æ˜¯æ’åºçš„ï¼Œä¸è¿‡æ²¡æœ‰getå‡½æ•°è·å–å†…å®¹ */
 	Set<Integer> intSet = new TreeSet<Integer>();
 	for(int i=0; i<10000; i++) {
 		intSet.add(rand.nextInt(30));
@@ -228,7 +228,7 @@ public static void main(String[] args) {
 	
 	Set<String> words = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 }
-LinkedHashSet ÎªÁË²éÑ¯ËÙ¶ÈÒ²Ê¹ÓÃÁËÉ¢ÁĞ£¬Í¬Ê±Ê¹ÓÃÁËÁĞ±íÎ¬»¤ÔªËØµÄ²åÈëË³Ğò
+LinkedHashSet ä¸ºäº†æŸ¥è¯¢é€Ÿåº¦ä¹Ÿä½¿ç”¨äº†æ•£åˆ—ï¼ŒåŒæ—¶ä½¿ç”¨äº†åˆ—è¡¨ç»´æŠ¤å…ƒç´ çš„æ’å…¥é¡ºåº
 
 HashMap<T, T>
 public static void main(String[] args) {
@@ -236,73 +236,73 @@ public static void main(String[] args) {
 	Map<Integer, Integer> m = new HashMap<Integer, Integer>();
 	for(int i=0; i<10000; i++) {
 		int r = rand.nextInt(20);
-		/*  MapÀïÃ»ÓĞÕâ¸öÔªËØÊ±£¬»á·µ»Ønull */
+		/*  Mapé‡Œæ²¡æœ‰è¿™ä¸ªå…ƒç´ æ—¶ï¼Œä¼šè¿”å›null */
 		Integer freq = m.get(r);
 		m.put(r, freq == null ? 1 : 1 + freq);
 	}
-	/*  ²é¿´mÖĞÊÇ·ñ°üº¬ keyÎª3µÄÔªËØ */
+	/*  æŸ¥çœ‹mä¸­æ˜¯å¦åŒ…å« keyä¸º3çš„å…ƒç´  */
 	Print.print(m.containsKey(3));
-	/*  ²é¿´mÖĞÊÇ·ñ°üº¬ valueÎª500µÄÔªËØ */
+	/*  æŸ¥çœ‹mä¸­æ˜¯å¦åŒ…å« valueä¸º500çš„å…ƒç´  */
 	Print.print(m.containsValue(500));
-	/*  »ñµÃËùÓĞµÄ key ¼¯ºÏ */
+	/*  è·å¾—æ‰€æœ‰çš„ key é›†åˆ */
 	Print.print(m.keySet());
-	/*  »ñµÃËùÓĞµÄ value ¼¯ºÏ */
+	/*  è·å¾—æ‰€æœ‰çš„ value é›†åˆ */
 	Print.print(m.values());
-	/* µü´ú±éÀúËùÓĞµÄkeys */
+	/* è¿­ä»£éå†æ‰€æœ‰çš„keys */
 	for(Integer k : m.keySet()) {
 			Print.print(k + " happens " + m.get(k) + "times");
 	}
 }
 
-QueueµÄ»ù±¾ÊµÏÖºÍÓÃ·¨ LinkedListÊµÏÖÁËQueue½Ó¿Ú£¬Í¨¹ı½«LinkedListÏòÉÏ×ªĞÍÎªQueue£¬ÓÃÀ´µ±×öQueueÊ¹ÓÃ
+Queueçš„åŸºæœ¬å®ç°å’Œç”¨æ³• LinkedListå®ç°äº†Queueæ¥å£ï¼Œé€šè¿‡å°†LinkedListå‘ä¸Šè½¬å‹ä¸ºQueueï¼Œç”¨æ¥å½“åšQueueä½¿ç”¨
 Queue<Integer> queue = new LinkedList<Integer>();
-/* Ìí¼ÓÔªËØ£¬²é¿´LinkedListÖªµÀÊÇÔÚ¶ÓÎ²Ìí¼ÓµÄ */
+/* æ·»åŠ å…ƒç´ ï¼ŒæŸ¥çœ‹LinkedListçŸ¥é“æ˜¯åœ¨é˜Ÿå°¾æ·»åŠ çš„ */
 queue.offer(333);
-// »ñÈ¡ÔªËØ£¬»ñÈ¡ºó²»É¾³ı£¬¿ÉÒÔµ÷ÓÃ queue.remove() É¾³ı
-queue.peek();  //  ·µ»Ø¶ÓÍ·£¬ ¶ÓÁĞÎª¿ÕÊ±·µ»Ø null
-queue.element();  //  ·µ»Ø¶ÓÍ·£¬ ¶ÓÁĞÎª¿ÕÊ±·µ»ØNoSuchElementExceptionÒì³£
+// è·å–å…ƒç´ ï¼Œè·å–åä¸åˆ é™¤ï¼Œå¯ä»¥è°ƒç”¨ queue.remove() åˆ é™¤
+queue.peek();  //  è¿”å›é˜Ÿå¤´ï¼Œ é˜Ÿåˆ—ä¸ºç©ºæ—¶è¿”å› null
+queue.element();  //  è¿”å›é˜Ÿå¤´ï¼Œ é˜Ÿåˆ—ä¸ºç©ºæ—¶è¿”å›NoSuchElementExceptionå¼‚å¸¸
 
-queue.poll()    //  É¾³ı²¢·µ»Ø¶ÓÍ·£¬¶ÓÁĞÎª¿ÕÊ±·µ»Ø null
-queue.remove()  // É¾³ı²¢·µ»Ø¶ÓÍ·£¬¶ÓÁĞÎª¿ÕÊ±·µ»ØNoSuchElementExceptionÒì³£
+queue.poll()    //  åˆ é™¤å¹¶è¿”å›é˜Ÿå¤´ï¼Œé˜Ÿåˆ—ä¸ºç©ºæ—¶è¿”å› null
+queue.remove()  // åˆ é™¤å¹¶è¿”å›é˜Ÿå¤´ï¼Œé˜Ÿåˆ—ä¸ºç©ºæ—¶è¿”å›NoSuchElementExceptionå¼‚å¸¸
 
-PriorityQueue ÓÅÏÈ¼¶¶ÓÁĞ£¬ÏÂÒ»¸öµ¯³öµÄÔªËØÊÇ¾ßÓĞ×î¸ßÓÅÏÈ¼¶µÄÔªËØ£¬Õâ¸öÓÅÏÈ¼¶ÊÇ·ÅÈëµÄ¶ÔÏóÊµÏÖµÄ Comparator À´µÃµ½
-È·±£µ÷ÓÃpeek()¡¢poll()¡¢remove()·½·¨Ê±£¬»ñÈ¡µÄÔªËØ½«ÊÇ¶ÓÁĞÖĞÓÅÏÈ¼¶×î¸ßµÄÔªËØ
-ÓÅÏÈ¼¶¶ÓÁĞËã·¨»áÔÚ²åÈëÊ±ÅÅĞò£¨Î¬»¤Ò»¸ö¶Ñ£©£¬µ«ÊÇËüÃÇÒ²¿ÉÄÜÔÚÒÆ³ıÊ±Ñ¡Ôñ×îÖØÒªµÄÔªËØ£¬Õâ¸öÒÀÀµÓÚ¾ßÌåÊµÏÖ¡£Èç¹û¶ÔÏóµÄÓÅÏÈ¼¶ÔÚËüµÄ¶ÓÁĞÖĞµÈ´ıÊ±¿ÉÒÔĞŞ¸Ä£¬ÄÇÃ´Ëã·¨µÄÑ¡Ôñ¾ÍÏÔµÃºÜÖØÒªÁË
+PriorityQueue ä¼˜å…ˆçº§é˜Ÿåˆ—ï¼Œä¸‹ä¸€ä¸ªå¼¹å‡ºçš„å…ƒç´ æ˜¯å…·æœ‰æœ€é«˜ä¼˜å…ˆçº§çš„å…ƒç´ ï¼Œè¿™ä¸ªä¼˜å…ˆçº§æ˜¯æ”¾å…¥çš„å¯¹è±¡å®ç°çš„ Comparator æ¥å¾—åˆ°
+ç¡®ä¿è°ƒç”¨peek()ã€poll()ã€remove()æ–¹æ³•æ—¶ï¼Œè·å–çš„å…ƒç´ å°†æ˜¯é˜Ÿåˆ—ä¸­ä¼˜å…ˆçº§æœ€é«˜çš„å…ƒç´ 
+ä¼˜å…ˆçº§é˜Ÿåˆ—ç®—æ³•ä¼šåœ¨æ’å…¥æ—¶æ’åºï¼ˆç»´æŠ¤ä¸€ä¸ªå †ï¼‰ï¼Œä½†æ˜¯å®ƒä»¬ä¹Ÿå¯èƒ½åœ¨ç§»é™¤æ—¶é€‰æ‹©æœ€é‡è¦çš„å…ƒç´ ï¼Œè¿™ä¸ªä¾èµ–äºå…·ä½“å®ç°ã€‚å¦‚æœå¯¹è±¡çš„ä¼˜å…ˆçº§åœ¨å®ƒçš„é˜Ÿåˆ—ä¸­ç­‰å¾…æ—¶å¯ä»¥ä¿®æ”¹ï¼Œé‚£ä¹ˆç®—æ³•çš„é€‰æ‹©å°±æ˜¾å¾—å¾ˆé‡è¦äº†
 public static void main( String[] args )
 {
 	PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
 	Random rand = new Random(47);
 	for(int i=0; i<10; i++) {
 		int tmp = rand.nextInt(i+10);
-		/* µÃµ½µÄÊÇ¸öËæ»úĞòÁĞ [8 1 1 1 5 14 3 1 0 1]   */
+		/* å¾—åˆ°çš„æ˜¯ä¸ªéšæœºåºåˆ— [8 1 1 1 5 14 3 1 0 1]   */
 		System.out.print(tmp + " ");
 		pq.offer(tmp);
 	}
 	while(pq.peek() != null) {
-		/* ¾­¹ıÓÅÏÈ¼¶¶ÓÁĞÅÅĞòºó£¬ÑÏ¸ñ°´ÕÕµİÔöË³Ğò³ö¶Ó  [0 1 1 1 1 1 3 5 8 14 ] */
+		/* ç»è¿‡ä¼˜å…ˆçº§é˜Ÿåˆ—æ’åºåï¼Œä¸¥æ ¼æŒ‰ç…§é€’å¢é¡ºåºå‡ºé˜Ÿ  [0 1 1 1 1 1 3 5 8 14 ] */
 		System.out.print(pq.remove() + " ");
 	}
 	
 	List<Integer> ints = Arrays.asList(25, 22, 20, 18, 14, 9, 3, 1, 2, 3, 9, 14, 25);
-	/* ³õÊ¼»¯Ê±Ö¸Ã÷ÅÅĞòĞòÁĞ£¬°´ÕÕ½µĞòÅÅÁĞ³ö¶Ó */
+	/* åˆå§‹åŒ–æ—¶æŒ‡æ˜æ’åºåºåˆ—ï¼ŒæŒ‰ç…§é™åºæ’åˆ—å‡ºé˜Ÿ */
 	pq = new PriorityQueue<Integer>(ints.size(), Collections.reverseOrder());
 	pq.addAll(ints);
-	/* µÃµ½ [ 25 25 22 20 18 14 14 9 9 3 3 2 1 ] */
+	/* å¾—åˆ° [ 25 25 22 20 18 14 14 9 9 3 3 2 1 ] */
 	while(pq.peek() != null) {
 		System.out.print(pq.remove() + " ");
 	}
 }
 
-Ö±½ÓÊµÏÖµü´úÆ÷£¬¹Ø¼üÊÇÊµÏÖ public Iterator<String> iterator() {} º¯Êı£¬ÔÚ×Ô¼ºÀàÄÚ²¿ÔõÃ´¶¼ÓĞÒ»¸ö¼¯ºÏ
+ç›´æ¥å®ç°è¿­ä»£å™¨ï¼Œå…³é”®æ˜¯å®ç° public Iterator<String> iterator() {} å‡½æ•°ï¼Œåœ¨è‡ªå·±ç±»å†…éƒ¨æ€ä¹ˆéƒ½æœ‰ä¸€ä¸ªé›†åˆ
 import java.util.*;
 class InstanceSequence {
 	protected String[] des = new String[] {"one", "two", "three", "four", "five", "six", "seven"}; 
 }
-/* Í¨¹ı¼Ì³ĞµÃµ½ÒÑÓĞµÄ×Ö·û´®Êı×é */
+/* é€šè¿‡ç»§æ‰¿å¾—åˆ°å·²æœ‰çš„å­—ç¬¦ä¸²æ•°ç»„ */
 public class NonCollectionSequence extends InstanceSequence {
-	/* Í¨¹ıÊµÏÖµü´úÆ÷º¯Êı Iterator<T> iterator() Ê¹µÃ±¾Àà¾ßÓĞµü´ú¹¦ÄÜ£¬¸Ã½Ó¿ÚÏÂµÄ hasNext() next() remove() Ò»¸ö¶¼²»ÄÜÉÙ*/
+	/* é€šè¿‡å®ç°è¿­ä»£å™¨å‡½æ•° Iterator<T> iterator() ä½¿å¾—æœ¬ç±»å…·æœ‰è¿­ä»£åŠŸèƒ½ï¼Œè¯¥æ¥å£ä¸‹çš„ hasNext() next() remove() ä¸€ä¸ªéƒ½ä¸èƒ½å°‘*/
 	public Iterator<String> iterator() {
-		/* Í¨¹ıÄäÃûÀàÊµÏÖ£¬Ã¿´Î·µ»Øµü´úÆ÷£¬ÕâÑùÄäÃûÀàÄÚ²¿µÄindexÃ¿´Î¶¼ÊÇ´Ó0¿ªÊ¼£¬Ìå»áÒ»ÏÂÕâ¸ö×î¼òµ¥µÄÊµÏÖ */
+		/* é€šè¿‡åŒ¿åç±»å®ç°ï¼Œæ¯æ¬¡è¿”å›è¿­ä»£å™¨ï¼Œè¿™æ ·åŒ¿åç±»å†…éƒ¨çš„indexæ¯æ¬¡éƒ½æ˜¯ä»0å¼€å§‹ï¼Œä½“ä¼šä¸€ä¸‹è¿™ä¸ªæœ€ç®€å•çš„å®ç° */
 		return new Iterator<String>() {
 			private int index = 0;
 			public boolean hasNext() {
@@ -323,29 +323,29 @@ public class NonCollectionSequence extends InstanceSequence {
 		while(it.hasNext()) {
 			System.out.println(it.next());
 		}
-		//  ÒòÎªÊµÏÖµÄ²»ÊÇ Iterable<T> ½Ó¿Ú£¬Òò´Ë²»ÄÜÔÚ foreach Ñ­»·ÖĞÊ¹ÓÃ
+		//  å› ä¸ºå®ç°çš„ä¸æ˜¯ Iterable<T> æ¥å£ï¼Œå› æ­¤ä¸èƒ½åœ¨ foreach å¾ªç¯ä¸­ä½¿ç”¨
 		// for(String s: ncs) {
 			// System.out.println(it.next());
 		// }
 	}
 }
-ÊµÏÖJSE5ĞÂµÄ Iterable ½Ó¿Ú£¬¸Ã½Ó¿Ú±»foreachÓÃÀ´ÔÚĞòÁĞÖĞÒÆ¶¯£¬ÏÂÃæÊµÏÖÁËÒ»¸ö·´×ª±éÀúµÄÀı×Ó
+å®ç°JSE5æ–°çš„ Iterable æ¥å£ï¼Œè¯¥æ¥å£è¢«foreachç”¨æ¥åœ¨åºåˆ—ä¸­ç§»åŠ¨ï¼Œä¸‹é¢å®ç°äº†ä¸€ä¸ªåè½¬éå†çš„ä¾‹å­
 package com.zxf.my;
 import java.util.*;
 class ReversibleArrayList<T> extends ArrayList<T> {
 	public ReversibleArrayList(Collection<T> c) { super(c); }
-	/* ×îÖÕforÀïÃæÊ¹ÓÃµÄÊ±ºò£¬ÊÇµ÷ÓÃµÄ  Iterable<T>.iterator()  ¼´Iterable<T>¶ÔÏóµÄiterator()·½·¨£¬¸Ã·½·¨·µ»ØIterator<T>¶ÔÏó */
-	/* ×îÖÕ±¾ÖÊÉÏ»¹ÊÇÒª·µ»Ø ½Ó¿Ú·ºĞÍ¶ÔÏó£¬×¢Òâ´Ë´¦²»ÊÇ Iterator<T> */
+	/* æœ€ç»ˆforé‡Œé¢ä½¿ç”¨çš„æ—¶å€™ï¼Œæ˜¯è°ƒç”¨çš„  Iterable<T>.iterator()  å³Iterable<T>å¯¹è±¡çš„iterator()æ–¹æ³•ï¼Œè¯¥æ–¹æ³•è¿”å›Iterator<T>å¯¹è±¡ */
+	/* æœ€ç»ˆæœ¬è´¨ä¸Šè¿˜æ˜¯è¦è¿”å› æ¥å£æ³›å‹å¯¹è±¡ï¼Œæ³¨æ„æ­¤å¤„ä¸æ˜¯ Iterator<T> */
 	public Iterable<T> reversed() {
-		/* ÊµÀı»¯Ò»¸ö½Ó¿Ú·ºĞÍµÄ¶ÔÏó£¬´Ë´¦ÊÇÒ»¸öÄäÃûÀà */
+		/* å®ä¾‹åŒ–ä¸€ä¸ªæ¥å£æ³›å‹çš„å¯¹è±¡ï¼Œæ­¤å¤„æ˜¯ä¸€ä¸ªåŒ¿åç±» */
 		return new Iterable<T>() {
-			/* ÄäÃûÀàÖĞµÄ·½·¨ public Iterator<T> iterator() ·µ»ØÒ»¸öµü´ú×Ó  */
+			/* åŒ¿åç±»ä¸­çš„æ–¹æ³• public Iterator<T> iterator() è¿”å›ä¸€ä¸ªè¿­ä»£å­  */
 			public Iterator<T> iterator() {
-				/* ·µ»Øµü´ú×ÓµÄ·½·¨ÄÚ²¿£¬±¾ÖÊÉÏÊÇ´´½¨Ò»¸öµü´úÆ÷¶ÔÏó£¬¸Ã¶ÔÏóÊµÏÖÁËÒ»¸öÄäÃûÀà */
+				/* è¿”å›è¿­ä»£å­çš„æ–¹æ³•å†…éƒ¨ï¼Œæœ¬è´¨ä¸Šæ˜¯åˆ›å»ºä¸€ä¸ªè¿­ä»£å™¨å¯¹è±¡ï¼Œè¯¥å¯¹è±¡å®ç°äº†ä¸€ä¸ªåŒ¿åç±» */
 				return new Iterator<T>()  {
 					int current = size() - 1;
 					public boolean hasNext() { return current > -1; }
-					/*  µ÷ÓÃget³åÒÑÓĞµÄ¼¯ºÏArrayListÖĞ»ñÈ¡¶ÔÏó */
+					/*  è°ƒç”¨getå†²å·²æœ‰çš„é›†åˆArrayListä¸­è·å–å¯¹è±¡ */
 					public T next() { return get(current--); }
 					public void remove() { throw new UnsupportedOperationException(); }
 				};
@@ -358,56 +358,56 @@ public class AdapterMethodIdiom {
 		ReversibleArrayList<String> ral = new ReversibleArrayList<String>(
 							Arrays.asList("To be or not to be".split(" ")));
 		for(String s: ral) 
-			System.out.print(s + " ");  // µÃµ½ To be or not to be
+			System.out.print(s + " ");  // å¾—åˆ° To be or not to be
 		System.out.println();
 		for(String s: ral.reversed())
-			System.out.print(s + " ");	 //  µÃµ½ be to not or be To 
+			System.out.print(s + " ");	 //  å¾—åˆ° be to not or be To 
 	}
 }
 
-/****                                      ·ºĞÍµÄÊ¹ÓÃ                                     ****/
-/* ¶¨ÒåÒ»¸ö»ù±¾·ºĞÍ£¬±¾ÖÊÉÏÒ»¸ö·ºĞÍÀà¾ÍÊÇ¶¨ÒåÒ»¸öĞÂÀà£¬¸ÃÀàÉú³ÉÁËÒ»Æ±ĞÂ·½·¨¶Ô·ºĞÍT½øĞĞ´¦Àí£¬Óë»ù±¾ÀàµÄÉùÃ÷Ã»ÓĞ±¾ÖÊÇø±ğ
-   ½«NewClass<T>µ±×öNewClass¿´´ı¾ÍºÃ£¬³ıÁË³õÊ¼»¯Ê±ĞèÒªÍ¨¹ı<>¼ÓÒ»Ğ©ÀàĞÍÈ·ÈÏÖ®Íâ£¬ÓëNewClassÔÚÊ¹ÓÃÉÏÃ»±¾ÖÊÇø±ğ
-   ¶øÖîÈçList<T>Ö®ÀàµÄ·ºĞÍ¼¯ºÏ£¬¾ÍÊÇÔÚ·ºĞÍTÉÏ¼ÓÁËÒ»Æ±¼¯ºÏ²Ù×÷·½·¨£¬¹¦ÄÜÉÏ¾ÍÊÇÒ»¸öListÀàµÄ¹¦ÄÜ
+/****                                      æ³›å‹çš„ä½¿ç”¨                                     ****/
+/* å®šä¹‰ä¸€ä¸ªåŸºæœ¬æ³›å‹ï¼Œæœ¬è´¨ä¸Šä¸€ä¸ªæ³›å‹ç±»å°±æ˜¯å®šä¹‰ä¸€ä¸ªæ–°ç±»ï¼Œè¯¥ç±»ç”Ÿæˆäº†ä¸€ç¥¨æ–°æ–¹æ³•å¯¹æ³›å‹Tè¿›è¡Œå¤„ç†ï¼Œä¸åŸºæœ¬ç±»çš„å£°æ˜æ²¡æœ‰æœ¬è´¨åŒºåˆ«
+   å°†NewClass<T>å½“åšNewClassçœ‹å¾…å°±å¥½ï¼Œé™¤äº†åˆå§‹åŒ–æ—¶éœ€è¦é€šè¿‡<>åŠ ä¸€äº›ç±»å‹ç¡®è®¤ä¹‹å¤–ï¼Œä¸NewClassåœ¨ä½¿ç”¨ä¸Šæ²¡æœ¬è´¨åŒºåˆ«
+   è€Œè¯¸å¦‚List<T>ä¹‹ç±»çš„æ³›å‹é›†åˆï¼Œå°±æ˜¯åœ¨æ³›å‹Tä¸ŠåŠ äº†ä¸€ç¥¨é›†åˆæ“ä½œæ–¹æ³•ï¼ŒåŠŸèƒ½ä¸Šå°±æ˜¯ä¸€ä¸ªListç±»çš„åŠŸèƒ½
    */
-class Decorate<T> {   // ÉùÃ÷Ò»¸öÖ§³Ö·ºĞÍµÄĞÂÀà
+class Decorate<T> {   // å£°æ˜ä¸€ä¸ªæ”¯æŒæ³›å‹çš„æ–°ç±»
 	private T s;
 	public Decorate(T outS) { s = outS; } 
 	public String toString() {   return "Decorate<" + s + ">";   }
 	public void setValue(T t) {  s = t;  }
 }
-//  ·ºĞÍĞÂÀàµÄ¼¯ºÏµÄÊ¹ÓÃ
+//  æ³›å‹æ–°ç±»çš„é›†åˆçš„ä½¿ç”¨
 public static void main(String[] args) {
-/* ´Ë´¦³õÊ¼»¯Ê±¿´ÆğÀ´ÓĞÈı²ãÇ¶Ì×£¬ÆäÊµ±¾ÖÊÉÏÊÇÒ»¸öDecorate<String>¶ÔÏó£¬
-   ¼òµ¥µÄ¿´³ÉDecorate¼´¿É£¬Ã÷°×¸Ã¶ÔÏóÄÚ²¿²Ù×÷String¾ÍºÃ                    */
+/* æ­¤å¤„åˆå§‹åŒ–æ—¶çœ‹èµ·æ¥æœ‰ä¸‰å±‚åµŒå¥—ï¼Œå…¶å®æœ¬è´¨ä¸Šæ˜¯ä¸€ä¸ªDecorate<String>å¯¹è±¡ï¼Œ
+   ç®€å•çš„çœ‹æˆDecorateå³å¯ï¼Œæ˜ç™½è¯¥å¯¹è±¡å†…éƒ¨æ“ä½œStringå°±å¥½                    */
 	List<Decorate<String>> testOne = new ArrayList<Decorate<String>>(  
-												Arrays.asList( new Decorate<String>("I"),   // ÔªËØ
+												Arrays.asList( new Decorate<String>("I"),   // å…ƒç´ 
 															   new Decorate<String>("II")));
-	System.out.println(testOne);  // µÃµ½  [Decorate<I>, Decorate<II>]
+	System.out.println(testOne);  // å¾—åˆ°  [Decorate<I>, Decorate<II>]
 	
-	/* ×¢Òâ´Ë´¦ÊÇArrayListÀïÃæ´æ´¢µÄÔªËØÒıÓÃµÄ¿½±´£¬¿ÉÒÔÀí½â³ÉËùÓĞÖ¸ÏòDecorate<String>¶ÔÏóµÄÖ¸ÕëµÄ¿½±´  */
+	/* æ³¨æ„æ­¤å¤„æ˜¯ArrayListé‡Œé¢å­˜å‚¨çš„å…ƒç´ å¼•ç”¨çš„æ‹·è´ï¼Œå¯ä»¥ç†è§£æˆæ‰€æœ‰æŒ‡å‘Decorate<String>å¯¹è±¡çš„æŒ‡é’ˆçš„æ‹·è´  */
 	List<Decorate<String>> testTwo = new ArrayList<Decorate<String>>(testOne);
-	//  ĞŞ¸ÄtestTwo¼¯ºÏÖĞµÄµÚ¶ş¸öÔªËØÎ»ÖÃ´æ´¢µÄÒıÓÃÎªÒ»¸öĞÂµÄ¶ÔÏóµÄÒıÓÃ
+	//  ä¿®æ”¹testTwoé›†åˆä¸­çš„ç¬¬äºŒä¸ªå…ƒç´ ä½ç½®å­˜å‚¨çš„å¼•ç”¨ä¸ºä¸€ä¸ªæ–°çš„å¯¹è±¡çš„å¼•ç”¨
 	testTwo.set(1, new Decorate<String>("III"));
-	System.out.println(testTwo);  // µÃµ½ [Decorate<I>, Decorate<III>]
-	System.out.println(testOne);  // µÃµ½ [Decorate<I>, Decorate<II>]
+	System.out.println(testTwo);  // å¾—åˆ° [Decorate<I>, Decorate<III>]
+	System.out.println(testOne);  // å¾—åˆ° [Decorate<I>, Decorate<II>]
 	
-/*  ×¢Òâµ½´Ë´¦»ñÈ¡ÁËtestTwoµÚÒ»¸öÔªËØ´æ´¢µÄÒıÓÃ£¬¸ÃÒıÓÃÓëtestOneµÚÒ»¸öÔªËØ´æ´¢µÄÒıÓÃÒ»Ñù£¬
-    ¼´¶¼Ö¸ÏòÍ¬Ò»¸öDecorate<String>¶ÔÏó                                                     */
+/*  æ³¨æ„åˆ°æ­¤å¤„è·å–äº†testTwoç¬¬ä¸€ä¸ªå…ƒç´ å­˜å‚¨çš„å¼•ç”¨ï¼Œè¯¥å¼•ç”¨ä¸testOneç¬¬ä¸€ä¸ªå…ƒç´ å­˜å‚¨çš„å¼•ç”¨ä¸€æ ·ï¼Œ
+    å³éƒ½æŒ‡å‘åŒä¸€ä¸ªDecorate<String>å¯¹è±¡                                                     */
 	Decorate<String> tmp = testTwo.get(0);
 	tmp.setValue("IV");
-	System.out.println(testTwo);   // µÃµ½  [Decorate<IV>, Decorate<III>]
-	System.out.println(testOne);   // µÃµ½  [Decorate<IV>, Decorate<II>]
+	System.out.println(testTwo);   // å¾—åˆ°  [Decorate<IV>, Decorate<III>]
+	System.out.println(testOne);   // å¾—åˆ°  [Decorate<IV>, Decorate<II>]
 
 
 
-/****                                      Ê¹ÓÃ·ºĞÍ°ü×°Àà/½Ó¿Ú¶ÔÍâÌá¹©¹¦ÄÜ                                     ****/
+/****                                      ä½¿ç”¨æ³›å‹åŒ…è£…ç±»/æ¥å£å¯¹å¤–æä¾›åŠŸèƒ½                                     ****/
 import java.util.Arrays;
-/* ×¢Òâ£¬´Ë´¦ÊÇ·ºĞÍÀà£¬¾ßÌåµÄ·ºĞÍ±íÊ¾·Åµ½ÀàÃûÉÏ£¬ÄÚ²¿µÄ·½·¨¾Í²»ÓÃÔÙ·Å<T>ÁË */
+/* æ³¨æ„ï¼Œæ­¤å¤„æ˜¯æ³›å‹ç±»ï¼Œå…·ä½“çš„æ³›å‹è¡¨ç¤ºæ”¾åˆ°ç±»åä¸Šï¼Œå†…éƒ¨çš„æ–¹æ³•å°±ä¸ç”¨å†æ”¾<T>äº† */
 class ClassParameter<T> {  
 	public T[] f(T[] arg) { return arg; }
 }
-/* ×¢Òâ£¬´Ë´¦ÊÇ·ºĞÍ·½·¨£¬ÀàÃûÉùÃ÷µÄÊ±ºò²»´ø·ºĞÍ£¬¾ßÌåµÄ·½·¨×îÇ°Ãæ£¬Òª´øÒ»¸ö±íÊ¾ÀàĞÍµÄ<T> */
+/* æ³¨æ„ï¼Œæ­¤å¤„æ˜¯æ³›å‹æ–¹æ³•ï¼Œç±»åå£°æ˜çš„æ—¶å€™ä¸å¸¦æ³›å‹ï¼Œå…·ä½“çš„æ–¹æ³•æœ€å‰é¢ï¼Œè¦å¸¦ä¸€ä¸ªè¡¨ç¤ºç±»å‹çš„<T> */
 class MethodParameter {
 	public static <T> T[] f(T[] arg) { return arg; }  
 }
@@ -416,49 +416,49 @@ public class ParameterizedArrayType {
 		Integer[] ints = {1, 2, 3, 4 ,5};
 		Double[] doubles = {1.1, 2.2, 3.3, 4.4, 5.5};
 		
-		Integer[] ints2 = new ClassParameter<Integer>().f(ints);    // ²ÎÊı»¯ÀàµÄ¾ßÌåT±ØĞëÔÚÉùÃ÷Ê±Ö¸¶¨
-		Double[] doubles2 = MethodParameter.f(doubles);         // ²ÎÊı»¯·½·¨µÄ¾ßÌåTÀàĞÍÆ¥Åäµ½µ÷ÓÃµÄÊ±ºò×Ô¼ºÊ¶±ğ£¬¼´ÀàĞÍÍÆ¶Ï
+		Integer[] ints2 = new ClassParameter<Integer>().f(ints);    // å‚æ•°åŒ–ç±»çš„å…·ä½“Tå¿…é¡»åœ¨å£°æ˜æ—¶æŒ‡å®š
+		Double[] doubles2 = MethodParameter.f(doubles);         // å‚æ•°åŒ–æ–¹æ³•çš„å…·ä½“Tç±»å‹åŒ¹é…åˆ°è°ƒç”¨çš„æ—¶å€™è‡ªå·±è¯†åˆ«ï¼Œå³ç±»å‹æ¨æ–­
 		
 		System.out.println(Arrays.deepToString(ints2));
 		System.out.println(Arrays.deepToString(doubles2));
 	}
 }
 
-Set<Object> so ÊÇ¸ö²ÎÊı»¯ÀàĞÍ£¬ ±íÊ¾¿ÉÒÔ°üº¬ÈÎºÎÀàĞÍµÄ¼¯ºÏ£¬Òò´Ë so.add("adadfs");   so.add(123);  ²Ù×÷¶¼ºÏ·¨
+Set<Object> so æ˜¯ä¸ªå‚æ•°åŒ–ç±»å‹ï¼Œ è¡¨ç¤ºå¯ä»¥åŒ…å«ä»»ä½•ç±»å‹çš„é›†åˆï¼Œå› æ­¤ so.add("adadfs");   so.add(123);  æ“ä½œéƒ½åˆæ³•
 
-Set<?> ±íÊ¾Ò»¸öÍ¨Åä·ûÀàĞÍ£¬±íÊ¾Ö»ÄÜ°üº¬Ä³ÖÖÎ´Öª¶ÔÏóÀàĞÍµÄÒ»¸ö¼¯ºÏ£¬¸ÃÀàĞÍÖ»ÄÜÓÃÀ´½ÓÊÕ²ÎÊı£¬²»ÄÜÓÃnewÊµÀı»¯£¬×öÁËĞÎ²ÎÒ²²»ÄÜÌí¼Ó/É¾³ıÔªËØ(null³ıÍâ£¬¿ÉÒÔÌí¼Ónull£¬Î¨Ò»¿ÉÒÔÌí¼ÓµÄÔªËØ)£¬Ö»ÄÜclear() Çå¿Õ
+Set<?> è¡¨ç¤ºä¸€ä¸ªé€šé…ç¬¦ç±»å‹ï¼Œè¡¨ç¤ºåªèƒ½åŒ…å«æŸç§æœªçŸ¥å¯¹è±¡ç±»å‹çš„ä¸€ä¸ªé›†åˆï¼Œè¯¥ç±»å‹åªèƒ½ç”¨æ¥æ¥æ”¶å‚æ•°ï¼Œä¸èƒ½ç”¨newå®ä¾‹åŒ–ï¼Œåšäº†å½¢å‚ä¹Ÿä¸èƒ½æ·»åŠ /åˆ é™¤å…ƒç´ (nullé™¤å¤–ï¼Œå¯ä»¥æ·»åŠ nullï¼Œå”¯ä¸€å¯ä»¥æ·»åŠ çš„å…ƒç´ )ï¼Œåªèƒ½clear() æ¸…ç©º
 
-Set Ô­ÉúÌ¬ÀàĞÍ£¬ÆúÓÃ   ×¢Òâ Set<String> ºÍ Set<Object> ¶¼ÊÇ SetµÄ×ÓÀà £¬µ«ÊÇÏà»¥Ö®¼äÃ»ÓĞ¸¸×Ó¹ØÏµ£¬ÊÇÆ½¼¶µÄ
+Set åŸç”Ÿæ€ç±»å‹ï¼Œå¼ƒç”¨   æ³¨æ„ Set<String> å’Œ Set<Object> éƒ½æ˜¯ Setçš„å­ç±» ï¼Œä½†æ˜¯ç›¸äº’ä¹‹é—´æ²¡æœ‰çˆ¶å­å…³ç³»ï¼Œæ˜¯å¹³çº§çš„
 
-/* ÎŞÏŞÖÆµÄÍ¨Åä·ûÀàĞÍ£¬Ö»ÄÜÓÃÀ´½ÓÊÕ²ÎÊı  */
-static int numElementsInCommon(Set<?> s1, Set<?> s2) {  // Set<?>±¾ÖÊÉÏÓëSetÃ»ÓĞ²î±ğ£¬µ«Í¨Åä·ûÊÇ°²È«µÄ
+/* æ— é™åˆ¶çš„é€šé…ç¬¦ç±»å‹ï¼Œåªèƒ½ç”¨æ¥æ¥æ”¶å‚æ•°  */
+static int numElementsInCommon(Set<?> s1, Set<?> s2) {  // Set<?>æœ¬è´¨ä¸Šä¸Setæ²¡æœ‰å·®åˆ«ï¼Œä½†é€šé…ç¬¦æ˜¯å®‰å…¨çš„
 	int ret = 0;
 	for(Object o : s1)    
-		if(s2.contains(o))  //  ²»ÖªµÀÕâ¿éÄÜ²»ÄÜÓÃcontainsAll()£¬ÓĞ¿ÕÊÔÒ»ÏÂ
+		if(s2.contains(o))  //  ä¸çŸ¥é“è¿™å—èƒ½ä¸èƒ½ç”¨containsAll()ï¼Œæœ‰ç©ºè¯•ä¸€ä¸‹
 			result++;
 	return ret;
 }	
-ÎŞ·¨½«ÈÎºÎÀàĞÍ·Åµ½ Collection<?> cÖĞ  ÈÎºÎÀàËÆ c.add("aaa") µÄµ÷ÓÃ¶¼»áÊ§°Ü
+æ— æ³•å°†ä»»ä½•ç±»å‹æ”¾åˆ° Collection<?> cä¸­  ä»»ä½•ç±»ä¼¼ c.add("aaa") çš„è°ƒç”¨éƒ½ä¼šå¤±è´¥
 
-²»ÒªÊ¹ÓÃÔ­ÉúÌ¬¼¯ºÏ£¨ÖîÈçList£¬Set£¬Collection£©£¬ÒªÊ¹ÓÃ´øÀàĞÍList<String>Ö®Àà£¬µ«ÊÇÓĞÁ½ÖÖ³¡¾°³ıÍâ£º
+ä¸è¦ä½¿ç”¨åŸç”Ÿæ€é›†åˆï¼ˆè¯¸å¦‚Listï¼ŒSetï¼ŒCollectionï¼‰ï¼Œè¦ä½¿ç”¨å¸¦ç±»å‹List<String>ä¹‹ç±»ï¼Œä½†æ˜¯æœ‰ä¸¤ç§åœºæ™¯é™¤å¤–ï¼š
 
-³¡¾°Ò»£º
-ÔÚÀàÎÄ×ÖÖĞ±ØĞëÊ¹ÓÃÔ­ÉúÌ¬ÀàĞÍ£¬¹æ·¶²»ÔÊĞíÊ¹ÓÃ²ÎÊı»¯ÀàĞÍ£¨Êı×éÀàĞÍºÍ»ù±¾ÀàĞÍ³ıÍâ£© ¼´
-List.class   String[].class  int.class ÊÇºÏ·¨µÄ  µ«ÊÇList<String>.class    List<?>.class ²»ºÏ·¨
-³¡¾°¶ş£º
-if( o instanceof Set ) { Set<?> m = (Set<?>)o; }   // Ò»µ©È·¶¨ o ÊÇSet£¬±ØĞë½«Ëû×ª»»³ÉÍ¨Åä·ûÀàĞÍSet<?>
-ÓÉÓÚ·ºĞÍĞÅÏ¢ÔËĞĞÊ±±»²Á³ı£¬Òò´Ë´ø²ÎÊıµÄ instanceof ²Ù×÷·Ç·¨
+åœºæ™¯ä¸€ï¼š
+åœ¨ç±»æ–‡å­—ä¸­å¿…é¡»ä½¿ç”¨åŸç”Ÿæ€ç±»å‹ï¼Œè§„èŒƒä¸å…è®¸ä½¿ç”¨å‚æ•°åŒ–ç±»å‹ï¼ˆæ•°ç»„ç±»å‹å’ŒåŸºæœ¬ç±»å‹é™¤å¤–ï¼‰ å³
+List.class   String[].class  int.class æ˜¯åˆæ³•çš„  ä½†æ˜¯List<String>.class    List<?>.class ä¸åˆæ³•
+åœºæ™¯äºŒï¼š
+if( o instanceof Set ) { Set<?> m = (Set<?>)o; }   // ä¸€æ—¦ç¡®å®š o æ˜¯Setï¼Œå¿…é¡»å°†ä»–è½¬æ¢æˆé€šé…ç¬¦ç±»å‹Set<?>
+ç”±äºæ³›å‹ä¿¡æ¯è¿è¡Œæ—¶è¢«æ“¦é™¤ï¼Œå› æ­¤å¸¦å‚æ•°çš„ instanceof æ“ä½œéæ³•
 
-Ã»ÓĞËùÎ½µÄ·ºĞÍÊı×é  new List<String>[];  ¶¼ÊÇ²»ºÏ·¨µÄ  Ö»ÄÜ´´½¨ new List<String>();
+æ²¡æœ‰æ‰€è°“çš„æ³›å‹æ•°ç»„  new List<String>[];  éƒ½æ˜¯ä¸åˆæ³•çš„  åªèƒ½åˆ›å»º new List<String>();
 
-/* ·ºĞÍÀàµÄÒ»°ãÊµÏÖ£¬ÎŞ·¨±ÜÃâÊ¹ÓÃÊı×éÊ±µÄÓÃ·¨£¬´ËÊ±Ò»¶¨ÒªÔÚÍâ²¿±£Ö¤²»»á´«Èë²»Í¬ÀàĞÍµÄ¶ÔÏó */
+/* æ³›å‹ç±»çš„ä¸€èˆ¬å®ç°ï¼Œæ— æ³•é¿å…ä½¿ç”¨æ•°ç»„æ—¶çš„ç”¨æ³•ï¼Œæ­¤æ—¶ä¸€å®šè¦åœ¨å¤–éƒ¨ä¿è¯ä¸ä¼šä¼ å…¥ä¸åŒç±»å‹çš„å¯¹è±¡ */
 public class Stack<E> {
 	private E[] elements;
 	private int size = 0;
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
 	@SuppressWarnings("unchecked")
 	public Stack() {
-		elements = (E[])new Object[DEFAULT_INITIAL_CAPACITY];   // ´Ë´¦³õÊ¼»¯Ê±½øĞĞÀàĞÍÇ¿×ª£¬µ«ÊÇÊı×éÀàĞÍµÄÇ¿×ªÍ¨³£¸üÎ£ÏÕ
+		elements = (E[])new Object[DEFAULT_INITIAL_CAPACITY];   // æ­¤å¤„åˆå§‹åŒ–æ—¶è¿›è¡Œç±»å‹å¼ºè½¬ï¼Œä½†æ˜¯æ•°ç»„ç±»å‹çš„å¼ºè½¬é€šå¸¸æ›´å±é™©
 	}
 	public push(E e) {
 		ensureCapacity();
@@ -484,65 +484,65 @@ public class Stack<E> {
 	}
 	public E pop() {
 		if( size == 0 )  throw new EmptyStackException();
-		@SuppressWarnings("unchecked") E ret = (E)elements[--size];  // Ã¿´ÎÈ¡³ö¶ÔÏóÊ±½øĞĞÀàĞÍÇ¿×ª£¬Ç¿×ª´ÎÊı¶à
+		@SuppressWarnings("unchecked") E ret = (E)elements[--size];  // æ¯æ¬¡å–å‡ºå¯¹è±¡æ—¶è¿›è¡Œç±»å‹å¼ºè½¬ï¼Œå¼ºè½¬æ¬¡æ•°å¤š
 		elements[size] = null;
 		return ret;
 	}
 }
 
-PECSÔ­Ôò£ºProducer-extends, Consumer-super£¬¼´²ÎÊı×÷ÎªÉú²úÕß¸ø±¾Àà¹©¸øÄÚÈİÊ±Ê¹ÓÃextendsÀ©Õ¹£¬×÷ÎªÏû·ÑÕßÏû·Ñ±¾ÀàµÄÔªËØÊ±×÷ÎªsuperÀ©Õ¹
-·µ»ØÀàĞÍ²»ÒªÊ¹ÓÃPECSÔ­Ôò½øĞĞÀ©Õ¹£¬¸Ã·µ»ØÊ²Ã´ÀàĞÍ¾Í·µ»ØÊ²Ã´ÀàĞÍ£¬·ñÔòµÈÓÚÇ¿ÖÆÊ¹ÓÃ´úÂëÒ²Ê¹ÓÃÍ¨ÅäÀàĞÍ
-/* Ê¹ÓÃÓĞÏŞÍ¨Åä·ûÌáÉıAPIµÄÁé»îĞÔ  PECSÔ­Ôò */
+PECSåŸåˆ™ï¼šProducer-extends, Consumer-superï¼Œå³å‚æ•°ä½œä¸ºç”Ÿäº§è€…ç»™æœ¬ç±»ä¾›ç»™å†…å®¹æ—¶ä½¿ç”¨extendsæ‰©å±•ï¼Œä½œä¸ºæ¶ˆè´¹è€…æ¶ˆè´¹æœ¬ç±»çš„å…ƒç´ æ—¶ä½œä¸ºsuperæ‰©å±•
+è¿”å›ç±»å‹ä¸è¦ä½¿ç”¨PECSåŸåˆ™è¿›è¡Œæ‰©å±•ï¼Œè¯¥è¿”å›ä»€ä¹ˆç±»å‹å°±è¿”å›ä»€ä¹ˆç±»å‹ï¼Œå¦åˆ™ç­‰äºå¼ºåˆ¶ä½¿ç”¨ä»£ç ä¹Ÿä½¿ç”¨é€šé…ç±»å‹
+/* ä½¿ç”¨æœ‰é™é€šé…ç¬¦æå‡APIçš„çµæ´»æ€§  PECSåŸåˆ™ */
 public class Stack<E> {
-	//  ´«ÈëÒ»¸ö¼¯ºÏÔªËØ£¬¼¯ºÏµÄÔªËØÖ»ĞèÒªÊÇEµÄ×ÓÀàĞÍ(°üÀ¨E)¾Í¿ÉÒÔ·ÅÈë£¬·ÅÈëµÄ¼¯ºÏÊÇÉú²úÕß
+	//  ä¼ å…¥ä¸€ä¸ªé›†åˆå…ƒç´ ï¼Œé›†åˆçš„å…ƒç´ åªéœ€è¦æ˜¯Eçš„å­ç±»å‹(åŒ…æ‹¬E)å°±å¯ä»¥æ”¾å…¥ï¼Œæ”¾å…¥çš„é›†åˆæ˜¯ç”Ÿäº§è€…
 	public pushAll(Iterable<? extends E> src) { ... }
-	//  ½«ÔªËØ´ÓÕ»Àï·µ»Øµ½Ò»¸ö¼¯ºÏÀï£¬¼¯ºÏµÄÔªËØÒªÊÇEµÄ³¬¼¯£¬È¡³öµÄ¼¯ºÏÊÇÏû·ÑÕß
+	//  å°†å…ƒç´ ä»æ ˆé‡Œè¿”å›åˆ°ä¸€ä¸ªé›†åˆé‡Œï¼Œé›†åˆçš„å…ƒç´ è¦æ˜¯Eçš„è¶…é›†ï¼Œå–å‡ºçš„é›†åˆæ˜¯æ¶ˆè´¹è€…
 	public void popAll(Collection<? super E> dst) { ... }
-	//  Èç¹ûÍâ²¿µÄ¼¯ºÏ×÷Îª·½·¨µÄÈë²ÎÊ±£¬¼´¿ÉÄÜµ±Éú²úÕßÓÖ¿ÉÄÜµ±Ïû·ÑÕß£¬Ôò²»ÊÊºÏÓÃÍ¨Åä·û£¬ÀÏÀÏÊµÊµÓÃE¾Í¿ÉÒÔÁË
-	// ²»ÒªÓÃÍ¨Åä·û×ö·µ»ØÀàĞÍ
+	//  å¦‚æœå¤–éƒ¨çš„é›†åˆä½œä¸ºæ–¹æ³•çš„å…¥å‚æ—¶ï¼Œå³å¯èƒ½å½“ç”Ÿäº§è€…åˆå¯èƒ½å½“æ¶ˆè´¹è€…ï¼Œåˆ™ä¸é€‚åˆç”¨é€šé…ç¬¦ï¼Œè€è€å®å®ç”¨Eå°±å¯ä»¥äº†
+	// ä¸è¦ç”¨é€šé…ç¬¦åšè¿”å›ç±»å‹
 }
-//  ºÏ²¢Á½¸ö¼¯ºÏ£¬²ÎÊı¶¼ÊÇÉú²úÕß
+//  åˆå¹¶ä¸¤ä¸ªé›†åˆï¼Œå‚æ•°éƒ½æ˜¯ç”Ÿäº§è€…
 public static <E> Set<E> union(Set<? extends E> s1, Set<? extends E> s2)  { ... }
 Set<Integer> integers = new HashSet<Integer>();
 Set<Double> doubles = new HashSet<Double>();
-Set<Number> numbers = Union.<Number>union(integers, doubles);  //  ÔËĞĞÅÜ²»¹ı£¬´Ë´¦ÓĞÎÊÌâ
+Set<Number> numbers = Union.<Number>union(integers, doubles);  //  è¿è¡Œè·‘ä¸è¿‡ï¼Œæ­¤å¤„æœ‰é—®é¢˜
 
-·ºĞÍµ¥Àı
+æ³›å‹å•ä¾‹
 interface UnaryFunction<T> { T apply(T arg); }
-// ¶¨ÒåÒ»¸ö¾²Ì¬±äÁ¿£¬Ã¿´Îµ÷ÓÃÊ±ÊµÀı»¯Ò»¸öUnaryFunction<Object>ÀàĞÍµÄ¶ÔÏó£¬¸Ã¶ÔÏóÎ¨Ò»µÄ·½·¨ÊÇ·µ»Ø×ÔÉí
+// å®šä¹‰ä¸€ä¸ªé™æ€å˜é‡ï¼Œæ¯æ¬¡è°ƒç”¨æ—¶å®ä¾‹åŒ–ä¸€ä¸ªUnaryFunction<Object>ç±»å‹çš„å¯¹è±¡ï¼Œè¯¥å¯¹è±¡å”¯ä¸€çš„æ–¹æ³•æ˜¯è¿”å›è‡ªèº«
 private static UnaryFunction<Object> IDENTITY_FUNCTION = new UnaryFunction<Object>() { 
 																	public Object apply(Object arg) { return arg; }
 };
-// JDK1.8Ö®ºóÌáÉıµÄlambda±í´ïÊ½Ğ´·¨£¬ÓëÉÏÃæµÄĞ´·¨Ğ§¹ûÍêÈ«Ò»ÖÂ
+// JDK1.8ä¹‹åæå‡çš„lambdaè¡¨è¾¾å¼å†™æ³•ï¼Œä¸ä¸Šé¢çš„å†™æ³•æ•ˆæœå®Œå…¨ä¸€è‡´
 private static UnaryFunction<Object> IDENTITY_FUNCTION = (t) -> t;
 
 @SuppressWarnings("unchecked")
-// ·ºĞÍ¾²Ì¬·½·¨×÷ÎªÀàĞÍ£¬µ÷ÓÃÆä¾²Ì¬·½·¨apply·µ»ØÈë²Î±¾Éí£¬Í¬Ê±ÓÉÓÚÀàĞÍÍÆ¶Ï£¬±äÁ¿ÉùÃ÷Ê±µÄÀàĞÍÏŞÖÆÁË´«Èë²ÎÊıµÄÀàĞÍ
+// æ³›å‹é™æ€æ–¹æ³•ä½œä¸ºç±»å‹ï¼Œè°ƒç”¨å…¶é™æ€æ–¹æ³•applyè¿”å›å…¥å‚æœ¬èº«ï¼ŒåŒæ—¶ç”±äºç±»å‹æ¨æ–­ï¼Œå˜é‡å£°æ˜æ—¶çš„ç±»å‹é™åˆ¶äº†ä¼ å…¥å‚æ•°çš„ç±»å‹
 public static <T> UnaryFunction<T> identityFunction() {  
 	return (UnaryFunction<T>) IDENTITY_FUNCTION;
 } 
-//  Ê¹ÓÃ·½·¨   Ã»¿´³öÀ´Õâ¸ö·ºĞÍµ¥ÀıÓĞÉ¶ÓÃ£¬¸øËû´«É¶ËûÊä³öÉ¶£¨Óë·ºĞÍÀàĞÍÉùÃ÷Ò»ÖÂ£©
+//  ä½¿ç”¨æ–¹æ³•   æ²¡çœ‹å‡ºæ¥è¿™ä¸ªæ³›å‹å•ä¾‹æœ‰å•¥ç”¨ï¼Œç»™ä»–ä¼ å•¥ä»–è¾“å‡ºå•¥ï¼ˆä¸æ³›å‹ç±»å‹å£°æ˜ä¸€è‡´ï¼‰
 UnaryFunction<String> mys = identityFunction();
-mys.apply("112233") == "112233"  // ·µ»Ø true
+mys.apply("112233") == "112233"  // è¿”å› true
 
-//  <T extends Comparable<T>> ¶Á×÷¡°Õë¶Ô¿ÉÒÔÓë×ÔÉí±È½ÏµÄÃ¿¸öÀàĞÍT¡±
-// ÇóÒ»¸ö±íÀïÃæµÄ×î´óÔªËØµÄ·ºĞÍ·½·¨£¬´«ÈëµÄÔªËØ¿ÉÒÔÊÇÄ³ÀàµÄ×ÓÀà
+//  <T extends Comparable<T>> è¯»ä½œâ€œé’ˆå¯¹å¯ä»¥ä¸è‡ªèº«æ¯”è¾ƒçš„æ¯ä¸ªç±»å‹Tâ€
+// æ±‚ä¸€ä¸ªè¡¨é‡Œé¢çš„æœ€å¤§å…ƒç´ çš„æ³›å‹æ–¹æ³•ï¼Œä¼ å…¥çš„å…ƒç´ å¯ä»¥æ˜¯æŸç±»çš„å­ç±»
 public static <T extends Comparable<T>> T max(List<T> list) {
 	Iterator<T> i = list.iterator();
 	T ret = i.next();
 	while(i.hasNext()) {
 		T tmp = i.next();
-		if(t.compareTo(result) > 0) ret = tmp;   //  ÒòÎªÄÜÓë×ÔÉí±È½Ï£¬´Ë´¦²ÅÄÜµ÷ÓÃ
+		if(t.compareTo(result) > 0) ret = tmp;   //  å› ä¸ºèƒ½ä¸è‡ªèº«æ¯”è¾ƒï¼Œæ­¤å¤„æ‰èƒ½è°ƒç”¨
 	}
 	return ret;
 }
-Ê¹ÓÃÍ¨Åä·û·ÅËõÖ®ºóµÄĞ§¹û
-/* Ö»ÒªTµÄ¸¸Àà¿ÉÒÔ±È½Ï£¬Ôò·ûºÏ±È½Ï½á¹û£¬¿É±È½ÏĞÔÊÇÏû·ÑÕßÊ¹ÓÃµÄ£¬¼´ºóÃæµÄÊµÏÖĞèÒªµ÷ÓÃ compareTo() º¯Êı½øĞĞ¾ßÌå±È½Ï
-   ÄÃÀ´È¡×î´óÖµµÄÁĞ±íÊÇÉú²úÕß£¬Òò´ËÊÇTµÄ×ÓÀà£¬×¢Òâµ½µü´úÆ÷Ò²ÒªÍ¬²½ĞŞ¸Ä */
-/*  ¶¨ÒåÒ»¸öÈ¡ÁĞ±í×î´óÖµµÄ·ºĞÍº¯Êı£¬Æä·µ»ØÖµ¿ÉÒÔÊ±ºòµ±Ç°·ºĞÍÀàµÄ×ÓÀà£¬²¢ÇÒµ±Ç°·ºĞÍÀàµÄ¸¸Àà±ØĞëÊµÏÖÁËCompatable()½Ó¿Ú£¬ÆäÈë²Î±ØĞëÊÇµ±Ç°·ºĞÍÀàµÄ×ÓÀàµÄ¼¯ºÏ
-<T extends Comparable*****>  ±íÊ¾T±ØĞë¼Ì³ĞÊµÏÖÁËÄ³¸öÀà/½Ó¿Ú
-<? super T>                  ±íÊ¾ÊµÏÖ±È½Ï½Ó¿ÚµÄÀàÊÇTµÄ¸¸Àà
-<? extends T>                ±íÊ¾Èë²Î±ØĞëÊÇTµÄ×ÓÀà    */
+ä½¿ç”¨é€šé…ç¬¦æ”¾ç¼©ä¹‹åçš„æ•ˆæœ
+/* åªè¦Tçš„çˆ¶ç±»å¯ä»¥æ¯”è¾ƒï¼Œåˆ™ç¬¦åˆæ¯”è¾ƒç»“æœï¼Œå¯æ¯”è¾ƒæ€§æ˜¯æ¶ˆè´¹è€…ä½¿ç”¨çš„ï¼Œå³åé¢çš„å®ç°éœ€è¦è°ƒç”¨ compareTo() å‡½æ•°è¿›è¡Œå…·ä½“æ¯”è¾ƒ
+   æ‹¿æ¥å–æœ€å¤§å€¼çš„åˆ—è¡¨æ˜¯ç”Ÿäº§è€…ï¼Œå› æ­¤æ˜¯Tçš„å­ç±»ï¼Œæ³¨æ„åˆ°è¿­ä»£å™¨ä¹Ÿè¦åŒæ­¥ä¿®æ”¹ */
+/*  å®šä¹‰ä¸€ä¸ªå–åˆ—è¡¨æœ€å¤§å€¼çš„æ³›å‹å‡½æ•°ï¼Œå…¶è¿”å›å€¼å¯ä»¥æ—¶å€™å½“å‰æ³›å‹ç±»çš„å­ç±»ï¼Œå¹¶ä¸”å½“å‰æ³›å‹ç±»çš„çˆ¶ç±»å¿…é¡»å®ç°äº†Compatable()æ¥å£ï¼Œå…¶å…¥å‚å¿…é¡»æ˜¯å½“å‰æ³›å‹ç±»çš„å­ç±»çš„é›†åˆ
+<T extends Comparable*****>  è¡¨ç¤ºTå¿…é¡»ç»§æ‰¿å®ç°äº†æŸä¸ªç±»/æ¥å£
+<? super T>                  è¡¨ç¤ºå®ç°æ¯”è¾ƒæ¥å£çš„ç±»æ˜¯Tçš„çˆ¶ç±»
+<? extends T>                è¡¨ç¤ºå…¥å‚å¿…é¡»æ˜¯Tçš„å­ç±»    */
 public static <T extends Comparable<? super T>> T max(List<? extends T> list) {
 	Iterator<? extends T> i = list.iterator();
 	T ret = i.next();
@@ -552,72 +552,72 @@ public static <T extends Comparable<? super T>> T max(List<? extends T> list) {
 	}
 	return ret;
 }
-// ½»»»·½·¨µÄÁ½ÖÖ·ºĞÍĞ´·¨£¬µÚÒ»ÖÖÊ¹ÓÃÀàĞÍ²ÎÊı£¬µÚ¶şÖÖÊ¹ÓÃÍ¨Åä·û
+// äº¤æ¢æ–¹æ³•çš„ä¸¤ç§æ³›å‹å†™æ³•ï¼Œç¬¬ä¸€ç§ä½¿ç”¨ç±»å‹å‚æ•°ï¼Œç¬¬äºŒç§ä½¿ç”¨é€šé…ç¬¦
 public static <E> void swap(List<E> list, int i, int j) { list.set(i, list.set(j, list.get(i))); }
-// ÕâÖÖ·½·¨ĞèÒª°ü×°ÉÏÒ»ÖÖĞ´·¨À´ÔËĞĞ£¬ÒòÎª List<?>ÀàĞÍ²»ÄÜÌí¼Ó³ınullÖ®ÍâµÄÔªËØ£¬¼°½ölist.add(null)²»»á±¨±àÒë´íÎó
-// ´Ë´¦µÄÇé¿öÊ¹ÓÃ?µÄ·½·¨¸üºÃ£¬ÒòÎªËû½ÓÊÜÈÎºÎListÀàĞÍ£¬Ñ¡È¡Ô­Ôò£ºÈç¹ûÀàĞÍÔÚÒ»¸ö·½·¨ÉùÃ÷ÖĞ½ö³öÏÖÒ»´Î£¬Ê¹ÓÃ?Ìæ»»ÄÇ¸öÀàĞÍE
+// è¿™ç§æ–¹æ³•éœ€è¦åŒ…è£…ä¸Šä¸€ç§å†™æ³•æ¥è¿è¡Œï¼Œå› ä¸º List<?>ç±»å‹ä¸èƒ½æ·»åŠ é™¤nullä¹‹å¤–çš„å…ƒç´ ï¼ŒåŠä»…list.add(null)ä¸ä¼šæŠ¥ç¼–è¯‘é”™è¯¯
+// æ­¤å¤„çš„æƒ…å†µä½¿ç”¨?çš„æ–¹æ³•æ›´å¥½ï¼Œå› ä¸ºä»–æ¥å—ä»»ä½•Listç±»å‹ï¼Œé€‰å–åŸåˆ™ï¼šå¦‚æœç±»å‹åœ¨ä¸€ä¸ªæ–¹æ³•å£°æ˜ä¸­ä»…å‡ºç°ä¸€æ¬¡ï¼Œä½¿ç”¨?æ›¿æ¢é‚£ä¸ªç±»å‹E
 public static void swap(List<?> list, int i, int j); 
 
-Êµ¼ÊÊµÏÖ£º
+å®é™…å®ç°ï¼š
 public Swap {
-	// ¶ÔÍâ½Ó¿Ú¼ò½à£¬²»ĞèÒª¸ù¾İÃ¿¸ö¾ßÌåµÄEÉùÃ÷Ò»¸ö½Ó¿Ú£¬Ê¹ÓÃ´Ë´¦Î¨Ò»¶ÔÍâÍ¨ÅäµÄ½Ó¿Ú¸øÓÃ»§´úÂëÊ¹ÓÃ
+	// å¯¹å¤–æ¥å£ç®€æ´ï¼Œä¸éœ€è¦æ ¹æ®æ¯ä¸ªå…·ä½“çš„Eå£°æ˜ä¸€ä¸ªæ¥å£ï¼Œä½¿ç”¨æ­¤å¤„å”¯ä¸€å¯¹å¤–é€šé…çš„æ¥å£ç»™ç”¨æˆ·ä»£ç ä½¿ç”¨
 	public static void swap(List<?> list, int i, int j) {
-		// list.set(i, list.set(j, list.get(i)));  ±¨´í£¬ÒòÎªList<?>ÀàĞÍÖ»ÄÜ·ÅnullÔªËØ£¬·ÅÈëÆäËûÔªËØ¶¼±¨´í
+		// list.set(i, list.set(j, list.get(i)));  æŠ¥é”™ï¼Œå› ä¸ºList<?>ç±»å‹åªèƒ½æ”¾nullå…ƒç´ ï¼Œæ”¾å…¥å…¶ä»–å…ƒç´ éƒ½æŠ¥é”™
 		swapHelper(list, i, j);
 	}
 	
-	// ÄÚ²¿·â×°ÁË·ºĞÍEµÄ·½·¨Àà×ö¾ßÌåÊµÏÖ£¬¿Ë·şList<?>ÔªËØ·ÅÈëµÄÏŞÖÆ
+	// å†…éƒ¨å°è£…äº†æ³›å‹Eçš„æ–¹æ³•ç±»åšå…·ä½“å®ç°ï¼Œå…‹æœList<?>å…ƒç´ æ”¾å…¥çš„é™åˆ¶
 	private static <E> void swapHelper(List<E> list, int i, int j) {
 		list.set(i, list.set(j, list.get(i)));
 	}
 }
 
-// ÀàĞÍ°²È«µÄ¶àÌ¬ÈİÆ÷£¬ÕâÀàÈİÆ÷²»ÄÜ´«Èë·ºĞÍÀàĞÍ£¬ÒòÎª²»´æÔÚList<String>.classºÍList<Integer>.classµÄĞ´·¨£¬½öÓĞList.class£¬¶ø¸ÃÀàĞÍ²»½¨ÒéÊ¹ÓÃ
+// ç±»å‹å®‰å…¨çš„å¤šæ€å®¹å™¨ï¼Œè¿™ç±»å®¹å™¨ä¸èƒ½ä¼ å…¥æ³›å‹ç±»å‹ï¼Œå› ä¸ºä¸å­˜åœ¨List<String>.classå’ŒList<Integer>.classçš„å†™æ³•ï¼Œä»…æœ‰List.classï¼Œè€Œè¯¥ç±»å‹ä¸å»ºè®®ä½¿ç”¨
 public class Favorites {
-	// MapÖĞµÄkeyÊÇÍ¨ÅäµÄ£¬´Ë´¦Class<?>±àÒëÊ±Ö¸´ú¸÷ÖÖ¾ßÌåµÄClass<T>
-	// MapµÄvalue¶¼ÊÇObject£¬¶ªÊ§ÁËÖµµÄ¾ßÌåÀàĞÍĞÅÏ¢£¬µ«Í¨¹ıÓë¼üµÄ¹ØÁªÕÒ»Ø
+	// Mapä¸­çš„keyæ˜¯é€šé…çš„ï¼Œæ­¤å¤„Class<?>ç¼–è¯‘æ—¶æŒ‡ä»£å„ç§å…·ä½“çš„Class<T>
+	// Mapçš„valueéƒ½æ˜¯Objectï¼Œä¸¢å¤±äº†å€¼çš„å…·ä½“ç±»å‹ä¿¡æ¯ï¼Œä½†é€šè¿‡ä¸é”®çš„å…³è”æ‰¾å›
 	private Map<Class<?>, Object> favorites = new HashMap<>();
 
 	public <T> void putFavorite(Class<T> type, T instance) {
-		// ´Ë´¦µÄtype.cast¶¯Ì¬ÀàĞÍ×ª»»±£Ö¤ÔËĞĞÊ±ÀàĞÍ°²È«£¬±£Ö¤ÔÚÍâ²¿ÓÃ»§´úÂë´íÎóÊ¹ÓÃÊ±µÚÒ»Ê±¼äÅ×Òì³£
+		// æ­¤å¤„çš„type.caståŠ¨æ€ç±»å‹è½¬æ¢ä¿è¯è¿è¡Œæ—¶ç±»å‹å®‰å…¨ï¼Œä¿è¯åœ¨å¤–éƒ¨ç”¨æˆ·ä»£ç é”™è¯¯ä½¿ç”¨æ—¶ç¬¬ä¸€æ—¶é—´æŠ›å¼‚å¸¸
 		favorites.put(Objects.requireNonNull(type), type.cast(instance));
 	}
 
 	public <T> T getFavorite(Class<T> type) {
-		// MapÖĞ´æ´¢µÄÊÇObjectÀàĞÍ£¬ËùÒÔ´Ë´¦Òª×ö¶¯Ì¬ÀàĞÍ×ª»»
+		// Mapä¸­å­˜å‚¨çš„æ˜¯Objectç±»å‹ï¼Œæ‰€ä»¥æ­¤å¤„è¦åšåŠ¨æ€ç±»å‹è½¬æ¢
 		return type.cast(favorites.get(type));
 	}
 }
 
-// ¶ÔClass<?>ÀàĞÍµÄÊı¾İ£¬ĞèÒªÔÚ²ÎÊıÎªClass<? extends AAA>º¯ÊıÖĞÊ¹ÓÃµÄÓÃ·¨¾ÙÀı£º
-// Ê¹ÓÃasSubclass()·½·¨½«²ÎÊı×ªÎªAAA×ÓÀà¶ø²»²úÉú±àÒë¸æ¾¯£¬ClassÀà¶¼ÓĞasSubclass·½·¨
-// ´Ë´¦ÑİÊ¾ÓÃµÄgetAnnotation()·½·¨£¬²é¿´ÁËÏÂJDK1.8µÄÔ´Âë²¢Ã»ÓĞÒªÇóClass<? extends Annotation>²ÎÊı£¬´Ë´¦×ª»»´¿Êô¶àÓà£¬½öÑİÊ¾ÓÃ
+// å¯¹Class<?>ç±»å‹çš„æ•°æ®ï¼Œéœ€è¦åœ¨å‚æ•°ä¸ºClass<? extends AAA>å‡½æ•°ä¸­ä½¿ç”¨çš„ç”¨æ³•ä¸¾ä¾‹ï¼š
+// ä½¿ç”¨asSubclass()æ–¹æ³•å°†å‚æ•°è½¬ä¸ºAAAå­ç±»è€Œä¸äº§ç”Ÿç¼–è¯‘å‘Šè­¦ï¼ŒClassç±»éƒ½æœ‰asSubclassæ–¹æ³•
+// æ­¤å¤„æ¼”ç¤ºç”¨çš„getAnnotation()æ–¹æ³•ï¼ŒæŸ¥çœ‹äº†ä¸‹JDK1.8çš„æºç å¹¶æ²¡æœ‰è¦æ±‚Class<? extends Annotation>å‚æ•°ï¼Œæ­¤å¤„è½¬æ¢çº¯å±å¤šä½™ï¼Œä»…æ¼”ç¤ºç”¨
 static Annotation getAnnotation(AnnotatedElement element, String annotationTypeName) {
-	Class<?> annotationType = null;  // ÎŞÏŞÖÆÀàĞÍ±êÊ¶·û
+	Class<?> annotationType = null;  // æ— é™åˆ¶ç±»å‹æ ‡è¯†ç¬¦
 	try{
 		annotationType = Class.forName(annotationTypeName);
 	}catch (ClassNotFoundException cnfe) {
 		throw new IllegalArgumentException(cnfe);
 	}
-	// Í¨¹ıasSubclass()·½·¨½«Class<?>ÀàĞÍµÄannotationType×ª»¯ÎªClass<? extends Annotation>µÄ½á¹û·µ»Ø
-	// ½öÔÚannotationTypeÈ·ÊµÊÇAnnotationµÄ×ÓÀàÊ±×ª»»³É¹¦£¬·ñÔòÅ×³öClassCastExceptionÒì³£
+	// é€šè¿‡asSubclass()æ–¹æ³•å°†Class<?>ç±»å‹çš„annotationTypeè½¬åŒ–ä¸ºClass<? extends Annotation>çš„ç»“æœè¿”å›
+	// ä»…åœ¨annotationTypeç¡®å®æ˜¯Annotationçš„å­ç±»æ—¶è½¬æ¢æˆåŠŸï¼Œå¦åˆ™æŠ›å‡ºClassCastExceptionå¼‚å¸¸
 	return element.getAnnotation(annotationType.asSubclass(Annotation.class));
 }
 
 
-/****                                               ÀàµÄ·ºĞÍ                                        ****/
+/****                                               ç±»çš„æ³›å‹                                        ****/
 
 import java.util.*;
-public class RandomList<T> {      //  ²ÎÊıÀïÃæ´ø¼âÀ¨ºÅµÄÀàĞÍ£¬¿ÉÒÔÓĞ¶à¸ö£¬Èç RandomList<A, B, C>
-	private ArrayList<T> storage = new ArrayList<T>();   //  Ê¹ÓÃÁËÒÑÓĞµÄÀàĞÍ×öÄÚ²¿´æ´¢£¬ÒÑÓĞ¼¯ºÏÒ²ÓÃ·ºĞÍT±íÊ¾
+public class RandomList<T> {      //  å‚æ•°é‡Œé¢å¸¦å°–æ‹¬å·çš„ç±»å‹ï¼Œå¯ä»¥æœ‰å¤šä¸ªï¼Œå¦‚ RandomList<A, B, C>
+	private ArrayList<T> storage = new ArrayList<T>();   //  ä½¿ç”¨äº†å·²æœ‰çš„ç±»å‹åšå†…éƒ¨å­˜å‚¨ï¼Œå·²æœ‰é›†åˆä¹Ÿç”¨æ³›å‹Tè¡¨ç¤º
 	private Random rand = new Random(47);
-	public void add(T item) { storage.add(item); }      //  Èë²ÎÊÇ·ºĞÍ£¬ÀàĞÍÓÃT±íÊ¾
-	public T select() {                                 //  ·µ»ØÖµÊÇ·ºĞÍ£¬ÀàĞÍÓÃT±íÊ¾
+	public void add(T item) { storage.add(item); }      //  å…¥å‚æ˜¯æ³›å‹ï¼Œç±»å‹ç”¨Tè¡¨ç¤º
+	public T select() {                                 //  è¿”å›å€¼æ˜¯æ³›å‹ï¼Œç±»å‹ç”¨Tè¡¨ç¤º
 		return storage.get(rand.nextInt(storage.size()));
 	}
 }
 
-/****                                               ½Ó¿ÚµÄ·ºĞÍ                                        ****/
+/****                                               æ¥å£çš„æ³›å‹                                        ****/
 class Coffee {
 	public static long counter = 0;
 	public final long id = counter++;
@@ -625,24 +625,24 @@ class Coffee {
 		return "Coffee<" + id + ">";
 	}
 }
-interface Generator<T> { T next(); }        //  Éú³ÉÆ÷µÄ½Ó¿Ú¶¨Òå£¬²»ÄÜÉÙ
+interface Generator<T> { T next(); }        //  ç”Ÿæˆå™¨çš„æ¥å£å®šä¹‰ï¼Œä¸èƒ½å°‘
 import java.util.*;
-public class CoffeeGenerator implements Generator<Coffee>, Iterable<Coffee> {  //  ÊµÏÖÉú³ÉÆ÷½Ó¿Ú ºÍ µü´ú½Ó¿Ú£¨¸øforeachÓÃ£©
-	private Class type = Coffee.class;         //   »ñµÃÀàµÄ¾ø¶ÔÂ·¾¶Ãû£¬Èç¡°class com.zxf.comp.Coffee¡±£¬¿ÉÓÃÖ®´´½¨¶ÔÏó£¬¼ûºóÎÄ
-	public CoffeeGenerator() {};            //  Ä¬ÈÏ¹¹Ôìº¯Êı£¬ÓÃÓÚ´´½¨Ä¬ÈÏ¶ÔÏó£¬µ÷ÓÃnext() »ñµÃCoffeeÔªËØ
-	public Coffee next() {                  //  ÆÕÍ¨ÊµÏÖ£¬Í¨¹ıÇ°Êö¹¹ÔìÆ÷µÃµ½Éú³ÉÆ÷¶ÔÏóºó£¬µ÷ÓÃ next() ²»¶Ï»ñµÃÔªËØ
+public class CoffeeGenerator implements Generator<Coffee>, Iterable<Coffee> {  //  å®ç°ç”Ÿæˆå™¨æ¥å£ å’Œ è¿­ä»£æ¥å£ï¼ˆç»™foreachç”¨ï¼‰
+	private Class type = Coffee.class;         //   è·å¾—ç±»çš„ç»å¯¹è·¯å¾„åï¼Œå¦‚â€œclass com.zxf.comp.Coffeeâ€ï¼Œå¯ç”¨ä¹‹åˆ›å»ºå¯¹è±¡ï¼Œè§åæ–‡
+	public CoffeeGenerator() {};            //  é»˜è®¤æ„é€ å‡½æ•°ï¼Œç”¨äºåˆ›å»ºé»˜è®¤å¯¹è±¡ï¼Œè°ƒç”¨next() è·å¾—Coffeeå…ƒç´ 
+	public Coffee next() {                  //  æ™®é€šå®ç°ï¼Œé€šè¿‡å‰è¿°æ„é€ å™¨å¾—åˆ°ç”Ÿæˆå™¨å¯¹è±¡åï¼Œè°ƒç”¨ next() ä¸æ–­è·å¾—å…ƒç´ 
 		try {  return (Coffee)type.newInstance();  }
 		catch(Exception e){	throw new RuntimeException(e); }
 	}
-	/* ÊÊºÏ foreach µÄµü´úÄ£Ê½ÊµÏÖ£¬Í¨¹ıÊµÏÖµü´úÆ÷  */
+	/* é€‚åˆ foreach çš„è¿­ä»£æ¨¡å¼å®ç°ï¼Œé€šè¿‡å®ç°è¿­ä»£å™¨  */
 	private int size = 0;                         
-	public CoffeeGenerator(int sz) { size = sz; }   //  µü´úÆ÷ÊµÏÖµ÷ÓÃ´Ë¹¹ÔìÆ÷£¬ÒòÎªµü´úÆ÷µÄÔªËØ¸öÊıÊÇÃ÷È·µÄ£¬·ñÔòÎŞÏŞµü´úÁË
-	class CoffeeIterator implements Iterator<Coffee> {   //  ÄÚ²¿Àà£¬ÓÃÀ´¸¨ÖúÉú³Éµü´úÆ÷
+	public CoffeeGenerator(int sz) { size = sz; }   //  è¿­ä»£å™¨å®ç°è°ƒç”¨æ­¤æ„é€ å™¨ï¼Œå› ä¸ºè¿­ä»£å™¨çš„å…ƒç´ ä¸ªæ•°æ˜¯æ˜ç¡®çš„ï¼Œå¦åˆ™æ— é™è¿­ä»£äº†
+	class CoffeeIterator implements Iterator<Coffee> {   //  å†…éƒ¨ç±»ï¼Œç”¨æ¥è¾…åŠ©ç”Ÿæˆè¿­ä»£å™¨
 		int count = size;
 		public boolean hasNext() { return count > 0; }
 		public Coffee next() {
 			count--;
-			return CoffeeGenerator.this.next();       //  µ÷ÓÃµ±Ç°Éú³Éµü´úÆ÷µÄCoffeeGenerator¶ÔÏóµÄ±¾ÉíµÄnext() º¯Êı
+			return CoffeeGenerator.this.next();       //  è°ƒç”¨å½“å‰ç”Ÿæˆè¿­ä»£å™¨çš„CoffeeGeneratorå¯¹è±¡çš„æœ¬èº«çš„next() å‡½æ•°
 		}
 		public void remove() { throw new UnsupportedOperationException(); }
 	};
@@ -650,19 +650,19 @@ public class CoffeeGenerator implements Generator<Coffee>, Iterable<Coffee> {  /
 }
 public static void main(String[] args) {
 	CoffeeGenerator cg = new CoffeeGenerator();
-	System.out.println(cg.next());    //  Éú³ÉÆ÷µÄÓÃ·¨
-	for(Coffee cc : new CoffeeGenerator(10)) {  System.out.println(cc); }   // µü´úÆ÷µÄÓÃ·¨
+	System.out.println(cg.next());    //  ç”Ÿæˆå™¨çš„ç”¨æ³•
+	for(Coffee cc : new CoffeeGenerator(10)) {  System.out.println(cc); }   // è¿­ä»£å™¨çš„ç”¨æ³•
 }
 
-/****                                               ·ºĞÍ·½·¨                                        ****/
-Ê¹ÓÃ·ºĞÍ·½·¨Ê±£¬¶ÔÓ¦ÀàÉú³ÉÊ±²»±ØÖ¸¶¨²ÎÊıÀàĞÍ£¬±àÒëÆ÷»áÎªÎÒÃÇÕÒ³ö¾ßÌåÀàĞÍ¡£³ÆÖ®ÎªÀàĞÍ²ÎÊıÍÆ¶Ï¡£
-public class GenericMethods {   //  Àà²¢²»ÊÇ²ÎÊı»¯µÄ£¬²»´ø <T>
-	public <T> void f(T x) {            //  ½«·ºĞÍ²ÎÊıÁĞ±íÖÃÓÚ·µ»ØÖµÖ®Ç°
+/****                                               æ³›å‹æ–¹æ³•                                        ****/
+ä½¿ç”¨æ³›å‹æ–¹æ³•æ—¶ï¼Œå¯¹åº”ç±»ç”Ÿæˆæ—¶ä¸å¿…æŒ‡å®šå‚æ•°ç±»å‹ï¼Œç¼–è¯‘å™¨ä¼šä¸ºæˆ‘ä»¬æ‰¾å‡ºå…·ä½“ç±»å‹ã€‚ç§°ä¹‹ä¸ºç±»å‹å‚æ•°æ¨æ–­ã€‚
+public class GenericMethods {   //  ç±»å¹¶ä¸æ˜¯å‚æ•°åŒ–çš„ï¼Œä¸å¸¦ <T>
+	public <T> void f(T x) {            //  å°†æ³›å‹å‚æ•°åˆ—è¡¨ç½®äºè¿”å›å€¼ä¹‹å‰
 		System.out.println(x.getClass().getName());
 	}
 }
 public class GenericVarargs {
-	public static <T> List<T> makelist(T... args) {   //  ·ºĞÍ·½·¨ÅäºÏ¿É±ä²ÎÊı£¬´Ë´¦²ÎÊıÀàĞÍ¶¼ÊÇT
+	public static <T> List<T> makelist(T... args) {   //  æ³›å‹æ–¹æ³•é…åˆå¯å˜å‚æ•°ï¼Œæ­¤å¤„å‚æ•°ç±»å‹éƒ½æ˜¯T
 		List<T> result = new ArrayList<T>();
 		for(T item: args)
 			result.add(item);
@@ -670,43 +670,43 @@ public class GenericVarargs {
 	}
 }
 
-/****                                               Í¨Åä·û£¨ÏòÉÏ/ÏòÏÂ×ªĞÍ£©                                        ****/
+/****                                               é€šé…ç¬¦ï¼ˆå‘ä¸Š/å‘ä¸‹è½¬å‹ï¼‰                                        ****/
 class Fruit {}
 class Apple extends Fruit {}
 class Jonathan extends Apple {}
 class Orange extends Fruit {}
 
-/**   ÒÔÏÂÊÇ¿Í»§´úÂë£¬¼´Î»ÓÚmainº¯ÊıÖĞ£¬Èç¹ûÃ»ÓĞ¶Ô»ù±¾µÄ·ºĞÍÀà½øĞĞ°ü×°£¬ÔòÖ»ÄÜÈ¡²»ÄÜ·Å£¬ÒòÎª·ºĞÍµÄÀàĞÍÅĞ¶ÏÊÇÔÚ±àÒë½×¶Î£¬
-       ÔËĞĞ½×¶ÎÀàĞÍÒÑ²Á³ı£¬·ÅµÄÊ±ºò²»È·¶¨ÊÇ²»ÊÇ·ÅµÄÕıÈ·ÀàĞÍ£¬Òò´ËÔÚ±àÒë½×¶Î¿¨ËÀ
+/**   ä»¥ä¸‹æ˜¯å®¢æˆ·ä»£ç ï¼Œå³ä½äºmainå‡½æ•°ä¸­ï¼Œå¦‚æœæ²¡æœ‰å¯¹åŸºæœ¬çš„æ³›å‹ç±»è¿›è¡ŒåŒ…è£…ï¼Œåˆ™åªèƒ½å–ä¸èƒ½æ”¾ï¼Œå› ä¸ºæ³›å‹çš„ç±»å‹åˆ¤æ–­æ˜¯åœ¨ç¼–è¯‘é˜¶æ®µï¼Œ
+       è¿è¡Œé˜¶æ®µç±»å‹å·²æ“¦é™¤ï¼Œæ”¾çš„æ—¶å€™ä¸ç¡®å®šæ˜¯ä¸æ˜¯æ”¾çš„æ­£ç¡®ç±»å‹ï¼Œå› æ­¤åœ¨ç¼–è¯‘é˜¶æ®µå¡æ­»
 **/
 List<? extends Fruit> flist = new ArrayList<Apple>();
-// flist.add(new Apple());   ±àÒë´íÎó
-// flist.add(new Fruit());   ±àÒë´íÎó£¬Òò´ËÖ»È·¶¨ flist´æ´¢µÄÊÇFruitµÄÄ³¸ö×ÓÀàĞÍ£¬µ«²»È·¶¨¾ßÌåÊÇÄÄ¸ö£¬¿ÉÄÜµ¼ÖÂÀàĞÍ²»Æ¥Åä
-// flist.add(new Object());  ±àÒë´íÎó
+// flist.add(new Apple());   ç¼–è¯‘é”™è¯¯
+// flist.add(new Fruit());   ç¼–è¯‘é”™è¯¯ï¼Œå› æ­¤åªç¡®å®š flistå­˜å‚¨çš„æ˜¯Fruitçš„æŸä¸ªå­ç±»å‹ï¼Œä½†ä¸ç¡®å®šå…·ä½“æ˜¯å“ªä¸ªï¼Œå¯èƒ½å¯¼è‡´ç±»å‹ä¸åŒ¹é…
+// flist.add(new Object());  ç¼–è¯‘é”™è¯¯
 List<? extends Fruit> flist = Arrays.asList(new Apple());
-Apple a = (Apple)flist.get(0);  //  ¿ÉÒÔ get ÔªËØ£¬µ«ÊÇ²»ÄÜ add ÔªËØ£¬ÒòÎªÌí¼ÓÊ±²»È·¶¨ÔªËØÀàĞÍ£¬±àÒëÆ÷
-flist.contains(new Apple());  //  contains ·½·¨½«½ÓÊÕµÄ²ÎÊı×ª»¯ÎªÁË Object
-flist.indexOf(new Apple());   //  indexOf   ·½·¨½«½ÓÊÕµÄ²ÎÊı×ª»¯ÎªÁË Object
+Apple a = (Apple)flist.get(0);  //  å¯ä»¥ get å…ƒç´ ï¼Œä½†æ˜¯ä¸èƒ½ add å…ƒç´ ï¼Œå› ä¸ºæ·»åŠ æ—¶ä¸ç¡®å®šå…ƒç´ ç±»å‹ï¼Œç¼–è¯‘å™¨
+flist.contains(new Apple());  //  contains æ–¹æ³•å°†æ¥æ”¶çš„å‚æ•°è½¬åŒ–ä¸ºäº† Object
+flist.indexOf(new Apple());   //  indexOf   æ–¹æ³•å°†æ¥æ”¶çš„å‚æ•°è½¬åŒ–ä¸ºäº† Object
 
-// Íù¼¯ºÏÀïÃæ·ÅµÄÊ±ºò£¬¼¯ºÏ¿ÉÒÔÊÇ¸¸ÀàµÄ¼¯ºÏ£¬½«×ÓÀàÔªËØ·ÅÈë£¬´ËÊ±ÓÃsuper
+// å¾€é›†åˆé‡Œé¢æ”¾çš„æ—¶å€™ï¼Œé›†åˆå¯ä»¥æ˜¯çˆ¶ç±»çš„é›†åˆï¼Œå°†å­ç±»å…ƒç´ æ”¾å…¥ï¼Œæ­¤æ—¶ç”¨super
 public class GenericWriting {
-	static <T> void writeExact(List<T> list, T item) { list.add(item); }  //  ÎŞÍ¨Åä·û
+	static <T> void writeExact(List<T> list, T item) { list.add(item); }  //  æ— é€šé…ç¬¦
 	static List<Apple> apples = new ArrayList<Apple>();
 	static List<Fruit> fruit = new ArrayList<Fruit>();
 	static void f1() {
 		writeExact(apples, new Apple());
-		// writeExact(fruit, new Apple());  ±àÒë´íÎó£¬²»¼æÈİµÄÀàĞÍ£¬found Fruit, required Apple
+		// writeExact(fruit, new Apple());  ç¼–è¯‘é”™è¯¯ï¼Œä¸å…¼å®¹çš„ç±»å‹ï¼Œfound Fruit, required Apple
 	}
-	// ÔÚ±»µ÷ÓÃµÄº¯ÊıÖĞÊ¹ÓÃ super£¬±íÊ¾½ÓÊÕµÄµÚÒ»¸ö²ÎÊıÆäÀàĞÍ¿ÉÒÔÊÇ  TÀàĞÍµÄ¸¸ÀàµÄ¼¯ºÏ£»
-	//  ¼´ ×°TÍ¨ÓÃÀàĞÍµÄ  ¼¯ºÏList µÄÈ·¶¨ÀàĞÍ¿ÉÒÔÊÇ List<TµÄ¸¸Àà>£¬ÓÃÕâÖÖ·½Ê½Àí½âºÎÊ±ÓÃ super
-	// ´Ë´¦ TºÍ¶ÔÓ¦µÄ¼¯ºÏÔÚÍ¬Ò»²ã£¬ĞèÒªTµÄ¸¸ÀàµÄ¼¯ºÏ½ÓÊÜ¾ßÌåµÄTÔªËØ
+	// åœ¨è¢«è°ƒç”¨çš„å‡½æ•°ä¸­ä½¿ç”¨ superï¼Œè¡¨ç¤ºæ¥æ”¶çš„ç¬¬ä¸€ä¸ªå‚æ•°å…¶ç±»å‹å¯ä»¥æ˜¯  Tç±»å‹çš„çˆ¶ç±»çš„é›†åˆï¼›
+	//  å³ è£…Té€šç”¨ç±»å‹çš„  é›†åˆList çš„ç¡®å®šç±»å‹å¯ä»¥æ˜¯ List<Tçš„çˆ¶ç±»>ï¼Œç”¨è¿™ç§æ–¹å¼ç†è§£ä½•æ—¶ç”¨ super
+	// æ­¤å¤„ Tå’Œå¯¹åº”çš„é›†åˆåœ¨åŒä¸€å±‚ï¼Œéœ€è¦Tçš„çˆ¶ç±»çš„é›†åˆæ¥å—å…·ä½“çš„Tå…ƒç´ 
 	static <T> void writeWithWildcard(List<? super T> list, T item) { list.add(item); }
 	staic void f2() {
 		writeWithWildcard(apples, new Apple());
 		writeWithWildcard(fruit, new Apple());
 	}
 }
-//  ´Ó¼¯ºÏÀïÃæÈ¡µÄÊ±ºò£¬¼¯ºÏ¿ÉÒÔÊÇ×ÓÀàµÄ¼¯ºÏ£¬È¡³öÀ´×ª»»³É¸¸ÀàÔªËØ£¬´ËÊ±ÓÃextends
+//  ä»é›†åˆé‡Œé¢å–çš„æ—¶å€™ï¼Œé›†åˆå¯ä»¥æ˜¯å­ç±»çš„é›†åˆï¼Œå–å‡ºæ¥è½¬æ¢æˆçˆ¶ç±»å…ƒç´ ï¼Œæ­¤æ—¶ç”¨extends
 public class GenericReading {
 	static <T> T readExact(List<T> list) { return list.get(0) }
 	static List<Apple> apples = Arrays.asList(new Apple());
@@ -714,20 +714,20 @@ public class GenericReading {
 	static void f1() {
 		Apple a = readExact(apples);
 		Fruit f = readExact(fruit);
-		f = readExact(apples);      //  Õı³£µÄ·ºĞÍ·½·¨¿ÉÒÔÕıÈ·ÔËĞĞ£¬È¡³öÀ´µÄAppleÀàĞÍ»á½øĞĞÀàĞÍ×ª»»
+		f = readExact(apples);      //  æ­£å¸¸çš„æ³›å‹æ–¹æ³•å¯ä»¥æ­£ç¡®è¿è¡Œï¼Œå–å‡ºæ¥çš„Appleç±»å‹ä¼šè¿›è¡Œç±»å‹è½¬æ¢
 		
-	static class Reader<T> {    //  ¶¨ÒåÁËÒ»¸ö·ºĞÍÀà£¬¸ÃÀàÓµÓĞÒ»¸öÃûÎª readExact µÄ·ºĞÍ·½·¨
+	static class Reader<T> {    //  å®šä¹‰äº†ä¸€ä¸ªæ³›å‹ç±»ï¼Œè¯¥ç±»æ‹¥æœ‰ä¸€ä¸ªåä¸º readExact çš„æ³›å‹æ–¹æ³•
 		T readExact(List<T> list) { return list.get(0); }  
 	}
 	static void f2() {
 		Reader<Fruit> fruitReader = new Reader<Fruit>();
 		Fruit f = fruitReader.readExact(fruit);
-		//  ÓÉÓÚÀàÀàĞÍÒÑ¾­¶¨ÒåÁË±¾ÀàÖ»ÄÜ´¦ÀíTÕâÒ»¸öÀàĞÍ£¬Òò´Ë¶ÔËüµÄÀ©´ó/ËõĞ´Àà·¶Î§²Ù×÷½Ô²»¿ÉĞĞ
-		// Fruit a = fruitReader.readExact(apples);  ±àÒë´íÎó£¬List<Fruit> ÀàĞÍ²»ÄÜÓ¦ÓÃÓÚ List<Apple> ÀàĞÍ
+		//  ç”±äºç±»ç±»å‹å·²ç»å®šä¹‰äº†æœ¬ç±»åªèƒ½å¤„ç†Tè¿™ä¸€ä¸ªç±»å‹ï¼Œå› æ­¤å¯¹å®ƒçš„æ‰©å¤§/ç¼©å†™ç±»èŒƒå›´æ“ä½œçš†ä¸å¯è¡Œ
+		// Fruit a = fruitReader.readExact(apples);  ç¼–è¯‘é”™è¯¯ï¼ŒList<Fruit> ç±»å‹ä¸èƒ½åº”ç”¨äº List<Apple> ç±»å‹
 		
-	static class CovariantReader<T> {  //  ¶¨ÒåÁËÒ»¸ö·ºĞÍÀà£¬¸ÃÀàÓµÓĞÒ»¸öÃûÎª readExact µÄ·ºĞÍ·½·¨£¬µ«·½·¨Èë²Î½øĞĞÁËµ÷Õû
-		T readCovariant(List<? extends T> list) { return list.get(0); } // ·½·¨Èë²Î½ÓÊÜËùÓĞTµÄ×ÓÀàĞÍ×÷Îª²ÎÊı
-		//  ´Ë´¦·½·¨µÄÈë²Î List Óë T ²»ÔÚÍ¬Ò»²ã£¬ÒâË¼ÊÇ½ÓÊÜ TµÄ×ÓÀàµÄ¼¯ºÏ ×÷ÎªÈë²Î£¬·µ»ØTÀàĞÍµÄ²ÎÊı
+	static class CovariantReader<T> {  //  å®šä¹‰äº†ä¸€ä¸ªæ³›å‹ç±»ï¼Œè¯¥ç±»æ‹¥æœ‰ä¸€ä¸ªåä¸º readExact çš„æ³›å‹æ–¹æ³•ï¼Œä½†æ–¹æ³•å…¥å‚è¿›è¡Œäº†è°ƒæ•´
+		T readCovariant(List<? extends T> list) { return list.get(0); } // æ–¹æ³•å…¥å‚æ¥å—æ‰€æœ‰Tçš„å­ç±»å‹ä½œä¸ºå‚æ•°
+		//  æ­¤å¤„æ–¹æ³•çš„å…¥å‚ List ä¸ T ä¸åœ¨åŒä¸€å±‚ï¼Œæ„æ€æ˜¯æ¥å— Tçš„å­ç±»çš„é›†åˆ ä½œä¸ºå…¥å‚ï¼Œè¿”å›Tç±»å‹çš„å‚æ•°
 	}
 	static void f3() {
 		CovariantReader<Fruit> fruitReader = new CovariantReader<Fruit>();
@@ -736,9 +736,9 @@ public class GenericReading {
 	}
 	
 	
-/****                                               ·´Éä                                        ****/
+/****                                               åå°„                                        ****/
 
-»ù±¾Ê¹ÓÃ£º
+åŸºæœ¬ä½¿ç”¨ï¼š
 public class ReflectServiceImpl {
 	public void sayHello(String name) {
 		System.out.println("Hello " + name);
@@ -756,11 +756,11 @@ public class ReflectServiceImpl2 {
 
 public class Main {
 
-	/*Í¨¹ı·´Éä»ñÈ¡¶ÔÏó£¨ÎŞ²Î¹¹Ôìº¯Êı°æ£©*/
+	/*é€šè¿‡åå°„è·å–å¯¹è±¡ï¼ˆæ— å‚æ„é€ å‡½æ•°ç‰ˆï¼‰*/
 	public ReflectServiceImpl getInstance() {
 		ReflectServiceImpl object = null;
 		try{
-			/*Í¨¹ınewInstance³õÊ¼»¯Ò»¸öÀà¶ÔÏó£¬²»´ø²ÎÊıµÄ³õÊ¼»¯·½·¨*/
+			/*é€šè¿‡newInstanceåˆå§‹åŒ–ä¸€ä¸ªç±»å¯¹è±¡ï¼Œä¸å¸¦å‚æ•°çš„åˆå§‹åŒ–æ–¹æ³•*/
 			object = (ReflectServiceImpl)Class.forName("com.zxf.zxfbatis.simple.ReflectServiceImpl").newInstance();
 		}catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
 			ex.printStackTrace();
@@ -768,37 +768,37 @@ public class Main {
 		return object;
 	}
 
-	/*Í¨¹ı·´Éä»ñÈ¡¶ÔÏó£¨ÓĞ²Î¹¹Ôìº¯Êı°æ£©*/
+	/*é€šè¿‡åå°„è·å–å¯¹è±¡ï¼ˆæœ‰å‚æ„é€ å‡½æ•°ç‰ˆï¼‰*/
 	public ReflectServiceImpl2 getInstance2() {
 		ReflectServiceImpl2 object = null;
 		try {
-			object = (ReflectServiceImpl2)Class.forName("com.zxf.zxfbatis.simple.ReflectServiceImpl2").getConstructor(String.class).newInstance("ÕÅÈı");
+			object = (ReflectServiceImpl2)Class.forName("com.zxf.zxfbatis.simple.ReflectServiceImpl2").getConstructor(String.class).newInstance("å¼ ä¸‰");
 		}catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
 			ex.printStackTrace();
 		}
 		return object;
 	}
 
-	/*·´Éä·½·¨£º ÒÑÓĞ¶ÔÏó²»È·¶¨ÀàÊ±µÄµ÷ÓÃ·½·¨£¬static½öÊÇÎªÁËmainµ÷ÓÃ·½±ã*/
+	/*åå°„æ–¹æ³•ï¼š å·²æœ‰å¯¹è±¡ä¸ç¡®å®šç±»æ—¶çš„è°ƒç”¨æ–¹æ³•ï¼Œstaticä»…æ˜¯ä¸ºäº†mainè°ƒç”¨æ–¹ä¾¿*/
 	public static Object reflectMethod() {
 		Object returnObj = null;
 		ReflectServiceImpl target = new ReflectServiceImpl();
 		try{
 			Method method = ReflectServiceImpl.class.getMethod("sayHello", String.class);
-			returnObj = method.invoke(target, "ÕÅÈı");
+			returnObj = method.invoke(target, "å¼ ä¸‰");
 		}catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 			ex.printStackTrace();
 		}
 		return returnObj;
 	}
 
-	/*·´Éä·½·¨£º Ã»ÓĞ¶ÔÏóµ«È·¶¨ÀàÊ±µÄµ÷ÓÃ·½·¨£¬static½öÊÇÎªÁËmainµ÷ÓÃ·½±ã*/
+	/*åå°„æ–¹æ³•ï¼š æ²¡æœ‰å¯¹è±¡ä½†ç¡®å®šç±»æ—¶çš„è°ƒç”¨æ–¹æ³•ï¼Œstaticä»…æ˜¯ä¸ºäº†mainè°ƒç”¨æ–¹ä¾¿*/
 	public static Object reflect() {
 		ReflectServiceImpl object = null;
 		try {
 			object = (ReflectServiceImpl)Class.forName("com.zxf.zxfbatis.simple.ReflectServiceImpl").newInstance();
 			Method method = object.getClass().getMethod("sayHello", String.class);
-			method.invoke(object, "ÕÅÈı");
+			method.invoke(object, "å¼ ä¸‰");
 		}catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException ex) {
 			ex.printStackTrace();
 		}
@@ -813,18 +813,18 @@ public class Main {
 
 
 
-Àà·½·¨ÌáÈ¡Æ÷
+ç±»æ–¹æ³•æå–å™¨
 import java.lang.reflect.*;
 import java.util.regex.*;
 public class ShowMethods {
-	/* Ê¹ÓÃ java ShowMethods className ÌáÈ¡ÀàµÄËùÓĞ·½·¨ºÍ¹¹Ôìº¯Êı  »òÕß 
-	   Ê¹ÓÃ java ShowMethods className methodName ÌáÈ¡ÀàÖĞ°üº¬·½·¨ÃûmethodNameµÄº¯Êı  */
+	/* ä½¿ç”¨ java ShowMethods className æå–ç±»çš„æ‰€æœ‰æ–¹æ³•å’Œæ„é€ å‡½æ•°  æˆ–è€… 
+	   ä½¿ç”¨ java ShowMethods className methodName æå–ç±»ä¸­åŒ…å«æ–¹æ³•åmethodNameçš„å‡½æ•°  */
 	private static String usage = "Usage:\n" +
 								  "ShowMethods qualified.class.name\n" +
 								  "To show all methods in class or:\n" +
 								  "ShowMethods qualified.class.name word\n" +
 								  "To search for methods involving 'word'";
-	/* ±íÊ¾Æ¥ÅäËùÓĞ . Ö®Ç°ÓĞ¶à¸öµ¥´ÊÀàĞÍ(w+)µÄÄ£Ê½ */
+	/* è¡¨ç¤ºåŒ¹é…æ‰€æœ‰ . ä¹‹å‰æœ‰å¤šä¸ªå•è¯ç±»å‹(w+)çš„æ¨¡å¼ */
 	private static Pattern p = Pattern.compile("\\w+\\."); 
 
 	public static void main(String[] args) {
@@ -835,20 +835,20 @@ public class ShowMethods {
 		}
 		int lines = 0;
 		try{
-			Class<?> c = Class.forName(args[0]);  /* ÏÈÍ¨¹ıÀàÃû»ñµÃÀàÒıÓÃ */
-			Method[] methods = c.getMethods();    // »ñµÃ¸ÃÀàµÄËùÓĞ·½·¨ 
-			Constructor[] ctors = c.getConstructors();  //  »ñµÃ¸ÃÀàµÄËùÓĞ¹¹Ôìº¯Êı
+			Class<?> c = Class.forName(args[0]);  /* å…ˆé€šè¿‡ç±»åè·å¾—ç±»å¼•ç”¨ */
+			Method[] methods = c.getMethods();    // è·å¾—è¯¥ç±»çš„æ‰€æœ‰æ–¹æ³• 
+			Constructor[] ctors = c.getConstructors();  //  è·å¾—è¯¥ç±»çš„æ‰€æœ‰æ„é€ å‡½æ•°
 			
 			if(args.length == 1) {
 				for(Method m : methods) {
-					/* ·µ»Ø public static void ShowMethods.main(java.lang.String[]) */
+					/* è¿”å› public static void ShowMethods.main(java.lang.String[]) */
 					Print.print(m.toString());
-					/* ·µ»Ø public static void main(String[]) */
-					/* ×¢Òâ´Ë´¦ÕıÔò±í´ïÊ½²éÕÒµ½ËùÓĞ.Ö®Ç°µÄµ¥´ÊÖ®ºó£¬µ÷ÓÃreplaceAll("")½«wÈ«²¿É¾³ıÁË */
+					/* è¿”å› public static void main(String[]) */
+					/* æ³¨æ„æ­¤å¤„æ­£åˆ™è¡¨è¾¾å¼æŸ¥æ‰¾åˆ°æ‰€æœ‰.ä¹‹å‰çš„å•è¯ä¹‹åï¼Œè°ƒç”¨replaceAll("")å°†wå…¨éƒ¨åˆ é™¤äº† */
 					Print.print(p.matcher(m.toString()).replaceAll(""));
 				}
 				for(Constructor ct : ctors)
-					/* ·µ»Ø public ShowMethods()  ×¢Òâ´Ë´¦½öÓĞÒ»¸ö±àÒëÆ÷×Ô¶¯¼ÓÉÏµÄÄ¬ÈÏ¹¹Ôìº¯Êı */
+					/* è¿”å› public ShowMethods()  æ³¨æ„æ­¤å¤„ä»…æœ‰ä¸€ä¸ªç¼–è¯‘å™¨è‡ªåŠ¨åŠ ä¸Šçš„é»˜è®¤æ„é€ å‡½æ•° */
 					Print.print(p.matcher(ct.toString()).replaceAll(""));
 				
 				lines = methods.length + ctors.length;
@@ -875,7 +875,7 @@ public class ShowMethods {
 
 
 /****                                               RTTI                                        ****/
-¸¨Öú½Ó¿ÚºÍÀà
+è¾…åŠ©æ¥å£å’Œç±»
 interface HasBattries {}
 interface Waterproof {}
 interface Shoots {}
@@ -887,13 +887,13 @@ class FancyToy extends Toy implements HasBattries, Waterproof, Shoots {
 	FancyToy() { super(1); }
 }
 
-²»ÍÆ¼öÏÂÃæÕâÖÖÖ±½ÓÊ¹ÓÃClassµÄ·½Ê½£¬ÍÆ¼öÊ¹ÓÃ·ºĞÍ
+ä¸æ¨èä¸‹é¢è¿™ç§ç›´æ¥ä½¿ç”¨Classçš„æ–¹å¼ï¼Œæ¨èä½¿ç”¨æ³›å‹
 static void printInfo(Class cc) {
-		/* »ñÈ¡ÀàÃû£¬ÈçFancyToy£¬ÅĞ¶ÏÊÇ·ñÊÇ½Ó¿Ú */
+		/* è·å–ç±»åï¼Œå¦‚FancyToyï¼Œåˆ¤æ–­æ˜¯å¦æ˜¯æ¥å£ */
 		Print.print("Class name: " + cc.getName() + " is interface? [" + cc.isInterface() + "]");
-		/* »ñÈ¡ÀàÃû£¬ÈçFancyToy */
+		/* è·å–ç±»åï¼Œå¦‚FancyToy */
 		Print.print("Simple name: " + cc.getSimpleName());
-		/* »ñÈ¡ÍêÕûÂ·¾¶µÄÀàÃû£¬Èçtypeinfo.toys.FancyToy */
+		/* è·å–å®Œæ•´è·¯å¾„çš„ç±»åï¼Œå¦‚typeinfo.toys.FancyToy */
 		Print.print("Canonical name:" + cc.getCanonicalName());
 		Print.print("==================separator========================");
 	}
@@ -901,74 +901,74 @@ static void printInfo(Class cc) {
 public static void main(String[] args) {
 	Class c = null;
 	try{
-		/* »ñÈ¡¸ø¶¨ÀàµÄClass¶ÔÏó£¬²ÎÊıÒªÊÇÀàËÆimportµÄ¾ø¶ÔÂ·¾¶£¬´Ë´¦FancyToy·ÅÔÚdefaultÄ¿Â¼ÖĞ */
-		/* ÁíÒ»¸ö¸ü¿ì½İµÄ·½Ê½ÊÇÊ¹ÓÃÀà×ÖÃæ³£Á¿  Èç FancyToy.class */
+		/* è·å–ç»™å®šç±»çš„Classå¯¹è±¡ï¼Œå‚æ•°è¦æ˜¯ç±»ä¼¼importçš„ç»å¯¹è·¯å¾„ï¼Œæ­¤å¤„FancyToyæ”¾åœ¨defaultç›®å½•ä¸­ */
+		/* å¦ä¸€ä¸ªæ›´å¿«æ·çš„æ–¹å¼æ˜¯ä½¿ç”¨ç±»å­—é¢å¸¸é‡  å¦‚ FancyToy.class */
 		c = Class.forName("FancyToy");
 	}catch(ClassNotFoundException e) {
 		e.printStackTrace();
 	}
 	printInfo(c);
-	/* »ñÈ¡¸ÃÀàÊµÏÖµÄËùÓĞ½Ó¿Ú */
+	/* è·å–è¯¥ç±»å®ç°çš„æ‰€æœ‰æ¥å£ */
 	for(Class face: c.getInterfaces())
 		printInfo(face);
-	/* »ñÈ¡µ±Ç°ÀàµÄÖ±Ïµ¸¸Àà */
+	/* è·å–å½“å‰ç±»çš„ç›´ç³»çˆ¶ç±» */
 	Class up = c.getSuperclass();
 	Object obj = null;
 	try{
-		/* »ñÈ¡µ±Ç°Àà¶ÔÏóÖ¸ÏòÀàµÄ¾ßÌåÊµÀı£¬¸ÃÀà±ØĞëÓĞÄ¬ÈÏ¹¹ÔìÆ÷£¬·ñÔòÅ×³öÒì³£ */
+		/* è·å–å½“å‰ç±»å¯¹è±¡æŒ‡å‘ç±»çš„å…·ä½“å®ä¾‹ï¼Œè¯¥ç±»å¿…é¡»æœ‰é»˜è®¤æ„é€ å™¨ï¼Œå¦åˆ™æŠ›å‡ºå¼‚å¸¸ */
 		obj = up.newInstance();
 	}catch(InstantiationException e){
 		e.printStackTrace();
 	}catch(IllegalAccessException e){
 		e.printStackTrace();
 	}
-	/*  »ñÈ¡µ±Ç°¶ÔÏóµÄÀàÀàĞÍ¶ÔÏó ²¢´òÓ¡ */
+	/*  è·å–å½“å‰å¯¹è±¡çš„ç±»ç±»å‹å¯¹è±¡ å¹¶æ‰“å° */
 	printInfo(obj.getClass());
 }
 	
-½¨Òé²ÉÓÃÏÂÃæµÄ·ºĞÍĞ´·¨
+å»ºè®®é‡‡ç”¨ä¸‹é¢çš„æ³›å‹å†™æ³•
 public static void main(String[] args) throws InstantiationException, IllegalAccessException {
-	// ²ÉÓÃ·ºĞÍµÄÀàÒıÓÃÀàĞÍ´æ´¢¾ßÌåÀàĞÍ
+	// é‡‡ç”¨æ³›å‹çš„ç±»å¼•ç”¨ç±»å‹å­˜å‚¨å…·ä½“ç±»å‹
 	Class<FancyToy> ftClass = FancyToy.class;
-	//  ftClass = int.class  ±àÒë²»¹ı£¬ÒòÎªÒÑ¾­ÓÃ·ºĞÍÏŞ¶¨ÁËÀàĞÍ
+	//  ftClass = int.class  ç¼–è¯‘ä¸è¿‡ï¼Œå› ä¸ºå·²ç»ç”¨æ³›å‹é™å®šäº†ç±»å‹
 	FancyToy fancyToy = ftClass.newInstance();
-	// ´æ´¢FancyToyµÄ³¬ÀàµÄÀàÒıÓÃ£¬×¢ÒâÖ»ÊÇËµÃ÷ÊÇ³¬Àà£¬Ã»ËµÊÇÄÄ¸ö¾ßÌåµÄ³¬Àà£¬Òò´ËµÚ¶şÖÖĞ´·¨±àÒë²»¹ı
+	// å­˜å‚¨FancyToyçš„è¶…ç±»çš„ç±»å¼•ç”¨ï¼Œæ³¨æ„åªæ˜¯è¯´æ˜æ˜¯è¶…ç±»ï¼Œæ²¡è¯´æ˜¯å“ªä¸ªå…·ä½“çš„è¶…ç±»ï¼Œå› æ­¤ç¬¬äºŒç§å†™æ³•ç¼–è¯‘ä¸è¿‡
 	Class<? super FancyToy> up = ftClass.getSuperclass();
 	//Class<Toy> up2 = ftClass.getSuperclass();
-	/* ÒòÎªÉùÃ÷µÄ²»ÊÇÒ»ÖÖ¾ßÌåµÄÀàĞÍ£¬Òò´ËµÃµ½µÄ±äÁ¿Ò²Ö»ÄÜÓÃObjectÀàĞÍ±íÊ¾ */
+	/* å› ä¸ºå£°æ˜çš„ä¸æ˜¯ä¸€ç§å…·ä½“çš„ç±»å‹ï¼Œå› æ­¤å¾—åˆ°çš„å˜é‡ä¹Ÿåªèƒ½ç”¨Objectç±»å‹è¡¨ç¤º */
 	Object obj = up.newInstance();
 	
 	Toy t = new FancyToy();
 	Class<FancyToy> fancyToyType = FancyToy.class;
-	/* cast() ·½·¨½«Èë²Î×ªĞÍÎªÀàÒıÓÃµÄÀàĞÍ£¬½«Toy±äÁ¿´æ´¢µÄFancyToy¶ÔÏó×ª»»³ÉÍêÈ«Æ¥ÅäµÄµ÷ÓÃµÄÀàÒıÓÃµÄÀàĞÍ */
+	/* cast() æ–¹æ³•å°†å…¥å‚è½¬å‹ä¸ºç±»å¼•ç”¨çš„ç±»å‹ï¼Œå°†Toyå˜é‡å­˜å‚¨çš„FancyToyå¯¹è±¡è½¬æ¢æˆå®Œå…¨åŒ¹é…çš„è°ƒç”¨çš„ç±»å¼•ç”¨çš„ç±»å‹ */
 	FancyToy ft = fancyToyType.cast(t);
-	/*  Ğ§¹ûµÈÓÚÉÏÒ»¾ä */
+	/*  æ•ˆæœç­‰äºä¸Šä¸€å¥ */
 	ft = (FancyToy)t;
 	
-	/* Class<?> µÈ¼ÛÓÚÔ­ÓĞµÄClass£¬Ã»ÓĞÀàĞÍÉùÃ÷Òò¶øÃ»ÓĞÔ¼Êø£¬¿ÉÒÔ´æ´¢ÈÎºÎµÄÀàĞÍ£¬Òò´Ë±»ÍÆ¼ö·ÅÆúÊ¹ÓÃ */
+	/* Class<?> ç­‰ä»·äºåŸæœ‰çš„Classï¼Œæ²¡æœ‰ç±»å‹å£°æ˜å› è€Œæ²¡æœ‰çº¦æŸï¼Œå¯ä»¥å­˜å‚¨ä»»ä½•çš„ç±»å‹ï¼Œå› æ­¤è¢«æ¨èæ”¾å¼ƒä½¿ç”¨ */
 	Class<?> intClass = int.class;
 	intClass = double.class;
 }
 	
 	
-/*  ²ÉÓÃ·ºĞÍµÄÁĞ±í×Ô¶¯Éú³ÉÆ÷µÄÀı×Ó */
+/*  é‡‡ç”¨æ³›å‹çš„åˆ—è¡¨è‡ªåŠ¨ç”Ÿæˆå™¨çš„ä¾‹å­ */
 class CounterInteger {
 	private static long counter;
-	/* ×¢Òâ£¬´Ë´¦id²»ÄÜÉèÖÃ³Éstatic£¬·ñÔòËùÓĞµÄidÖµ½«±ä³É0 */
+	/* æ³¨æ„ï¼Œæ­¤å¤„idä¸èƒ½è®¾ç½®æˆstaticï¼Œå¦åˆ™æ‰€æœ‰çš„idå€¼å°†å˜æˆ0 */
 	private final long id = counter++;
 	public String toString() { return Long.toString(id); }
 }
 public class FilledList<T> {
-	/* ´Ë´¦±íÊ¾´æ´¢Ò»¸öÀàĞÍTµÄClassÀàĞÍµÄÀàÒıÓÃ±äÁ¿  */
+	/* æ­¤å¤„è¡¨ç¤ºå­˜å‚¨ä¸€ä¸ªç±»å‹Tçš„Classç±»å‹çš„ç±»å¼•ç”¨å˜é‡  */
 	private Class<T> type;
-	/* Ê¹ÓÃÀàÒıÓÃÀàĞÍ×öÈë²Î */
+	/* ä½¿ç”¨ç±»å¼•ç”¨ç±»å‹åšå…¥å‚ */
 	public FilledList(Class<T> type) { this.type = type; }
 	
 	public List<T> create(int nElements) {
 		List<T> result = new ArrayList<T>();
 		try{
 			for(int i=0; i<nElements; i++) {
-				/* TµÄClassÀàĞÍÀàÒıÓÃ±äÁ¿ÉÏ£¬µ÷ÓÃnewInstance()£¬µÃµ½TµÄÄ¬ÈÏ¹¹Ôìº¯Êı´´½¨µÄÊµÀı±äÁ¿ */
+				/* Tçš„Classç±»å‹ç±»å¼•ç”¨å˜é‡ä¸Šï¼Œè°ƒç”¨newInstance()ï¼Œå¾—åˆ°Tçš„é»˜è®¤æ„é€ å‡½æ•°åˆ›å»ºçš„å®ä¾‹å˜é‡ */
 				T tmp = type.newInstance();
 				result.add(tmp);
 			}
@@ -979,41 +979,41 @@ public class FilledList<T> {
 	}
 	public static void main(String[] args) {
 		FilledList<CounterInteger> fl = new FilledList<CounterInteger>(CounterInteger.class);
-		Print.print(fl.create(15));  // µÃµ½ [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+		Print.print(fl.create(15));  // å¾—åˆ° [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 	}
 }
 
-/* ÅĞ¶ÏxÊÇ·ñÊÇ DogÀàĞÍ »òÕß DogÀàĞÍµÄ×ÓÀàĞÍ µÄÊµÀı£¬*/
+/* åˆ¤æ–­xæ˜¯å¦æ˜¯ Dogç±»å‹ æˆ–è€… Dogç±»å‹çš„å­ç±»å‹ çš„å®ä¾‹ï¼Œ*/
 if(x instanceof Dog) { ((Dog)x).bark(); }
 
 
-/****                                      ¼¯ºÏµÄÊ¹ÓÃ                                       ****/
-Iterator ºÍ ListIterator µÄ²îÒì
-1).IteratorÖ»ÄÜµ¥ÏòÒÆ¶¯£¬ListIterator¿ÉÒÔË«ÏòÒÆ¶¯£»
-2).ListIterator¿ÉÒÔÉ¾³ı¡¢Ìæ»»»òÌí¼ÓÔªËØ£¬¶øIteratorÖ»ÄÜÉ¾³ıÔªËØ£»
-3).ListIterator¿ÉÒÔ·µ»Øµ±Ç°£¨µ÷ÓÃnext()»òprevious()·µ»ØµÄ£©ÔªËØµÄË÷Òı£¬¶øIterator²»ÄÜ¡£
+/****                                      é›†åˆçš„ä½¿ç”¨                                       ****/
+Iterator å’Œ ListIterator çš„å·®å¼‚
+1).Iteratoråªèƒ½å•å‘ç§»åŠ¨ï¼ŒListIteratorå¯ä»¥åŒå‘ç§»åŠ¨ï¼›
+2).ListIteratorå¯ä»¥åˆ é™¤ã€æ›¿æ¢æˆ–æ·»åŠ å…ƒç´ ï¼Œè€ŒIteratoråªèƒ½åˆ é™¤å…ƒç´ ï¼›
+3).ListIteratorå¯ä»¥è¿”å›å½“å‰ï¼ˆè°ƒç”¨next()æˆ–previous()è¿”å›çš„ï¼‰å…ƒç´ çš„ç´¢å¼•ï¼Œè€ŒIteratorä¸èƒ½ã€‚
 
-Iterator ºÍ Enumeration µÄ²îÒì
-1).IteratorÔÊĞíÒÆ³ı´Óµ×²ã¼¯ºÏµÄÔªËØ
-2).IteratorµÄ·½·¨ÃûÊÇ±ê×¼»¯µÄ
+Iterator å’Œ Enumeration çš„å·®å¼‚
+1).Iteratorå…è®¸ç§»é™¤ä»åº•å±‚é›†åˆçš„å…ƒç´ 
+2).Iteratorçš„æ–¹æ³•åæ˜¯æ ‡å‡†åŒ–çš„
 
-/* ¼¯ºÏµÄ»ù±¾Ê¹ÓÃ */
+/* é›†åˆçš„åŸºæœ¬ä½¿ç”¨ */
 List<Integer> list = new ArrayList<Integer>(); 
-/* ÏñListÖĞÌí¼ÓÔªËØ */
+/* åƒListä¸­æ·»åŠ å…ƒç´  */
 list.addAll(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10););
-/* ×¢Òâµü´úÆ÷µÄÖ÷ÒªÈı¸ö·½·¨ .hasNext() .next() .remove()    
-   Java 8 Ôö¼ÓforEachRemaining·½·¨£¬Ëü¿ÉÒÔÊµÏÖ¶ÔÓàÏÂµÄËùÓĞÔªËØÖ´ĞĞÖ¸¶¨µÄ²Ù×÷ */
+/* æ³¨æ„è¿­ä»£å™¨çš„ä¸»è¦ä¸‰ä¸ªæ–¹æ³• .hasNext() .next() .remove()    
+   Java 8 å¢åŠ forEachRemainingæ–¹æ³•ï¼Œå®ƒå¯ä»¥å®ç°å¯¹ä½™ä¸‹çš„æ‰€æœ‰å…ƒç´ æ‰§è¡ŒæŒ‡å®šçš„æ“ä½œ */
 for(Iterator<Integer> iter = list.iterator(); iter.hasNext();)
 {
-	int i = iter.next(); // ×Ô¶¯²ğÏä
-	if(i == 3) iter.remove();  // ×¢Òâ£¬´Ë´¦Ê¹ÓÃµü´úÆ÷ÒÆ³ıµ±Ç°ÔªËØ£¬²»ÄÜÊ¹ÓÃlist.remove(i)£¬»áÆÆ»µlistµ±Ç°½á¹¹£¬µü´úÅ×³öÒì³£
+	int i = iter.next(); // è‡ªåŠ¨æ‹†ç®±
+	if(i == 3) iter.remove();  // æ³¨æ„ï¼Œæ­¤å¤„ä½¿ç”¨è¿­ä»£å™¨ç§»é™¤å½“å‰å…ƒç´ ï¼Œä¸èƒ½ä½¿ç”¨list.remove(i)ï¼Œä¼šç ´ålistå½“å‰ç»“æ„ï¼Œè¿­ä»£æŠ›å‡ºå¼‚å¸¸
 }
-System.out.println(list);  // µÃµ½ [1, 2, 4, 5, 6, 7, 8, 9, 10]
+System.out.println(list);  // å¾—åˆ° [1, 2, 4, 5, 6, 7, 8, 9, 10]
 
-ListIterator ÊÇÒ»¸öIteratorµÄ×ÓÀàĞÍ£¬Ö»ÄÜÓÃÓÚListÀàµÄ·ÃÎÊ£¬
+ListIterator æ˜¯ä¸€ä¸ªIteratorçš„å­ç±»å‹ï¼Œåªèƒ½ç”¨äºListç±»çš„è®¿é—®ï¼Œ
 public static void main(String[] args) {
 	List<String> numArray = new ArrayList<String>(Arrays.asList("zero", "one", "two", "three", "four", "five", "six", "seven", "eight"));
-	/* »ñÈ¡listIteratorµÄµü´úÆ÷ */
+	/* è·å–listIteratorçš„è¿­ä»£å™¨ */
 	ListIterator<String> it = numArray.listIterator();
 	/*
 		zero,	0-1
@@ -1026,7 +1026,7 @@ public static void main(String[] args) {
 		seven,	7-8
 		eight,	8-9
 	*/
-	// µ÷ÓÃ next() Ö®ºó£¬it¾Í½øÈëÊä³öÔªËØºóÃæµÄ¿ÓÀï£¬previousIndex()Õ¾Êä³öÔªËØ£¬nextIndex()Õ¾¿ÓºóÃæµÄÔªËØ
+	// è°ƒç”¨ next() ä¹‹åï¼Œitå°±è¿›å…¥è¾“å‡ºå…ƒç´ åé¢çš„å‘é‡Œï¼ŒpreviousIndex()ç«™è¾“å‡ºå…ƒç´ ï¼ŒnextIndex()ç«™å‘åé¢çš„å…ƒç´ 
 	while(it.hasNext()) {
 		System.out.println(it.next() + ",\t" + it.previousIndex() + "-" + it.nextIndex());
 	}
@@ -1041,14 +1041,14 @@ public static void main(String[] args) {
 		one,	0-1
 		zero,	-1-0
 	*/
-	// µ÷ÓÃ previous() Ö®ºó£¬it¾Í½øÈëÊä³öÔªËØÇ°ÃæµÄ¿ÓÀï£¬previousIndex()Õ¾¿ÓÇ°ÃæµÄÔªËØ£¬nextIndex()Õ¾Êä³öÔªËØ
+	// è°ƒç”¨ previous() ä¹‹åï¼Œitå°±è¿›å…¥è¾“å‡ºå…ƒç´ å‰é¢çš„å‘é‡Œï¼ŒpreviousIndex()ç«™å‘å‰é¢çš„å…ƒç´ ï¼ŒnextIndex()ç«™è¾“å‡ºå…ƒç´ 
 	while(it.hasPrevious()) {
 		System.out.println(it.previous() + ",\t" + it.previousIndex() + "-" + it.nextIndex());
 	}
-	/* ·Åµ½Ö¸¶¨ÏÂ±êµÄÔªËØÖ®Ç° */
+	/* æ”¾åˆ°æŒ‡å®šä¸‹æ ‡çš„å…ƒç´ ä¹‹å‰ */
 	it = numArray.listIterator(3);
-	/* [zero, one, two, NULL, NULL, NULL, NULL, NULL, NULL]£¬
-		Õ¾ÏÂ±ê3µÄÔªËØÇ°ÃæµÄ¿Ó£¬È»ºó¸ù¾İÊä³öÔªËØËùÕ¼Î»ÖÃĞŞ¸ÄÔªËØ£¬µ÷ÓÃprevious()Í¬Àí */
+	/* [zero, one, two, NULL, NULL, NULL, NULL, NULL, NULL]ï¼Œ
+		ç«™ä¸‹æ ‡3çš„å…ƒç´ å‰é¢çš„å‘ï¼Œç„¶åæ ¹æ®è¾“å‡ºå…ƒç´ æ‰€å ä½ç½®ä¿®æ”¹å…ƒç´ ï¼Œè°ƒç”¨previous()åŒç† */
 	while(it.hasNext()) {
 		it.next();
 		it.set("NULL");
@@ -1056,27 +1056,27 @@ public static void main(String[] args) {
 	System.out.println(numArray);
 }
 
-IdentityHashMap ºÍ HashMap µÄ²îÒì
-IdentityHashMapÊÇMap½Ó¿ÚµÄÊµÏÖ¡£²»Í¬ÓÚHashMapµÄ£¬ÕâÀï²ÉÓÃ²Î¿¼Æ½µÈ¡£
-1)ÔÚHashMapÖĞÈç¹ûÁ½¸öÔªËØÊÇÏàµÈµÄ£¬Ôòkey1.equals(key2)
-2)ÔÚIdentityHashMapÖĞÈç¹ûÁ½¸öÔªËØÊÇÏàµÈµÄ£¬Ôòkey1 == key2
+IdentityHashMap å’Œ HashMap çš„å·®å¼‚
+IdentityHashMapæ˜¯Mapæ¥å£çš„å®ç°ã€‚ä¸åŒäºHashMapçš„ï¼Œè¿™é‡Œé‡‡ç”¨å‚è€ƒå¹³ç­‰ã€‚
+1)åœ¨HashMapä¸­å¦‚æœä¸¤ä¸ªå…ƒç´ æ˜¯ç›¸ç­‰çš„ï¼Œåˆ™key1.equals(key2)
+2)åœ¨IdentityHashMapä¸­å¦‚æœä¸¤ä¸ªå…ƒç´ æ˜¯ç›¸ç­‰çš„ï¼Œåˆ™key1 == key2
 
-/****                                      ×Ö·û´®                                       ****/
-StringBuilderµÄÒ»°ãÓÃ·¨£¬±¾ÀàÊÇJSE5ÒıÈë£¬Ö®Ç°ÊÇ StringBuffer£¬StringBufferÊÇÏß³Ì°²È«µÄ£¬Òò´Ë¿ªÏú¸ü´ó
+/****                                      å­—ç¬¦ä¸²                                       ****/
+StringBuilderçš„ä¸€èˆ¬ç”¨æ³•ï¼Œæœ¬ç±»æ˜¯JSE5å¼•å…¥ï¼Œä¹‹å‰æ˜¯ StringBufferï¼ŒStringBufferæ˜¯çº¿ç¨‹å®‰å…¨çš„ï¼Œå› æ­¤å¼€é”€æ›´å¤§
 import java.util.*;
 public class UsingStringBuilder {
 	public static Random rand = new Random(47);
 	public String toString() {
 		StringBuilder ret = new StringBuilder("[");
 		for(int i=0; i<25; i++) {
-			/* Í¨¹ı append()Ìí¼ÓÄÚÈİ£¬×¢Òâ´Ë´¦Èç¹û½«Á½¸ö¾ßÌåºÏ²¢£¬±àÒëÆ÷ÄÚ²¿¿ÉÄÜÉú³ÉÒ»¸öÁÙÊ±µÄStringBuilderÖ´ĞĞÆ´½Ó¶¯×÷ */
+			/* é€šè¿‡ append()æ·»åŠ å†…å®¹ï¼Œæ³¨æ„æ­¤å¤„å¦‚æœå°†ä¸¤ä¸ªå…·ä½“åˆå¹¶ï¼Œç¼–è¯‘å™¨å†…éƒ¨å¯èƒ½ç”Ÿæˆä¸€ä¸ªä¸´æ—¶çš„StringBuilderæ‰§è¡Œæ‹¼æ¥åŠ¨ä½œ */
 			ret.append(rand.nextInt(100));
 			ret.append(", ");
 		}
 		ret.delete(ret.length()-2, ret.length());
 		ret.append("]");
-		// ret.reverse()   ÔÚStringBuilderÉÏÔ­µØ½«×Ö·û´®·­×ª
-		// ret.substring(10) ½«retÉÏµÚ10¸ö×Ö·ûÖ®ºóµÄ×Ö·û´®×÷Îª·µ»ØÖµ·µ»Ø£¬retÔ­ÓĞÄÚÈİ²»±ä
+		// ret.reverse()   åœ¨StringBuilderä¸ŠåŸåœ°å°†å­—ç¬¦ä¸²ç¿»è½¬
+		// ret.substring(10) å°†retä¸Šç¬¬10ä¸ªå­—ç¬¦ä¹‹åçš„å­—ç¬¦ä¸²ä½œä¸ºè¿”å›å€¼è¿”å›ï¼ŒretåŸæœ‰å†…å®¹ä¸å˜
 		return ret.toString();
 	}
 	public static void main(String[] args) {
@@ -1084,39 +1084,39 @@ public class UsingStringBuilder {
 		System.out.println(usb);
 	}
 }
-ÎŞÒâÊ¶µÄµİ¹é
+æ— æ„è¯†çš„é€’å½’
 public class InfiniteRecursion {
 	public String toString() {
-		/* ÕıÈ·ÓÃ·¨£¬µ÷ÓÃ super.toString()   */
+		/* æ­£ç¡®ç”¨æ³•ï¼Œè°ƒç”¨ super.toString()   */
 		return " InfiniteRecursion address" + super.toString() + "\n";
-		/* ´íÎóÓÃ·¨£¬ this·¢ÏÖÒªÆ´½Ó×Ö·û´®ÊÇ£¬»áµ÷ÓÃËùÖ¸ÏòÀàµÄtoString()£¬´ËÊ±¾Í»á³öÏÖËÀÑ­»·µÄµ÷ÓÃÁË */
+		/* é”™è¯¯ç”¨æ³•ï¼Œ thiså‘ç°è¦æ‹¼æ¥å­—ç¬¦ä¸²æ˜¯ï¼Œä¼šè°ƒç”¨æ‰€æŒ‡å‘ç±»çš„toString()ï¼Œæ­¤æ—¶å°±ä¼šå‡ºç°æ­»å¾ªç¯çš„è°ƒç”¨äº† */
 		//return " InfiniteRecursion address" + this + "\n";
 	}
 }
-ÕıÔò±í´ïÊ½  JavaÖĞ \\×ªÒåÒ»¸ö\×Ö·û£¬Èç¹û\ÒªÅäºÏÆäËûĞÎÊ½£¬ÔòĞèÒªÖîÈç \\d ÕâÖÖĞÎÊ½
-×Ö·û´®Ö§³ÖÕıÔò±í´ïÊ½µÄÈı¸öº¯Êı  matches()  split()  replace()
-"-1234".matches("-?\\d+");  // ×Ö·û´® matches() º¯Êı×Ô´øÕıÔò¹¦ÄÜ£¬´Ë´¦Æ¥Åä ¿ÉÄÜµÄ - ×Ö·ûºÍÒ»¸öÒÔÉÏµÄÊı×Ö
-s.split("\\W+");  // ÒÔËùÓĞµÄ·Çµ¥´Ê·Ö¸ô
-s.replaceFirst("f\\w", "located");  // ½«f¿ªÍ·µÄµÚÒ»¸öµ¥´ÊÌæ»»³É located
-s.replaceAll("shrubbery|tree|herring", "banana")  // ½«ËùÓĞ³öÏÖ¹ıµÄ shrubbery tree herring ¶¼Ìæ»»³É banana
+æ­£åˆ™è¡¨è¾¾å¼  Javaä¸­ \\è½¬ä¹‰ä¸€ä¸ª\å­—ç¬¦ï¼Œå¦‚æœ\è¦é…åˆå…¶ä»–å½¢å¼ï¼Œåˆ™éœ€è¦è¯¸å¦‚ \\d è¿™ç§å½¢å¼
+å­—ç¬¦ä¸²æ”¯æŒæ­£åˆ™è¡¨è¾¾å¼çš„ä¸‰ä¸ªå‡½æ•°  matches()  split()  replace()
+"-1234".matches("-?\\d+");  // å­—ç¬¦ä¸² matches() å‡½æ•°è‡ªå¸¦æ­£åˆ™åŠŸèƒ½ï¼Œæ­¤å¤„åŒ¹é… å¯èƒ½çš„ - å­—ç¬¦å’Œä¸€ä¸ªä»¥ä¸Šçš„æ•°å­—
+s.split("\\W+");  // ä»¥æ‰€æœ‰çš„éå•è¯åˆ†éš”
+s.replaceFirst("f\\w", "located");  // å°†få¼€å¤´çš„ç¬¬ä¸€ä¸ªå•è¯æ›¿æ¢æˆ located
+s.replaceAll("shrubbery|tree|herring", "banana")  // å°†æ‰€æœ‰å‡ºç°è¿‡çš„ shrubbery tree herring éƒ½æ›¿æ¢æˆ banana
 
 
-Scanner¶ÔÏó£¬ÓÃÀ´½øĞĞÉ¨ÃèÊäÈë£¬Ò»°ãËµµÄ½»»¥Ê½ÊäÈë£¬»òÕß´ÓÎÄ±¾ÖĞÃ¿´Î¶ÁÒ»ĞĞ²¢½øĞĞ´¦ÀíµÄ²Ù×÷£¬Ğè½áºÏÎÄ¼şIOÀà²Ù×÷
+Scannerå¯¹è±¡ï¼Œç”¨æ¥è¿›è¡Œæ‰«æè¾“å…¥ï¼Œä¸€èˆ¬è¯´çš„äº¤äº’å¼è¾“å…¥ï¼Œæˆ–è€…ä»æ–‡æœ¬ä¸­æ¯æ¬¡è¯»ä¸€è¡Œå¹¶è¿›è¡Œå¤„ç†çš„æ“ä½œï¼Œéœ€ç»“åˆæ–‡ä»¶IOç±»æ“ä½œ
 Scanner in = new Scanner(FileChannel.input);
-// ËùÓĞµÄ¶ÁÈ¡¶¼ÊÇScanner×Ô¼º¸øÎÒÃÇÆ¥Åä
-in.nextLine();   // ¶ÁÈ¡ÏÂÒ»ĞĞ    
-in.nextInt();   // ¶ÁÈ¡ÏÂÒ»¸öÕûÊı
-in.nextDouble();  // ¶ÁÈ¡ÏÂÒ»¸ö¸¡µãÊı
+// æ‰€æœ‰çš„è¯»å–éƒ½æ˜¯Scannerè‡ªå·±ç»™æˆ‘ä»¬åŒ¹é…
+in.nextLine();   // è¯»å–ä¸‹ä¸€è¡Œ    
+in.nextInt();   // è¯»å–ä¸‹ä¸€ä¸ªæ•´æ•°
+in.nextDouble();  // è¯»å–ä¸‹ä¸€ä¸ªæµ®ç‚¹æ•°
 
 Scanner sc = new Scanner("12, 42, 78, 99, 42");
-sc.useDelimiter("\\s*,\\s*");   //  ÉèÖÃ¶¨½ç·û£¬Ò²¾ÍÊÇ·Ö¸ô·û£¬´Ë´¦ÊÇÆ¥ÅäÈÎÒâ¿Õ°×ÖĞ¼äÓĞ,µÄÇé¿ö
+sc.useDelimiter("\\s*,\\s*");   //  è®¾ç½®å®šç•Œç¬¦ï¼Œä¹Ÿå°±æ˜¯åˆ†éš”ç¬¦ï¼Œæ­¤å¤„æ˜¯åŒ¹é…ä»»æ„ç©ºç™½ä¸­é—´æœ‰,çš„æƒ…å†µ
 while(sc.hasNextInt())
-	System.out.println(scanner.nextInt());   µÃµ½  12 42 79 99 42
+	System.out.println(scanner.nextInt());   å¾—åˆ°  12 42 79 99 42
 
-/****                                      Êı×é                                       ****/
-¶àÎ¬Êı×é
+/****                                      æ•°ç»„                                       ****/
+å¤šç»´æ•°ç»„
 int[][] a = {{1, 2, 3}, {4, 5, 6}};
-System.out.println(Arrays.deepToString(a));   // ½«¶àÎ¬Êı×é×ª»»ÎªString
+System.out.println(Arrays.deepToString(a));   // å°†å¤šç»´æ•°ç»„è½¬æ¢ä¸ºString
 
 int[][][] a = new int[2][3][4];
 int[][][] a = new int[rand.nextInt(7)][][];
@@ -1128,43 +1128,43 @@ for(int i=0; i<a.length; i++) {
 
 int size = 6;
 boolean[] a1 = new boolean[size];
-Arrays.fill(a1, true);    // Ê¹ÓÃ trueÌî³äÕû¸öÊı×é
+Arrays.fill(a1, true);    // ä½¿ç”¨ trueå¡«å……æ•´ä¸ªæ•°ç»„
 String[] a2 = new String[size];
-Arrays.fill(a2, 3, 5, "hello");  // Ìî³ä3ºÍ4Á½¸öÎ»ÖÃÎª hello
+Arrays.fill(a2, 3, 5, "hello");  // å¡«å……3å’Œ4ä¸¤ä¸ªä½ç½®ä¸º hello
 
-/****                                              JAVAÍøÂç±à³Ì                                       ****/
-CookieManager manager = new CookieManager();       //  1.6ÊµÏÖÁËÒ»¸öCookieHandlerµÄÄ¬ÈÏ×ÓÀà
-manager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);          //  ÉèÖÃcookieÖ»½ÓÊÜµÚÒ»·»cookie
+/****                                              JAVAç½‘ç»œç¼–ç¨‹                                       ****/
+CookieManager manager = new CookieManager();       //  1.6å®ç°äº†ä¸€ä¸ªCookieHandlerçš„é»˜è®¤å­ç±»
+manager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);          //  è®¾ç½®cookieåªæ¥å—ç¬¬ä¸€åŠcookie
 CookieHandler.setDefault(manager);
 
 
-/****                                              JAVAÏµÍ³ÊôĞÔ                                       ****/
-http.keepAlive                       //   [true/false]    ÆôÓÃ/½ûÓÃHTTP Keep-Alive
-http.maxConnections                  //   [5]    Ï£ÍûÍ¬Ê±±£³Ö´ò¿ªµÄsocketÊı£¬Ä¬ÈÏÊÇ5
-http.keepAlive.remainingData         //   [false]   ÔÚ¶ªÆúÁ´½ÓºóÍê³ÉÇåÀí
-sun.net.http.errorstream.enableBuffering  //   [false]   ³¢ÊÔ»º³å400ºÍ500¼¶ÏìÓ¦µÄÏà¶ÔĞ¡µÄ´íÎóÁõ£¬´Ó¶øÄÜÊÍ·ÅÁ´½Ó£¬ÒÔ±¸ÉÔºóÊ¹ÓÃ
-sun.net.http.errorstream.bufferSize       //   [4096]    Îª»º³å´íÎóÁ÷Ê¹ÓÃµÄ×Ö½ÚÊı
-sun.net.http.errorstream.timeout     //   [300]     ¶Á´íÎóÁ÷³¬Ê±Ç°µÄºÁÃëÊı£¬Ä¬ÈÏÎª300ºÁÃë
+/****                                              JAVAç³»ç»Ÿå±æ€§                                       ****/
+http.keepAlive                       //   [true/false]    å¯ç”¨/ç¦ç”¨HTTP Keep-Alive
+http.maxConnections                  //   [5]    å¸Œæœ›åŒæ—¶ä¿æŒæ‰“å¼€çš„socketæ•°ï¼Œé»˜è®¤æ˜¯5
+http.keepAlive.remainingData         //   [false]   åœ¨ä¸¢å¼ƒé“¾æ¥åå®Œæˆæ¸…ç†
+sun.net.http.errorstream.enableBuffering  //   [false]   å°è¯•ç¼“å†²400å’Œ500çº§å“åº”çš„ç›¸å¯¹å°çš„é”™è¯¯åˆ˜ï¼Œä»è€Œèƒ½é‡Šæ”¾é“¾æ¥ï¼Œä»¥å¤‡ç¨åä½¿ç”¨
+sun.net.http.errorstream.bufferSize       //   [4096]    ä¸ºç¼“å†²é”™è¯¯æµä½¿ç”¨çš„å­—èŠ‚æ•°
+sun.net.http.errorstream.timeout     //   [300]     è¯»é”™è¯¯æµè¶…æ—¶å‰çš„æ¯«ç§’æ•°ï¼Œé»˜è®¤ä¸º300æ¯«ç§’
 
 
-//  MapÀàĞÍ¿ìËÙ³õÊ¼»¯µÄ´úÂë
+//  Mapç±»å‹å¿«é€Ÿåˆå§‹åŒ–çš„ä»£ç 
 private static final Map<String, String> templdateMap = new ConcurrentHashMap<String, String>()
 {
 	{
-		put("1000", "×ğ¾´µÄÓÃ»§£¬ÄúÕıÔÚ×¢²áÕËºÅ£¬ÑéÖ¤ÂëÎª£º%s£¬10·ÖÖÓÄÚÓĞĞ§£¬ÇëÎğ¸æËßËûÈË¡£");
-		put("1001", "×ğ¾´µÄÓÃ»§£¬ÄúÕıÔÚ²Ù×÷ÉèÖÃ×Ê½ğÃÜÂë£¬ÑéÖ¤ÂëÎª£º%s£¬10·ÖÖÓÄÚÓĞĞ§£¬ÇëÎğ¸æËßËûÈË¡£");
-		put("1002", "×ğ¾´µÄÓÃ»§£¬ÄúÕıÔÚ²Ù×÷ÖØÖÃµÇÂ¼ÃÜÂë£¬ÑéÖ¤ÂëÎª£º%s£¬10·ÖÖÓÄÚÓĞĞ§£¬ÇëÎğ¸æËßËûÈË¡£");
-		put("1003", "ÄúµÄ¶ÌĞÅÑéÖ¤ÂëÎª:%s");
-		put("1004", "ÓĞÈË¸øÄãÏÂµ¥ÁË,ÕÊºÅ%sÉÏ,ÏÂÁË%sÔª,Çë¾¡¿ì´¦Àí!");
-		put("1005", "%sÄúºÃ£¬ÄúÓĞĞÂµÄ¶©µ¥%s£¬Çë¼°Ê±´¦Àí¶©µ¥");
-		put("1006", "%sÄúºÃ£¬ÄúµÄ¶©µ¥%sÒÑ±ê¼Ç¸¶¿î£¬Çë²éÑ¯ÈëÕË²¢¼°Ê±´¦Àí¶©µ¥");
+		put("1000", "å°Šæ•¬çš„ç”¨æˆ·ï¼Œæ‚¨æ­£åœ¨æ³¨å†Œè´¦å·ï¼ŒéªŒè¯ç ä¸ºï¼š%sï¼Œ10åˆ†é’Ÿå†…æœ‰æ•ˆï¼Œè¯·å‹¿å‘Šè¯‰ä»–äººã€‚");
+		put("1001", "å°Šæ•¬çš„ç”¨æˆ·ï¼Œæ‚¨æ­£åœ¨æ“ä½œè®¾ç½®èµ„é‡‘å¯†ç ï¼ŒéªŒè¯ç ä¸ºï¼š%sï¼Œ10åˆ†é’Ÿå†…æœ‰æ•ˆï¼Œè¯·å‹¿å‘Šè¯‰ä»–äººã€‚");
+		put("1002", "å°Šæ•¬çš„ç”¨æˆ·ï¼Œæ‚¨æ­£åœ¨æ“ä½œé‡ç½®ç™»å½•å¯†ç ï¼ŒéªŒè¯ç ä¸ºï¼š%sï¼Œ10åˆ†é’Ÿå†…æœ‰æ•ˆï¼Œè¯·å‹¿å‘Šè¯‰ä»–äººã€‚");
+		put("1003", "æ‚¨çš„çŸ­ä¿¡éªŒè¯ç ä¸º:%s");
+		put("1004", "æœ‰äººç»™ä½ ä¸‹å•äº†,å¸å·%sä¸Š,ä¸‹äº†%så…ƒ,è¯·å°½å¿«å¤„ç†!");
+		put("1005", "%sæ‚¨å¥½ï¼Œæ‚¨æœ‰æ–°çš„è®¢å•%sï¼Œè¯·åŠæ—¶å¤„ç†è®¢å•");
+		put("1006", "%sæ‚¨å¥½ï¼Œæ‚¨çš„è®¢å•%så·²æ ‡è®°ä»˜æ¬¾ï¼Œè¯·æŸ¥è¯¢å…¥è´¦å¹¶åŠæ—¶å¤„ç†è®¢å•");
 	}
 };
 
-WeakHashMapÊµÏÖÁËMap½Ó¿Ú£¬ÊÇHashMapµÄÒ»ÖÖÊµÏÖ£¬ËûÊ¹ÓÃÈõÒıÓÃ×÷ÎªÄÚ²¿Êı¾İµÄ´æ´¢·½°¸£¬
-WeakHashMap¿ÉÒÔ×÷Îª¼òµ¥»º´æ±íµÄ½â¾ö·½°¸£¬µ±ÏµÍ³ÄÚ´æ²»¹»µÄÊ±ºò£¬À¬»øÊÕ¼¯Æ÷»á×Ô¶¯µÄÇå³ıÃ»ÓĞÔÚÆäËûÈÎºÎµØ·½±»ÒıÓÃµÄ¼üÖµ¶Ô¡£
-Èç¹ûĞèÒªÓÃÒ»ÕÅºÜ´óµÄHashMap×÷Îª»º´æ±í£¬ÄÇÃ´¿ÉÒÔ¿¼ÂÇÊ¹ÓÃWeakHashMap£¬µ±¼üÖµ²»´æÔÚµÄÊ±ºòÌí¼Óµ½±íÖĞ£¬´æÔÚ¼´È¡³öÆäÖµ¡£
-ËùÎ½µÄÇ¿ÒıÓÃ£¬¼´¸³Öµ¸øÄ³¸ö±äÁ¿£¬ËùÎ½ÈõÒıÓÃ£¬¼´³ıÁËÔÚWeakHashMap×÷Îªkey£¬Ã»ÓĞÔÚÆäËûµØ·½±»ÆäËû±äÁ¿ÒıÓÃ
+WeakHashMapå®ç°äº†Mapæ¥å£ï¼Œæ˜¯HashMapçš„ä¸€ç§å®ç°ï¼Œä»–ä½¿ç”¨å¼±å¼•ç”¨ä½œä¸ºå†…éƒ¨æ•°æ®çš„å­˜å‚¨æ–¹æ¡ˆï¼Œ
+WeakHashMapå¯ä»¥ä½œä¸ºç®€å•ç¼“å­˜è¡¨çš„è§£å†³æ–¹æ¡ˆï¼Œå½“ç³»ç»Ÿå†…å­˜ä¸å¤Ÿçš„æ—¶å€™ï¼Œåƒåœ¾æ”¶é›†å™¨ä¼šè‡ªåŠ¨çš„æ¸…é™¤æ²¡æœ‰åœ¨å…¶ä»–ä»»ä½•åœ°æ–¹è¢«å¼•ç”¨çš„é”®å€¼å¯¹ã€‚
+å¦‚æœéœ€è¦ç”¨ä¸€å¼ å¾ˆå¤§çš„HashMapä½œä¸ºç¼“å­˜è¡¨ï¼Œé‚£ä¹ˆå¯ä»¥è€ƒè™‘ä½¿ç”¨WeakHashMapï¼Œå½“é”®å€¼ä¸å­˜åœ¨çš„æ—¶å€™æ·»åŠ åˆ°è¡¨ä¸­ï¼Œå­˜åœ¨å³å–å‡ºå…¶å€¼ã€‚
+æ‰€è°“çš„å¼ºå¼•ç”¨ï¼Œå³èµ‹å€¼ç»™æŸä¸ªå˜é‡ï¼Œæ‰€è°“å¼±å¼•ç”¨ï¼Œå³é™¤äº†åœ¨WeakHashMapä½œä¸ºkeyï¼Œæ²¡æœ‰åœ¨å…¶ä»–åœ°æ–¹è¢«å…¶ä»–å˜é‡å¼•ç”¨
 public static void main(String[] args) {
 	WeakHashMap<AA, People1> weakMap1 = new WeakHashMap<AA, People1>();
 	String b = new String("louhang1");
@@ -1172,13 +1172,13 @@ public static void main(String[] args) {
 	BB bb = new BB(a);
 	People1 p1 = new People1(bb);
 	weakMap1.put(p1.getB().getAA(), p1);
-	p1.getB().setAA(null);// È¥³ı¶ÔÏóaµÄÇ¿ÒıÓÃ
-	a = null;// È¥³ı¶ÔÏóaµÄÇ¿ÒıÓÃ,²¢ÈÃÀ¬»øÊÕ¼¯Æ÷»ØÊÕAA¶ÔÏóÔÚ¶ÑÖĞµÄÄÚ´æ
+	p1.getB().setAA(null);// å»é™¤å¯¹è±¡açš„å¼ºå¼•ç”¨
+	a = null;// å»é™¤å¯¹è±¡açš„å¼ºå¼•ç”¨,å¹¶è®©åƒåœ¾æ”¶é›†å™¨å›æ”¶AAå¯¹è±¡åœ¨å †ä¸­çš„å†…å­˜
 	System.gc();
 	Iterator i = weakMap1.entrySet().iterator();
 	while (i.hasNext()) {
 	Map.Entry en = (Map.Entry) i.next();
-	System.out.println("weakMap:" + en.getKey() + ":" + en.getValue());  // Ã»ÓĞÈÎºÎÊä³ö½á¹û£¬ÒòÎªgcºómapÖĞÈõÒıÓÃÈ«²¿Çå³ı£¬Ã»ÓĞÔªËØÁË
+	System.out.println("weakMap:" + en.getKey() + ":" + en.getValue());  // æ²¡æœ‰ä»»ä½•è¾“å‡ºç»“æœï¼Œå› ä¸ºgcåmapä¸­å¼±å¼•ç”¨å…¨éƒ¨æ¸…é™¤ï¼Œæ²¡æœ‰å…ƒç´ äº†
 	}
 }
 class AA {
@@ -1219,70 +1219,70 @@ class People1 {
 }
 
 
-/****                         SerializableĞòÁĞ»¯Óë·´ĞòÁĞ»¯                         ****/
+/****                         Serializableåºåˆ—åŒ–ä¸ååºåˆ—åŒ–                         ****/
 
-ĞòÁĞ»¯Õë¶ÔµÄÊÇ¶ÔÏóµÄ×´Ì¬£¬¾ßÌåÀ´Ëµ¾ÍÊÇ³ÉÔ±±äÁ¿£¬²»Õë¶ÔÀà·½·¨
-a£©ĞòÁĞ»¯Ê±£¬Ö»¶Ô¶ÔÏóµÄ×´Ì¬½øĞĞ±£´æ£¬¶ø²»¹Ü¶ÔÏóµÄ·½·¨£»
-b£©µ±Ò»¸ö¸¸ÀàÊµÏÖĞòÁĞ»¯£¬×ÓÀà×Ô¶¯ÊµÏÖĞòÁĞ»¯£¬²»ĞèÒªÏÔÊ½ÊµÏÖSerializable½Ó¿Ú£»
-c£©µ±Ò»¸ö¶ÔÏóµÄÊµÀı±äÁ¿ÒıÓÃÆäËû¶ÔÏó£¬ĞòÁĞ»¯¸Ã¶ÔÏóÊ±Ò²°ÑÒıÓÃ¶ÔÏó½øĞĞĞòÁĞ»¯£»
-d£©²¢·ÇËùÓĞµÄ¶ÔÏó¶¼¿ÉÒÔĞòÁĞ»¯£¬,ÖÁÓÚÎªÊ²Ã´²»¿ÉÒÔ£¬ÓĞºÜ¶àÔ­ÒòÁË,±ÈÈç£º
-1.°²È«·½ÃæµÄÔ­Òò£¬±ÈÈçÒ»¸ö¶ÔÏóÓµÓĞprivate£¬publicµÈfield£¬
-   ¶ÔÓÚÒ»¸öÒª´«ÊäµÄ¶ÔÏó£¬±ÈÈçĞ´µ½ÎÄ¼ş£¬»òÕß½øĞĞrmi´«ÊäµÈµÈ£¬
-   ÔÚĞòÁĞ»¯½øĞĞ´«ÊäµÄ¹ı³ÌÖĞ£¬Õâ¸ö¶ÔÏóµÄprivateµÈÓòÊÇ²»ÊÜ±£»¤µÄ¡£
-2. ×ÊÔ´·ÖÅä·½ÃæµÄÔ­Òò£¬±ÈÈçsocket£¬threadÀà£¬Èç¹û¿ÉÒÔĞòÁĞ»¯£¬½øĞĞ´«Êä»òÕß±£´æ£¬Ò²ÎŞ·¨¶ÔËûÃÇ½øĞĞÖØĞÂµÄ×ÊÔ´·ÖÅä
+åºåˆ—åŒ–é’ˆå¯¹çš„æ˜¯å¯¹è±¡çš„çŠ¶æ€ï¼Œå…·ä½“æ¥è¯´å°±æ˜¯æˆå‘˜å˜é‡ï¼Œä¸é’ˆå¯¹ç±»æ–¹æ³•
+aï¼‰åºåˆ—åŒ–æ—¶ï¼Œåªå¯¹å¯¹è±¡çš„çŠ¶æ€è¿›è¡Œä¿å­˜ï¼Œè€Œä¸ç®¡å¯¹è±¡çš„æ–¹æ³•ï¼›
+bï¼‰å½“ä¸€ä¸ªçˆ¶ç±»å®ç°åºåˆ—åŒ–ï¼Œå­ç±»è‡ªåŠ¨å®ç°åºåˆ—åŒ–ï¼Œä¸éœ€è¦æ˜¾å¼å®ç°Serializableæ¥å£ï¼›
+cï¼‰å½“ä¸€ä¸ªå¯¹è±¡çš„å®ä¾‹å˜é‡å¼•ç”¨å…¶ä»–å¯¹è±¡ï¼Œåºåˆ—åŒ–è¯¥å¯¹è±¡æ—¶ä¹ŸæŠŠå¼•ç”¨å¯¹è±¡è¿›è¡Œåºåˆ—åŒ–ï¼›
+dï¼‰å¹¶éæ‰€æœ‰çš„å¯¹è±¡éƒ½å¯ä»¥åºåˆ—åŒ–ï¼Œ,è‡³äºä¸ºä»€ä¹ˆä¸å¯ä»¥ï¼Œæœ‰å¾ˆå¤šåŸå› äº†,æ¯”å¦‚ï¼š
+1.å®‰å…¨æ–¹é¢çš„åŸå› ï¼Œæ¯”å¦‚ä¸€ä¸ªå¯¹è±¡æ‹¥æœ‰privateï¼Œpublicç­‰fieldï¼Œ
+   å¯¹äºä¸€ä¸ªè¦ä¼ è¾“çš„å¯¹è±¡ï¼Œæ¯”å¦‚å†™åˆ°æ–‡ä»¶ï¼Œæˆ–è€…è¿›è¡Œrmiä¼ è¾“ç­‰ç­‰ï¼Œ
+   åœ¨åºåˆ—åŒ–è¿›è¡Œä¼ è¾“çš„è¿‡ç¨‹ä¸­ï¼Œè¿™ä¸ªå¯¹è±¡çš„privateç­‰åŸŸæ˜¯ä¸å—ä¿æŠ¤çš„ã€‚
+2. èµ„æºåˆ†é…æ–¹é¢çš„åŸå› ï¼Œæ¯”å¦‚socketï¼Œthreadç±»ï¼Œå¦‚æœå¯ä»¥åºåˆ—åŒ–ï¼Œè¿›è¡Œä¼ è¾“æˆ–è€…ä¿å­˜ï¼Œä¹Ÿæ— æ³•å¯¹ä»–ä»¬è¿›è¡Œé‡æ–°çš„èµ„æºåˆ†é…
 
-1¡¢transientÖ¸¶¨²»±»ĞòÁĞ»¯µÄÊôĞÔ
-2¡¢writeObject()ĞòÁĞ»¯Ê±¶¨ÖÆ´¦ÀíÏà¹ØµÄÊôĞÔ£¬Ò»°ãÕâĞ©ÊôĞÔ¶¼ÊÇtransientĞŞÊÎµÄ£¬·ñÔòÍ¬Ò»¸ö±äÁ¿ĞòÁĞ»¯´æ´¢Á½´Î(¶¨ÖÆºÍ·Ç¶¨ÖÆ)£¬ÒâÒå²»´ó
-3¡¢readObject()·´ĞòÁĞ»¯Ê±¶¨ÖÆ»Ö¸´Ïà¹ØµÄÊôĞÔ
-4¡¢writeReplace()ÔÚwriteObject()Ö®Ç°Ö´ĞĞ£¬¿ÉÒÔ½øĞĞÒ»Ğ©Ô¤´¦Àí¶¯×÷
-5¡¢readResolve()ÔÚreadObject()Ö®ºóÖ´ĞĞ£¬¶Ô·´ĞòÁĞ»¯µÄ¶ÔÏó½øÒ»²½´¦Àí£¬Ò»°ãÔÚµ¥ÀıÄ£Ê½Ê±ÓÃ±¾µØµ¥ÀıÌæ»»·´ĞòÁĞ»¯Éú³ÉµÄ¶ÔÏó£¬´ïµ½JVMÖĞÎ¨Ò»µ¥ÀıÄ¿µÄ
-6¡¢staticĞŞÊÎ·ûĞŞÊÎµÄÊôĞÔ²»»á²ÎÓëĞòÁĞ»¯ºÍ·´ĞòÁĞ»¯£¬ÒòÎªÊÇÀàµÄÊôĞÔ£¬²»Ëæ¶ÔÏó×ß
+1ã€transientæŒ‡å®šä¸è¢«åºåˆ—åŒ–çš„å±æ€§
+2ã€writeObject()åºåˆ—åŒ–æ—¶å®šåˆ¶å¤„ç†ç›¸å…³çš„å±æ€§ï¼Œä¸€èˆ¬è¿™äº›å±æ€§éƒ½æ˜¯transientä¿®é¥°çš„ï¼Œå¦åˆ™åŒä¸€ä¸ªå˜é‡åºåˆ—åŒ–å­˜å‚¨ä¸¤æ¬¡(å®šåˆ¶å’Œéå®šåˆ¶)ï¼Œæ„ä¹‰ä¸å¤§
+3ã€readObject()ååºåˆ—åŒ–æ—¶å®šåˆ¶æ¢å¤ç›¸å…³çš„å±æ€§
+4ã€writeReplace()åœ¨writeObject()ä¹‹å‰æ‰§è¡Œï¼Œå¯ä»¥è¿›è¡Œä¸€äº›é¢„å¤„ç†åŠ¨ä½œ
+5ã€readResolve()åœ¨readObject()ä¹‹åæ‰§è¡Œï¼Œå¯¹ååºåˆ—åŒ–çš„å¯¹è±¡è¿›ä¸€æ­¥å¤„ç†ï¼Œä¸€èˆ¬åœ¨å•ä¾‹æ¨¡å¼æ—¶ç”¨æœ¬åœ°å•ä¾‹æ›¿æ¢ååºåˆ—åŒ–ç”Ÿæˆçš„å¯¹è±¡ï¼Œè¾¾åˆ°JVMä¸­å”¯ä¸€å•ä¾‹ç›®çš„
+6ã€staticä¿®é¥°ç¬¦ä¿®é¥°çš„å±æ€§ä¸ä¼šå‚ä¸åºåˆ—åŒ–å’Œååºåˆ—åŒ–ï¼Œå› ä¸ºæ˜¯ç±»çš„å±æ€§ï¼Œä¸éšå¯¹è±¡èµ°
 
 
-Java SerializableĞòÁĞ»¯¹¦ÄÜÈ±µã£º
-1¡¢ÎŞ·¨¿çÓïÑÔ£¬ÒòÎªJavaĞòÁĞ»¯¼¼ÊõÊÇJavaÓïÑÔÄÚ²¿µÄË½ÓĞĞ­Òé£¬ÆäËûÓïÑÔ²»Ö§³Ö£»
-2¡¢ĞòÁĞ»¯ºóµÄÂëÁ÷Ì«´ó£»
-3¡¢ĞòÁĞ»¯ĞÔÄÜÌ«µÍ£»
+Java Serializableåºåˆ—åŒ–åŠŸèƒ½ç¼ºç‚¹ï¼š
+1ã€æ— æ³•è·¨è¯­è¨€ï¼Œå› ä¸ºJavaåºåˆ—åŒ–æŠ€æœ¯æ˜¯Javaè¯­è¨€å†…éƒ¨çš„ç§æœ‰åè®®ï¼Œå…¶ä»–è¯­è¨€ä¸æ”¯æŒï¼›
+2ã€åºåˆ—åŒ–åçš„ç æµå¤ªå¤§ï¼›
+3ã€åºåˆ—åŒ–æ€§èƒ½å¤ªä½ï¼›
 
-// Ê¾Àı1£ºÒ»°ãĞòÁĞ»¯¼°Ê¹ÓÃ
+// ç¤ºä¾‹1ï¼šä¸€èˆ¬åºåˆ—åŒ–åŠä½¿ç”¨
 public static void main(String[] args) throws Exception {
-	// Person¶ÔÏóÎÄ¼şÂ·¾¶
+	// Personå¯¹è±¡æ–‡ä»¶è·¯å¾„
 	String path = "e:/person.dat";
-	// ´´½¨Ò»¸öPerson¶ÔÏó
-	Person p1 = new Person("ÕÅÈı", 18);
+	// åˆ›å»ºä¸€ä¸ªPersonå¯¹è±¡
+	Person p1 = new Person("å¼ ä¸‰", 18);
 
-	// ĞòÁĞ»¯Person¶ÔÏó
+	// åºåˆ—åŒ–Personå¯¹è±¡
 	ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path));
 	out.writeObject(p1);
 	out.close();
 	
-	Person.level = 999; // ĞŞ¸ÄstaticÊôĞÔ£¬·´ĞòÁĞ»¯µÄÖµÒ²»áËæÖ®±ä»¯Îª999
+	Person.level = 999; // ä¿®æ”¹staticå±æ€§ï¼Œååºåˆ—åŒ–çš„å€¼ä¹Ÿä¼šéšä¹‹å˜åŒ–ä¸º999
 
 	/**
-	 * Ê¹ÓÃnew³õÊ¼»¯Ê±µ÷ÓÃ±¾¹¹Ôì·½·¨£¬µ«ÊÇ·´ĞòÁĞ»¯Ê±²»µ÷ÓÃ±¾¹¹Ôì·½·¨Ö±½ÓÉú³É£¬
-	 * ´ËÊ±JVMÀï´æÔÚÁ½¸öÄÚÈİÒ»ÑùµÄPerson¶ÔÏó
+	 * ä½¿ç”¨newåˆå§‹åŒ–æ—¶è°ƒç”¨æœ¬æ„é€ æ–¹æ³•ï¼Œä½†æ˜¯ååºåˆ—åŒ–æ—¶ä¸è°ƒç”¨æœ¬æ„é€ æ–¹æ³•ç›´æ¥ç”Ÿæˆï¼Œ
+	 * æ­¤æ—¶JVMé‡Œå­˜åœ¨ä¸¤ä¸ªå†…å®¹ä¸€æ ·çš„Personå¯¹è±¡
 	 */
-	// ·´ĞòÁĞ»¯
+	// ååºåˆ—åŒ–
 	ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));
 	Person p2 = (Person) in.readObject();
 	in.close();
-	// ´òÓ¡·´ĞòÁĞ»¯µÄ½á¹û
-	// Õı³£´¦ÀíÊ±ageÊÇ18£¬transient±ê¼ÇÊ±ageÊÇ0£¬
-	// transient±ê¼Ç¼ÓwriteObject´¦Àíµ«readObject²»»Ö¸´Ê±ageÊÇ28
+	// æ‰“å°ååºåˆ—åŒ–çš„ç»“æœ
+	// æ­£å¸¸å¤„ç†æ—¶ageæ˜¯18ï¼Œtransientæ ‡è®°æ—¶ageæ˜¯0ï¼Œ
+	// transientæ ‡è®°åŠ writeObjectå¤„ç†ä½†readObjectä¸æ¢å¤æ—¶ageæ˜¯28
 	System.out.println("p2: " + p2);
-	// ·´ĞòÁĞ»¯ºó¶ÔÏóµÄÄÚ´æµØÖ·ºÍÔ­À´µÄµØÖ·²»Í¬£¬ÊÇÉî¿½±´¡£´Ë´¦·µ»Ø p1 == p2 is: false
+	// ååºåˆ—åŒ–åå¯¹è±¡çš„å†…å­˜åœ°å€å’ŒåŸæ¥çš„åœ°å€ä¸åŒï¼Œæ˜¯æ·±æ‹·è´ã€‚æ­¤å¤„è¿”å› p1 == p2 is: false
 	System.out.println("p1 == p2 is: " + (p1 == p2));
 }
 
 public class Person implements Serializable {
 	private String name;
 
-	/** transientÓÃÓÚĞòÁĞ»¯ÖĞµÄÖîÈçÃÜÂëµÈÒşË½×Ö¶Î£¬
-	*   ±»ĞŞÊÎµÄ±äÁ¿²»»á±»ĞòÁĞ»¯£¬²»×ö¶îÍâ´¦ÀíÊ±·´ĞòÁĞ»¯ºóÖµÎª»ù±¾ÀàĞÍÄ¬ÈÏÖµ£¬´Ë´¦age·´ĞòÁĞ»¯ºóµÃµ½0
+	/** transientç”¨äºåºåˆ—åŒ–ä¸­çš„è¯¸å¦‚å¯†ç ç­‰éšç§å­—æ®µï¼Œ
+	*   è¢«ä¿®é¥°çš„å˜é‡ä¸ä¼šè¢«åºåˆ—åŒ–ï¼Œä¸åšé¢å¤–å¤„ç†æ—¶ååºåˆ—åŒ–åå€¼ä¸ºåŸºæœ¬ç±»å‹é»˜è®¤å€¼ï¼Œæ­¤å¤„ageååºåˆ—åŒ–åå¾—åˆ°0
 	*/
 	private transient int age;
 	
-	/* ¾²Ì¬±äÁ¿ÊôÓÚÀà£¬Ò²²»»á²ÎÓëĞòÁĞ»¯Óë·´ĞòÁĞ»¯ */
+	/* é™æ€å˜é‡å±äºç±»ï¼Œä¹Ÿä¸ä¼šå‚ä¸åºåˆ—åŒ–ä¸ååºåˆ—åŒ– */
 	public static int level = 7;
 
 	public Person() {
@@ -1296,26 +1296,26 @@ public class Person implements Serializable {
 	}
 
 	/**
-	 * ĞòÁĞ»¯transientĞŞÊÎµÄ×Ö¶Î,Í¨¹ıObjectOutputStream°ÑÏëÒªĞòÁĞ»¯µÄtransient×Ö¶ÎĞ´³öÈ¥¡£
-	 * ·ÃÎÊ¿ØÖÆ·û±ØĞëÊÇprivate£¬
-	 * Ò»¶¨ÒªÏÈÖ´ĞĞout.defaultWriteObject();°ÑÆäËûÕı³£ĞòÁĞ»¯µÄ×Ö¶ÎÄÚÈİĞ´Èë
+	 * åºåˆ—åŒ–transientä¿®é¥°çš„å­—æ®µ,é€šè¿‡ObjectOutputStreamæŠŠæƒ³è¦åºåˆ—åŒ–çš„transientå­—æ®µå†™å‡ºå»ã€‚
+	 * è®¿é—®æ§åˆ¶ç¬¦å¿…é¡»æ˜¯privateï¼Œ
+	 * ä¸€å®šè¦å…ˆæ‰§è¡Œout.defaultWriteObject();æŠŠå…¶ä»–æ­£å¸¸åºåˆ—åŒ–çš„å­—æ®µå†…å®¹å†™å…¥
 	 */
 	private void writeObject(ObjectOutputStream out) throws IOException {
 		out.defaultWriteObject();
-		// ´Ë´¦µ¥¶À´¦Àíage×Ö¶Î£¬Ò»°ãÊÇ¶ÔÃô¸ĞÊı¾İ×ö¼ÓÃÜ´¦Àí£¬´Ë´¦ÊÇÔÚÖµÉÏ¼Ó10ÈÅÂÒÊı¾İ
+		// æ­¤å¤„å•ç‹¬å¤„ç†ageå­—æ®µï¼Œä¸€èˆ¬æ˜¯å¯¹æ•æ„Ÿæ•°æ®åšåŠ å¯†å¤„ç†ï¼Œæ­¤å¤„æ˜¯åœ¨å€¼ä¸ŠåŠ 10æ‰°ä¹±æ•°æ®
 		out.writeInt(age + 10);
 	}
 
 	/**
-	 * ·´ĞòÁĞ»¯transientĞŞÊÎµÄ×Ö¶Î£¬Í¨¹ıObjectInputStream°Ñtransient×Ö¶Î¶Á³öÀ´
-	 * ·ÃÎÊ¿ØÖÆ·û±ØĞëÊÇprivate£¬
-	 * Ò»¶¨ÒªÏÈÖ´ĞĞin.defaultReadObject();°ÑÆäËûÕı³£ĞòÁĞ»¯µÄ×Ö¶ÎÄÚÈİ¶Á³ö
+	 * ååºåˆ—åŒ–transientä¿®é¥°çš„å­—æ®µï¼Œé€šè¿‡ObjectInputStreamæŠŠtransientå­—æ®µè¯»å‡ºæ¥
+	 * è®¿é—®æ§åˆ¶ç¬¦å¿…é¡»æ˜¯privateï¼Œ
+	 * ä¸€å®šè¦å…ˆæ‰§è¡Œin.defaultReadObject();æŠŠå…¶ä»–æ­£å¸¸åºåˆ—åŒ–çš„å­—æ®µå†…å®¹è¯»å‡º
 	 *
 	 */
 	private void readObject(ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
 		in.defaultReadObject();
-		// µ¥¶À´¦Àíage×Ö¶Î£¬¶ÁÈ¡³öÀ´ºóÒªÔÚ¼ÓÃÜÊı¾İÉÏ×ö½âÃÜ£¬´Ë´¦¼õÈ¥ÓÃÓÚÈÅÂÒµÄÔöÁ¿10
+		// å•ç‹¬å¤„ç†ageå­—æ®µï¼Œè¯»å–å‡ºæ¥åè¦åœ¨åŠ å¯†æ•°æ®ä¸Šåšè§£å¯†ï¼Œæ­¤å¤„å‡å»ç”¨äºæ‰°ä¹±çš„å¢é‡10
 		age = in.readInt() - 10;
 	}
 
@@ -1344,25 +1344,25 @@ public class Person implements Serializable {
 	}
 }
 
-// Ê¾Àı2£ºµ¥ÀıĞòÁĞ»¯¼°Ê¹ÓÃ
+// ç¤ºä¾‹2ï¼šå•ä¾‹åºåˆ—åŒ–åŠä½¿ç”¨
 public static void main(String[] args) throws IOException,ClassNotFoundException {
 	String path = "e:/singleton.dat";
 	Singleton singleton = Singleton.getInstance();
 
-	// ĞòÁĞ»¯Singleton¶ÔÏó
+	// åºåˆ—åŒ–Singletonå¯¹è±¡
 	ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path));
 	out.writeObject(singleton);
 	out.close();
 
-	// ·´ĞòÁĞ»¯
+	// ååºåˆ—åŒ–
 	ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));
 	Singleton Singleton2 = (Singleton) in.readObject();
 	in.close();
 
-	// ·´ĞòÁĞ»¯ºó¶ÔÏóµÄÄÚ´æµØÖ·ºÍÔ­À´µÄµØÖ·ÏàÍ¬¡£
+	// ååºåˆ—åŒ–åå¯¹è±¡çš„å†…å­˜åœ°å€å’ŒåŸæ¥çš„åœ°å€ç›¸åŒã€‚
 	System.out.println(singleton == Singleton2);
 	
-	// Ö´ĞĞ½á¹û£º
+	// æ‰§è¡Œç»“æœï¼š
 	// writeReplace
 	// writeObject
 	// readObject
@@ -1387,9 +1387,9 @@ public class Singleton implements Serializable {
 	}
 
 	/**
-	 * writeReplace·½·¨»áÔÚwriteObject·½·¨Ö®Ç°Ö´ĞĞ¡£
-	 * ObjectOutputStream»á°ÑwriteReplace·½·¨·µ»ØµÄ¶ÔÏóĞòÁĞ»¯Ğ´³öÈ¥¡£
-	 * ×¢Òâ±¾·½·¨±ØĞëÊÇprivate
+	 * writeReplaceæ–¹æ³•ä¼šåœ¨writeObjectæ–¹æ³•ä¹‹å‰æ‰§è¡Œã€‚
+	 * ObjectOutputStreamä¼šæŠŠwriteReplaceæ–¹æ³•è¿”å›çš„å¯¹è±¡åºåˆ—åŒ–å†™å‡ºå»ã€‚
+	 * æ³¨æ„æœ¬æ–¹æ³•å¿…é¡»æ˜¯private
 	 */
 	private Object writeReplace() throws ObjectStreamException {
 		System.out.println("writeReplace");
@@ -1397,18 +1397,18 @@ public class Singleton implements Serializable {
 	}
 
 	/**
-	 * readResolve·½·¨»áÔÚreadObject·½·¨Ö®ºóÖ´ĞĞ£¬¿ÉÒÔÔÙ´ÎĞŞ¸ÄreadObject·½·¨·µ»ØµÄ¶ÔÏóÊı¾İ¡£
-	 * ×¢Òâ±¾·½·¨±ØĞëÊÇprivate
+	 * readResolveæ–¹æ³•ä¼šåœ¨readObjectæ–¹æ³•ä¹‹åæ‰§è¡Œï¼Œå¯ä»¥å†æ¬¡ä¿®æ”¹readObjectæ–¹æ³•è¿”å›çš„å¯¹è±¡æ•°æ®ã€‚
+	 * æ³¨æ„æœ¬æ–¹æ³•å¿…é¡»æ˜¯private
 	 */
 	private Object readResolve() throws ObjectStreamException {
 		System.out.println("readResolve");
-		// ±¾ÖÊÉÏÊÇ´Ë´¦ÓÃ±¾µØµÄINSTANCEÌæ»»ÁË·´ĞòÁĞ»¯Éú³ÉµÄSingleton¶ÔÏó£¬ÕâÑù±£Ö¤ÁËJVMÀïÃæµ¥ÀıµÄÎ¨Ò»ĞÔ
-		// ÒòÎªËùÓĞÊ¹ÓÃ¸Ãµ¥ÀıµÄJVMÔÚ·´ĞòÁĞ»¯Ö®Ç°ÒÑ¾­¼ÓÔØµ¥ÀıCLASS£¬´ËÊ±µ¥ÀıµÄÊµÀıÒÑ¾­Éú³É
+		// æœ¬è´¨ä¸Šæ˜¯æ­¤å¤„ç”¨æœ¬åœ°çš„INSTANCEæ›¿æ¢äº†ååºåˆ—åŒ–ç”Ÿæˆçš„Singletonå¯¹è±¡ï¼Œè¿™æ ·ä¿è¯äº†JVMé‡Œé¢å•ä¾‹çš„å”¯ä¸€æ€§
+		// å› ä¸ºæ‰€æœ‰ä½¿ç”¨è¯¥å•ä¾‹çš„JVMåœ¨ååºåˆ—åŒ–ä¹‹å‰å·²ç»åŠ è½½å•ä¾‹CLASSï¼Œæ­¤æ—¶å•ä¾‹çš„å®ä¾‹å·²ç»ç”Ÿæˆ
 		return INSTANCE;
 	}
 }
 
-/****                        ComparableºÍComparatorµÄÇø±ğ                        ****/
+/****                        Comparableå’ŒComparatorçš„åŒºåˆ«                        ****/
 
 package java.lang;
 public interface Comparable<T> {
@@ -1424,13 +1424,13 @@ public interface Comparator<T> {
 }
 
 Comparable<T>
-1¡¢ÄÚ²¿±È½ÏÆ÷£¬ÓÉĞèÒª±È½ÏµÄÀàimplements¸Ã½Ó¿Ú²¢@Override compareTo·½·¨£¬Ö÷ÒªÊ¹ÀàÓĞ×Ô±È½ÏµÄÌØĞÔ£»µ±È»ÓÉÓÚ·ºĞÍTµÄ´æÔÚÒ²¿ÉÒÔÊÇÎŞ¹ØÀàĞÍµÄ±È½Ï£¬ÕâÖÖÊ¹ÓÃºÜÉÙ¼û£»
-2¡¢Ò»°ãÓĞ´óĞ¡¹ØÏµµÄÖµÀà¶¼½¨ÒéÊµÏÖ£¬ÕâÑù¿ÉÒÔÖ±½ÓÊ¹ÓÃ¼¯ºÏµÄÅÅĞò¹¦ÄÜ£¬»òÕß¿ÉÒÔ×÷ÎªÓĞĞòÓ³ÉäTreeMapµÄ¼ü»òÕßÓĞĞò¼¯ºÏTreeSetµÄÔªËØÖ±½ÓÊ¹ÓÃ£¬À©´óÊ¹ÓÃ·¶Î§£»
+1ã€å†…éƒ¨æ¯”è¾ƒå™¨ï¼Œç”±éœ€è¦æ¯”è¾ƒçš„ç±»implementsè¯¥æ¥å£å¹¶@Override compareToæ–¹æ³•ï¼Œä¸»è¦ä½¿ç±»æœ‰è‡ªæ¯”è¾ƒçš„ç‰¹æ€§ï¼›å½“ç„¶ç”±äºæ³›å‹Tçš„å­˜åœ¨ä¹Ÿå¯ä»¥æ˜¯æ— å…³ç±»å‹çš„æ¯”è¾ƒï¼Œè¿™ç§ä½¿ç”¨å¾ˆå°‘è§ï¼›
+2ã€ä¸€èˆ¬æœ‰å¤§å°å…³ç³»çš„å€¼ç±»éƒ½å»ºè®®å®ç°ï¼Œè¿™æ ·å¯ä»¥ç›´æ¥ä½¿ç”¨é›†åˆçš„æ’åºåŠŸèƒ½ï¼Œæˆ–è€…å¯ä»¥ä½œä¸ºæœ‰åºæ˜ å°„TreeMapçš„é”®æˆ–è€…æœ‰åºé›†åˆTreeSetçš„å…ƒç´ ç›´æ¥ä½¿ç”¨ï¼Œæ‰©å¤§ä½¿ç”¨èŒƒå›´ï¼›
 
 Comparator<T>
-1¡¢Íâ²¿±È½ÏÆ÷£¬ÊµÏÖÀàÒ»°ãÃüÃûÎª ´ı±È½ÏÊµÌåÀàClassName + Comparator£¬ compare(T o1, T o2)·½·¨Ç©ÃûÏŞÖÆÁËÖ»ÄÜÔÚÍ¬Ò»¸öÀàĞÍÉÏ±È½Ï£¬equals¿ÉÒÔ²»¸²Ğ´ÑØÓÃ¹«¹²»ùÀàObjectµÄ
-2¡¢¶àÓÃÓÚ£¨1£©Ã»ÓĞÊµÏÖ×Ô±È½Ï¹¦ÄÜµÄÀà £¨2£©ÒÑÓĞ±È½Ï¹ØÏµ²»Âú×ãÒªÇóµÄÀà £¨3£©ÌØ¶¨³¡¾°ÏÂ±È½Ï·½·¨ĞèÒª¶¨ÖÆµÄÀà
-3¡¢µäĞÍµÄ²ßÂÔÄ£Ê½£¬²»½şÈë±»±È½ÏµÄÀà´Ó¶ø²»Ó°Ïì¸ÃÀàµÄÊµÏÖ£¬ÓĞµãC++·ºĞÍËã·¨µÄÒâË¼
+1ã€å¤–éƒ¨æ¯”è¾ƒå™¨ï¼Œå®ç°ç±»ä¸€èˆ¬å‘½åä¸º å¾…æ¯”è¾ƒå®ä½“ç±»ClassName + Comparatorï¼Œ compare(T o1, T o2)æ–¹æ³•ç­¾åé™åˆ¶äº†åªèƒ½åœ¨åŒä¸€ä¸ªç±»å‹ä¸Šæ¯”è¾ƒï¼Œequalså¯ä»¥ä¸è¦†å†™æ²¿ç”¨å…¬å…±åŸºç±»Objectçš„
+2ã€å¤šç”¨äºï¼ˆ1ï¼‰æ²¡æœ‰å®ç°è‡ªæ¯”è¾ƒåŠŸèƒ½çš„ç±» ï¼ˆ2ï¼‰å·²æœ‰æ¯”è¾ƒå…³ç³»ä¸æ»¡è¶³è¦æ±‚çš„ç±» ï¼ˆ3ï¼‰ç‰¹å®šåœºæ™¯ä¸‹æ¯”è¾ƒæ–¹æ³•éœ€è¦å®šåˆ¶çš„ç±»
+3ã€å…¸å‹çš„ç­–ç•¥æ¨¡å¼ï¼Œä¸æµ¸å…¥è¢«æ¯”è¾ƒçš„ç±»ä»è€Œä¸å½±å“è¯¥ç±»çš„å®ç°ï¼Œæœ‰ç‚¹C++æ³›å‹ç®—æ³•çš„æ„æ€
 
 public class Student implements Comparable<Student>{
 	private String name;
@@ -1452,16 +1452,16 @@ public class Student implements Comparable<Student>{
 		return name.hashCode() + age*34;
 	}
 
-	@Override  // Ãû×ÖºÍÄê¼ÍÒ»Ñù¾ÍÈÏÎªÊÇÍ¬Ò»¸öÈË
+	@Override  // åå­—å’Œå¹´çºªä¸€æ ·å°±è®¤ä¸ºæ˜¯åŒä¸€ä¸ªäºº
 	public boolean equals(Object obj) {
 		if(!(obj instanceof Student)) {
-			throw new ClassCastException("ÀàĞÍ²»Æ¥Åä");
+			throw new ClassCastException("ç±»å‹ä¸åŒ¹é…");
 		}
 		Student s = (Student)obj;
 		return this.name.equals(s.name) && this.age == age;
 	}
 
-	@Override // ÏÈ°´Äê¼ÍÅÅĞò£¬ÔÙ°´Ãû×ÖÅÅĞò£¬Çø·Ö´óĞ¡Ğ´
+	@Override // å…ˆæŒ‰å¹´çºªæ’åºï¼Œå†æŒ‰åå­—æ’åºï¼ŒåŒºåˆ†å¤§å°å†™
 	public int compareTo(Student o) {
 		int num = new Integer(this.age).compareTo(new Integer(o.age));
 		if(num == 0) {
@@ -1484,9 +1484,9 @@ public class Student implements Comparable<Student>{
 		this.age = age;
 	}
 }
-// ÈÏÎªStudent×Ô´øµÄ±È½Ï·½·¨²»ºÃ»òÕß²»ÊÊÓÃÊ±×Ô¶¨Òå±È½ÏÆ÷
+// è®¤ä¸ºStudentè‡ªå¸¦çš„æ¯”è¾ƒæ–¹æ³•ä¸å¥½æˆ–è€…ä¸é€‚ç”¨æ—¶è‡ªå®šä¹‰æ¯”è¾ƒå™¨
 public class StudentComparator implements Comparator<Student> {
-	@Override  // ÏÈ²»Çø·Ö´óĞ¡Ğ´µÄ±È½ÏÃû×Ö£¬ÔÙ±È½ÏÄê¼Í
+	@Override  // å…ˆä¸åŒºåˆ†å¤§å°å†™çš„æ¯”è¾ƒåå­—ï¼Œå†æ¯”è¾ƒå¹´çºª
 	public int compare(Student s1, Student s2) {
 		int num = s1.getName().compareToIgnoreCase(s2.getName());
 		if(num == 0) {
@@ -1496,30 +1496,30 @@ public class StudentComparator implements Comparator<Student> {
 		}
 	}
 }
-Ê¹ÓÃ£º
+ä½¿ç”¨ï¼š
 List<Student> listStudent = Arrays.asList(...);
-Collections.sort(listStudent);  // Ê¹ÓÃComparableµÄ±È½Ï·½·¨
-Arrays.sort(listStudent);  // Í¬ÉÏ£¬½øĞĞÊı×éÄÚ²¿µÄ±È½ÏÖØÅÅ
+Collections.sort(listStudent);  // ä½¿ç”¨Comparableçš„æ¯”è¾ƒæ–¹æ³•
+Arrays.sort(listStudent);  // åŒä¸Šï¼Œè¿›è¡Œæ•°ç»„å†…éƒ¨çš„æ¯”è¾ƒé‡æ’
 
-Collections.sort(listStudent, new StudentComparator());  // Ê¹ÓÃComparatorµÄ±È½Ï·½·¨
+Collections.sort(listStudent, new StudentComparator());  // ä½¿ç”¨Comparatorçš„æ¯”è¾ƒæ–¹æ³•
 
-/****                        Ã¶¾ÙEnum                        ****/
+/****                        æšä¸¾Enum                        ****/
 
-ÈÎÒâÃ¶¾ÙÀàĞÍ¿ÉÓÃµÄËæ»ú»ñÈ¡Æ÷£¬Ö»°üº¬¾²Ì¬ÊôĞÔºÍ¾²Ì¬·½·¨£¬×ö³ÉÁËÍêÈ«µÄ¹¤¾ßÀà
+ä»»æ„æšä¸¾ç±»å‹å¯ç”¨çš„éšæœºè·å–å™¨ï¼ŒåªåŒ…å«é™æ€å±æ€§å’Œé™æ€æ–¹æ³•ï¼Œåšæˆäº†å®Œå…¨çš„å·¥å…·ç±»
 public class Enums {
     private static Random rand = new Random(47);
-	// ´Ë·½·¨Ö÷Òª¶ÔÍâ£¬Ö¸¶¨¾ßÌåÃ¶¾ÙÀàĞÍºó¾Í»ñÈ¡µ½¸ÃÀàĞÍµÄËæ»úÖµ
+	// æ­¤æ–¹æ³•ä¸»è¦å¯¹å¤–ï¼ŒæŒ‡å®šå…·ä½“æšä¸¾ç±»å‹åå°±è·å–åˆ°è¯¥ç±»å‹çš„éšæœºå€¼
     public static <T extends Enum<T>> T random(Class<T> ec) {
-        // ÀûÓÃËùÓĞÃ¶¾ÙÀà¶¼ÓĞµÄgetEnumConstants()»ñµÃ¾ßÌåÃ¶¾ÙµÄËùÓĞÊµÀı
+        // åˆ©ç”¨æ‰€æœ‰æšä¸¾ç±»éƒ½æœ‰çš„getEnumConstants()è·å¾—å…·ä½“æšä¸¾çš„æ‰€æœ‰å®ä¾‹
         return random(ec.getEnumConstants());
     }
-	// ´Ë·½·¨Ö÷Òª¶ÔÄÚ£¬Ó¦¸ÃÍâ²¿ºÜÉÙ»á´«ÈëÒ»¸öÃ¶¾ÙµÄÈ«²¿Öµ¡£
+	// æ­¤æ–¹æ³•ä¸»è¦å¯¹å†…ï¼Œåº”è¯¥å¤–éƒ¨å¾ˆå°‘ä¼šä¼ å…¥ä¸€ä¸ªæšä¸¾çš„å…¨éƒ¨å€¼ã€‚
     public static <T> T random(T[] values) {
         return values[rand.nextInt(values.length)];
     }
 }
 
-Ê¹ÓÃ½Ó¿Ú¹ÜÀíÃ¶¾Ù£¬Ê¹ÓÃFood½Ó¿Ú½«ËùÓĞµÄÊ³Îï¹é×Ü£¬È»ºó°´Ê³ÎïµÄÏ¸Àà¼ÌĞø»®·Ö¸÷¸öÃ¶¾Ù£¬ÔÚÍâ²¿¿ÉÒÔÊ¹ÓÃFood´æ·ÅËùÓĞ¾ßÌåÊ³Îï
+ä½¿ç”¨æ¥å£ç®¡ç†æšä¸¾ï¼Œä½¿ç”¨Foodæ¥å£å°†æ‰€æœ‰çš„é£Ÿç‰©å½’æ€»ï¼Œç„¶åæŒ‰é£Ÿç‰©çš„ç»†ç±»ç»§ç»­åˆ’åˆ†å„ä¸ªæšä¸¾ï¼Œåœ¨å¤–éƒ¨å¯ä»¥ä½¿ç”¨Foodå­˜æ”¾æ‰€æœ‰å…·ä½“é£Ÿç‰©
 public enum Course {
     APPRTIZER(Food.Appetizer.class),
     MAINCOURSE(Food.MainCourse.class),
@@ -1563,16 +1563,16 @@ public enum Course {
     }
 }
 
-Ê¹ÓÃ½Ó¿ÚÖĞ´øÃ¶¾ÙµÄ·½Ê½£¬¿ÉÒÔ½«exportµ½Íâ²¿µÄÃÅÃæ½Ó¿ÚÀïÃæ£¬ÏŞ¶¨¸Ã½Ó¿Ú×¨ÓÃµÄ²¿·ÖÃ¶¾ÙµÄ×÷ÓÃ·¶Î§£¬±ÈÈç³£ÓÃµÄFacadeÖĞ´øÏà¹ØÃ¶¾Ù
+ä½¿ç”¨æ¥å£ä¸­å¸¦æšä¸¾çš„æ–¹å¼ï¼Œå¯ä»¥å°†exportåˆ°å¤–éƒ¨çš„é—¨é¢æ¥å£é‡Œé¢ï¼Œé™å®šè¯¥æ¥å£ä¸“ç”¨çš„éƒ¨åˆ†æšä¸¾çš„ä½œç”¨èŒƒå›´ï¼Œæ¯”å¦‚å¸¸ç”¨çš„Facadeä¸­å¸¦ç›¸å…³æšä¸¾
 
-EnumSetºÍEnumMapÊ¹ÓÃ¾ÙÀı
+EnumSetå’ŒEnumMapä½¿ç”¨ä¸¾ä¾‹
 public enum AlarmPoints {
     STAIR1, STAIR2, LOBBY, OFFICE1, OFFICE2, OFFICE3,
     OFFICE4, BATHROOM, UTILITY, KITCHEN
 }
 // EnumSet
 public class EnumSets {
-	// EnumSetÖĞÊä³öÔªËØµÄ´ÎĞòÍêÈ«°´ÕÕ¶ÔÓ¦´æ´¢µÄenum¶¨ÒåÊ±µÄ´ÎĞò£¬ÓëÔªËØaddµÄË³ĞòÎŞ¹Ø
+	// EnumSetä¸­è¾“å‡ºå…ƒç´ çš„æ¬¡åºå®Œå…¨æŒ‰ç…§å¯¹åº”å­˜å‚¨çš„enumå®šä¹‰æ—¶çš„æ¬¡åºï¼Œä¸å…ƒç´ addçš„é¡ºåºæ— å…³
     public static void main(String[] args) {
         EnumSet<AlarmPoints> points = EnumSet.noneOf(AlarmPoints.class);
         points.add(BATHROOM);
@@ -1593,7 +1593,7 @@ public class EnumSets {
 interface Command { void action(); }
 public class EnumMaps {
     public static void main(String[] args) {
-		// ËùÓĞµÄÃ¶¾ÙÀàĞÍÊµÀı¶¼»áÔÚEnumMap×÷Îª¼ü´æÔÚ£¬Ö»ÊÇÃ»ÓĞput²Ù×÷µÄ»°£¬¶ÔÓ¦µÄÖµ¶¼ÎªNULL£¬Ç¿ĞĞµ÷ÓÃ·µ»Ø¿ÕÖ¸ÕëÒì³£
+		// æ‰€æœ‰çš„æšä¸¾ç±»å‹å®ä¾‹éƒ½ä¼šåœ¨EnumMapä½œä¸ºé”®å­˜åœ¨ï¼Œåªæ˜¯æ²¡æœ‰putæ“ä½œçš„è¯ï¼Œå¯¹åº”çš„å€¼éƒ½ä¸ºNULLï¼Œå¼ºè¡Œè°ƒç”¨è¿”å›ç©ºæŒ‡é’ˆå¼‚å¸¸
         EnumMap<AlarmPoints, Command> em = new EnumMap<>(AlarmPoints.class);
         em.put(KITCHEN, () -> System.out.println("Kitchn fire!"));
         em.put(BATHROOM, () -> System.out.println("Bathroom alert!"));
@@ -1605,7 +1605,7 @@ public class EnumMaps {
 }
 
 
-/*¸ù¾İ»¨Ô°ÀïËùÓĞÖ²ÎïÍ³¼Æ¸÷ÖÖÉúÃüÖÜÆÚµÄÖ²ÎïÓĞÄÄĞ©*/	
+/*æ ¹æ®èŠ±å›­é‡Œæ‰€æœ‰æ¤ç‰©ç»Ÿè®¡å„ç§ç”Ÿå‘½å‘¨æœŸçš„æ¤ç‰©æœ‰å“ªäº›*/	
 public class Plant {
 	enum LifeCycle {ANNUAL, PERENNIAL, BIENNIAL}
 
@@ -1618,7 +1618,7 @@ public class Plant {
 	}
 
 	public static void main(String[] args) {
-		/* ·½°¸Ò»£ºÉú³ÉMapºÍSetÍ³¼Æ½á¹¹£¬Ê¹ÓÃforÑ­»·±éÀú·ÅÈëÊı¾İ */
+		/* æ–¹æ¡ˆä¸€ï¼šç”ŸæˆMapå’ŒSetç»Ÿè®¡ç»“æ„ï¼Œä½¿ç”¨forå¾ªç¯éå†æ”¾å…¥æ•°æ® */
 		Map<LifeCycle, Set<Plant>> plantsByLifeCycle = new EnumMap<>(Plant.LifeCycle.class);
 		for(Plant.LifeCycle lc : Plant.LifeCycle.values()) {
 			plantsByLifeCycle.put(lc, new HashSet<>());
@@ -1626,16 +1626,16 @@ public class Plant {
 		for(Plant p : garden) {
 			plantsByLifeCycle.get(p.lifeCycle).addAll(p);
 		}
-		/* ·½°¸¶ş£ºÊ¹ÓÃstream£¬µ«´Ë´¦Ê¹ÓÃÆÕÍ¨Map£¬Ğ§ÂÊ±È½ÏµÍ */
+		/* æ–¹æ¡ˆäºŒï¼šä½¿ç”¨streamï¼Œä½†æ­¤å¤„ä½¿ç”¨æ™®é€šMapï¼Œæ•ˆç‡æ¯”è¾ƒä½ */
 		Arrays.stream(garden).collect(groupingBy(p -> p.lifeCycle));
-		/* ·½°¸Èı£ºÊ¹ÓÃstream²¢Ö¸¶¨Ê¹ÓÃEnumMap£¬Ğ§ÂÊ×î¸ß */
+		/* æ–¹æ¡ˆä¸‰ï¼šä½¿ç”¨streamå¹¶æŒ‡å®šä½¿ç”¨EnumMapï¼Œæ•ˆç‡æœ€é«˜ */
 		Arrays.stream(garden).collect(groupingBy(p -> p.lifeCycle,
 				() -> new EnumMap<>(LifeCycle.class), toSet()));
 	}
 }
 
-/* ¶ÔÓÚ¶à¸ö³£Á¿¼¶ÁªµÄ¶àÖØÊı×éĞÎÊ½µÄÓ³Éä£¬ÓÃEnumMapÊµÏÖ±ÈÓÃ¶àÎ¬Êı×éÊµÏÖ¸ü°²È«Ò×À©Õ¹£¨Ö±½ÓĞÂÃ¶¾ÙÖµ£¬²»ĞèÒªĞŞ¸ÄÊı×éÓ³Éä´¦ÀíµÄÆäËû´úÂë£©
-   ´Ë´¦ÊµÏÖÒ»¸ö¹ÌÒºÆøÈıÌ¬×ª»»µÄÃû³ÆÓ³Éä±í */
+/* å¯¹äºå¤šä¸ªå¸¸é‡çº§è”çš„å¤šé‡æ•°ç»„å½¢å¼çš„æ˜ å°„ï¼Œç”¨EnumMapå®ç°æ¯”ç”¨å¤šç»´æ•°ç»„å®ç°æ›´å®‰å…¨æ˜“æ‰©å±•ï¼ˆç›´æ¥æ–°æšä¸¾å€¼ï¼Œä¸éœ€è¦ä¿®æ”¹æ•°ç»„æ˜ å°„å¤„ç†çš„å…¶ä»–ä»£ç ï¼‰
+   æ­¤å¤„å®ç°ä¸€ä¸ªå›ºæ¶²æ°”ä¸‰æ€è½¬æ¢çš„åç§°æ˜ å°„è¡¨ */
 public enum Phase {
 	SOLID, LIQUID, GAS;
 
@@ -1658,7 +1658,7 @@ public enum Phase {
 		private static final Map<Phase, Map<Phase, Transition>> m =
 			Stream.of(values()).collect(
 				groupingBy(t -> t.from, ()->new EnumMap<>(Phase.class),
-						// ´Ë´¦(x, y)->yÎŞÒâÒå£¬Ö»ÊÇÎªÁËÂú×ãtoMapµÄ²ÎÊıÒªÇó
+						// æ­¤å¤„(x, y)->yæ— æ„ä¹‰ï¼Œåªæ˜¯ä¸ºäº†æ»¡è¶³toMapçš„å‚æ•°è¦æ±‚
 						toMap(t->t.to, t->t, (x, y)->y, ()->new EnumMap<>(Phase.class))));
 
 		public static Transition from(Phase from, Phase to) {
@@ -1669,7 +1669,7 @@ public enum Phase {
 
 
 
-Í¨¹ıÎªenum¶¨ÒåÒ»¸ö»ò¶à¸öabstract·½·¨ÈÃÃ¿¸öenumÊµÀı¶¨ÖÆ×Ô¼ºµÄĞĞÎª
+é€šè¿‡ä¸ºenumå®šä¹‰ä¸€ä¸ªæˆ–å¤šä¸ªabstractæ–¹æ³•è®©æ¯ä¸ªenumå®ä¾‹å®šåˆ¶è‡ªå·±çš„è¡Œä¸º
 public enum ConstantSpecificMethod {
     DATE_TIME {
         String getInfo() {
@@ -1693,7 +1693,7 @@ public enum ConstantSpecificMethod {
         }
     }
 }
-¶¨ÒåÆÕÍ¨·½·¨²¢Õë¶Ô²¿·ÖÃ¶¾ÙÊµÀı½øĞĞ¸²Ğ´
+å®šä¹‰æ™®é€šæ–¹æ³•å¹¶é’ˆå¯¹éƒ¨åˆ†æšä¸¾å®ä¾‹è¿›è¡Œè¦†å†™
 public enum OverrideConstantSpecific {
     NUT, BOLT,
     WASHER {
@@ -1711,10 +1711,10 @@ public enum OverrideConstantSpecific {
         }
     }
 }
-/* ¶¨ÒåÒ»¸ö¼ÆËãÒ»ÖÜÖĞÃ¿ÈÕ¹¤×ÊµÄÃ¶¾Ù£¬ÆäÖĞ¹¤×÷ÈÕºÍË«ĞİµÄ¼Ó°à¹¤×Ê¼ÆËã¹«Ê½²»Í¬
-   Èç¹ûÃ¿¸öÃ¶¾ÙÖµÖ±½Ó¸½ÉÏ¼Ó°à¹¤×Ê¼ÆËãº¯Êı£¬ÖØ¸´Ñù°åÌ«¶à£»
-   Í¨¹ıswitchº¯Êı×ÛºÏ´¦ÀíÔòÌí¼ÓĞÂÃ¶¾ÙÖµÊ±»áÍü¼Ç²¹³ä¸ÃÃ¶¾ÙµÄcase£»
-   ´Ë´¦Í¨¹ıÄÚ²¿Ã¶¾Ù³éÈ¡¹²ĞÔ·½·¨´ïµ½Ïû³ıÖØ¸´´úÂëÍ¬Ê±ÔÚÌí¼ÓĞÂÃ¶¾ÙÖµ²»Íü¼ÇÖ¸¶¨´¦Àíº¯ÊıµÄĞ§¹û */
+/* å®šä¹‰ä¸€ä¸ªè®¡ç®—ä¸€å‘¨ä¸­æ¯æ—¥å·¥èµ„çš„æšä¸¾ï¼Œå…¶ä¸­å·¥ä½œæ—¥å’ŒåŒä¼‘çš„åŠ ç­å·¥èµ„è®¡ç®—å…¬å¼ä¸åŒ
+   å¦‚æœæ¯ä¸ªæšä¸¾å€¼ç›´æ¥é™„ä¸ŠåŠ ç­å·¥èµ„è®¡ç®—å‡½æ•°ï¼Œé‡å¤æ ·æ¿å¤ªå¤šï¼›
+   é€šè¿‡switchå‡½æ•°ç»¼åˆå¤„ç†åˆ™æ·»åŠ æ–°æšä¸¾å€¼æ—¶ä¼šå¿˜è®°è¡¥å……è¯¥æšä¸¾çš„caseï¼›
+   æ­¤å¤„é€šè¿‡å†…éƒ¨æšä¸¾æŠ½å–å…±æ€§æ–¹æ³•è¾¾åˆ°æ¶ˆé™¤é‡å¤ä»£ç åŒæ—¶åœ¨æ·»åŠ æ–°æšä¸¾å€¼ä¸å¿˜è®°æŒ‡å®šå¤„ç†å‡½æ•°çš„æ•ˆæœ */
 public enum PayrollDay {
     MONDAY,
     TUESDAY,
@@ -1760,36 +1760,36 @@ public enum PayrollDay {
 }
 
 
-/****                        ½Ó¿ÚInterface                        ****/
+/****                        æ¥å£Interface                        ****/
 
-½Ó¿Ú±¾ÖÊÉÏÊÇ±íÊ¾Ò»¸öÀà»¹ÄÜ×öÊ²Ã´£¬ÊÇ³ıÈ¥ÀàµÄÖ÷ÒªÌØĞÔ£¨¶¨ÒåÀàÖ®ËùÒÔÎªÀàµÄºËĞÄÄÚÈİ£©Ö®ÍâµÄ¸½¼ÓĞĞÎªÌØĞÔ(Optional Function)
-// ½Ó¿ÚµÄ»ù±¾ÄÚÈİ
+æ¥å£æœ¬è´¨ä¸Šæ˜¯è¡¨ç¤ºä¸€ä¸ªç±»è¿˜èƒ½åšä»€ä¹ˆï¼Œæ˜¯é™¤å»ç±»çš„ä¸»è¦ç‰¹æ€§ï¼ˆå®šä¹‰ç±»ä¹‹æ‰€ä»¥ä¸ºç±»çš„æ ¸å¿ƒå†…å®¹ï¼‰ä¹‹å¤–çš„é™„åŠ è¡Œä¸ºç‰¹æ€§(Optional Function)
+// æ¥å£çš„åŸºæœ¬å†…å®¹
 public interface A {
-	/**  ½Ó¿ÚÄÚ²¿±äÁ¿ÊÇÃ»Ê²Ã´ÊµÖÊÒâÒåµÄ¹¦ÄÜ£¬·´¶ø±©Â¶ÁËÒ»¸öÓÀÔ¶ÒªÎ¬»¤µÄ¶ÔÍâ±äÁ¿£¬²»½¨ÒéÊ¹ÓÃ  **/
-	// ÔÚ½Ó¿ÚÖĞ¶¨Òå³ÉÔ±±äÁ¿£¬ËùÓĞ½Ó¿ÚÖĞµÄÊı¾İ³ÉÔ±×Ô¶¯ÓÃpublic static finalĞŞÊÎ£¬ËùÒÔ±ØĞë³õÊ¼»¯£¬±¾ÖÊÉÏ¶¼ÊÇ³£Á¿¶ø²»ÊÇ±äÁ¿
+	/**  æ¥å£å†…éƒ¨å˜é‡æ˜¯æ²¡ä»€ä¹ˆå®è´¨æ„ä¹‰çš„åŠŸèƒ½ï¼Œåè€Œæš´éœ²äº†ä¸€ä¸ªæ°¸è¿œè¦ç»´æŠ¤çš„å¯¹å¤–å˜é‡ï¼Œä¸å»ºè®®ä½¿ç”¨  **/
+	// åœ¨æ¥å£ä¸­å®šä¹‰æˆå‘˜å˜é‡ï¼Œæ‰€æœ‰æ¥å£ä¸­çš„æ•°æ®æˆå‘˜è‡ªåŠ¨ç”¨public static finalä¿®é¥°ï¼Œæ‰€ä»¥å¿…é¡»åˆå§‹åŒ–ï¼Œæœ¬è´¨ä¸Šéƒ½æ˜¯å¸¸é‡è€Œä¸æ˜¯å˜é‡
 	String str = "Hello";
 	int FEBRUARY = 2;
-	// ÒòÎª³ÉÔ±±äÁ¿¶¼ÊÇstatic£¬ËùÒÔÖ»»áÔÚ¼ÓÔØÊ±³õÊ¼»¯£¬ºóĞø²»»áÔÙ±ä»¯£¬´Ë´¦VAL_AÖµÔÚ¼ÓÔØºóÓÀ²»¸Ä±äÖ±µ½JVMÖØĞÂÔËĞĞ
+	// å› ä¸ºæˆå‘˜å˜é‡éƒ½æ˜¯staticï¼Œæ‰€ä»¥åªä¼šåœ¨åŠ è½½æ—¶åˆå§‹åŒ–ï¼Œåç»­ä¸ä¼šå†å˜åŒ–ï¼Œæ­¤å¤„VAL_Aå€¼åœ¨åŠ è½½åæ°¸ä¸æ”¹å˜ç›´åˆ°JVMé‡æ–°è¿è¡Œ
 	int VAL_A = (int)(Math.random() * 10);
 
-	// ×îÔ­Ê¼µÄ½Ó¿Ú£¬ËùÓĞ·½·¨¶¼ÊÇĞéµÄ£¬Ã»ÓĞÊµÏÖ£¬JDK1.8Ö®Ç°È«²¿ÊÇpublic abstract
+	// æœ€åŸå§‹çš„æ¥å£ï¼Œæ‰€æœ‰æ–¹æ³•éƒ½æ˜¯è™šçš„ï¼Œæ²¡æœ‰å®ç°ï¼ŒJDK1.8ä¹‹å‰å…¨éƒ¨æ˜¯public abstract
 	void X();
 
-	// Ä¬ÈÏ·½·¨£¬JDK1.8¼ÓÈë£¬Ö»ÄÜ¾ßÌåÊµÀı¶ÔÏóµ÷ÓÃ£¬²»ÔÊĞí¶¨ÒåÓëObject¶ÔÏóµÄequals¡¢hashCodeºÍtoString·½·¨Í¬ÑùÇ©ÃûµÄÄ¬ÈÏ·½·¨
+	// é»˜è®¤æ–¹æ³•ï¼ŒJDK1.8åŠ å…¥ï¼Œåªèƒ½å…·ä½“å®ä¾‹å¯¹è±¡è°ƒç”¨ï¼Œä¸å…è®¸å®šä¹‰ä¸Objectå¯¹è±¡çš„equalsã€hashCodeå’ŒtoStringæ–¹æ³•åŒæ ·ç­¾åçš„é»˜è®¤æ–¹æ³•
 	default String defaultMethod(String aa) {
 		System.out.println("default method in interface after JDK1.8");
 		return "ok";
 	}
 
-	// Ä¬ÈÏ·½·¨£¬JDK1.8¼ÓÈë£¬Ö»ÄÜËùÔÚµÄ½Ó¿Úµ÷ÓÃ
+	// é»˜è®¤æ–¹æ³•ï¼ŒJDK1.8åŠ å…¥ï¼Œåªèƒ½æ‰€åœ¨çš„æ¥å£è°ƒç”¨
 	static void staticMethod(String bb) {
 		System.out.println("static method in interface after JDK1.8, get: " + bb);
 	}
 }
 
-// ½Ó¿Ú¼Ì³ĞºÍÄÚ²¿½Ó¿Ú£¬´ı²¹³ä
+// æ¥å£ç»§æ‰¿å’Œå†…éƒ¨æ¥å£ï¼Œå¾…è¡¥å……
 public interface B extends A, D {
-	String str = "World";  // »áÆÁ±Î½Ó¿ÚAÀïÃæµÄÍ¬Ãû±äÁ¿
+	String str = "World";  // ä¼šå±è”½æ¥å£Aé‡Œé¢çš„åŒåå˜é‡
 	interface C {
 		static void methodOfC() {
 			System.out.println("Method of interface C");
@@ -1806,40 +1806,40 @@ public static void main(String[] args) {
 	A.staticMethod("call");
 	System.out.println(B.str);
 	B.C.methodOfC();
-	// B.staticMethod("call");  // ²»ÄÜÊ¹ÓÃ×Ó½Ó¿Úµ÷ÓÃ¸¸½Ó¿ÚµÄ¾²Ì¬·½·¨
+	// B.staticMethod("call");  // ä¸èƒ½ä½¿ç”¨å­æ¥å£è°ƒç”¨çˆ¶æ¥å£çš„é™æ€æ–¹æ³•
 
 }
 
 
-/****                        ÄÚ²¿Àà                        ****/
+/****                        å†…éƒ¨ç±»                        ****/
 
-×Ü¹²ËÄÖÖÄÚ²¿Àà£º
-1¡¢¾²Ì¬³ÉÔ±Àà static member class
-2¡¢·Ç¾²Ì¬³ÉÔ±Àà  nonstatic member class
-3¡¢ÄäÃûÀà    anonymous class  // ÄäÃûÀàÀïÃæµÄthisÖ¸ÏòÄäÃû¶ÔÏó£¬¶ølambda±í´ïÊ½ÖĞµÄthisÖ¸Ïò°ü¹ülambdaµÄ¶ÔÏó
-4¡¢¾Ö²¿Àà    local class
+æ€»å…±å››ç§å†…éƒ¨ç±»ï¼š
+1ã€é™æ€æˆå‘˜ç±» static member class
+2ã€éé™æ€æˆå‘˜ç±»  nonstatic member class
+3ã€åŒ¿åç±»    anonymous class  // åŒ¿åç±»é‡Œé¢çš„thisæŒ‡å‘åŒ¿åå¯¹è±¡ï¼Œè€Œlambdaè¡¨è¾¾å¼ä¸­çš„thisæŒ‡å‘åŒ…è£¹lambdaçš„å¯¹è±¡
+4ã€å±€éƒ¨ç±»    local class
 
-Íâ²¿ÀàµÄËùÓĞ³ÉÔ±ºÍº¯Êı£¨°üÀ¨Ë½ÓĞµÄ£©¶¼¶ÔÄÚ²¿Àà¿É¼û£¬ÄÚ²¿ÀàÒ»°ãÓÃ×öÍâ²¿ÀàµÄ¸¨ÖúÀà
-Èç¹ûÄÚ²¿Àà²»ĞèÒª²Ù×÷Íâ²¿ÀàµÄÊôĞÔ£¬Ò»°ã½¨ÒéÊ¹ÓÃ¾²Ì¬³ÉÔ±Àà£¬²»½¨ÒéÊ¹ÓÃ·Ç¾²Ì¬³ÉÔ±Àà£¬
+å¤–éƒ¨ç±»çš„æ‰€æœ‰æˆå‘˜å’Œå‡½æ•°ï¼ˆåŒ…æ‹¬ç§æœ‰çš„ï¼‰éƒ½å¯¹å†…éƒ¨ç±»å¯è§ï¼Œå†…éƒ¨ç±»ä¸€èˆ¬ç”¨åšå¤–éƒ¨ç±»çš„è¾…åŠ©ç±»
+å¦‚æœå†…éƒ¨ç±»ä¸éœ€è¦æ“ä½œå¤–éƒ¨ç±»çš„å±æ€§ï¼Œä¸€èˆ¬å»ºè®®ä½¿ç”¨é™æ€æˆå‘˜ç±»ï¼Œä¸å»ºè®®ä½¿ç”¨éé™æ€æˆå‘˜ç±»ï¼Œ
 
-¡¾¡¾¡¾ÒòÎª·Ç¾²Ì¬³ÉÔ±ÀàµÄÊµÀıÓëÍâ²¿ÊµÀı°ó¶¨£¬¿ÉÒÔ»ñµÃÍâ²¿ÀàµÄÒıÓÃ£¬²Ù×÷²»µ±¿ÉÄÜµ¼ÖÂGCÎŞ·¨»ØÊÕÄÚ´æµ¼ÖÂÄÚ´æĞ¹Â©¡¿¡¿¡¿
-¼´ÔÚÄÚ²¿Àà£¨²»¹ÜÄäÃûÓë·ñ£©ÀïÃæÓÀÔ¶ÓĞ¸öÒş²ØµÄÓòOuterClass.this Ö¸Ïò°ü¹üÄÚ²¿Àà¶ÔÏóµÄÍâ²¿ÊµÀı
-½â¾ö·½·¨£º
-1¡¢½«ÄÚ²¿Àà¶¨ÒåÎªstatic
-2¡¢ÓÃstaticµÄ±äÁ¿ÒıÓÃÄäÃûÄÚ²¿ÀàµÄÊµÀı»ò½«ÄäÃûÄÚ²¿ÀàµÄÊµÀı»¯²Ù×÷·Åµ½Íâ²¿ÀàµÄ¾²Ì¬·½·¨ÖĞ
-ËùÓĞµÄ¾²Ì¬ÉÏÏÂÎÄ£¬¶¼²»»á³ÖÓĞÍâ²¿¶ÔÏóµÄthisÒşÊ½ÒıÓÃ£¬±Ï¾¹¾²Ì¬¶ÔÏó/·½·¨ÊÇ¿ÉÒÔÍ¨¹ıÀàÖ±½Óµ÷ÓÃµÄ£¬ÕâÊ±ºò¶¼²»´æÔÚÍâ²¿Àà¶ÔÏó
+ã€ã€ã€å› ä¸ºéé™æ€æˆå‘˜ç±»çš„å®ä¾‹ä¸å¤–éƒ¨å®ä¾‹ç»‘å®šï¼Œå¯ä»¥è·å¾—å¤–éƒ¨ç±»çš„å¼•ç”¨ï¼Œæ“ä½œä¸å½“å¯èƒ½å¯¼è‡´GCæ— æ³•å›æ”¶å†…å­˜å¯¼è‡´å†…å­˜æ³„æ¼ã€‘ã€‘ã€‘
+å³åœ¨å†…éƒ¨ç±»ï¼ˆä¸ç®¡åŒ¿åä¸å¦ï¼‰é‡Œé¢æ°¸è¿œæœ‰ä¸ªéšè—çš„åŸŸOuterClass.this æŒ‡å‘åŒ…è£¹å†…éƒ¨ç±»å¯¹è±¡çš„å¤–éƒ¨å®ä¾‹
+è§£å†³æ–¹æ³•ï¼š
+1ã€å°†å†…éƒ¨ç±»å®šä¹‰ä¸ºstatic
+2ã€ç”¨staticçš„å˜é‡å¼•ç”¨åŒ¿åå†…éƒ¨ç±»çš„å®ä¾‹æˆ–å°†åŒ¿åå†…éƒ¨ç±»çš„å®ä¾‹åŒ–æ“ä½œæ”¾åˆ°å¤–éƒ¨ç±»çš„é™æ€æ–¹æ³•ä¸­
+æ‰€æœ‰çš„é™æ€ä¸Šä¸‹æ–‡ï¼Œéƒ½ä¸ä¼šæŒæœ‰å¤–éƒ¨å¯¹è±¡çš„thiséšå¼å¼•ç”¨ï¼Œæ¯•ç«Ÿé™æ€å¯¹è±¡/æ–¹æ³•æ˜¯å¯ä»¥é€šè¿‡ç±»ç›´æ¥è°ƒç”¨çš„ï¼Œè¿™æ—¶å€™éƒ½ä¸å­˜åœ¨å¤–éƒ¨ç±»å¯¹è±¡
 
-// ·Ç¾²Ì¬³ÉÔ±ÀàµÄ³õÊ¼»¯
+// éé™æ€æˆå‘˜ç±»çš„åˆå§‹åŒ–
 public class A {
 	public class B {
 	}
 }
 A a = new A();
-A.B ab = a.new B();  // ±ØĞëÊ¹ÓÃÍâ²¿ÀàµÄÊµÀıÀ´newÒ»¸öÄÚ²¿ÀàÊµÀı£¬ÒòÎª·Ç¾²Ì¬ÄÚ²¿ÀàÊµÀıÓĞ¹éÊôÎÊÌâ
+A.B ab = a.new B();  // å¿…é¡»ä½¿ç”¨å¤–éƒ¨ç±»çš„å®ä¾‹æ¥newä¸€ä¸ªå†…éƒ¨ç±»å®ä¾‹ï¼Œå› ä¸ºéé™æ€å†…éƒ¨ç±»å®ä¾‹æœ‰å½’å±é—®é¢˜
 
 
 
-/* ÄäÃûÄÚ²¿ÀàÒıÓÃÍâ²¿¶ÔÏóµÄÊ¾Àı¼°·ÖÎö */
+/* åŒ¿åå†…éƒ¨ç±»å¼•ç”¨å¤–éƒ¨å¯¹è±¡çš„ç¤ºä¾‹åŠåˆ†æ */
 public class Test {
 	interface Action {
 		void action();
@@ -1855,29 +1855,29 @@ public class Test {
 	}
 
 	public void perform() {
-		/* ´Ë´¦new Action()ÊÇÄäÃûÄÚ²¿Àà£¬ÔÚ±àÒëµÄÊ±ºò»á¸øËûÒ»¸öÖîÈçTest$1µÄÀàÃû
-           Ò»°ãÀ´ËµÄäÃûÄÚ²¿ÀàµÄÉú³ÉÓï¾ä»áÓĞ{}£¬
-		   ´Ë´¦new Action(){...} ÊÇÔÚTest¶ÔÏóµÄ×÷ÓÃÓòÀï´´½¨µÄ£¬ËùÒÔËüµÄÍâ²¿ÀàÊÇTest	*/
+		/* æ­¤å¤„new Action()æ˜¯åŒ¿åå†…éƒ¨ç±»ï¼Œåœ¨ç¼–è¯‘çš„æ—¶å€™ä¼šç»™ä»–ä¸€ä¸ªè¯¸å¦‚Test$1çš„ç±»å
+           ä¸€èˆ¬æ¥è¯´åŒ¿åå†…éƒ¨ç±»çš„ç”Ÿæˆè¯­å¥ä¼šæœ‰{}ï¼Œ
+		   æ­¤å¤„new Action(){...} æ˜¯åœ¨Testå¯¹è±¡çš„ä½œç”¨åŸŸé‡Œåˆ›å»ºçš„ï¼Œæ‰€ä»¥å®ƒçš„å¤–éƒ¨ç±»æ˜¯Test	*/
 		new Speaker().handleAction(new Action() {
 			@Override
 			public void action() {
-				/* ´òÓ¡ÄäÃûÄÚ²¿ÀàµÄÀàÃû */
+				/* æ‰“å°åŒ¿åå†…éƒ¨ç±»çš„ç±»å */
 				System.out.println(this.getClass());
-				/* ´òÓ¡ÄäÃûÄÚ²¿Àà¶ÔÍâ²¿¶ÔÏóµÄÒıÓÃ */
+				/* æ‰“å°åŒ¿åå†…éƒ¨ç±»å¯¹å¤–éƒ¨å¯¹è±¡çš„å¼•ç”¨ */
 				System.out.println(Test.this);
-				/* Í¨¹ıÄäÃûÄÚ²¿Àà¶ÔÍâ²¿¶ÔÏóµÄÒıÓÃµ÷ÓÃÍâ²¿·½·¨ */
+				/* é€šè¿‡åŒ¿åå†…éƒ¨ç±»å¯¹å¤–éƒ¨å¯¹è±¡çš„å¼•ç”¨è°ƒç”¨å¤–éƒ¨æ–¹æ³• */
 				Test.this.report();
-				/* Ö±½Óµ÷ÓÃÍâ²¿·½·¨ */
+				/* ç›´æ¥è°ƒç”¨å¤–éƒ¨æ–¹æ³• */
 				report();
 			}
 		});
 	}
-	/*  »ñµÃÄäÃûÄÚ²¿Àà¶ÔÏóÒıÓÃ */
+	/*  è·å¾—åŒ¿åå†…éƒ¨ç±»å¯¹è±¡å¼•ç”¨ */
 	public Action getAction() {
 		return new Action() {
 			@Override
 			public void action() {
-				/* Í¨¹ıÄäÃûÄÚ²¿Àà¶ÔÏóµ÷ÓÃÍâ²¿ÀàµÄÊµÀı·½·¨ */
+				/* é€šè¿‡åŒ¿åå†…éƒ¨ç±»å¯¹è±¡è°ƒç”¨å¤–éƒ¨ç±»çš„å®ä¾‹æ–¹æ³• */
 				Test.this.report();
 			}
 		};
@@ -1886,11 +1886,11 @@ public class Test {
 	public static void main(String[] args) {
 		Test t = new Test();
 		t.perform();
-		t.getAction().action();  // Í¨¹ıÄÚ²¿Àà¶ÔÏóµ÷ÓÃÍâ²¿¶ÔÏóµÄÊµÀı·½·¨
+		t.getAction().action();  // é€šè¿‡å†…éƒ¨ç±»å¯¹è±¡è°ƒç”¨å¤–éƒ¨å¯¹è±¡çš„å®ä¾‹æ–¹æ³•
 	}
 }
 
-ÄäÃûÄÚ²¿ÀàÒ²ÓĞ¹¹ÔìÆ÷£¬¶øÇÒºÍÆÕÍ¨ÀàµÄ¹¹ÔìÆ÷ÓĞµã²»Ò»Ñù£¬±àÒëµÄÊ±ºò»áÔÚÄäÃûÄÚ²¿ÀàµÄ¹¹ÔìÆ÷µÄ²ÎÊıÁĞ±íÖ®Ç°ÔÙ²åÈëÒ»¸ö²ÎÊı£¬Õâ¸ö²ÎÊıÊÇÍâ²¿ÀàµÄ¶ÔÏóµÄÒıÓÃ£¬±àÒëÖ®ºóÕâ¸öÀà³¤ÕâÑù
+åŒ¿åå†…éƒ¨ç±»ä¹Ÿæœ‰æ„é€ å™¨ï¼Œè€Œä¸”å’Œæ™®é€šç±»çš„æ„é€ å™¨æœ‰ç‚¹ä¸ä¸€æ ·ï¼Œç¼–è¯‘çš„æ—¶å€™ä¼šåœ¨åŒ¿åå†…éƒ¨ç±»çš„æ„é€ å™¨çš„å‚æ•°åˆ—è¡¨ä¹‹å‰å†æ’å…¥ä¸€ä¸ªå‚æ•°ï¼Œè¿™ä¸ªå‚æ•°æ˜¯å¤–éƒ¨ç±»çš„å¯¹è±¡çš„å¼•ç”¨ï¼Œç¼–è¯‘ä¹‹åè¿™ä¸ªç±»é•¿è¿™æ ·
 Test$1 implements Action {
     final T this$0;
     Test$1(T this$0){
@@ -1903,43 +1903,43 @@ Test$1 implements Action {
     }
 }
 
-new Action(){...}Êµ¼ÊÉÏÊÇ´´½¨ÁËTest$1£¬²¢ÇÒÍ¨¹ı¹¹ÔìÆ÷°Ñtest¶ÔÏóÒıÓÃ´«¸øTest$1
+new Action(){...}å®é™…ä¸Šæ˜¯åˆ›å»ºäº†Test$1ï¼Œå¹¶ä¸”é€šè¿‡æ„é€ å™¨æŠŠtestå¯¹è±¡å¼•ç”¨ä¼ ç»™Test$1
 public void perform(){
 	new Speaker().handleAction(new Test$1(this));
 }
-ËùÒÔÄäÃûÄÚ²¿Àà³ÖÓĞÍâ²¿ÀàµÄÒıÓÃ(Í¨¹ıTest.this)£¬ÇÒ¿ÉÒÔµ÷ÓÃÍâ²¿ÀàµÄ·½·¨(Í¨¹ıTest.this.report())
+æ‰€ä»¥åŒ¿åå†…éƒ¨ç±»æŒæœ‰å¤–éƒ¨ç±»çš„å¼•ç”¨(é€šè¿‡Test.this)ï¼Œä¸”å¯ä»¥è°ƒç”¨å¤–éƒ¨ç±»çš„æ–¹æ³•(é€šè¿‡Test.this.report())
 
 
 
 
 public class Outside() {
 	public class Inside() {
-		// ·Ç¾²Ì¬³ÉÔ±ÀàÖĞÍ¨¹ıÄÚ²¿Àà»ñÈ¡Íâ²¿ÀàÊµÀı¶ÔÏó
+		// éé™æ€æˆå‘˜ç±»ä¸­é€šè¿‡å†…éƒ¨ç±»è·å–å¤–éƒ¨ç±»å®ä¾‹å¯¹è±¡
 		public Outside getOutside() {
 			return Outside.this;
 		}
 	}
 }
 Outside o = new Outside();
-o.new Inside();   // ´´½¨·Ç¾²Ì¬³ÉÔ±Àà¶ÔÏóµÄÒ»ÖÖ·½Ê½£¬¿ÉĞĞ£¬²»ÍÆ¼ö
+o.new Inside();   // åˆ›å»ºéé™æ€æˆå‘˜ç±»å¯¹è±¡çš„ä¸€ç§æ–¹å¼ï¼Œå¯è¡Œï¼Œä¸æ¨è
 
 
 /*********************************          Optional          *****************************************/
 
 
-ÓïÒåÉÏµÄ×÷ÓÃ£º¶¨ÒåÒ»¸ö±äÁ¿ÀàĞÍ£¬¸ÃÀàĞÍ±íÊ¾±äÁ¿°üº¬Ò»¸ö¿ÉÄÜµÄ·â×°ÀàĞÍ½á¹û£¬Ò²¿ÉÄÜ²»°üº¬¡£
-¶ÔÎïÀíÊÀ½çÓë´úÂëµÄÈÏÖªÌáÉı£ºÍ¨¹ıÀàĞÍÏµÍ³ÈÃÓòÄ£ĞÍÖĞÒş²ØµÄÖªÊ¶ÏÔÊ¾µÄÌåÏÖÔÚ´úÂëÖĞ£¬±ÈÈçÓĞĞ©Óò±äÁ¿ÔÚÒµÎñÉÏ¿ÉÄÜÎª¿Õ£¬ÓĞĞ©²»ÔÊĞíÎª¿Õ
+è¯­ä¹‰ä¸Šçš„ä½œç”¨ï¼šå®šä¹‰ä¸€ä¸ªå˜é‡ç±»å‹ï¼Œè¯¥ç±»å‹è¡¨ç¤ºå˜é‡åŒ…å«ä¸€ä¸ªå¯èƒ½çš„å°è£…ç±»å‹ç»“æœï¼Œä¹Ÿå¯èƒ½ä¸åŒ…å«ã€‚
+å¯¹ç‰©ç†ä¸–ç•Œä¸ä»£ç çš„è®¤çŸ¥æå‡ï¼šé€šè¿‡ç±»å‹ç³»ç»Ÿè®©åŸŸæ¨¡å‹ä¸­éšè—çš„çŸ¥è¯†æ˜¾ç¤ºçš„ä½“ç°åœ¨ä»£ç ä¸­ï¼Œæ¯”å¦‚æœ‰äº›åŸŸå˜é‡åœ¨ä¸šåŠ¡ä¸Šå¯èƒ½ä¸ºç©ºï¼Œæœ‰äº›ä¸å…è®¸ä¸ºç©º
 
-×¢Òâ£ºOptionalÃ»ÓĞÊµÏÖĞòÁĞ»¯£¬ËùÒÔÈç¹û×÷ÎªĞŞÊÎÀàĞÍÓ¦ÓÃµ½µÄÓò±äÁ¿¿ÉÄÜ»á±»ĞòÁĞ»¯£¬¿ÉÄÜÒı·¢³ÌĞò¹ÊÕÏ
+æ³¨æ„ï¼šOptionalæ²¡æœ‰å®ç°åºåˆ—åŒ–ï¼Œæ‰€ä»¥å¦‚æœä½œä¸ºä¿®é¥°ç±»å‹åº”ç”¨åˆ°çš„åŸŸå˜é‡å¯èƒ½ä¼šè¢«åºåˆ—åŒ–ï¼Œå¯èƒ½å¼•å‘ç¨‹åºæ•…éšœ
 
-OptionalµÄÊ¹ÓÃ£º ¸Ã¶ÔÏóÏàµ±ÓÚÒ»¸öÖµµÄÈİÆ÷£¬ÊÇÒ»¸öÈİÆ÷¶ÔÏó
-Optional<String> a = Optional.of("a");    // Í¨¹ıof¹¤³§·½·¨°ü×°¶ÔÏó´´½¨Ò»¸öOptionalÊµÀı
-assertEquals("a", a.get());            //  ¿ÉÒÔÍ¨¹ıget·½·¨»ñÈ¡ÈİÆ÷ÖĞµÄÖµ
+Optionalçš„ä½¿ç”¨ï¼š è¯¥å¯¹è±¡ç›¸å½“äºä¸€ä¸ªå€¼çš„å®¹å™¨ï¼Œæ˜¯ä¸€ä¸ªå®¹å™¨å¯¹è±¡
+Optional<String> a = Optional.of("a");    // é€šè¿‡ofå·¥å‚æ–¹æ³•åŒ…è£…å¯¹è±¡åˆ›å»ºä¸€ä¸ªOptionalå®ä¾‹
+assertEquals("a", a.get());            //  å¯ä»¥é€šè¿‡getæ–¹æ³•è·å–å®¹å™¨ä¸­çš„å€¼
 
-ÀıÈç£º
+ä¾‹å¦‚ï¼š
 public class Person {
-	/* Ò»¸öÈË¿ÉÄÜÓµÓĞÒ»Á¾³µ£¬Ò²¿ÉÄÜÃ»ÓĞ£¬Êµ¼Ê´úÂëĞ§¹û¿ÉÄÜµÈÍ¬ÓÚnullµÄ³¡¾°£¬
-	   µ«ÊÇ±ÜÃâÁËNullPointerExceptionÒì³£²¢½«ÕâÖÖ²»´æÔÚµÄ¿ÉÄÜÌåÏÖÔÚÁË´úÂëÖĞ  */
+	/* ä¸€ä¸ªäººå¯èƒ½æ‹¥æœ‰ä¸€è¾†è½¦ï¼Œä¹Ÿå¯èƒ½æ²¡æœ‰ï¼Œå®é™…ä»£ç æ•ˆæœå¯èƒ½ç­‰åŒäºnullçš„åœºæ™¯ï¼Œ
+	   ä½†æ˜¯é¿å…äº†NullPointerExceptionå¼‚å¸¸å¹¶å°†è¿™ç§ä¸å­˜åœ¨çš„å¯èƒ½ä½“ç°åœ¨äº†ä»£ç ä¸­  */
 	private Optional<Car> car;   
 	public Optional<Car> getCar() { return car; }
 }
@@ -1954,50 +1954,50 @@ public class Insurance {
 	public String getName() { return name; }
 }
 
-Éú³ÉOptional¶ÔÏó£º
-¡¾empty¡¿·µ»ØÒ»¸ö¿ÕµÄ Optional ÊµÀı
+ç”ŸæˆOptionalå¯¹è±¡ï¼š
+ã€emptyã€‘è¿”å›ä¸€ä¸ªç©ºçš„ Optional å®ä¾‹
 Optional<Car> optCar = Optional.empty();
 
 
-¡¾of¡¿½«Ö¸¶¨ÖµÓÃOptional·â×°Ö®ºó·µ»Ø£¬Èç¹û¸ÃÖµÎª null £¬ÔòÅ×³öÒ»¸öNullPointerExceptionÒì³£
+ã€ofã€‘å°†æŒ‡å®šå€¼ç”¨Optionalå°è£…ä¹‹åè¿”å›ï¼Œå¦‚æœè¯¥å€¼ä¸º null ï¼Œåˆ™æŠ›å‡ºä¸€ä¸ªNullPointerExceptionå¼‚å¸¸
 Optional<Car> optCar = Optional.of(car);
 
 
-¡¾ofNullable¡¿½«Ö¸¶¨ÖµÓÃ Optional ·â×°Ö®ºó·µ»Ø£¬Èç¹û¸ÃÖµÎª null £¬Ôò·µ»ØÒ»¸ö¿ÕµÄ Optional ¶ÔÏó
+ã€ofNullableã€‘å°†æŒ‡å®šå€¼ç”¨ Optional å°è£…ä¹‹åè¿”å›ï¼Œå¦‚æœè¯¥å€¼ä¸º null ï¼Œåˆ™è¿”å›ä¸€ä¸ªç©ºçš„ Optional å¯¹è±¡
 Car car = null;
-Optional<Car> optCar = Optional.ofNullable(car);  // ofNullable¹¤³§·½·¨ÔÊĞí´´½¨Ò»¸ö¿ÕÖµ¶ÔÏó
+Optional<Car> optCar = Optional.ofNullable(car);  // ofNullableå·¥å‚æ–¹æ³•å…è®¸åˆ›å»ºä¸€ä¸ªç©ºå€¼å¯¹è±¡
 
 
-´¦ÀíOptional¶ÔÏó£º
-¡¾map¡¿Èç¹ûÖµ´æÔÚ£¬¾Í¶Ô¸ÃÖµÖ´ĞĞÌá¹©µÄ mappingº¯Êıµ÷ÓÃ£¬Èç¹ûÖµÎªnull£¬¾ÍÊ²Ã´¶¼²»×öÖ±½Ó·µ»ØOptional.empty()
+å¤„ç†Optionalå¯¹è±¡ï¼š
+ã€mapã€‘å¦‚æœå€¼å­˜åœ¨ï¼Œå°±å¯¹è¯¥å€¼æ‰§è¡Œæä¾›çš„ mappingå‡½æ•°è°ƒç”¨ï¼Œå¦‚æœå€¼ä¸ºnullï¼Œå°±ä»€ä¹ˆéƒ½ä¸åšç›´æ¥è¿”å›Optional.empty()
 Optional<Insurance> optInsurance = Optional.ofNullable(insurance);
-Optional<String> name = optInsurance.map(Insurance::getName);  // Ê¹ÓÃmap´ÓOptionalÖĞÌáÈ¡ºÍ×ª»»Öµ£¬×¢Òâ½ÓÊÕÕßÀàĞÍÒ²ÊÇOptional
+Optional<String> name = optInsurance.map(Insurance::getName);  // ä½¿ç”¨mapä»Optionalä¸­æå–å’Œè½¬æ¢å€¼ï¼Œæ³¨æ„æ¥æ”¶è€…ç±»å‹ä¹Ÿæ˜¯Optional
 
 
-¡¾flatMap¡¿
-¶ÔÓÚÒ»¸öOptionalµÄ¶ÔÏó£¬Èç¹û°ü×°µÄÖµ´æÔÚ£¬¾Í¶Ô¸ÃÖµÖ´ĞĞÌá¹©µÄmappingº¯Êıµ÷ÓÃ£¬·µ»ØÒ»¸öOptionalÀàĞÍµÄÖµ£¬
-·ñÔòÖ±½Ó¾Í·µ»ØÒ»¸ö¿ÕµÄOptional¶ÔÏó£¬²»Ö´ĞĞÖĞ¼äµÄlambda±í´ïÊ½£¬Í¬Ê±½«Ç¶Ì×µÄ¶à²ãOptionalÕ¹¿ªÌ¯Æ½³ÉÒ»²ãOptional
+ã€flatMapã€‘
+å¯¹äºä¸€ä¸ªOptionalçš„å¯¹è±¡ï¼Œå¦‚æœåŒ…è£…çš„å€¼å­˜åœ¨ï¼Œå°±å¯¹è¯¥å€¼æ‰§è¡Œæä¾›çš„mappingå‡½æ•°è°ƒç”¨ï¼Œè¿”å›ä¸€ä¸ªOptionalç±»å‹çš„å€¼ï¼Œ
+å¦åˆ™ç›´æ¥å°±è¿”å›ä¸€ä¸ªç©ºçš„Optionalå¯¹è±¡ï¼Œä¸æ‰§è¡Œä¸­é—´çš„lambdaè¡¨è¾¾å¼ï¼ŒåŒæ—¶å°†åµŒå¥—çš„å¤šå±‚Optionalå±•å¼€æ‘Šå¹³æˆä¸€å±‚Optional
 
-×¢Òâ: ´Ë´¦µÄ¿ÉÒÔÎªnullÆäÊµÊÇpersonÒªÃ´Optional.empty()£¬ÒªÃ´·Çnull¡£Èôperson·Çnull£¬Á¬´ø×ÅÒªÇóÀàÇ¶Ì×µÄcar -> insurance Óò±äÁ¿ÄÚÈİ¶¼²»Îªnull£¬ÈôÕâÁ½¸öÓò±äÁ¿Î´¸³Öµ£¬»¹ÊÇ»áÅ×³öNullPointerException
+æ³¨æ„: æ­¤å¤„çš„å¯ä»¥ä¸ºnullå…¶å®æ˜¯personè¦ä¹ˆOptional.empty()ï¼Œè¦ä¹ˆénullã€‚è‹¥personénullï¼Œè¿å¸¦ç€è¦æ±‚ç±»åµŒå¥—çš„car -> insurance åŸŸå˜é‡å†…å®¹éƒ½ä¸ä¸ºnullï¼Œè‹¥è¿™ä¸¤ä¸ªåŸŸå˜é‡æœªèµ‹å€¼ï¼Œè¿˜æ˜¯ä¼šæŠ›å‡ºNullPointerException
 public String getCarInsuranceName(Optional<Person> person) {
-	// ¶ÔÓ¦µÄÎŞOptional·Ç¿ÕÇ¿Ô¼ÊøĞ´·¨  person.getCar().getInsurance().getName(); Á´ÖĞÈÎÒâÔªËØÎªnull¾ÍÅ×NullPointerExceptionÒì³£
-	// ×¢ÒâpersonÊÇOptionalÀàĞÍ
-	return person.flatMap(Person::getCar)    // Optional<Person>ÓĞÖµµÄÊ±ºò£¬µ÷ÓÃPerson::getCar·½·¨£¬·µ»ØOptional<Car>²¢ÔÚ·µ»ØÊ±½«´«ÈëµÄOptionalºÍ·µ»ØµÄOptionalºÏ¶şÎªÒ»
-				 .flatMap(Car::getInsurance)  // Optional<Car>ÓĞÖµµÄÊ±ºò£¬µ÷ÓÃCar::getInsurance·½·¨£¬·µ»ØOptional<Insurance>²¢ÔÚ·µ»ØÊ±½«´«ÈëµÄOptionalºÍ·µ»ØµÄOptionalºÏ¶şÎªÒ»
-				 .map(Insurance::getName)     // getName·µ»ØString£¬ËùÒÔ²»´æÔÚÁ½¸öOptionalĞèÒªºÏ¶şÎªÒ»µÄÎÊÌâ£¬´«ÈëOptionalÈ»ºó·µ»ØOptional
+	// å¯¹åº”çš„æ— Optionaléç©ºå¼ºçº¦æŸå†™æ³•  person.getCar().getInsurance().getName(); é“¾ä¸­ä»»æ„å…ƒç´ ä¸ºnullå°±æŠ›NullPointerExceptionå¼‚å¸¸
+	// æ³¨æ„personæ˜¯Optionalç±»å‹
+	return person.flatMap(Person::getCar)    // Optional<Person>æœ‰å€¼çš„æ—¶å€™ï¼Œè°ƒç”¨Person::getCaræ–¹æ³•ï¼Œè¿”å›Optional<Car>å¹¶åœ¨è¿”å›æ—¶å°†ä¼ å…¥çš„Optionalå’Œè¿”å›çš„OptionalåˆäºŒä¸ºä¸€
+				 .flatMap(Car::getInsurance)  // Optional<Car>æœ‰å€¼çš„æ—¶å€™ï¼Œè°ƒç”¨Car::getInsuranceæ–¹æ³•ï¼Œè¿”å›Optional<Insurance>å¹¶åœ¨è¿”å›æ—¶å°†ä¼ å…¥çš„Optionalå’Œè¿”å›çš„OptionalåˆäºŒä¸ºä¸€
+				 .map(Insurance::getName)     // getNameè¿”å›Stringï¼Œæ‰€ä»¥ä¸å­˜åœ¨ä¸¤ä¸ªOptionaléœ€è¦åˆäºŒä¸ºä¸€çš„é—®é¢˜ï¼Œä¼ å…¥Optionalç„¶åè¿”å›Optional
 				 .orElse("Unknown");
 }
 
 		
 
-¡¾filter¡¿Èç¹ûÖµ´æÔÚ²¢ÇÒÂú×ãÌá¹©µÄÎ½´Ê£¬¾Í·µ»Ø°üº¬¸ÃÖµµÄ Optional ¶ÔÏó£»·ñÔò·µ»ØÒ»¸ö¿ÕµÄOptional¶ÔÏó
+ã€filterã€‘å¦‚æœå€¼å­˜åœ¨å¹¶ä¸”æ»¡è¶³æä¾›çš„è°“è¯ï¼Œå°±è¿”å›åŒ…å«è¯¥å€¼çš„ Optional å¯¹è±¡ï¼›å¦åˆ™è¿”å›ä¸€ä¸ªç©ºçš„Optionalå¯¹è±¡
 Optional<Insurance> optInsurance = ...;
-// Í¨¹ıfilter¹ıÂËOptional¶ÔÏó£¬Èç¹ûÎªtrue·µ»ØÔ­¶ÔÏó£¬Èç¹ûÎªfalse½«OptionalÖÃ¿Õ
+// é€šè¿‡filterè¿‡æ»¤Optionalå¯¹è±¡ï¼Œå¦‚æœä¸ºtrueè¿”å›åŸå¯¹è±¡ï¼Œå¦‚æœä¸ºfalseå°†Optionalç½®ç©º
 optInsurance.filter(insurance -> "CambridgeInsurance".equals(insurance.getName()))
 			.ifPresent(x -> System.out.println("ok"));
 			
 public String getCarInsuranceName(Optional<Person> person, int minAge) {
-	return person.filter(p -> p.getAge() >= minAge)  // Î½´Ê²Ù×÷Îªtrue²»×öÈÎºÎ²Ù×÷Ö±½Ó·µ»ØÊäÈë£¬·ñÔò½«¸ÃÖµÖ±½Ó¹ıÂËµô½«OptionalÖÃÎª¿Õ
+	return person.filter(p -> p.getAge() >= minAge)  // è°“è¯æ“ä½œä¸ºtrueä¸åšä»»ä½•æ“ä½œç›´æ¥è¿”å›è¾“å…¥ï¼Œå¦åˆ™å°†è¯¥å€¼ç›´æ¥è¿‡æ»¤æ‰å°†Optionalç½®ä¸ºç©º
 				.flatMap(Person::getCar)
 				.flatMap(Car::getInsurance)
 				.map(Insurance::getName)
@@ -2005,7 +2005,7 @@ public String getCarInsuranceName(Optional<Person> person, int minAge) {
 }
 			
 			
-¡¾isPresent¡¿Èç¹ûÖµ´æÔÚ¾Í·µ»Ø true £¬·ñÔò·µ»Ø false
+ã€isPresentã€‘å¦‚æœå€¼å­˜åœ¨å°±è¿”å› true ï¼Œå¦åˆ™è¿”å› false
 public Optional<Insurance> nullSafeFindCheapestInsurance(Optional<Person> person, Optional<Car> car) {
 	if(person.isPresent() && car.isPresent()) {
 		return Optional.Of(findCheapestInsurance(person.get(), car.get());
@@ -2013,46 +2013,46 @@ public Optional<Insurance> nullSafeFindCheapestInsurance(Optional<Person> person
 		return Optional.empty();
 	}
 }
-µÈĞ§¸ÄĞ´£º
+ç­‰æ•ˆæ”¹å†™ï¼š
 public Optional<Insurance> nullSafeFindCheapestInsurance(Optional<Person> person, Optional<Car> car) {
-	return person.flatMap(p -> car.map(c -> findCheapestInsurance(p, c)));  // ÀûÓÃOptionalÔªËØÄÚÈİÎª¿ÕÊ±²»Ö´ĞĞflatMap/map°üº¬µÄlambda±í´ïÊ½Ö±½Ó·µ»ØOptional.empty()µÄÌØĞÔ¼ò»¯
+	return person.flatMap(p -> car.map(c -> findCheapestInsurance(p, c)));  // åˆ©ç”¨Optionalå…ƒç´ å†…å®¹ä¸ºç©ºæ—¶ä¸æ‰§è¡ŒflatMap/mapåŒ…å«çš„lambdaè¡¨è¾¾å¼ç›´æ¥è¿”å›Optional.empty()çš„ç‰¹æ€§ç®€åŒ–
 }
 
 
 				 
-½âÒıÓÃOptional¶ÔÏó£º
-¡¾get¡¿Èç¹û¸ÃÖµ´æÔÚ£¬½«¸ÃÖµÓÃ Optional·â×°·µ»Ø£¬·ñÔòÅ×³öÒ»¸öNoSuchElementExceptionÒì³£
-Car car = optCar.get();  // ¼òµ¥²»°²È«£¬³ı·ÇÈ·¶¨²»»áÎªnull£¬·ñÔò²»½¨ÒéÊ¹ÓÃ
+è§£å¼•ç”¨Optionalå¯¹è±¡ï¼š
+ã€getã€‘å¦‚æœè¯¥å€¼å­˜åœ¨ï¼Œå°†è¯¥å€¼ç”¨ Optionalå°è£…è¿”å›ï¼Œå¦åˆ™æŠ›å‡ºä¸€ä¸ªNoSuchElementExceptionå¼‚å¸¸
+Car car = optCar.get();  // ç®€å•ä¸å®‰å…¨ï¼Œé™¤éç¡®å®šä¸ä¼šä¸ºnullï¼Œå¦åˆ™ä¸å»ºè®®ä½¿ç”¨
 
 
-¡¾orElse¡¿Èç¹ûÓĞÖµÔò½«Æä·µ»Ø£¬·ñÔò·µ»ØÒ»¸öÄ¬ÈÏÖµ
+ã€orElseã€‘å¦‚æœæœ‰å€¼åˆ™å°†å…¶è¿”å›ï¼Œå¦åˆ™è¿”å›ä¸€ä¸ªé»˜è®¤å€¼
 
 
-¡¾orElseGet(Supplier<? extends T> other)¡¿Èç¹ûÓĞÖµÔò½«Æä·µ»Ø£¬·ñÔò·µ»ØÒ»¸öÓÉÖ¸¶¨µÄ Supplier ½Ó¿ÚÉú³ÉµÄÖµ
-orElse·½·¨ÑÓ³Ùµ÷ÓÃ°æ£¬´´½¨Ä¬ÈÏ·µ»ØÖµºÄ·Ñ±È½Ï´óÊ±Ê¹ÓÃ±¾°æ±¾ÌáÉıĞÔÄÜ
+ã€orElseGet(Supplier<? extends T> other)ã€‘å¦‚æœæœ‰å€¼åˆ™å°†å…¶è¿”å›ï¼Œå¦åˆ™è¿”å›ä¸€ä¸ªç”±æŒ‡å®šçš„ Supplier æ¥å£ç”Ÿæˆçš„å€¼
+orElseæ–¹æ³•å»¶è¿Ÿè°ƒç”¨ç‰ˆï¼Œåˆ›å»ºé»˜è®¤è¿”å›å€¼è€—è´¹æ¯”è¾ƒå¤§æ—¶ä½¿ç”¨æœ¬ç‰ˆæœ¬æå‡æ€§èƒ½
 
 
-¡¾orElseThrow(Supplier<? extends X> exceptionSupplier)¡¿ Èç¹ûÓĞÖµÔò½«Æä·µ»Ø£¬·ñÔòÅ×³öÒ»¸öÓÉÖ¸¶¨µÄ Supplier ½Ó¿ÚÉú³ÉµÄÒì³£
-Ò»°ãÓÃÓÚ¶¨ÖÆÅ×³öµÄÒì³£ÀàĞÍ
+ã€orElseThrow(Supplier<? extends X> exceptionSupplier)ã€‘ å¦‚æœæœ‰å€¼åˆ™å°†å…¶è¿”å›ï¼Œå¦åˆ™æŠ›å‡ºä¸€ä¸ªç”±æŒ‡å®šçš„ Supplier æ¥å£ç”Ÿæˆçš„å¼‚å¸¸
+ä¸€èˆ¬ç”¨äºå®šåˆ¶æŠ›å‡ºçš„å¼‚å¸¸ç±»å‹
 
 
-¡¾ifPresent(Consumer<? super T>)¡¿Èç¹ûÖµ´æÔÚ£¬¾ÍÖ´ĞĞÊ¹ÓÃ¸ÃÖµµÄ·½·¨µ÷ÓÃ£¬·ñÔòÊ²Ã´Ò²²»×ö
-
-
-
-Optional emptyOptional = Optional.empty();           //  Í¨¹ı¹¤³§·½·¨µÃµ½Îª¿ÕµÄOptional¶ÔÏó
-Optional alsoEmpty = Optional.ofNullable(null);      //  ½«¿ÕÖµ×ª»»³ÉOptional¶ÔÏó£¬×îÖÕĞ§¹ûÍ¬ÉÏ
-
-assertFalse(emptyOptional.isPresent());       //     isPresent() ·½·¨ÅĞ¶ÏOptional¶ÔÏóÖĞÊÇ·ñÓĞÖµ
-assertTrue(a.isPresent());                    //   Í¬ÉÏ
-
-assertEquals("b", emptyOptional.orElse("b"));          //   orElse() ·½·¨ÔÚOptionalÎª¿ÕÊ±Ìá¹©±¸Ñ¡Öµ
-assertEquals("c", emptyOptional.orElseGet(() -> "c"));   //  Îª¿ÕÊ±½ÓÊÜÒ»¸öSupplier¶ÔÏó²¢µ÷ÓÃ
+ã€ifPresent(Consumer<? super T>)ã€‘å¦‚æœå€¼å­˜åœ¨ï¼Œå°±æ‰§è¡Œä½¿ç”¨è¯¥å€¼çš„æ–¹æ³•è°ƒç”¨ï¼Œå¦åˆ™ä»€ä¹ˆä¹Ÿä¸åš
 
 
 
-ÒÅÁô´úÂë×ª»¯ÎªOptional´úÂëÊ¾Àı£º´Ó¼üÖµÀàPropertiesÖĞ¸ù¾İkeyÈ¡³övalue£¬µ±ÖµÊÇÕıÊı×Ö·û´®Ê±×ªÎªÊı×Ö·µ»Ø£¬ÆäËûÇé¿ö·µ»Ø0
-ÒÅÁô´úÂë£º
+Optional emptyOptional = Optional.empty();           //  é€šè¿‡å·¥å‚æ–¹æ³•å¾—åˆ°ä¸ºç©ºçš„Optionalå¯¹è±¡
+Optional alsoEmpty = Optional.ofNullable(null);      //  å°†ç©ºå€¼è½¬æ¢æˆOptionalå¯¹è±¡ï¼Œæœ€ç»ˆæ•ˆæœåŒä¸Š
+
+assertFalse(emptyOptional.isPresent());       //     isPresent() æ–¹æ³•åˆ¤æ–­Optionalå¯¹è±¡ä¸­æ˜¯å¦æœ‰å€¼
+assertTrue(a.isPresent());                    //   åŒä¸Š
+
+assertEquals("b", emptyOptional.orElse("b"));          //   orElse() æ–¹æ³•åœ¨Optionalä¸ºç©ºæ—¶æä¾›å¤‡é€‰å€¼
+assertEquals("c", emptyOptional.orElseGet(() -> "c"));   //  ä¸ºç©ºæ—¶æ¥å—ä¸€ä¸ªSupplierå¯¹è±¡å¹¶è°ƒç”¨
+
+
+
+é—ç•™ä»£ç è½¬åŒ–ä¸ºOptionalä»£ç ç¤ºä¾‹ï¼šä»é”®å€¼ç±»Propertiesä¸­æ ¹æ®keyå–å‡ºvalueï¼Œå½“å€¼æ˜¯æ­£æ•°å­—ç¬¦ä¸²æ—¶è½¬ä¸ºæ•°å­—è¿”å›ï¼Œå…¶ä»–æƒ…å†µè¿”å›0
+é—ç•™ä»£ç ï¼š
 public int readDuration(Properties props, String name) {
 	String value = props.getProperty(name);
 	if(value != null) {
@@ -2065,20 +2065,20 @@ public int readDuration(Properties props, String name) {
 	}
 	return 0;
 }
-¸ÄÔìºóµÄ´úÂë£º
+æ”¹é€ åçš„ä»£ç ï¼š
 public int readDuration(Properties props, String name) {
 	return Optional.ofNullable(props.getProperty(name))
-					.flatMap(OptionalUtility::stringToInt) // ×ÔÓĞµÄ½«String×ªÎªOptional(Integer)µÄ¹¤¾ßÀà£¬Å×Òì³£Ê±·µ»ØOptional.empty()
+					.flatMap(OptionalUtility::stringToInt) // è‡ªæœ‰çš„å°†Stringè½¬ä¸ºOptional(Integer)çš„å·¥å…·ç±»ï¼ŒæŠ›å¼‚å¸¸æ—¶è¿”å›Optional.empty()
 					.filter(i -> i > 0)
 					.orElse(0);
 }
 
 
 
-»ù´¡ÀàĞÍµÄOptional¶ÔÏó(²»ÍÆ¼öÊ¹ÓÃ):  OptionalInt, OptionalLong, OptionalDouble 
-ÒòÎª»ù´¡ÀàĞÍµÄOptional¶ÔÏó²»Ö§³Ömap¡¢flatMap¡¢filter·½·¨£¬¶øÕâĞ©ÊÂOptionalÀà×îÓĞÓÃµÄ·½·¨
+åŸºç¡€ç±»å‹çš„Optionalå¯¹è±¡(ä¸æ¨èä½¿ç”¨):  OptionalInt, OptionalLong, OptionalDouble 
+å› ä¸ºåŸºç¡€ç±»å‹çš„Optionalå¯¹è±¡ä¸æ”¯æŒmapã€flatMapã€filteræ–¹æ³•ï¼Œè€Œè¿™äº›äº‹Optionalç±»æœ€æœ‰ç”¨çš„æ–¹æ³•
 
-/* Ê¹ÓÃOptional¸ÄÔìÒÑÓĞµÄ·½·¨  */
+/* ä½¿ç”¨Optionalæ”¹é€ å·²æœ‰çš„æ–¹æ³•  */
 public class Artists {
 	private List<Artist> artists;
 	public Artists(List<Artist> artists) {
@@ -2117,34 +2117,34 @@ public class Artists {
 }
 
 
-/****                                               Ê±¼ä´¦Àí                                        ****/
-ÀÏÊ±¼ä½Ó¿ÚºÍÀàµÄÎÊÌâ£»
-jdk1.0ÒıÈëµÄDate  Äê·İÆğÊ¼Ñ¡ÔñÊÇ1900Äê£¬ÔÂ·İ´Ó0¿ªÊ¼¼ÆÊı£¬Èç Date date = new Date(114, 2, 18); ±íÊ¾2014/03/18£¬DateFormat·½·¨Ö»ÊÊºÏDate²¢ÇÒÏß³Ì²»°²È«
-jdk1.1ÒıÈëµÄCalendar  ÔÂ·İÒÀÈ»ÊÇ´Ó0¿ªÊ¼¼ÆËã
+/****                                               æ—¶é—´å¤„ç†                                        ****/
+è€æ—¶é—´æ¥å£å’Œç±»çš„é—®é¢˜ï¼›
+jdk1.0å¼•å…¥çš„Date  å¹´ä»½èµ·å§‹é€‰æ‹©æ˜¯1900å¹´ï¼Œæœˆä»½ä»0å¼€å§‹è®¡æ•°ï¼Œå¦‚ Date date = new Date(114, 2, 18); è¡¨ç¤º2014/03/18ï¼ŒDateFormatæ–¹æ³•åªé€‚åˆDateå¹¶ä¸”çº¿ç¨‹ä¸å®‰å…¨
+jdk1.1å¼•å…¥çš„Calendar  æœˆä»½ä¾ç„¶æ˜¯ä»0å¼€å§‹è®¡ç®—
 
 
-¡¾LocalDate¡¿ Ìá¹©ÁË¼òµ¥µÄÈÕÆÚ¹¦ÄÜ£¨²»°üº¬Ê±¼ä£©£¬²»´øÊ±Çø£¬²»¿É±ä¶ÔÏó/Ïß³Ì°²È«
+ã€LocalDateã€‘ æä¾›äº†ç®€å•çš„æ—¥æœŸåŠŸèƒ½ï¼ˆä¸åŒ…å«æ—¶é—´ï¼‰ï¼Œä¸å¸¦æ—¶åŒºï¼Œä¸å¯å˜å¯¹è±¡/çº¿ç¨‹å®‰å…¨
 
-LocalDate date = LocalDate.of(2019, 4, 18);  // ¹¤³§·½·¨Éú³ÉÈÕÆÚ
-LocalDate today = LocalDate.now();   // »ñµÃ½ñÌìÈÕÆÚµÄ¹¤³§·½·¨
-LocalDate date2 = LocalDate.parse("2019-04-25");  // Í¨¹ı×Ö·û´®Éú³ÉÈÕÆÚ
+LocalDate date = LocalDate.of(2019, 4, 18);  // å·¥å‚æ–¹æ³•ç”Ÿæˆæ—¥æœŸ
+LocalDate today = LocalDate.now();   // è·å¾—ä»Šå¤©æ—¥æœŸçš„å·¥å‚æ–¹æ³•
+LocalDate date2 = LocalDate.parse("2019-04-25");  // é€šè¿‡å­—ç¬¦ä¸²ç”Ÿæˆæ—¥æœŸ
 
 
 int year = date.getYear();     //  2019
-Month month = date.getMonth();       // 4ÔÂ
+Month month = date.getMonth();       // 4æœˆ
 int day = date.getDayOfMonth();         // 18
 DayOfWeek dow = date.getDayOfWeek();  // THURSDAY
-int len = date.lengthOfMonth();      // 30  Ö¸¶¨ÔÂµÄÌìÊı
-boolean leap = date.isLeapYear();   //  ÊÇ·ñÈòÄê
+int len = date.lengthOfMonth();      // 30  æŒ‡å®šæœˆçš„å¤©æ•°
+boolean leap = date.isLeapYear();   //  æ˜¯å¦é—°å¹´
 
 
-// Ê¹ÓÃTemporalField½Ó¿Ú»ñÈ¡¾ßÌå×Ö¶Î£¬ChronoFieldÃ¶¾ÙÊÇ¸Ã½Ó¿ÚµÄÊµÏÖÖ®Ò»
+// ä½¿ç”¨TemporalFieldæ¥å£è·å–å…·ä½“å­—æ®µï¼ŒChronoFieldæšä¸¾æ˜¯è¯¥æ¥å£çš„å®ç°ä¹‹ä¸€
 int year2 = date.get(ChronoField.YEAR);
 int month2 = date.get(ChronoField.MONTH_OF_YEAR);
 int day2 = date.get(ChronoField.DAY_OF_MONTH);
 
 
-¡¾LocalTime¡¿ Ìá¹©Ê±¼ä¹¦ÄÜ£¨²»°üº¬ÈÕÆÚ£©£¬²»¿É±ä¶ÔÏó/Ïß³Ì°²È«
+ã€LocalTimeã€‘ æä¾›æ—¶é—´åŠŸèƒ½ï¼ˆä¸åŒ…å«æ—¥æœŸï¼‰ï¼Œä¸å¯å˜å¯¹è±¡/çº¿ç¨‹å®‰å…¨
 LocalTime time = LocalTime.of(13,45, 20);
 LocalTime time2 = LocalTime.parse("09:38:21");
 
@@ -2154,66 +2154,66 @@ int minute = time.getMinute();
 int second = time.getSecond();
 
 
-¡¾LocalDateTime¡¿ Ìá¹©ÈÕÆÚºÍÊ±¼ä¹¦ÄÜ£¬²»´øÊ±ÇøĞÅÏ¢£¬²»¿É±ä¶ÔÏó/Ïß³Ì°²È«
-LocalDateTime dt1 = LocalDateTime.of(2014, Month.MARCH, 18, 13, 15, 20);  // Íê³ÉµÄ¸³Öµ
+ã€LocalDateTimeã€‘ æä¾›æ—¥æœŸå’Œæ—¶é—´åŠŸèƒ½ï¼Œä¸å¸¦æ—¶åŒºä¿¡æ¯ï¼Œä¸å¯å˜å¯¹è±¡/çº¿ç¨‹å®‰å…¨
+LocalDateTime dt1 = LocalDateTime.of(2014, Month.MARCH, 18, 13, 15, 20);  // å®Œæˆçš„èµ‹å€¼
 LocalDateTime dt2 = LocalDateTime.of(date, time);   
-LocalDateTime dt3 = date.atTime(12, 34, 56);   // Ö»ĞŞ¸Ä²ÎÊıÖ¸¶¨µÄ²¿·Ö£¬ÆäËû±£Áô
-LocalDateTime dt4 = date.atTime(time);         // Ö»ĞŞ¸Ä²ÎÊıÖ¸¶¨µÄ²¿·Ö£¬ÆäËû±£Áô
-LocalDateTime dt5 = time.atDate(date);         // Ö»ĞŞ¸Ä²ÎÊıÖ¸¶¨µÄ²¿·Ö£¬ÆäËû±£Áô
+LocalDateTime dt3 = date.atTime(12, 34, 56);   // åªä¿®æ”¹å‚æ•°æŒ‡å®šçš„éƒ¨åˆ†ï¼Œå…¶ä»–ä¿ç•™
+LocalDateTime dt4 = date.atTime(time);         // åªä¿®æ”¹å‚æ•°æŒ‡å®šçš„éƒ¨åˆ†ï¼Œå…¶ä»–ä¿ç•™
+LocalDateTime dt5 = time.atDate(date);         // åªä¿®æ”¹å‚æ•°æŒ‡å®šçš„éƒ¨åˆ†ï¼Œå…¶ä»–ä¿ç•™
 
-LocalDate date3 = dt1.toLocalDate();   // ³éÈ¡ÈÕÆÚ
-LocalTime time3 = dt1.toLocalTime();   // ³éÈ¡Ê±¼ä
+LocalDate date3 = dt1.toLocalDate();   // æŠ½å–æ—¥æœŸ
+LocalTime time3 = dt1.toLocalTime();   // æŠ½å–æ—¶é—´
 
 
-¡¾Instant¡¿ »úÆ÷Ê±¼ä£¬´Ó1970-01-01T00:00:00¿ªÊ¼¼ÆÊıµÄÃë£¬±¾Àà³ıÁËÓò±äÁ¿ÃëÖ®Íâ»¹ÓĞÄÉÃë£¬ÓÃÓÚ¾«È·ĞŞÕıÃëµÄÖµ  £¬²»¿É±ä¶ÔÏó/Ïß³Ì°²È«
-ÏÂÃæ3¸öÊ¾Àı¶¼±íÊ¾1970-01-01T00:00:03  ÆäÖĞµÚ¶ş¸ö²ÎÊıÊÇÓÃÓÚĞŞÕıµÄÄÉÃë
+ã€Instantã€‘ æœºå™¨æ—¶é—´ï¼Œä»1970-01-01T00:00:00å¼€å§‹è®¡æ•°çš„ç§’ï¼Œæœ¬ç±»é™¤äº†åŸŸå˜é‡ç§’ä¹‹å¤–è¿˜æœ‰çº³ç§’ï¼Œç”¨äºç²¾ç¡®ä¿®æ­£ç§’çš„å€¼  ï¼Œä¸å¯å˜å¯¹è±¡/çº¿ç¨‹å®‰å…¨
+ä¸‹é¢3ä¸ªç¤ºä¾‹éƒ½è¡¨ç¤º1970-01-01T00:00:03  å…¶ä¸­ç¬¬äºŒä¸ªå‚æ•°æ˜¯ç”¨äºä¿®æ­£çš„çº³ç§’
 Instant.ofEpochSecond(3);
 Instant.ofEpochSecond(3, 0);
 Instant.ofEpochSecond(2, 1_000_000_000);
 Instant.ofEpochSecond(4, -1_000_000_000);
 
 
-¡¾Duration¡¿¼ÆËãÊ±¼ä²î£¨Ãë¼¶»òÕßÄÉÃë¼¶£© ÓÃÓÚLocalTime¶ÔÏó¡¢LocalDateTime¶ÔÏó¡¢Instant¶ÔÏóÄÚ²¿Ëã²îÖµ£¬²»ÄÜ»ìÓÃ£¬²»ÄÜÓÃÓÚLocalDate
-¼ÆËã²îÖµ£º
+ã€Durationã€‘è®¡ç®—æ—¶é—´å·®ï¼ˆç§’çº§æˆ–è€…çº³ç§’çº§ï¼‰ ç”¨äºLocalTimeå¯¹è±¡ã€LocalDateTimeå¯¹è±¡ã€Instantå¯¹è±¡å†…éƒ¨ç®—å·®å€¼ï¼Œä¸èƒ½æ··ç”¨ï¼Œä¸èƒ½ç”¨äºLocalDate
+è®¡ç®—å·®å€¼ï¼š
 Duration d = Duration.between(time, time2);   // PT-4H-6M-59S
 Duration d2 = Duration.between(dt1, dt2);     // PT44400H30M
 
 
-Í¨¹ı¹¤³§·½·¨Éú³É²îÖµÊµÀı£º
+é€šè¿‡å·¥å‚æ–¹æ³•ç”Ÿæˆå·®å€¼å®ä¾‹ï¼š
 Duration threeMinutes = Duration.ofMinutes(3);
 Duration threeMinutes2 = Duration.of(3, ChronoUnit.SECONDS);
 
-¡¾Period¡¿ÄêÔÂÈÕ¶ÈÁ¿µÄ²îÖµ½¨Ä££¬¿ÉÓÃÓÚLocalDate
-¼ÆËã²îÖµ£º
+ã€Periodã€‘å¹´æœˆæ—¥åº¦é‡çš„å·®å€¼å»ºæ¨¡ï¼Œå¯ç”¨äºLocalDate
+è®¡ç®—å·®å€¼ï¼š
 Period tenDays = Period.between(LocalDate.of(2014, 3, 8), LocalDate.of(2014, 3, 18));
 
 
-Í¨¹ı¹¤³§·½·¨Éú³É²îÖµÊµÀı£º
+é€šè¿‡å·¥å‚æ–¹æ³•ç”Ÿæˆå·®å€¼å®ä¾‹ï¼š
 Period tenDays2 = Period.ofDays(10);
 Period threeWeeks = Period.ofWeeks(3);
 Period twoYearsSixMonthsOneDay = Period.of(2, 6, 1);
 
 
-¡¾²Ù×İ¡¿
-Ê¹ÓÃwith¿ªÍ·µÄ·½·¨»ñÈ¡Ö¸¶¨ĞÂÊ±¼ä£¬×¢ÒâÕâĞ©·½·¨¶¼´´½¨¶ÔÏóµÄĞÂ¸±±¾£¬²»»áĞŞ¸ÄÔ­¶ÔÏó¡£Í¨¹ıget/withÁ½´óÀà·½·¨×âµ½¶ÁÈ¡/ĞŞ¸Ä·ÖÀë
+ã€æ“çºµã€‘
+ä½¿ç”¨withå¼€å¤´çš„æ–¹æ³•è·å–æŒ‡å®šæ–°æ—¶é—´ï¼Œæ³¨æ„è¿™äº›æ–¹æ³•éƒ½åˆ›å»ºå¯¹è±¡çš„æ–°å‰¯æœ¬ï¼Œä¸ä¼šä¿®æ”¹åŸå¯¹è±¡ã€‚é€šè¿‡get/withä¸¤å¤§ç±»æ–¹æ³•ç§Ÿåˆ°è¯»å–/ä¿®æ”¹åˆ†ç¦»
 LocalDate date4 = LocalDate.of(2014, 3, 19);
 LocalDate date5 = date4.withYear(2011);
 LocalDate date6 = date5.withDayOfMonth(25);
 LocalDate date7 = date6.with(ChronoField.MONTH_OF_YEAR, 9);
 
-ÒÔÏà¶Ô±äÁ¿·½Ê½»ñÈ¡ĞÂÖµ£¬Ö÷ÒªÊÇplus/minusÇ°×º·½·¨£¬Í¬ÑùĞÂ¶ÔÏó¶¼ÊÇÔ­¶ÔÏóµÄ¸±±¾£¬Ïß³Ì°²È«
+ä»¥ç›¸å¯¹å˜é‡æ–¹å¼è·å–æ–°å€¼ï¼Œä¸»è¦æ˜¯plus/minuså‰ç¼€æ–¹æ³•ï¼ŒåŒæ ·æ–°å¯¹è±¡éƒ½æ˜¯åŸå¯¹è±¡çš„å‰¯æœ¬ï¼Œçº¿ç¨‹å®‰å…¨
 LocalDate date8 = date4.plusWeeks(1);
 LocalDate date9 = date8.minusYears(3);
 LocalDate date10 = date9.plus(6, ChronoUnit.MONTHS);
 
 
-Í¨¹ı TemporalAdjusters ÊµÏÖÀàµÄ¾²Ì¬¹¤³§·½·¨µ÷ÕûÊ±¼ä£¬Ö÷ÒªÊÇ°´ÕÕÊ±¼ä½ÚµãÌØĞÔ»ñÈ¡¾ßÌåÊ±¼ä
+é€šè¿‡ TemporalAdjusters å®ç°ç±»çš„é™æ€å·¥å‚æ–¹æ³•è°ƒæ•´æ—¶é—´ï¼Œä¸»è¦æ˜¯æŒ‰ç…§æ—¶é—´èŠ‚ç‚¹ç‰¹æ€§è·å–å…·ä½“æ—¶é—´
 LocalDate date11 = LocalDate.of(2019, 4, 18);
 LocalDate date12 = date11.with(nextOrSame(DayOfWeek.SUNDAY));
 LocalDate date13 = date12.with(lastDayOfMonth());
 
 
-Í¨¹ıÊµÏÖTemporalAdjuster½Ó¿Ú¶¨ÖÆÈÕÆÚĞŞ¸ÄÀà
+é€šè¿‡å®ç°TemporalAdjusteræ¥å£å®šåˆ¶æ—¥æœŸä¿®æ”¹ç±»
 public class NextWorkingDay implements TemporalAdjuster {
 	@Override
 	public Temporal adjustInto(Temporal temporal) {
@@ -2233,7 +2233,7 @@ public class NextWorkingDay implements TemporalAdjuster {
 	}
 }
 
-Í¨¹ı TemporalAdjusters ÀàµÄ¾²Ì¬¹¤³§·½·¨Í¨¹ılambda±í´ïÊ½Éú³É TemporalAdjuster ¶ÔÏó
+é€šè¿‡ TemporalAdjusters ç±»çš„é™æ€å·¥å‚æ–¹æ³•é€šè¿‡lambdaè¡¨è¾¾å¼ç”Ÿæˆ TemporalAdjuster å¯¹è±¡
 TemporalAdjuster nextWorkingDay = TemporalAdjusters.ofDateAdjuster(
 		temporal -> {
 			DayOfWeek dow = DayOfWeek.of(temporal.get(ChronoField.DAY_OF_WEEK));
@@ -2250,24 +2250,24 @@ LocalDate date = LocalDate.of(2019, 4, 19);
 System.out.println(date.with(nextWorkingDay));
 
 
-¡¾½âÎö/¸ñÊ½»¯ÈÕÆÚ¡¿Ê¹ÓÃDateTimeFormatter£¬¸ÃÀàËùÓĞÊµÀı¶¼ÊÇÏß³Ì°²È«µÄ£¬ËùÒÔ¿ÉÒÔÊ¹ÓÃµ¥ÀıÄ£Ê½¹¹½¨¸ñÊ½Æ÷
-// °´ÕÕÀà¿âÌá¹©µÄÖ¸¶¨¸ñÊ½×ª»¯ÎªÊ±¼ä×Ö·û´®
+ã€è§£æ/æ ¼å¼åŒ–æ—¥æœŸã€‘ä½¿ç”¨DateTimeFormatterï¼Œè¯¥ç±»æ‰€æœ‰å®ä¾‹éƒ½æ˜¯çº¿ç¨‹å®‰å…¨çš„ï¼Œæ‰€ä»¥å¯ä»¥ä½¿ç”¨å•ä¾‹æ¨¡å¼æ„å»ºæ ¼å¼å™¨
+// æŒ‰ç…§ç±»åº“æä¾›çš„æŒ‡å®šæ ¼å¼è½¬åŒ–ä¸ºæ—¶é—´å­—ç¬¦ä¸²
 String s1 = date11.format(DateTimeFormatter.BASIC_ISO_DATE);  //  20190418
 String s2 = date11.format(DateTimeFormatter.ISO_LOCAL_DATE);  //  2019-04-18
 
-// °´ÕÕÖ¸¶¨¸ñÊ½½âÎö×Ö·û´®µ½LocalDate
+// æŒ‰ç…§æŒ‡å®šæ ¼å¼è§£æå­—ç¬¦ä¸²åˆ°LocalDate
 LocalDate date14 = LocalDate.parse("20190419", DateTimeFormatter.BASIC_ISO_DATE);
 LocalDate date15 = LocalDate.parse("2019-04-19", DateTimeFormatter.ISO_LOCAL_DATE);
 
-// °´ÕÕÖ¸¶¨¸ñÊ½ÔÚÊ±¼ä×Ö·û´®ºÍLocalDateÖ®¼ä×ª»»
+// æŒ‰ç…§æŒ‡å®šæ ¼å¼åœ¨æ—¶é—´å­—ç¬¦ä¸²å’ŒLocalDateä¹‹é—´è½¬æ¢
 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 String formattedDate = date11.format(formatter);
 LocalDate date16 = LocalDate.parse(formattedDate, formatter);
 
-// ´´½¨±¾µØ»¯µÄDateTimeFormatter
+// åˆ›å»ºæœ¬åœ°åŒ–çš„DateTimeFormatter
 DateTimeFormatter italianFormatter = DateTimeFormatter.ofPattern("d. MMMM yyyy", Locale.ITALIAN);
 
-// Í¨¹ıÏ¸Á£¶ÈµÄÉèÖÃ´´½¨Í¬ÉÏµÄDateTimeFormatter
+// é€šè¿‡ç»†ç²’åº¦çš„è®¾ç½®åˆ›å»ºåŒä¸Šçš„DateTimeFormatter
 DateTimeFormatter italianFormatter2 = new DateTimeFormatterBuilder()
 						.appendText(ChronoField.DAY_OF_MONTH)
 						.appendLiteral(". ")
@@ -2277,37 +2277,37 @@ DateTimeFormatter italianFormatter2 = new DateTimeFormatterBuilder()
 						.parseCaseInsensitive()
 						.toFormatter(Locale.ITALIAN);
 						
-¡¾Ê±Çø¡¿ZoneIdÀà£¬°üº¬40¸öÊµÀı
+ã€æ—¶åŒºã€‘ZoneIdç±»ï¼ŒåŒ…å«40ä¸ªå®ä¾‹
 
-ZoneId romeZone = ZoneId.of("Europe/Rome");  // ¸ù¾İ×Ö·û´®»ñÈ¡Ö¸¶¨µØÇøZoneId
-ZoneId zoneId = TimeZone.getDefault().toZoneId();  // ¸ù¾İÀÏµÄTimeZone¶ÔÏó»ñÈ¡¶ÔÓ¦µÄZoneId¶ÔÏó
+ZoneId romeZone = ZoneId.of("Europe/Rome");  // æ ¹æ®å­—ç¬¦ä¸²è·å–æŒ‡å®šåœ°åŒºZoneId
+ZoneId zoneId = TimeZone.getDefault().toZoneId();  // æ ¹æ®è€çš„TimeZoneå¯¹è±¡è·å–å¯¹åº”çš„ZoneIdå¯¹è±¡
 
 LocalDate date = LocalDate.of(2014, Month.MARCH, 18);
-ZonedDateTime zdt1 = date.atStartOfDay(romeZone);  // LocalDateÉèÖÃÊ±Çø
+ZonedDateTime zdt1 = date.atStartOfDay(romeZone);  // LocalDateè®¾ç½®æ—¶åŒº
 
 LocalDateTime dateTime = LocalDateTime.of(2014, Month.MARCH, 18, 13, 45);
-ZonedDateTime zdt2 = dateTime.atZone(romeZone);   // LocalDateTimeÉèÖÃÊ±Çø
+ZonedDateTime zdt2 = dateTime.atZone(romeZone);   // LocalDateTimeè®¾ç½®æ—¶åŒº
 
 Instant instant = Instant.now();
-ZonedDateTime zdt3 = instant.atZone(romeZone);   // InstantÉèÖÃÊ±Çø
+ZonedDateTime zdt3 = instant.atZone(romeZone);   // Instantè®¾ç½®æ—¶åŒº
 
-// Í¨¹ıZoneId×öLocalDateTimeºÍInstantÀàĞÍµÄÏà»¥×ª»»
+// é€šè¿‡ZoneIdåšLocalDateTimeå’ŒInstantç±»å‹çš„ç›¸äº’è½¬æ¢
 LocalDateTime dateTime = LocalDateTime.of(2014, Month.MARCH, 18, 13, 45);
 Instant instantFromDateTime = dateTime.toInstant(romeZone);
 
 Instant instant = Instant.now();
 LocalDateTime timeFromInstant = LocalDateTime.ofInstant(instant, romeZone);
 
-// ZoneOffsetÊÇZoneIdµÄ×ÓÀà£¬ÓÃÓÚ±íÊ¾Ê±¼ä²î
+// ZoneOffsetæ˜¯ZoneIdçš„å­ç±»ï¼Œç”¨äºè¡¨ç¤ºæ—¶é—´å·®
 ZoneOffset newYorkOffset = ZoneOffset.of("-05:00");  
 LocalDateTime dateTime = LocalDateTime.of(2014, Month.MARCH, 18, 13, 45);
 OffsetDateTime dateTimeInNewYork = OffsetDateTime.of(dateTime, newYorkOffset);
 
-Ê¹ÓÃÆäËûµÄÈÕÖ¾ÏµÍ³£¬Ö÷ÒªÓĞ ThaiBuddhistDate ¡¢MinguoDate ¡¢ JapaneseDate ¡¢ HijrahDate
+ä½¿ç”¨å…¶ä»–çš„æ—¥å¿—ç³»ç»Ÿï¼Œä¸»è¦æœ‰ ThaiBuddhistDate ã€MinguoDate ã€ JapaneseDate ã€ HijrahDate
 LocalDate date = LocalDate.of(2014, Month.MARCH, 18);
 JapaneseDate japaneseDate = JapaneseDate.from(date);
 
-// ÎªÄ³¸öLocaleÏÔÊ¾µÄ´´½¨ÈÕÀúÏµÍ³£¬ Chronology ½Ó¿Ú½¨Ä£ÁËÒ»¸öÈÕÀúÏµÍ³£¬Ê¹ÓÃofLocale¹¤³§·½·¨µÃµ½Ò»¸öÊµÀı
-// ½¨ÒéÊ¹ÓÃLocalDate¶ø²»ÒªÊ¹ÓÃChronoLocalDate£¬Ö÷ÒªÊÇ×Ô¶¨ÒåµÄÈÕÀúÏµÍ³Î¬»¤³É±¾¸ß
+// ä¸ºæŸä¸ªLocaleæ˜¾ç¤ºçš„åˆ›å»ºæ—¥å†ç³»ç»Ÿï¼Œ Chronology æ¥å£å»ºæ¨¡äº†ä¸€ä¸ªæ—¥å†ç³»ç»Ÿï¼Œä½¿ç”¨ofLocaleå·¥å‚æ–¹æ³•å¾—åˆ°ä¸€ä¸ªå®ä¾‹
+// å»ºè®®ä½¿ç”¨LocalDateè€Œä¸è¦ä½¿ç”¨ChronoLocalDateï¼Œä¸»è¦æ˜¯è‡ªå®šä¹‰çš„æ—¥å†ç³»ç»Ÿç»´æŠ¤æˆæœ¬é«˜
 Chronology japaneseChronology = Chronology.ofLocale(Locale.JAPAN);
 ChronoLocalDate now = japaneseChronology.dateNow();

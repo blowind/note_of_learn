@@ -1,9 +1,9 @@
-×Ö·û´®²Ù×÷£º
+å­—ç¬¦ä¸²æ“ä½œï¼š
 SET   		set hello word
 GET   		get hello
 DEL   		del hello
 
-ÁĞ±í²Ù×÷£º
+åˆ—è¡¨æ“ä½œï¼š
 RPUSH  		rpush list-key item 
 			rpush list-key item2
 			rpush list-key item
@@ -11,7 +11,7 @@ LRANGE 		lrange list-key 0 -1
 LINDEX 		lindex list-key 1
 RPOP   		lpop list-key
 
-¼¯ºÏ²Ù×÷£º
+é›†åˆæ“ä½œï¼š
 SADD     	sadd set-key item
 			sadd set-key item2
 			sadd set-key item3
@@ -20,7 +20,7 @@ SISMEMBER   sismember set-key item4
 SREM		srem set-key item2
 
 
-É¢ÁĞ²Ù×÷£º
+æ•£åˆ—æ“ä½œï¼š
 HSET		hset hash-key sub-key1 value1
 			hset hash-key sub-key2 value2
 			hset hash-key sub-key1 value1
@@ -28,7 +28,7 @@ HGETALL		hgetall hash-key
 HGET		hget hash-key sub-key1
 HDEL		hdel hash-key sub-key2
 
-ÓĞĞò¼¯ºÏ²Ù×÷£º
+æœ‰åºé›†åˆæ“ä½œï¼š
 ZADD				zadd zset-key 728 member1
 					zadd zset-key 982 member0
 ZRANGE				zrange zset-key 0 -1 withscores

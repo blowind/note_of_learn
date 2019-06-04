@@ -1,27 +1,27 @@
-% hadoop fs -ls file:///      //  ÁĞ³ö±¾µØÎÄ¼şÏµÍ³¸ùÄ¿Â¼ÏÂµÄÎÄ¼ş
-% hadoop fs -lsr har:///my/files/har  // ÒÔµİ¹é·½Ê½ÁĞ³ö´æµµÎÄ¼şÖĞµÄ²¿·ÖÎÄ¼ş
-% hadoop fs -rmr /my/files.har    //  µİ¹éÉ¾³ıHARÎÄ¼ş
+% hadoop fs -ls file:///      //  åˆ—å‡ºæœ¬åœ°æ–‡ä»¶ç³»ç»Ÿæ ¹ç›®å½•ä¸‹çš„æ–‡ä»¶
+% hadoop fs -lsr har:///my/files/har  // ä»¥é€’å½’æ–¹å¼åˆ—å‡ºå­˜æ¡£æ–‡ä»¶ä¸­çš„éƒ¨åˆ†æ–‡ä»¶
+% hadoop fs -rmr /my/files.har    //  é€’å½’åˆ é™¤HARæ–‡ä»¶
 
 
-//  distcpµÄµäĞÍÓ¦ÓÃ³¡¾°ÊÇÔÚÁ½¸öHDFS¼¯ÈºÖ®¼ä´«ÊäÊı¾İ£¬Ô´Â·¾¶±ØĞëÊÇ¾ø¶ÔÂ·¾¶
-//  °ÑµÚÒ»¸ö¼¯Èº/fooÄ¿Â¼¼°ÆäÄÚÈİ¸´ÖÆµ½µÚ¶ş¸ö¼¯ÈºµÄ/barÄ¿Â¼ÏÂ£¬Éú³ÉµÄÄ¿Â¼½á¹¹ÊÇ /bar/foo
+//  distcpçš„å…¸å‹åº”ç”¨åœºæ™¯æ˜¯åœ¨ä¸¤ä¸ªHDFSé›†ç¾¤ä¹‹é—´ä¼ è¾“æ•°æ®ï¼Œæºè·¯å¾„å¿…é¡»æ˜¯ç»å¯¹è·¯å¾„
+//  æŠŠç¬¬ä¸€ä¸ªé›†ç¾¤/fooç›®å½•åŠå…¶å†…å®¹å¤åˆ¶åˆ°ç¬¬äºŒä¸ªé›†ç¾¤çš„/barç›®å½•ä¸‹ï¼Œç”Ÿæˆçš„ç›®å½•ç»“æ„æ˜¯ /bar/foo
 % hadoop distcp hdfs://namenode1/foo  hdfs://namenode2/bar  
 
-// ÔÚÁ½¸ö¼¯Èº¼ä¸´ÖÆÊı¾İ
-// ÔÚÁ½¸öÔËĞĞ×Å²»Í¬HDFS°æ±¾µÄ¼¯ÈºÉÏÊ¹ÓÃdistcp¸´ÖÆÊı¾İÊ¹ÓÃhdfsĞ­Òé»áÊ§°Ü£¬¿ÉÒÔÊ¹ÓÃ»ùÓÚhttpĞ­ÒéµÄhftpÎÄ¼şÏµÍ³£¬×÷Òµ±ØĞëÔËĞĞÔÚÄ¿±ê¼¯ÈºÉÏ£¬ÒÔÊµÏÖHDFS RPC°æ±¾µÄ¼æÈİ
+// åœ¨ä¸¤ä¸ªé›†ç¾¤é—´å¤åˆ¶æ•°æ®
+// åœ¨ä¸¤ä¸ªè¿è¡Œç€ä¸åŒHDFSç‰ˆæœ¬çš„é›†ç¾¤ä¸Šä½¿ç”¨distcpå¤åˆ¶æ•°æ®ä½¿ç”¨hdfsåè®®ä¼šå¤±è´¥ï¼Œå¯ä»¥ä½¿ç”¨åŸºäºhttpåè®®çš„hftpæ–‡ä»¶ç³»ç»Ÿï¼Œä½œä¸šå¿…é¡»è¿è¡Œåœ¨ç›®æ ‡é›†ç¾¤ä¸Šï¼Œä»¥å®ç°HDFS RPCç‰ˆæœ¬çš„å…¼å®¹
 % hadoop distcp hftp://namenode1:50070/foo  hdfs://namenode2/bar
-// Ê¹ÓÃwebhdfsĞ­Òé£¬²»´æÔÚ²»¼æÈİµÄÇé¿ö
+// ä½¿ç”¨webhdfsåè®®ï¼Œä¸å­˜åœ¨ä¸å…¼å®¹çš„æƒ…å†µ
 % hadoop distcp webhdfs://namenode1:50070/foo  webhdfs://namenode2:50070/bar
 
-// Ê¹ÓÃhadoop´æµµ¹¤¾ß
-//   ×îºóÈı¸ö²ÎÊı£º ´æµµÎÄ¼şÃû£¬Ô´Ä¿Â¼£¬Ä¿±êÄ¿Â¼
+// ä½¿ç”¨hadoopå­˜æ¡£å·¥å…·
+//   æœ€åä¸‰ä¸ªå‚æ•°ï¼š å­˜æ¡£æ–‡ä»¶åï¼Œæºç›®å½•ï¼Œç›®æ ‡ç›®å½•
 % hadoop archive -archiveName files.har /my/files /my
 
 
 
 
 
-Í¨¹ıURLStreamHandlerÊµÀıÒÔ±ê×¼·½·¨ÏÔÊ¾HadoopÎÄ¼şÏµÍ³µÄÎÄ¼ş // ²»ÍÆ¼ö£¬ÒòÎªÃ¿¸öJavaĞéÄâ»úÖ»ÄÜµ÷ÓÃÒ»´ÎÕâ¸ö·½·¨
+é€šè¿‡URLStreamHandlerå®ä¾‹ä»¥æ ‡å‡†æ–¹æ³•æ˜¾ç¤ºHadoopæ–‡ä»¶ç³»ç»Ÿçš„æ–‡ä»¶ // ä¸æ¨èï¼Œå› ä¸ºæ¯ä¸ªJavaè™šæ‹Ÿæœºåªèƒ½è°ƒç”¨ä¸€æ¬¡è¿™ä¸ªæ–¹æ³•
 public class URLCat {
 	static { URL.setURLStreamHandlerFactory( new FsUrlStreamHandlerFactory() ); }
 	
@@ -29,24 +29,24 @@ public class URLCat {
 		InputStream in = null;
 		try {
 			in = new URL(args[0]).openStream();    // "hdfs://host/path"
-			// 1¡¢ÊäÈëÁ÷ 2¡¢Êä³öÁ÷ 3¡¢»º³åÇø´óĞ¡ 4¡¢¸´ÖÆ½áÊøºóÊÇ·ñ¹Ø±ÕÊı¾İÁ÷
+			// 1ã€è¾“å…¥æµ 2ã€è¾“å‡ºæµ 3ã€ç¼“å†²åŒºå¤§å° 4ã€å¤åˆ¶ç»“æŸåæ˜¯å¦å…³é—­æ•°æ®æµ
 			IOUtils.copyBytes(in, System.out, 4096, false); 
 		}finally{
 			IOUtils.closeStream(in);
 		}
 	}
 }
-Ê¾Àı£º
+ç¤ºä¾‹ï¼š
 % hadoop URLCat hdfs://localhost/user/tom/quangle.txt
 
 
-Ö±½ÓÊ¹ÓÃFileSystemÒÔ±ê×¼Êä³ö¸ñÊ½ÏÔÊ¾hadoopÎÄ¼şÏµÍ³ÖĞµÄÎÄ¼ş£¬´Ë´¦½«ÊäÈë´òÓ¡Á½±é
+ç›´æ¥ä½¿ç”¨FileSystemä»¥æ ‡å‡†è¾“å‡ºæ ¼å¼æ˜¾ç¤ºhadoopæ–‡ä»¶ç³»ç»Ÿä¸­çš„æ–‡ä»¶ï¼Œæ­¤å¤„å°†è¾“å…¥æ‰“å°ä¸¤é
 public class FileSystemCat {
 	public static void main(String[] args) throws Exception {
 		String uri = args[0];
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(URI.create(uri), conf);
-		FSDataInputStream in = null;     // ¼Ì³Ğ java.io.DataInputStream ½Ó¿Ú£¬ÊµÏÖÁË Seekable, PositionedReadable
+		FSDataInputStream in = null;     // ç»§æ‰¿ java.io.DataInputStream æ¥å£ï¼Œå®ç°äº† Seekable, PositionedReadable
 		try {
 			in = fs.open(new Path(uri));
 			IOUtils.copyBytes(in, System.out, 4096, false);
@@ -57,11 +57,11 @@ public class FileSystemCat {
 		}
 	}
 }
-Ê¾Àı£º
+ç¤ºä¾‹ï¼š
 % hadoop FileSystemCat hdfs://localhost/user/tom/quangle.txt
 
 
-½«±¾µØÎÄ¼ş¸´ÖÆµ½HadoopÎÄ¼şÏµÍ³
+å°†æœ¬åœ°æ–‡ä»¶å¤åˆ¶åˆ°Hadoopæ–‡ä»¶ç³»ç»Ÿ
 public class FileCopyWithProgress {
 	public static void main(String[] args) throws Exception {
 		String localSrc = args[0];
@@ -70,7 +70,7 @@ public class FileCopyWithProgress {
 		
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(URI.create(dst), conf);
-		                  //ÖØÔØ·½·¨Progressable£¬ÓÃÓÚ´«µİ»Øµ÷½Ó¿Ú£¬°ÑÊı¾İĞ´ÈëdatanodeµÄ½ø¶ÈÍ¨Öª¸øÓ¦ÓÃ£¬´Ë´¦Ö÷ÒªÊÇ´òµã
+		                  //é‡è½½æ–¹æ³•Progressableï¼Œç”¨äºä¼ é€’å›è°ƒæ¥å£ï¼ŒæŠŠæ•°æ®å†™å…¥datanodeçš„è¿›åº¦é€šçŸ¥ç»™åº”ç”¨ï¼Œæ­¤å¤„ä¸»è¦æ˜¯æ‰“ç‚¹
 		OutputStream out = fs.create(new Path(dst), new Progressable() { 
 														public void progress() {
 															System.out.print("."); 
@@ -79,7 +79,7 @@ public class FileCopyWithProgress {
 		IOUtils.copyBytes(in, System.out, 4096, false);
 	}
 }
-Ê¾Àı£º
+ç¤ºä¾‹ï¼š
 % hadoop FileCopyWithProgress input/docs/1400-8.txt hdfs://localhost/user/tom/1400-8.txt
 
 
@@ -88,4 +88,4 @@ public class FileCopyWithProgress {
 
 
 
-WebHDFS ±ØĞëÍ¨¹ı½« dfs.webhdfs.enable Ñ¡ÏîÖÃÎªtrueºó²ÅÄÜÆôÓÃ£¬¿É¶ÁĞ´HDFS
+WebHDFS å¿…é¡»é€šè¿‡å°† dfs.webhdfs.enable é€‰é¡¹ç½®ä¸ºtrueåæ‰èƒ½å¯ç”¨ï¼Œå¯è¯»å†™HDFS

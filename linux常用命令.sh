@@ -1,224 +1,224 @@
 
-1���鿴�ڴ�ʹ��������
-free  ����ڴ�ʹ�����         free -m   ���ڴ�ʹ�������MΪ��λ��ʾ
-������ֶκ��壺
-total:�ܼ������ڴ�Ĵ�С��
-used:��ʹ�ö��
-free:�����ж��١�
-Shared:������̹������ڴ��ܶ
-Buffers/cached:���̻���Ĵ�С��
+1、查看内存使用相关命令：
+free  监控内存使用情况         free -m   将内存使用情况以M为单位显示
+输出各字段含义：
+total:总计物理内存的大小。
+used:已使用多大。
+free:可用有多少。
+Shared:多个进程共享的内存总额。
+Buffers/cached:磁盘缓存的大小。
 
-watch -n 2 -d free   ÿ����ִ��freeһ�Σ�ִ��ǰ�����Ļ����ͬ��λ����ʾ���ݡ� -n ����ˢ�� -d ÿ����ʾ��ͬ�ĵط�
+watch -n 2 -d free   每两秒执行free一次，执行前清除屏幕，在同样位置显示数据。 -n 控制刷新 -d 每次显示不同的地方
 
-/proc/meminfo            �Ƚϸ��ӵĿ��ڴ�ʹ�õķ���
+/proc/meminfo            比较复杂的看内存使用的方法
 
-top  ��̬��ʾϵͳ�������̵���Դռ�����������task�����CPUʹ���ʣ�Memʹ���ʣ�swap������ʹ�����
-��һ������  
-12:38:33 up 50 days, 23:15,  7 users,  load average: 60.58, 61.14, 61.22(�ֱ�Ϊ1���ӣ�5���ӣ�15���ӵ�ƽ������)
-����uptime���
-13:22:30 up 8 min,  4 users,  load average: 0.14, 0.38, 0.25   (uptime��ʾ���)
+top  动态显示系统各个进程的资源占用情况，包括task情况，CPU使用率，Mem使用率，swap交换区使用情况
+第一个行是  
+12:38:33 up 50 days, 23:15,  7 users,  load average: 60.58, 61.14, 61.22(分别为1分钟，5分钟，15分钟的平均负载)
+类似uptime命令：
+13:22:30 up 8 min,  4 users,  load average: 0.14, 0.38, 0.25   (uptime显示结果)
 
 
-vmstat 5 5           ��5��ʱ���ڽ���5�β���
+vmstat 5 5           在5秒时间内进行5次采样
 http://blog.csdn.net/jamesjiangqian/article/details/6782548
 
-2���鿴CPUʹ�����
+2、查看CPU使用情况
 /proc/cpuinfo            
 
 
-3��ͳ���ļ����µ��ļ�����
-ls -l | wc -l                ### �Ȱ������ÿ���ļ�����ͳ������   ls -al��ʾ������
+3、统计文件夹下的文件个数
+ls -l | wc -l                ### 先按行输出每个文件，再统计行数   ls -al显示隐藏行
 
-find . -type f -print | wc -l       ##  ������ǰ�ļ����µ�file����ӡ
-
-
-4�����������ӵ�ַ
-ifconfig eth1 add 2001:250:1800:1::88/64         ###  ����ipv6��ַ��������64 ����������
+find . -type f -print | wc -l       ##  搜索当前文件夹下的file并打印
 
 
-5������·��
+4、给网卡添加地址
+ifconfig eth1 add 2001:250:1800:1::88/64         ###  设置ipv6地址，掩码是64 ？？？？？
+
+
+5、添加路由
 route -A inet6 add default gw 2001:250:1800:1::1
-ͬʱҪ�޸��ļ���
+同时要修改文件：
 vi /etc/sysconfig/network
 NETWORKING_IPV6=yes
 
 
-6��������Ŀ¼�а���ĳ�ַ������ض��ļ�
-find ./src -name '*.ec' -exec grep -i niuc {} /; -print     ###  ����./srcĿ¼�°���"niuc"������.ec�ļ�
+6、搜索子目录中包含某字符串的特定文件
+find ./src -name '*.ec' -exec grep -i niuc {} /; -print     ###  搜索./src目录下包含"niuc"的所有.ec文件
 
-grep -R --include="*.cpp" key dir       ### ��dirĿ¼�µݹ��������.cpp�ļ��еĹؼ���key
-grep -r : ��ȷҪ��������Ŀ¼
-grep -d skip :������Ŀ¼
-grep -i pattern files : �����ִ�Сд��������Ĭ����������ִ�Сд
-grep -l pattern files : ֻ�г�ƥ����ļ���
-grep -L pattern files : ֻ�г���ƥ����ļ���
-grep -w pattern files : ֻƥ���������ʣ��������ַ�����һ����(��ƥ�䡰magic�������ǡ�magical��)
-grep pattern1 | pattern2 files : ��ʾƥ��pattern1����pattern2����
-grep pattern1 file | grep pattern2 : ��ʾ��ƥ��pattern1��ƥ��pattern2���У���ʵ���ùܵ�������grep�ϲ�����
-grep '/<man'  : ƥ����manΪ����ǰ������ĸ���У� /<��ע���ʵĿ�ʼ
-grep 'man/>'  : ƥ����manΪ���ʽ�β���У�    />��ע���ʵĽ�β
-^ ƥ����ַ���������
-$ ƥ����ַ�������β
+grep -R --include="*.cpp" key dir       ### 在dir目录下递归查找所有.cpp文件中的关键字key
+grep -r : 明确要求搜索子目录
+grep -d skip :忽略子目录
+grep -i pattern files : 不区分大小写的搜索。默认情况下区分大小写
+grep -l pattern files : 只列出匹配的文件名
+grep -L pattern files : 只列出不匹配的文件名
+grep -w pattern files : 只匹配整个单词，而不是字符串的一部分(如匹配“magic”而不是“magical”)
+grep pattern1 | pattern2 files : 显示匹配pattern1或者pattern2的行
+grep pattern1 file | grep pattern2 : 显示既匹配pattern1又匹配pattern2的行，其实是用管道把两个grep合并起来
+grep '/<man'  : 匹配以man为单词前三个字母的行， /<标注单词的开始
+grep 'man/>'  : 匹配以man为单词结尾的行，    />标注单词的结尾
+^ 匹配的字符串在行首
+$ 匹配的字符串在行尾
 
 
-7���鿴�ļ�ĳЩ�е�����
-sed -n '190,196p' song.txt        ### �鿴�ļ�song.txt�ĵ�190��196��
+7、查看文件某些行的内容
+sed -n '190,196p' song.txt        ### 查看文件song.txt的第190到196行
 
-8��ϵͳ
-uname -a  ## �鿴�ں�/����ϵͳ/CPU��Ϣ
+8、系统
+uname -a  ## 查看内核/操作系统/CPU信息
 
-## �鿴�����ϵͳ�汾
-lsb_release -a                  ## ����һ��centos�ײ���Ч
-cat /etc/redhat-release         ## ��������centos�ײ���Ч
-rpm -q centos-release ���� rpm -q redhat-release    ## �����������ݶ�Ӧϵͳѡ���Ӧ���centos�ײ���Ч
-cat /proc/version               ## �鿴��ǰcentos �汾��redhat��Ӧ�İ汾������
+## 查看具体的系统版本
+lsb_release -a                  ## 方法一：centos亲测无效
+cat /etc/redhat-release         ## 方法二：centos亲测有效
+rpm -q centos-release 或者 rpm -q redhat-release    ## 方法三：根据对应系统选择对应命令，centos亲测有效
+cat /proc/version               ## 查看当前centos 版本与redhat对应的版本的命令
 
-## �鿴�м����߼�CPU���Լ�CPU�ͺ�
+## 查看有几个逻辑CPU，以及CPU型号
 cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c 
       8  Intel(R) Xeon(R) CPU E5620  @ 2.40GHz
 
 
-head -n 1 /etc/issue       ## �鿴issue�ļ��ĵ�һ�У�������ϵͳ�汾
+head -n 1 /etc/issue       ## 查看issue文件的第一行，即操作系统版本
 
-cat /proc/cpuinfo         ##  �鿴CPU��Ϣ
+cat /proc/cpuinfo         ##  查看CPU信息
 
-hostname            ### �鿴�������
+hostname            ### 查看计算机名
 
-lspci -tv           ### �г�����PCI�豸
+lspci -tv           ### 列出所有PCI设备
 
-lsusb -tv           ### �г�����USB�豸
+lsusb -tv           ### 列出所有USB设备
 
-lsmod               ###  �г����ص��ں�ģ��
+lsmod               ###  列出加载的内核模块
 
-env                 ###  �鿴��������
+env                 ###  查看环境变量
 
-9����Դ
-free -m            ##  �鿴�ڴ�ʹ�����ͽ�����ʹ����
+9、资源
+free -m            ##  查看内存使用量和交换区使用量
 
-df -h              ##  �鿴������ʹ�����
+df -h              ##  查看各分区使用情况
 
-du -sh <Ŀ¼��>    ##  �鿴ָ��Ŀ¼�Ĵ�С
+du -sh <目录名>    ##  查看指定目录的大小
 
-grep MemTotal /proc/meminfo    ## �鿴�ڴ�����
+grep MemTotal /proc/meminfo    ## 查看内存总想
 
-grep MemFree /proc/meminfo     ##  �鿴�����ڴ���
+grep MemFree /proc/meminfo     ##  查看空闲内存量
 
-uptime       ## �鿴ϵͳ����ʱ�䡢�û���������
+uptime       ## 查看系统运行时间、用户数、负载
 
-cat /proc/loadavg          ##  �鿴ϵͳ���� 
+cat /proc/loadavg          ##  查看系统负载 
 
-10�����̺ͷ���
-mount | column -t          ##  �鿴�ҽӵķ���״̬
+10、磁盘和分区
+mount | column -t          ##  查看挂接的分区状态
 
-fdisk -l                   ##  �鿴���з���
+fdisk -l                   ##  查看所有分区
 
-swapon -s                  ##  �鿴���н�������
+swapon -s                  ##  查看所有交换分区
 
-hdparm -i /dev/hda          ## �鿴���̲���(��������IDE�豸)
+hdparm -i /dev/hda          ## 查看磁盘参数(仅适用于IDE设备)
 
-dmesg | grep IDE              ##  �鿴����ʱIDE�豸���״��
+dmesg | grep IDE              ##  查看启动时IDE设备检测状况
 
-11������netstat
-ifconfig            ## �鿴��������ӿڵ�����
-ifconfig eth0       ## �鿴����eth0����Ϣ������������ַ�����룬�㲥��ַ��MAC��ַ��MTU��
-ping -b 206.168.112.127   ## ��������ҳ��Ĺ㲥��ַ����ping���������Եõ����������������������ĵ�ַ
+11、网络netstat
+ifconfig            ## 查看所有网络接口的属性
+ifconfig eth0       ## 查看网卡eth0的信息，包括本机地址，掩码，广播地址，MAC地址，MTU等
+ping -b 206.168.112.127   ## 针对上面找出的广播地址进行ping操作，可以得到局域网内所有其他机器的地址
 
-iptables -L         ##  �鿴����ǽ����
+iptables -L         ##  查看防火墙设置
 
-route -n        ## �鿴·�ɱ�
-netstat -lntp   ##  �鿴���м����˿�
-netstat -antp   ##  �鿴�����ѽ���������
-netstat -s      ##  �鿴����ͳ����Ϣ
-netstat -ni     ## -i�ṩ����ӿڵ���Ϣ��һ��Ϊeth0, lo(loopback) -n��־�����ֵ��ַ�������ǰ����������������� 
-netstat -nr     ## -rչʾ·�ɱ�
-netstat -a      ##  �鿴�׽������
-netstat -a -tcp ##  �鿴���м���(-a)��tcp�������
+route -n        ## 查看路由表
+netstat -lntp   ##  查看所有监听端口
+netstat -antp   ##  查看所有已建立的连接
+netstat -s      ##  查看网络统计信息
+netstat -ni     ## -i提供网络接口的信息：一般为eth0, lo(loopback) -n标志输出数值地址，而不是把输出反向解析成名字 
+netstat -nr     ## -r展示路由表
+netstat -a      ##  查看套接字情况
+netstat -a -tcp ##  查看所有激活(-a)的tcp连接情况
 
 
-dig www.bing.com +trace   ### �鿴www.bing.com��ַ����ϸDNS������Ϣ����Ҫ��װbind-utils��
+dig www.bing.com +trace   ### 查看www.bing.com网址的详细DNS解析信息，需要安装bind-utils包
 
----- �鿴��ǰ�������ʵı���DNS
+---- 查看当前机器访问的本地DNS
 cat /etc/resolv.conf
 
-----  �����������
+----  清空域名缓存
 service nscd restart
 
-cat /proc/net/netstat  ## �鿴TCP��ͳ����Ϣ
-cat /proc/net/snmp     ## �鿴��ǰϵͳ���������
+cat /proc/net/netstat  ## 查看TCP的统计信息
+cat /proc/net/snmp     ## 查看当前系统的连接情况
 
-12��iptables
+12、iptables
 
-iptables -t nat -L      ##  �鿴iptables�����Ƿ�ʹ��
+iptables -t nat -L      ##  查看iptables功能是否使能
 
-### ������Ŀ��IP��192.168.1.100���˿���80��tcp���ض���8080�˿�
+### 将所有目的IP是192.168.1.100，端口是80的tcp包重定向到8080端口
 iptables -t nat -I PREROUTING -p tcp --dst 192.168.1.100 --dport 80 -j REDIRECT --to-ports 8080
 iptables -t nat -I OUTPUT -p tcp --dst 192.168.1.100 --dport 80 -j REDIRECT --to-ports 8080
 
 
-��linux����iptables�����أ�����port forward�˿�ת��
-������Ϣ��
+用linux设置iptables做网关，进行port forward端口转发
+基本信息：
 web site ip port: 192.168.12.50 80 (windows IIS server  or linux apache)
 gateway public ip(eth0): 210.211.22.20, private ip(eth1): 192.168.12.10 (centos 5.2)
-��������ϣ������http://210.211.22.20 ���ɷ���http://192.168.12.50:80.   ### ǰ��������IP������������������IP
-�������£�
+现在我们希望访问http://210.211.22.20 即可访问http://192.168.12.50:80.   ### 前者是外网IP，后者是内网服务器IP
+过程如下：
 vi /etc/sysctl.conf
-�޸����ã�
-net.ipv4.ip_forward = 1          ### ��Ϊ������������ת��
-�˳����棬ִ�У�
+修改设置：
+net.ipv4.ip_forward = 1          ### 改为允许本机进行转发
+退出保存，执行：
 sysctl -p
-�޸�ת��tables��
-#nat����PREROUTING�������ö�eth0��Ŀ��˿���80��tcpЭ�飬�ŵ�DNAT��forward��192.168.12.50:80   
+修改转发tables：
+#nat表，PREROUTING链，设置对eth0的目标端口是80的tcp协议，放到DNAT，forward到192.168.12.50:80   
 iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j DNAT --to 192.168.12.50:80
-#filter�����Խӵ���eth0�ģ���eth1ת��192.168.12.50:80 
+#filter表，对接到的eth0的，从eth1转到192.168.12.50:80 
 iptables -A FORWARD -p tcp -i eth0 -o eth1 -d 192.168.12.50 --dport 80 -j ACCEPT
-#���ǣ�ҲҪ��nat�任��ά��һ��ӳ�������eth1�ͳ�ʱ����������ַ������ʱ��Ϊ������ַ�������������ղ����ظ���
+#但是，也要做nat变换，维护一份映射表，从eth1送出时采用内网地址，回来时变为公网地址。否则外网会收不到回复。
 iptables -A POSTROUTING -t nat -j MASQUERADE -o eth1
-������ϣ�ִ��service iptables save
+设置完毕，执行service iptables save
 
-����mssql���ݿ�Ĵ�����
-#1.��nat������PREROUTING��������û�� -oѡ�
+设置mssql数据库的代理。
+#1.在nat表设置PREROUTING链，这里没有 -o选项。
 iptables -t nat -A PREROUTING -p tcp -i eth0  --dport 1433 -j DNAT --to 192.168.12.123:1433
-#2.����filter��
+#2.设置filter表
 iptables -A FORWARD -p tcp -i eth0 -o eth1 --dport 1433 -d 192.168.12.123 -j ACCEPT
-#3.nat�任��������˾Ϳ��Բ�����
+#3.nat变换，如果有了就可以不设置
 iptables -t nat -A POSTROUTING -j MASQUERADE -o eth1
 
 
 iptables 
 
 
-12������
-ps -ef               ##  �鿴���н���
+12、进程
+ps -ef               ##  查看所有进程
 
-top                  ##  ʵʱ��ʾ����״̬
+top                  ##  实时显示进程状态
 
-top -H -p 32381      ##  �鿴����32381�и����߳���Դռ�����
+top -H -p 32381      ##  查看进程32381中各个线程资源占用情况
 
-pmap -d  5647        ##  �鿴����5647���ڴ�ռ�����
+pmap -d  5647        ##  查看进程5647的内存占用情况
 
-cat /proc/sys/fs/file-max  ## �鿴��ǰϵͳ֧�ֵ��������
+cat /proc/sys/fs/file-max  ## 查看当前系统支持的最大句柄数
 
 
-13���û�
-w                    ##  �鿴��û�
+13、用户
+w                    ##  查看活动用户
 
-id <�û���>          ##  �鿴ָ���û���Ϣ
+id <用户名>          ##  查看指定用户信息
 
-last                 ##  �鿴�û���¼��־
+last                 ##  查看用户登录日志
 
-cut -d: -f1 /etc/passwd        ## �鿴ϵͳ�����û�
+cut -d: -f1 /etc/passwd        ## 查看系统所有用户
 
-cut -d: -f1 /etc/group         ## �鿴ϵͳ������
+cut -d: -f1 /etc/group         ## 查看系统所有组
 
-crontab -l             ## �鿴��ǰ�û��ļƻ�����
+crontab -l             ## 查看当前用户的计划任务
 
-13������
-chkconfig --list          ## �г�����ϵͳ����
-chkconfig --list | grep on   ## �г�����������ϵͳ����
-chkconfig --level 2345 tomcat on  ## ��2,3,4,5�ĸ��㼶�Ͽ���������tomcat��Ҫ��rpm��װ��
+13、服务
+chkconfig --list          ## 列出所有系统服务
+chkconfig --list | grep on   ## 列出所有启动的系统服务
+chkconfig --level 2345 tomcat on  ## 在2,3,4,5四个层级上开机自启动tomcat（要求rpm安装）
 
-14����дtomcat�����������ű�tomcat
-1�����ű��������£�
+14、编写tomcat开机自启动脚本tomcat
+1）、脚本内容如下：
 ==============================================
 #!/bin/sh
 JAVA_HOME=/usr/java/jdk1.8.04-28
@@ -226,194 +226,194 @@ CATALINA_HOME=/mnt/apache-tomcat-9.0.1
 export JAVA_HOME CATALINA_HOME
 exec $CATALINA_HOME/bin/catalina.sh $*
 ==============================================
-2�����޸�tomcat�ű�Ȩ�޺�����
+2）、修改tomcat脚本权限和属组
 chown root.root tomcat
 chmod 755 tomcat
-3������tomcat�ű����Ƶ�/etc/rc.d/init.d/Ŀ¼��
-4��������tomcat�����Զ�������ֹͣ
+3）、将tomcat脚本复制到/etc/rc.d/init.d/目录下
+4）、设置tomcat服务自动启动和停止
 chkconfig --level 2345 tomcat on
 
 
 
-15��cut����
-cut����ÿһ��Ϊһ����������ģ���ô����cut���붨λ���ļ��������أ�
-cut������Ҫ�ǽ���������λ������
-��һ���ֽڣ�bytes������ѡ��-b  ���磺who | cut -b 3### ��ʾwho��ÿ������ĵ������ַ�  cut -b 3-5,8 ��õ�3,4,5,8�ַ�
-�ڶ����ַ���characters������ѡ��-c  ��ASCII����˵������û���𣬶������ַ���˵������
-��������fields������ѡ��-f    cat /etc/passwd | head -n 5 | cut -d: -f1  ## -d���ü������Ϊ: -f������Ҫȡ����
+15、cut命令
+cut是以每一行为一个处理对象的，怎么告诉cut我想定位到的剪切内容呢？
+cut命令主要是接受三个定位方法：
+第一，字节（bytes），用选项-b  例如：who | cut -b 3### 显示who的每行输出的第三个字符  cut -b 3-5,8 获得第3,4,5,8字符
+第二，字符（characters），用选项-c  对ASCII码来说跟上面没区别，对中文字符来说有区别
+第三，域（fields），用选项-f    cat /etc/passwd | head -n 5 | cut -d: -f1  ## -d设置间隔符号为: -f设置我要取的域
 
-16���ļ�����
-rm  ɾ����ص�����
-��һ��Ŀ¼���д����ļ�ʱ��ֱ����rm -f *.log���յ�������Ϣ����ʾ�����б�̫��
-ͨ�� rm -f a*.log���Է���ɾ��������һ��һ��Ķ���ɾ��̫�鷳
-����취��  ls *.log | xargs rm -f      ### �Ȱ��������ɹܵ�����ͨ���ܵ�һ�������͸�rm����ɾ��
-����ʹ�ã�  rm -fr (·��/Ҫɾ�ļ�)
+16、文件操作
+rm  删除相关的命令
+当一个目录下有大量文件时，直接用rm -f *.log会收到出错信息，提示参数列表太长
+通过 rm -f a*.log可以分批删除，但是一类一类的定点删除太麻烦
+解决办法：  ls *.log | xargs rm -f      ### 先把内容做成管道，再通过管道一个个传送给rm进行删除
+或者使用：  rm -fr (路径/要删文件)
 
-cp �ļ��������
-cp [-adfilprsu] src1,src2,...dest    ###  �����Դ�ļ�������Ŀ���ļ���
+cp 文件复制相关
+cp [-adfilprsu] src1,src2,...dest    ###  将多个源文件拷贝到目的文件夹
 
-17��ʹ�� tar ѹ��/��ѹ�ļ�
-tar -zxcf abc.tar.gz  ## ��ѹ���ļ� 
-tar -zcvf tmp.tar.gz /tmp/    ##  ��/tmpĿ¼�µ��ļ����ѹ����tmp.tar.gz������z��ʾgzip��c��ʾѹ����v��ʾ��ʾ������飬f��ʾָ���ļ���
+17、使用 tar 压缩/解压文件
+tar -zxcf abc.tar.gz  ## 解压缩文件 
+tar -zcvf tmp.tar.gz /tmp/    ##  将/tmp目录下的文件打包压缩成tmp.tar.gz，其中z表示gzip，c表示压缩，v表示显示打包详情，f表示指定文件名
 
-18���鿴�����Ϣ
+18、查看随机信息
 
-head -n 1 /dev/random         ##  �鿴�ں���ʱ��seed���������Ϣ������ϢҪ�ں�ʱ�䣬������������Ϣ֮����ʱ����
-head -n 1 /dev/urandom        ##  �鿴α�����Ϣ��������ʱ�䣬���ʵʱ��
+head -n 1 /dev/random         ##  查看融合了时间seed的真随机信息，出信息要融合时间，因此两个随机信息之间有时间间隔
+head -n 1 /dev/urandom        ##  查看伪随机信息，不融入时间，因此实时出
 
 
-19���鿴��ǰϵͳ�������û�
+19、查看当前系统下所有用户
 
 cat /etc/passwd
 cat /etc/shadow
 
--c: ����ѹ������
--x����ѹ
--t���鿴����
--r����ѹ���鵵�ļ�ĩβ׷���ļ�
--u������ԭѹ�����е��ļ�
-������Ƕ��������ѹ����ѹ��Ҫ�õ�����һ�������Ժͱ���������õ�ֻ��������һ��������Ĳ����Ǹ�����Ҫ��ѹ�����ѹ����ʱ��ѡ�ġ�
+-c: 建立压缩档案
+-x：解压
+-t：查看内容
+-r：向压缩归档文件末尾追加文件
+-u：更新原压缩包中的文件
+这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。
 
--z����gzip���Ե�
--j����bz2���Ե�
--Z����compress���Ե�
--v����ʾ���й���
--O�����ļ��⿪����׼���
+-z：有gzip属性的
+-j：有bz2属性的
+-Z：有compress属性的
+-v：显示所有过程
+-O：将文件解开到标准输出
 
-����Ĳ���-f�Ǳ����
--f: ʹ�õ������֣��мǣ�������������һ������������ֻ�ܽӵ�������
+下面的参数-f是必须的
+-f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名。
 
-ѹ��
-tar -zcvf myfile.tar.gz * ## ����ǰĿ¼�������ļ������myfile.tar������gzipѹ��������һ��gzipѹ����������Ϊmyfile.tar.gz
+压缩
+tar -zcvf myfile.tar.gz * ## 将当前目录下所有文件打包成myfile.tar后，再用gzip压缩，生成一个gzip压缩包，命名为myfile.tar.gz
 
-��ѹ
-tar -zxvf myfile.tar.gz    ##  ��ѹgzipѹ�����İ�
+解压
+tar -zxvf myfile.tar.gz    ##  解压gzip压缩过的包
 
-18��ʹ��ǩ�����߼���У���(������������CentOS���ײ���Ч)
+18、使用签名工具计算校验和(以下所有命令CentOS下亲测有效)
 
-md5sum   abc.txt     ## MD5У���
-sha1sum   abc.txt    ## sha1У���
+md5sum   abc.txt     ## MD5校验和
+sha1sum   abc.txt    ## sha1校验和
 sha224sum
-sha256sum   abc.txt  ## sha256У���
+sha256sum   abc.txt  ## sha256校验和
 sha384sum
 sha512sum
 
-% gpg --import KEYS           ##  KEYS �ļ���Ҫר������
-% gpg --verify downloaded_file.asc downloaded_file   ##  asc�ļ���Ҫר������
+% gpg --import KEYS           ##  KEYS 文件需要专门下载
+% gpg --verify downloaded_file.asc downloaded_file   ##  asc文件需要专门下载
 
-19���ָ��ļ�
-split -b 10m info.log.2018-04-28 -d -a 3 log0428_   ## �����ļ���С��� -d��ʾ��������Ϊ�ļ���β��-a��ʾ�����ֽ�β���ȣ��˴�Ϊ3
-split -l 1000 data.csv -d -a 2 filename   ## ������������� -d��ʾ��������Ϊ�ļ���β��-a��ʾ�����ֽ�β���ȣ��˴�Ϊ2
-
-
--l 10      ָ�����������ָ��ļ����˴�ָ��ÿ10�оͷָ��һ��С�ļ�
--b 10m     ָ���ָ��ÿ���ļ��Ĵ�С��֧��m��k���ֵ�λ���˴�ָ���ָ���ļ���СΪ10MB
--d         ָ���ָ�������õ��ļ�����׺ʹ�����ֱ�ʾ����ָ��ʱĬ����abcdefg��ĸ
--a 3       ָ����������׺�ĳ��ȣ��˴���ʾ3λ������ʽ
-log0428_   ָ���ָ���ļ�������ͬǰ׺
+19、分割文件
+split -b 10m info.log.2018-04-28 -d -a 3 log0428_   ## 按照文件大小拆分 -d表示以数字作为文件结尾，-a表示以数字结尾长度，此处为3
+split -l 1000 data.csv -d -a 2 filename   ## 按照行数来拆分 -d表示以数字作为文件结尾，-a表示以数字结尾长度，此处为2
 
 
-20�� ʱ��ת��
-date -d "@1279592730"  ## ת����
+-l 10      指定按照行数分割文件，此处指定每10行就分割成一个小文件
+-b 10m     指定分割后每个文件的大小，支持m和k两种单位，此处指定分割后文件大小为10MB
+-d         指定分割后区分用的文件名后缀使用数字表示，不指定时默认用abcdefg字母
+-a 3       指定数字名后缀的长度，此处表示3位数字形式
+log0428_   指定分割后文件名的相同前缀
 
-date +%s       ## ��ʱ�������ʾ��ǰʱ��  1527165067
-date +%F_%I    ## ��ȡ��ǰʱ��������պ�ʱ��ʱ�䣬�� 2019-02-27_11  %FΪfull date; same as %Y-%m-%d  %IΪhour (00..23)
-date +%s.%N    ## ��ȡ��ǰʱ�������1970������ʱ�䳤��  �� 1551237799.650062159 %sΪseconds since 1970-01-01 00:00:00 UTC  %NΪnanoseconds (000000000..999999999)
+
+20、 时间转换
+date -d "@1279592730"  ## 转换成
+
+date +%s       ## 以时间戳来显示当前时间  1527165067
+date +%F_%I    ## 获取当前时间的年月日和时针时间，如 2019-02-27_11  %F为full date; same as %Y-%m-%d  %I为hour (00..23)
+date +%s.%N    ## 获取当前时间相对于1970年起点的时间长度  如 1551237799.650062159 %s为seconds since 1970-01-01 00:00:00 UTC  %N为nanoseconds (000000000..999999999)
 
 
-21���鿴��ǰ�û��ļƻ�����
+21、查看当前用户的计划任务
 crontab -l 
 
-22��centos���ñ��ز��ֶ˿�ɨ�蹦��
+22、centos禁用本地部分端口扫描功能
 
-yum install iptables-services   ##  centos 7 ��Ҫ��װiptables����
+yum install iptables-services   ##  centos 7 需要安装iptables服务
 
 
-23���鿴linuxϵͳ��������
+23、查看linux系统网络流量
 ifstat
 
-cat /proc/sys/net/ipv4/ip_local_port_range  ## �鿴��ǰ�������õĶ˿ڷ�Χ
+cat /proc/sys/net/ipv4/ip_local_port_range  ## 查看当前主机可用的端口范围
 
-cat /proc/sys/net/ipv4/tcp_fin_timeout   ## ����tcp������󱣴�ʱ�䣬ͨ���޸��ļ����ֵ�����޸ĵȴ�ʱ��
+cat /proc/sys/net/ipv4/tcp_fin_timeout   ## 设置tcp连接最大保存时间，通过修改文件里的值可以修改等待时间
 
-netstat -n | awk '/^tcp/ {++state[$NF]} END {for(key in state) print key, "\t", state[key]}'  ##  ͳ�Ƶ�ǰ����TCP���Ӹ�״̬����Ŀ
-���ʾ����
-LAST_ACK 5 �����ڵȴ���������������
-SYN_RECV 30  ��һ�����������Ѿ�����ȴ�ȷ�� ��
-ESTABLISHED 1597 ���������ݴ���״̬�� 
+netstat -n | awk '/^tcp/ {++state[$NF]} END {for(key in state) print key, "\t", state[key]}'  ##  统计当前所有TCP连接各状态的数目
+结果示例：
+LAST_ACK 5 （正在等待处理的请求数）
+SYN_RECV 30  （一个连接请求已经到达，等待确认 ）
+ESTABLISHED 1597 （正常数据传输状态） 
 FIN_WAIT1 51 
 FIN_WAIT2 504 
-TIME_WAIT 1057 ��������ϣ��ȴ���ʱ�������������� 
+TIME_WAIT 1057 （处理完毕，等待超时结束的请求数） 
 
 
-24���鿴yum��װ����������Ϣ
+24、查看yum安装的软件包信息
 
-yum info nginx  ## �鿴nginx��װ��Ϣ
-yum -y update   ## �������а����ı��������ú�ϵͳ����,ϵͳ�汾�ں˶�����
-yum -y upgrade  ## �������а������ı��������ú�ϵͳ���ã�ϵͳ�汾�������ں˲��ı� 
+yum info nginx  ## 查看nginx安装信息
+yum -y update   ## 升级所有包，改变软件设置和系统设置,系统版本内核都升级
+yum -y upgrade  ## 升级所有包，不改变软件设置和系统设置，系统版本升级，内核不改变 
 
-24��rpm��������װ�������
-rpm -qa    ## �鿴���а�װ��������
-rpm -qa | grep tomcat   ## �鿴����tomcat��rpm��װ��Ϣ
-rpm -e tomcat --nodeps   ## ɾ��tomcat��װ����������������
-rpm -ivh --nodeps --prefix /usr/local  tomcat-9.noarch.rpm    ## ����������İ�װtomcat-9.noarch.rpm������װ��/usr/localĿ¼��
+24、rpm软件包安装相关命令
+rpm -qa    ## 查看所有安装的软件包
+rpm -qa | grep tomcat   ## 查看所有tomcat的rpm安装信息
+rpm -e tomcat --nodeps   ## 删除tomcat安装包，不检查相关依赖
+rpm -ivh --nodeps --prefix /usr/local  tomcat-9.noarch.rpm    ## 不检查依赖的安装tomcat-9.noarch.rpm包，安装到/usr/local目录下
 
-25�������û����û���
-groupadd  nobody       ## ����nobody�û���
-##  �����û�tomcat����tomcat���û�shell����Ϊ/sbin/nologin,  homeĿ¼Ϊ/opt/tomcat/temp, Ⱥ��Ϊnobody
+25、添加用户和用户组
+groupadd  nobody       ## 添加nobody用户组
+##  添加用户tomcat，将tomcat的用户shell设置为/sbin/nologin,  home目录为/opt/tomcat/temp, 群组为nobody
 useradd -s /sbin/nologin  -d /opt/tomcat/temp  -c 'Tomcat User' -g nobody tomcat
 
 
-26��ɱ������
-kill -TERM 5166  ## ɱ��pidΪ5166�Ľ���
-kill -KILL 5166  ## ɱ��pidΪ5166�Ľ���
+26、杀死进程
+kill -TERM 5166  ## 杀死pid为5166的进程
+kill -KILL 5166  ## 杀死pid为5166的进程
 
 
-27������������
-ln -s abc cde  ## ����abc��������
+27、建立软链接
+ln -s abc cde  ## 建立abc的软链接
 
-28���鿴��ǰ��ҳ����
+28、查看当前脏页数量
 cat /proc/vmstat | egrep "dirty|writeback"
 
 
-29��linux�鿴��ǰ�ļ�ϵͳ�ĸ�ʽ
+29、linux查看当前文件系统的格式
 df -T
 
-30���鿴�������ļ�
+30、查看二进制文件
 od -c colors.MYI
 
-31���鿴�������ܲ���
+31、查看磁盘性能参数
 iostat
 
-32���ļ��ȶ�
+32、文件比对
 comm [-123] file1 file2
-���У�
--1 ����file1���е����ݣ�����ʣ�µ�����
--2 ����file2���е����ݣ�����ʣ�µ�����
--3 ����file1��file2�ظ������ݣ�����ʣ�µ�����
-ע�⣺file1�����ظ��ж�file2�����ظ��У���-3ȥ�ظ�����ֻ����˵�һ�й�ͬ�����ݣ���һһ����
+其中：
+-1 过滤file1独有的内容，保留剩下的内容
+-2 过滤file2独有的内容，保留剩下的内容
+-3 过滤file1和file2重复的内容，保留剩下的内容
+注意：file1中无重复行而file2中有重复行，则-3去重复内容只会过滤掉一行共同的内容，即一一相消
 
 
-                   ##################    ����shellС����           #############
-ѭ��ɱ�����̵�С����	
-�ϲ���һ����İ汾��
+                   ##################    例子shell小程序           #############
+循环杀死进程的小程序：	
+合并成一个句的版本：
 ps -ef | grep DataServer | grep -v grep | awk '{print $2}' | xargs kill -9
-###  ֱ����pkillɱ���̣�  pkill -9 DataServer ���� kill all DataServer
+###  直接用pkill杀进程：  pkill -9 DataServer 或者 kill all DataServer
 
-ps -ef | grep kpdf | grep -v grep | awk '{print $2}' | while read pid           ### kpdf��Ҫɱ���Ľ���
+ps -ef | grep kpdf | grep -v grep | awk '{print $2}' | while read pid           ### kpdf是要杀死的进程
 do
 	kill -9 $pid
 done
-�������ݴ�Ϊһ��shell�ű���Ȼ����crontab��������
+上述内容存为一个shell脚本，然后在crontab里面设置
 */15 * * * *  /root/kill.sh
 				   
 				   
-. /etc/profile  #���Ҫ�����shell�ű��ŵ�crontab�У���䲻���٣�������ʼ�����򻷾�����������root�û��Ļ��������ļ�
-PNAME="��������"    #���Ų����٣���Ϊ�������ֺ�����ܻ��пո�Ͳ���
-PATHNAME=���������ļ��о���·��
-###  ������: grep -v grep ���˵�������grep�ַ�����
+. /etc/profile  #如果要把这个shell脚本放到crontab中，这句不能少，用来初始化程序环境变量，这是root用户的环境变量文件
+PNAME="程序名字"    #引号不能少，因为程序名字后面可能会有空格和参数
+PATHNAME=程序所在文件夹绝对路径
+###  语句解释: grep -v grep 过滤掉包含有grep字符的行
 ###  
-LENGTH=`ps -ef | grep "$PNAME" | grep -v grep |cut -b 49-200|wc -c `  #���Ų����٣�ͬ��
+LENGTH=`ps -ef | grep "$PNAME" | grep -v grep |cut -b 49-200|wc -c `  #引号不能少，同上
 if test $LENGTH -eq 0
 then
 cd $PATHNAME
@@ -426,7 +426,7 @@ chown  -R  ownername[:groupname]  filename
 chmod  -R  777 filename
 cp src dest
 
-/etc/services   ## �洢�˱������������Ķ˿ڷ����
-/etc/shadow     ## �˺Ź������ļ�
-/etc/group      ## �û���������ʹ��chgrp�޸��ļ������û���ʱ�������Ǳ��ļ�����ڵ�����
-/etc/passwd     ## �û���Ϣ��ʹ��chown�޸��ļ�������ʱ�������Ǳ��ļ�����ڵ��û���
+/etc/services   ## 存储了本服务器完整的端口分配表
+/etc/shadow     ## 账号管理的文件
+/etc/group      ## 用户组组名，使用chgrp修改文件所述用户组时，必须是本文件里存在的组名
+/etc/passwd     ## 用户信息，使用chown修改文件所有者时，必须是本文件里存在的用户名

@@ -1,35 +1,35 @@
- ///////////////////////////////                     »ù´¡ÖªÊ¶                ///////////////////////////////
- $ Ò²ÊÇÒ»¸öÓÐÐ§µÄ±äÁ¿Ãû/º¯ÊýÃû ·ûºÅ£¬µ«Ò»°ãÔÚscalaÄÚ²¿Ê¹ÓÃ£¬²»½¨ÒéÓÃÀ´ÃüÃû
+ ///////////////////////////////                     åŸºç¡€çŸ¥è¯†                ///////////////////////////////
+ $ ä¹Ÿæ˜¯ä¸€ä¸ªæœ‰æ•ˆçš„å˜é‡å/å‡½æ•°å ç¬¦å·ï¼Œä½†ä¸€èˆ¬åœ¨scalaå†…éƒ¨ä½¿ç”¨ï¼Œä¸å»ºè®®ç”¨æ¥å‘½å
 
-scalaÖÐ³£Á¿±ðÃûÒ»°ãÊ¹ÓÃÈ«´óÐ´×Ö·û£¬ÈçPI, XOFFSET
+scalaä¸­å¸¸é‡åˆ«åä¸€èˆ¬ä½¿ç”¨å…¨å¤§å†™å­—ç¬¦ï¼Œå¦‚PI, XOFFSET
 
-`` ·´ÒýºÅÀ©ÆðÀ´µÄ×Ö·û´®Ö»ÓÃ×÷Ê¶±ð·û£¨±äÁ¿Ãû£©£¬ÓÃÓÚ¸ÃÊ¶±ð·ûÓëscala¹Ø¼ü×ÖÏàÍ¬µÄÇé¿ö  ÀýÈç£º Thread.`yield`()
+`` åå¼•å·æ‰©èµ·æ¥çš„å­—ç¬¦ä¸²åªç”¨ä½œè¯†åˆ«ç¬¦ï¼ˆå˜é‡åï¼‰ï¼Œç”¨äºŽè¯¥è¯†åˆ«ç¬¦ä¸Žscalaå…³é”®å­—ç›¸åŒçš„æƒ…å†µ  ä¾‹å¦‚ï¼š Thread.`yield`()
 
-scalaÖÐ¸´ÖÆÔËËãÓÀÔ¶·µ»Ø Unit
+scalaä¸­å¤åˆ¶è¿ç®—æ°¸è¿œè¿”å›ž Unit
 
-¡¾×ÜÈë¿Ú¡¿
+ã€æ€»å…¥å£ã€‘
 
 object FindLongLines {
 	def main(args: Array[String]) = {
 		val width = args(0).toInt
-		for (arg <- args.drop(1))    //  Ê¡ÂÔµôµÚÒ»¸öÔªËØ£¬´ÓµÚ¶þ¸öÔªËØ¿ªÊ¼±éÀú
+		for (arg <- args.drop(1))    //  çœç•¥æŽ‰ç¬¬ä¸€ä¸ªå…ƒç´ ï¼Œä»Žç¬¬äºŒä¸ªå…ƒç´ å¼€å§‹éåŽ†
 			LongLines.processFile(arg, width)
 }
 
-¡¾¿ØÖÆ½á¹¹¡¿
-// ÆäÊµ±¾ÖÊÉÏ´«µÄµÚ¶þ¸ö²ÎÊýÊÇº¯ÊýÖ¸Õë£¬Òò´ËÀàÐÍÊÇ (String, String) => Boolean £¬ÓÃÈë²ÎºÍ·µ»ØÖµÀàÐÍÈ·¶¨ÁËº¯ÊýÌØÕ÷
-// ´Ë´¦·â×°º¯ÊýÆäÊµ°üº¬ÁËÒ»Ð©Ç°ÖÃÐÅÏ¢£¬±ÈÈçforÑ­»·±éÀúµÄÒ»¶¨ÊÇÎÄ¼þÀàÐÍ£¬Òò´Ë±ØÈ»ÓÐgetName·½·¨
+ã€æŽ§åˆ¶ç»“æž„ã€‘
+// å…¶å®žæœ¬è´¨ä¸Šä¼ çš„ç¬¬äºŒä¸ªå‚æ•°æ˜¯å‡½æ•°æŒ‡é’ˆï¼Œå› æ­¤ç±»åž‹æ˜¯ (String, String) => Boolean ï¼Œç”¨å…¥å‚å’Œè¿”å›žå€¼ç±»åž‹ç¡®å®šäº†å‡½æ•°ç‰¹å¾
+// æ­¤å¤„å°è£…å‡½æ•°å…¶å®žåŒ…å«äº†ä¸€äº›å‰ç½®ä¿¡æ¯ï¼Œæ¯”å¦‚forå¾ªçŽ¯éåŽ†çš„ä¸€å®šæ˜¯æ–‡ä»¶ç±»åž‹ï¼Œå› æ­¤å¿…ç„¶æœ‰getNameæ–¹æ³•
 def filesMatching(query: String, matcher: (String, String) => Boolean) = {
 	for (file <- filesHere; if matcher(file.getName, query)) yield file
 }
-// fileName.endsWith(query)µÄËõÐ´£¬ÆäÖÐ²ÎÊý fileNameÒÑ¾­·â×°ÔÚ filesMatchingÖÐ£¬
-// Í¬Ê±ÓÉÓÚÃ¿¸ö²ÎÊý½ö³öÏÖÒ»´Î£¬¿ÉÒÔÓÃÕ¼Î»·û _ Ìæ´ú£¬Ã¿¸öÕ¼Î»·ûÒÀ´Î¶ÔÓ¦´Ó×óµ½ÓÒµÄ²ÎÊý
-// JAVAÖÐÒ»°ã½«Õâ¸ö¶¯×÷³éÈ¡³Éinterface½Ó¿Ú(°üº¬matcher·½·¨¶¨Òå)£¬¶ÔÃ¿ÖÖ·½·¨ÊµÏÖÒ»¸öµ¥¶ÀµÄ×ÓÀà£¬
-// FileMatcherÊµÀý»¯Ê±¸ù¾Ý¾ßÌåÀàÐÍ´«¶ÔÓ¦×ÓÀàÊµÀý²ÎÊý£¬²ÎÊýÀàÐÍÎªinterface½Ó¿ÚÀàÐÍ£¬Ïê¼ûÉè¼ÆÄ£Ê½DuckÏà¹Ø
+// fileName.endsWith(query)çš„ç¼©å†™ï¼Œå…¶ä¸­å‚æ•° fileNameå·²ç»å°è£…åœ¨ filesMatchingä¸­ï¼Œ
+// åŒæ—¶ç”±äºŽæ¯ä¸ªå‚æ•°ä»…å‡ºçŽ°ä¸€æ¬¡ï¼Œå¯ä»¥ç”¨å ä½ç¬¦ _ æ›¿ä»£ï¼Œæ¯ä¸ªå ä½ç¬¦ä¾æ¬¡å¯¹åº”ä»Žå·¦åˆ°å³çš„å‚æ•°
+// JAVAä¸­ä¸€èˆ¬å°†è¿™ä¸ªåŠ¨ä½œæŠ½å–æˆinterfaceæŽ¥å£(åŒ…å«matcheræ–¹æ³•å®šä¹‰)ï¼Œå¯¹æ¯ç§æ–¹æ³•å®žçŽ°ä¸€ä¸ªå•ç‹¬çš„å­ç±»ï¼Œ
+// FileMatcherå®žä¾‹åŒ–æ—¶æ ¹æ®å…·ä½“ç±»åž‹ä¼ å¯¹åº”å­ç±»å®žä¾‹å‚æ•°ï¼Œå‚æ•°ç±»åž‹ä¸ºinterfaceæŽ¥å£ç±»åž‹ï¼Œè¯¦è§è®¾è®¡æ¨¡å¼Duckç›¸å…³
 def filesEnding(query: String) = filesMatching(query, _.endsWith(_)) 
 def filesContaining(query: String) = filesMatching(query, _.contains(_))
 def filesRegex(query: String) = filesMatching(query, _.matches(_))
-//  ÖÕ¼«¼ò»¯°æ±¾£¬ÓÉÓÚquery²ÎÊýÔÚfilesMatchingÖÐ²¢²»Ê¹ÓÃ£¬Ö±½ÓÔÚÉÏ²ã´«²ÎÊ±Ìæ»»Õ¼Î»·û
+//  ç»ˆæžç®€åŒ–ç‰ˆæœ¬ï¼Œç”±äºŽqueryå‚æ•°åœ¨filesMatchingä¸­å¹¶ä¸ä½¿ç”¨ï¼Œç›´æŽ¥åœ¨ä¸Šå±‚ä¼ å‚æ—¶æ›¿æ¢å ä½ç¬¦
 object FileMatcher {
 	private def filesHere = (new java.io.File(".")).listFiles
 	
@@ -41,51 +41,51 @@ object FileMatcher {
 	def filesRegex(query: String) = filesMatching(_.matches(query))
 }
 
-²éÕÒµÄº¯Êý·Ö²ãÊ½Ð´·¨£º
-// Ò»°ãJava»òÕßCÓïÑÔÇãÏòÓÚÓÃforÑ­»·±éÀúÔªËØ²éÕÒºó·µ»Ø£¬¶øOOÐÍÐ´·¨ÇãÏòÓÚ·â×°³ÉÀà¿â
-// existsÀàËÆÒÑ·â×°µÄº¯ÊýÖ¸Õë£¬Ö¸Ïò±éÀú¼¯ºÏÔªËØµÄ²Ù×÷£¬¾ßÌå²Ù×÷ÄÚÈÝÓÉÉÏ²ã´«µÝ£¬´Ë´¦ÊÇ _ < 0 £¬ÆäÖÐ_±íÊ¾ÔªËØÄÚÈÝ
-def containsNeg(nums: List[Int]) = nums.exists(_ < 0)   // ²éÕÒÒ»¸öÕûÊýListÖÐÊÇ·ñÓë¸´Êý
-def containsOdd(nums: List[Int]) = nums.exists(_ % 2 == 1)  // ²éÕÒ¼¯ºÏÖÐÊÇ·ñÓÐÆæÊý
+æŸ¥æ‰¾çš„å‡½æ•°åˆ†å±‚å¼å†™æ³•ï¼š
+// ä¸€èˆ¬Javaæˆ–è€…Cè¯­è¨€å€¾å‘äºŽç”¨forå¾ªçŽ¯éåŽ†å…ƒç´ æŸ¥æ‰¾åŽè¿”å›žï¼Œè€ŒOOåž‹å†™æ³•å€¾å‘äºŽå°è£…æˆç±»åº“
+// existsç±»ä¼¼å·²å°è£…çš„å‡½æ•°æŒ‡é’ˆï¼ŒæŒ‡å‘éåŽ†é›†åˆå…ƒç´ çš„æ“ä½œï¼Œå…·ä½“æ“ä½œå†…å®¹ç”±ä¸Šå±‚ä¼ é€’ï¼Œæ­¤å¤„æ˜¯ _ < 0 ï¼Œå…¶ä¸­_è¡¨ç¤ºå…ƒç´ å†…å®¹
+def containsNeg(nums: List[Int]) = nums.exists(_ < 0)   // æŸ¥æ‰¾ä¸€ä¸ªæ•´æ•°Listä¸­æ˜¯å¦ä¸Žå¤æ•°
+def containsOdd(nums: List[Int]) = nums.exists(_ % 2 == 1)  // æŸ¥æ‰¾é›†åˆä¸­æ˜¯å¦æœ‰å¥‡æ•°
 
-¡¾¾Ö²¿Ì×ÓÃ currying¡¿
-ÊÇÒ»ÖÖ×ª»»¼¼ÇÉ£¬Í¨¹ýÔ¤ÏÈ´«ÈëÒ»¸ö»ò¶à ¸ö²ÎÊýÀ´°Ñ¶àÔªº¯Êý×ª±äÎª¸üÉÙÒ»Ð©ÔªµÄº¯ÊýÉõ»òÊÇÒ»Ôªº¯Êý¡£¾Ö²¿Ì×ÓÃ£¨Currying£©£ºÊÇÒ»ÖÖ½â¹¹¼¼ÇÉ£¬ÓÃÓÚ°Ñ¶àÔªº¯Êý·Ö½âÎª¶à¸ö¿ÉÁ´Ê½µ÷ÓÃµÄ²ãµþÊ½µÄÒ»Ôªº¯Êý£¬ÕâÖÖ½â¹¹¿ÉÒÔÔÊÐíÄãÔÚÆäÖÐ¾Ö²¿Ó¦ÓÃÒ»¸ö»ò¶à¸ö²ÎÊý
-def curriedSum(x: Int)(y: Int) = x + y    // Á½ÊýÇóºÍµÄcurryingÐ´·¨ µÈ¼ÛÓÚ  def curriedSum(x: Int, y: Int) = x + y
-Õ¹¿ªÀ´¾ÍÊÇ£º
+ã€å±€éƒ¨å¥—ç”¨ curryingã€‘
+æ˜¯ä¸€ç§è½¬æ¢æŠ€å·§ï¼Œé€šè¿‡é¢„å…ˆä¼ å…¥ä¸€ä¸ªæˆ–å¤š ä¸ªå‚æ•°æ¥æŠŠå¤šå…ƒå‡½æ•°è½¬å˜ä¸ºæ›´å°‘ä¸€äº›å…ƒçš„å‡½æ•°ç”šæˆ–æ˜¯ä¸€å…ƒå‡½æ•°ã€‚å±€éƒ¨å¥—ç”¨ï¼ˆCurryingï¼‰ï¼šæ˜¯ä¸€ç§è§£æž„æŠ€å·§ï¼Œç”¨äºŽæŠŠå¤šå…ƒå‡½æ•°åˆ†è§£ä¸ºå¤šä¸ªå¯é“¾å¼è°ƒç”¨çš„å±‚å å¼çš„ä¸€å…ƒå‡½æ•°ï¼Œè¿™ç§è§£æž„å¯ä»¥å…è®¸ä½ åœ¨å…¶ä¸­å±€éƒ¨åº”ç”¨ä¸€ä¸ªæˆ–å¤šä¸ªå‚æ•°
+def curriedSum(x: Int)(y: Int) = x + y    // ä¸¤æ•°æ±‚å’Œçš„curryingå†™æ³• ç­‰ä»·äºŽ  def curriedSum(x: Int, y: Int) = x + y
+å±•å¼€æ¥å°±æ˜¯ï¼š
 def first(x: Int) = (y: Int) => x + y
-def second = first(1)    µÈ¼ÛÓÚ   val onePlus = curriedSum(1)_     // ´Ë´¦Õ¼Î»·û±íÊ¾´«¸øcurriedSum(1)µÄ²ÎÊý
-ÉÏ²ãµ÷ÓÃÐÎÊ½Îª£º
-second(2)              µÈ¼ÛÓÚ   onePlus(2)
+def second = first(1)    ç­‰ä»·äºŽ   val onePlus = curriedSum(1)_     // æ­¤å¤„å ä½ç¬¦è¡¨ç¤ºä¼ ç»™curriedSum(1)çš„å‚æ•°
+ä¸Šå±‚è°ƒç”¨å½¢å¼ä¸ºï¼š
+second(2)              ç­‰ä»·äºŽ   onePlus(2)
 
-// ÐÎ²Î1ÊÇ¸öº¯ÊýÖ¸Õë£¬ÐÎ²Î2ÊÇDoubleÀàÐÍ£¬º¯ÊýÌåÀï°ÑÒ»¸öº¯Êýµ÷ÓÃÁ½±é
+// å½¢å‚1æ˜¯ä¸ªå‡½æ•°æŒ‡é’ˆï¼Œå½¢å‚2æ˜¯Doubleç±»åž‹ï¼Œå‡½æ•°ä½“é‡ŒæŠŠä¸€ä¸ªå‡½æ•°è°ƒç”¨ä¸¤é
 def twice(op: Double => Double, x: Double) = op(op(x))  
-twice(_ + 1, 5)  //  µÃµ½7£¬¼´5¼ÓÁËÁ½´Î1
+twice(_ + 1, 5)  //  å¾—åˆ°7ï¼Œå³5åŠ äº†ä¸¤æ¬¡1
 
 
-¡¾Ãû²ÎÊý by-name parameter¡¿  ½öÈë²ÎÎª¿ÕµÄÊ±ºò¿ÉÒÔÕâÃ´ÓÃ£¬ÎªÁËÈÃº¯ÊýÏÔµÃÏñ if Ö®ÀàµÄ¿ØÖÆ¹Ø¼ü×Ö
-Ô­ÓÐ¸ñÊ½ÈçÏÂ£º
+ã€åå‚æ•° by-name parameterã€‘  ä»…å…¥å‚ä¸ºç©ºçš„æ—¶å€™å¯ä»¥è¿™ä¹ˆç”¨ï¼Œä¸ºäº†è®©å‡½æ•°æ˜¾å¾—åƒ if ä¹‹ç±»çš„æŽ§åˆ¶å…³é”®å­—
+åŽŸæœ‰æ ¼å¼å¦‚ä¸‹ï¼š
 var assertionsEnabled = true
-def myAssert(predicate: () => Boolean) =   //  ´«Ò»¸öº¯ÊýÖ¸Õë£¬Èë²ÎÎª¿Õ£¬·µ»ØÖµÊÇ²¼¶ûÀàÐÍ
+def myAssert(predicate: () => Boolean) =   //  ä¼ ä¸€ä¸ªå‡½æ•°æŒ‡é’ˆï¼Œå…¥å‚ä¸ºç©ºï¼Œè¿”å›žå€¼æ˜¯å¸ƒå°”ç±»åž‹
 	if (assertionsEnabled && !predicate())
 	throw new AssertionError
 	
-myAssert( () => 5 > 3)  //  () ²»ÄÜÊ¡£¬ÒòÎª±íÊ¾º¯Êýµ÷ÓÃ£¬Èë²ÎÎª¿Õ£¬Ê¡ÂÔÁË½á¹¹²»ÍêÕû
+myAssert( () => 5 > 3)  //  () ä¸èƒ½çœï¼Œå› ä¸ºè¡¨ç¤ºå‡½æ•°è°ƒç”¨ï¼Œå…¥å‚ä¸ºç©ºï¼Œçœç•¥äº†ç»“æž„ä¸å®Œæ•´
 
-// ×¢Òâµ½£¬´ËÖÖ¶¨ÒåÐÎÊ½Óë predicate: Boolean Ö±½Ó´«²¼¶ûÀàÐÍµÄÇø±ðÔÚÓÚ£¬´Ë´¦ÊÇ´«µÝµÄÒ»¸öº¯Êý£¬ÔÚ·â×°ÄÚ²¿ÊµÏÖÊ±²ÅÖ´ÐÐ
-// ¿ÉÒÔÀí½âÎªÒ»¸öÑÓ³ÙÖ´ÐÐµÄ±í´ïÊ½£¬¶øÈç¹ûÊÇ predicate: Boolean ÀàÐÍ£¬º¯Êýµ÷ÓÃÇ°Èë²Î»áÏÈ±»¼ÆËã£¬È»ºó½«½á¹û×÷Îª²ÎÊý´«µÝ
-def byNameAssert(predicate: => Boolean) =       //  ¶¨ÒåµÄÒâÒåÍ¬ÉÏ£¬µ«ÊÇÊ¡ÂÔ()£¬±íÊ¾Ãû²ÎÊý
+// æ³¨æ„åˆ°ï¼Œæ­¤ç§å®šä¹‰å½¢å¼ä¸Ž predicate: Boolean ç›´æŽ¥ä¼ å¸ƒå°”ç±»åž‹çš„åŒºåˆ«åœ¨äºŽï¼Œæ­¤å¤„æ˜¯ä¼ é€’çš„ä¸€ä¸ªå‡½æ•°ï¼Œåœ¨å°è£…å†…éƒ¨å®žçŽ°æ—¶æ‰æ‰§è¡Œ
+// å¯ä»¥ç†è§£ä¸ºä¸€ä¸ªå»¶è¿Ÿæ‰§è¡Œçš„è¡¨è¾¾å¼ï¼Œè€Œå¦‚æžœæ˜¯ predicate: Boolean ç±»åž‹ï¼Œå‡½æ•°è°ƒç”¨å‰å…¥å‚ä¼šå…ˆè¢«è®¡ç®—ï¼Œç„¶åŽå°†ç»“æžœä½œä¸ºå‚æ•°ä¼ é€’
+def byNameAssert(predicate: => Boolean) =       //  å®šä¹‰çš„æ„ä¹‰åŒä¸Šï¼Œä½†æ˜¯çœç•¥()ï¼Œè¡¨ç¤ºåå‚æ•°
 	if (assertionsEnabled && !predicate)
 	throw new AssertionError
 	
 byNameAssert(5 > 3)
 
- ///////////////////////////////                     ¿ØÖÆ½á¹¹                ///////////////////////////////
+ ///////////////////////////////                     æŽ§åˆ¶ç»“æž„                ///////////////////////////////
 
-/////////// ifÓï¾ä£¬scalaÖÐËùÓÐÓï¾ä¶¼·µ»ØÒ»¸öÖµ(º¯ÊýÊ½ÓïÑÔµÄÌØµã)£¬Òò´Ë¿ÉÒÔÖ±½Ó°Ñ½á¹û×÷ÎªÖ´ÐÐÓï¾ä·µ»Ø
-//  ×¢Òâ´Ë´¦µÄ±äÁ¿ÀàÐÍ£¬ÔÚÎÄ¼þÃû±äÁ¿´æ´¢Öµ»ù±¾²»»á±ä¸üµÄÇé¿ö£¬Ê¹ÓÃvalÀàÐÍ£¬¸ü°²È«¸ßÐ§Ò×¶Á£»
-//  ´ËÍâ£¬±íÃ÷±äÁ¿ÓëÓÒ²à¼ÆËãÊ½µÈ¼Û(º¯ÊýÓïÑÔË¼Â·)
+/////////// ifè¯­å¥ï¼Œscalaä¸­æ‰€æœ‰è¯­å¥éƒ½è¿”å›žä¸€ä¸ªå€¼(å‡½æ•°å¼è¯­è¨€çš„ç‰¹ç‚¹)ï¼Œå› æ­¤å¯ä»¥ç›´æŽ¥æŠŠç»“æžœä½œä¸ºæ‰§è¡Œè¯­å¥è¿”å›ž
+//  æ³¨æ„æ­¤å¤„çš„å˜é‡ç±»åž‹ï¼Œåœ¨æ–‡ä»¶åå˜é‡å­˜å‚¨å€¼åŸºæœ¬ä¸ä¼šå˜æ›´çš„æƒ…å†µï¼Œä½¿ç”¨valç±»åž‹ï¼Œæ›´å®‰å…¨é«˜æ•ˆæ˜“è¯»ï¼›
+//  æ­¤å¤–ï¼Œè¡¨æ˜Žå˜é‡ä¸Žå³ä¾§è®¡ç®—å¼ç­‰ä»·(å‡½æ•°è¯­è¨€æ€è·¯)
 val filename = if (!args.isEmpty) args(0) else "default.txt"
 
-/////////// whileÓï¾ä£¬whileºÍdo-whileÔÚscalaÖÐÊÇÑ­»·¶ø²»ÊÇ±í´ïÊ½£¬·µ»ØÖµÓÀÔ¶ÊÇ Unit µÈ¼ÛÓÚ ()
+/////////// whileè¯­å¥ï¼Œwhileå’Œdo-whileåœ¨scalaä¸­æ˜¯å¾ªçŽ¯è€Œä¸æ˜¯è¡¨è¾¾å¼ï¼Œè¿”å›žå€¼æ°¸è¿œæ˜¯ Unit ç­‰ä»·äºŽ ()
 var line = ""
 do {
 	line = readLine()
@@ -100,52 +100,52 @@ def gcdLoop(x: Long, y: Long): Long = {
 		a = b%a
 		b = a
 	}
-	b       //  ´Ë´¦bÊÇÕâ¸öº¯ÊýµÄ·µ»ØÖµ
+	b       //  æ­¤å¤„bæ˜¯è¿™ä¸ªå‡½æ•°çš„è¿”å›žå€¼
 }
-// Í¬Ñù¹¦ÄÜµÄµÝ¹éÊ½Ð´·¨(º¯ÊýÊ½Ë¼Î¬)
+// åŒæ ·åŠŸèƒ½çš„é€’å½’å¼å†™æ³•(å‡½æ•°å¼æ€ç»´)
 def gcd(x: Long, y: Long): Long = if y == 0 x else gcd(y, x%y)
 
-/////////// forÓï¾ä
-// ´ËÐ´·¨²»Í¬ÓÚÆäËûÓïÑÔµÄÌØµãÔÚÓÚ£¬²»ÐèÒª¶¨ÒåÒ»¸öÏÂ±ê±éÀú i £¬Í¨¹ýÏÂ±êµÄ×ÔÔö£¬´Ó¼¯ºÏÀïÃæ³éÈ¡¸ÃÏÂ±êÔªËØÀ´·ÃÎÊ¼¯ºÏÔªËØ£¬
-// ÓÅµã£ºÓÐÐ§±ÜÃâµÄÊý×éÔ½½ç¡¢0/1ÆðÊ¼µÈÎÊÌâ
+/////////// forè¯­å¥
+// æ­¤å†™æ³•ä¸åŒäºŽå…¶ä»–è¯­è¨€çš„ç‰¹ç‚¹åœ¨äºŽï¼Œä¸éœ€è¦å®šä¹‰ä¸€ä¸ªä¸‹æ ‡éåŽ† i ï¼Œé€šè¿‡ä¸‹æ ‡çš„è‡ªå¢žï¼Œä»Žé›†åˆé‡Œé¢æŠ½å–è¯¥ä¸‹æ ‡å…ƒç´ æ¥è®¿é—®é›†åˆå…ƒç´ ï¼Œ
+// ä¼˜ç‚¹ï¼šæœ‰æ•ˆé¿å…çš„æ•°ç»„è¶Šç•Œã€0/1èµ·å§‹ç­‰é—®é¢˜
 val filesHere = (new java.io.File(".")).listFiles
-for (file <- filesHere)   //  Éú³ÉÆ÷Óï¾ä£¬¶ÔÓÚËùÓÐ¼¯ºÏÀà(²»Ö»Êý×é)£¬»áÒÀ´Î°Ñ¼¯ºÏÔªËØ·ÅÈë±äÁ¿
+for (file <- filesHere)   //  ç”Ÿæˆå™¨è¯­å¥ï¼Œå¯¹äºŽæ‰€æœ‰é›†åˆç±»(ä¸åªæ•°ç»„)ï¼Œä¼šä¾æ¬¡æŠŠé›†åˆå…ƒç´ æ”¾å…¥å˜é‡
 	println(file)
 	
-for ( i <- 1 to 5 )   //  Í¬ÉÏ£¬±éÀú´òÓ¡1µ½5
+for ( i <- 1 to 5 )   //  åŒä¸Šï¼ŒéåŽ†æ‰“å°1åˆ°5
 	println(i)
 	
-for ( i <- 1 until 4 )  //  ±éÀú´òÓ¡1µ½3 £¨²»°üÀ¨ÉÏÏÞ£©
+for ( i <- 1 until 4 )  //  éåŽ†æ‰“å°1åˆ°3 ï¼ˆä¸åŒ…æ‹¬ä¸Šé™ï¼‰
 	println(i)
 
-// ¹ýÂËÆ÷£¬ÔÚÉú³ÉÆ÷Óï¾äºó¼Ó if£¬±ÈÔÚÑ­»·ÌåÓï¾äÀïÃæ¼Ó if µÄºÃ´¦ÊÇ£ººóÕß»áµ¼ÖÂforÑ­»·µÄ´òÓ¡Óï¾ä·µ»ØÖµ Unit ×÷ÎªforÓï¾ä·µ»ØÖµ·µ»Ø
+// è¿‡æ»¤å™¨ï¼Œåœ¨ç”Ÿæˆå™¨è¯­å¥åŽåŠ  ifï¼Œæ¯”åœ¨å¾ªçŽ¯ä½“è¯­å¥é‡Œé¢åŠ  if çš„å¥½å¤„æ˜¯ï¼šåŽè€…ä¼šå¯¼è‡´forå¾ªçŽ¯çš„æ‰“å°è¯­å¥è¿”å›žå€¼ Unit ä½œä¸ºforè¯­å¥è¿”å›žå€¼è¿”å›ž
 val filesHere = (new java.io.File(".")).listFiles
 for (file <- filesHere if file.getName.endsWith(".scala"))
 	println(file)
-// É¸Ñ¡´òÓ¡ .scala½áÎ²µÄÎÄ¼þÃû	
+// ç­›é€‰æ‰“å° .scalaç»“å°¾çš„æ–‡ä»¶å	
 for ( file <- filesHere
 	  if file.isFile
-	  if file.getName.endsWith(".scala")   //  ¶à¸ö¹ýÂËÆ÷µþ¼Ó
+	  if file.getName.endsWith(".scala")   //  å¤šä¸ªè¿‡æ»¤å™¨å åŠ 
 )println(file)
-// É¸Ñ¡´òÓ¡µ±Ç°Ä¿Â¼ÏÂËùÓÐ .scala ÎÄ¼þÀï°üº¬ gcd Èý¸ö×Ö·ûµÄÎÄ¼þµÄÎÄ¼þÃû
+// ç­›é€‰æ‰“å°å½“å‰ç›®å½•ä¸‹æ‰€æœ‰ .scala æ–‡ä»¶é‡ŒåŒ…å« gcd ä¸‰ä¸ªå­—ç¬¦çš„æ–‡ä»¶çš„æ–‡ä»¶å
 def fileLines(file: java.io.File) = scala.io.Source.fromFile(file).getLines().toList
 def grep(pattern: String) =
 	for (
 		file <- filesHere
 		if file.getName.endsWith(".scala");
 		line <- fileLines(file)
-		trimmed = line.trim             // ×¢Òâµ½´Ë´¦trimmed±äÁ¿ÊÇÁÙÊ±Éú³ÉµÄ£¬Ñ­»·ÌåºÍÅÐ¶ÏÀï¿ÉÒÔÊ¹ÓÃ
-		if trimmed.matchs(pattern)        //  ¸´ºÏµü´ú
+		trimmed = line.trim             // æ³¨æ„åˆ°æ­¤å¤„trimmedå˜é‡æ˜¯ä¸´æ—¶ç”Ÿæˆçš„ï¼Œå¾ªçŽ¯ä½“å’Œåˆ¤æ–­é‡Œå¯ä»¥ä½¿ç”¨
+		if trimmed.matchs(pattern)        //  å¤åˆè¿­ä»£
 	) println(file + ": " + trimmed)
 grep(".*gcd.*")
 
-// yieldÓï¾ä£¬Í¨¹ý¸ÃÓï¾äÉú³É¼¯ºÏ£¬±ê×¼¸ñÊ½ for clauses yield body£¬ÊµÖÊÊÇ°ÑforÓï¾äÀï×îºóÔªËØÓÃ yield Êä³ö
+// yieldè¯­å¥ï¼Œé€šè¿‡è¯¥è¯­å¥ç”Ÿæˆé›†åˆï¼Œæ ‡å‡†æ ¼å¼ for clauses yield bodyï¼Œå®žè´¨æ˜¯æŠŠforè¯­å¥é‡Œæœ€åŽå…ƒç´ ç”¨ yield è¾“å‡º
 def scalaFiles = 
 	for {
 		file <- filesHere
-		if file.getName.endsWith(".scala")   // ×¢Òâ´Ë´¦µü´úºÍÉ¸Ñ¡¶¼·ÅÔÚ {} Àï£¬yield ¹Ø¼ü×ÖÔÚÍêÕûÓï¾ä½áÊøÖ®Ç°
-	} yield file    // Éú³ÉÒÔÎÄ¼þÃûÎªÔªËØµÄÊý×é Array[File]
-//  »ñÈ¡Ò»¸ö°üº¬ for×Ö·ûµÄscalaÎÄ¼þµÄ¸ÃÐÐ³¤¶È¼¯ºÏ£¬ÀàÐÍ Array[Int]
+		if file.getName.endsWith(".scala")   // æ³¨æ„æ­¤å¤„è¿­ä»£å’Œç­›é€‰éƒ½æ”¾åœ¨ {} é‡Œï¼Œyield å…³é”®å­—åœ¨å®Œæ•´è¯­å¥ç»“æŸä¹‹å‰
+	} yield file    // ç”Ÿæˆä»¥æ–‡ä»¶åä¸ºå…ƒç´ çš„æ•°ç»„ Array[File]
+//  èŽ·å–ä¸€ä¸ªåŒ…å« forå­—ç¬¦çš„scalaæ–‡ä»¶çš„è¯¥è¡Œé•¿åº¦é›†åˆï¼Œç±»åž‹ Array[Int]
 val forLineLengths = for {
 	file <- filesHere
 	if file.getName.endsWith(".scala")
@@ -154,13 +154,13 @@ val forLineLengths = for {
 	if trimmed.matchs(".*for.*")
 	} yield trimmed.length
 	
-// Òì³£´¦Àí try-catch-finally ½á¹¹Ò²ÓÐ·µ»ØÖµ£¬Òª±ÜÃâÔÚfinallyÓï¾äÀïÊ¹ÓÃ return
+// å¼‚å¸¸å¤„ç† try-catch-finally ç»“æž„ä¹Ÿæœ‰è¿”å›žå€¼ï¼Œè¦é¿å…åœ¨finallyè¯­å¥é‡Œä½¿ç”¨ return
 throw new IllegalArgumentException
 
 val half = 
 	if (n%2 == 0) n/2
 	else 
-		throw new RuntimeException("n must be even") // Å×³öÒ»³¡µÄÓï¾äÒ²ÊÇÓÐ·µ»ØÖµµÄ£¬ÀàÐÍÊÇ Nothing£¬ºóÐòÓï¾äÓÀ²»Ö´ÐÐ
+		throw new RuntimeException("n must be even") // æŠ›å‡ºä¸€åœºçš„è¯­å¥ä¹Ÿæ˜¯æœ‰è¿”å›žå€¼çš„ï¼Œç±»åž‹æ˜¯ Nothingï¼ŒåŽåºè¯­å¥æ°¸ä¸æ‰§è¡Œ
 	
 import java.io.FileReader
 import java.io.FileNotFoundException
@@ -170,23 +170,23 @@ try {
 } catch {
 	case ex: FileNotFoundException =>
 	case ex: IOException =>
-} finally {        // ²»¹ÜÒì³£½á¹û±ØÈ»Ö´ÐÐÓï¾ä£¬È·±£×ÊÔ´µÃµ½ÊÍ·Å
+} finally {        // ä¸ç®¡å¼‚å¸¸ç»“æžœå¿…ç„¶æ‰§è¡Œè¯­å¥ï¼Œç¡®ä¿èµ„æºå¾—åˆ°é‡Šæ”¾
 	f.close()
 }
 
-def f(): Int = try return 1 finally return 2           //  µÃµ½½á¹û2£¬ÒòÎªreturnÓï¾ä·µ»ØÖµ¸²¸ÇÁËtryÓï¾ä
-def g(): Int = try 1 finally 2                 //  µÃµ½½á¹û1£¬ÒòÎªtryÓï¾äµÄÖ´ÐÐ½á¹û×÷ÎªÕû¸öÓï¾ä½á¹û·µ»Ø
+def f(): Int = try return 1 finally return 2           //  å¾—åˆ°ç»“æžœ2ï¼Œå› ä¸ºreturnè¯­å¥è¿”å›žå€¼è¦†ç›–äº†tryè¯­å¥
+def g(): Int = try 1 finally 2                 //  å¾—åˆ°ç»“æžœ1ï¼Œå› ä¸ºtryè¯­å¥çš„æ‰§è¡Œç»“æžœä½œä¸ºæ•´ä¸ªè¯­å¥ç»“æžœè¿”å›ž
 
-// match-case Óï¾ä£¬ÀàËÆÆäËûÓïÑÔÀïµÄ switch-case Óï¾ä£¬Çø±ðÔÚÓÚ case ÅÐ¶Ï²»ÏÞÀàÐÍ
-// Í¬Ê±£¬ÓÉÓÚÃ»ÓÐbreakÓï¾ä£¬Ò²Ã»ÓÐÆäËûÓïÑÔÖÐ¶à¸öcase¹²ÓÃÒ»¸öÖ´ÐÐÌåµÄÇé¿ö£¬Ò»¸öcaseÖ´ÐÐÍêºó¾ÍÍË³ö
+// match-case è¯­å¥ï¼Œç±»ä¼¼å…¶ä»–è¯­è¨€é‡Œçš„ switch-case è¯­å¥ï¼ŒåŒºåˆ«åœ¨äºŽ case åˆ¤æ–­ä¸é™ç±»åž‹
+// åŒæ—¶ï¼Œç”±äºŽæ²¡æœ‰breakè¯­å¥ï¼Œä¹Ÿæ²¡æœ‰å…¶ä»–è¯­è¨€ä¸­å¤šä¸ªcaseå…±ç”¨ä¸€ä¸ªæ‰§è¡Œä½“çš„æƒ…å†µï¼Œä¸€ä¸ªcaseæ‰§è¡Œå®ŒåŽå°±é€€å‡º
 val firstArg = if (args.length > 0) args(0) else ""
 firstArg match {      
 	case "salt" => println("pepper")
 	case "chips" => println("salsa")
 	case "eggs" => println("bacon")
-	case _ => "huh?"           //  Ä¬ÈÏ¶µµ×Óï¾ä
+	case _ => "huh?"           //  é»˜è®¤å…œåº•è¯­å¥
 }
-// ÁíÒ»ÖÖÐ´·¨£¬×¢Òâµ½ match Óï¾äÒ²ÊÇÓÐ·µ»ØÖµµÄ£¬Ö±½Ó½«·µ»ØÖµ´òÓ¡±ÜÃâºÜ¶àÖØ¸´±àÂë£¬Í¬Ê±ÓïÒå½âñîÇåÎú£¨Ñ¡Ôñ£¬Êä³ö£©
+// å¦ä¸€ç§å†™æ³•ï¼Œæ³¨æ„åˆ° match è¯­å¥ä¹Ÿæ˜¯æœ‰è¿”å›žå€¼çš„ï¼Œç›´æŽ¥å°†è¿”å›žå€¼æ‰“å°é¿å…å¾ˆå¤šé‡å¤ç¼–ç ï¼ŒåŒæ—¶è¯­ä¹‰è§£è€¦æ¸…æ™°ï¼ˆé€‰æ‹©ï¼Œè¾“å‡ºï¼‰
 val friend = firstArg match {         
 	case "salt" => "pepper"
 	case "chips" => "salsa"
@@ -195,8 +195,8 @@ val friend = firstArg match {
 }
 println(friend)
 	
-// ²»Ê¹ÓÃbreakºÍcontinueµÄº¯ÊýÊ½É¸Ñ¡Ð´·¨£¬scalaÖÐÒ²Ã»ÓÐ½«ÕâÁ½¸ö×÷Îª»ù±¾¹Ø¼ü×Ö
-// ÆäËûÓïÑÔµÄÐ´·¨£¬Æ¥Åä·Ç-ºócontinueÖ´ÐÐ.scalaÅÐ¶Ï£¬Æ¥Åä.scalaÖ®ºóbreakÍË³öÑ­»·
+// ä¸ä½¿ç”¨breakå’Œcontinueçš„å‡½æ•°å¼ç­›é€‰å†™æ³•ï¼Œscalaä¸­ä¹Ÿæ²¡æœ‰å°†è¿™ä¸¤ä¸ªä½œä¸ºåŸºæœ¬å…³é”®å­—
+// å…¶ä»–è¯­è¨€çš„å†™æ³•ï¼ŒåŒ¹é…éž-åŽcontinueæ‰§è¡Œ.scalaåˆ¤æ–­ï¼ŒåŒ¹é….scalaä¹‹åŽbreaké€€å‡ºå¾ªçŽ¯
 def searchFrom(i: Int): Int = 
 	if (i >= args.length) -1 
 	else if (args(i).startsWith("-")) searchFrom(i+1)
@@ -204,8 +204,8 @@ def searchFrom(i: Int): Int =
 	else searchFrom(i+1)
 val i = searchFrom(0)
 
-// Ç¿ÐÐÊ¹ÓÃbreakµÄ·½·¨£¬×¢Òâ´Ë´¦Ç¿ÐÐÌø³öµ½breakable±ê¼ÇµÄÓï¾ä¿é {} ½áÎ²£¬ÀàËÆÆäËûÓïÑÔµÄgotoÓï¾ä£¬
-// µ×²ãÊ¹ÓÃÒì³£»úÖÆÊµÏÖ£¬¿ÉÒÔ¿ç¶à²ãº¯ÊýÌø×ª£¬Ç¿ÓÚÆäËûÓïÑÔbreak£¬ÈõÓÚgoto
+// å¼ºè¡Œä½¿ç”¨breakçš„æ–¹æ³•ï¼Œæ³¨æ„æ­¤å¤„å¼ºè¡Œè·³å‡ºåˆ°breakableæ ‡è®°çš„è¯­å¥å— {} ç»“å°¾ï¼Œç±»ä¼¼å…¶ä»–è¯­è¨€çš„gotoè¯­å¥ï¼Œ
+// åº•å±‚ä½¿ç”¨å¼‚å¸¸æœºåˆ¶å®žçŽ°ï¼Œå¯ä»¥è·¨å¤šå±‚å‡½æ•°è·³è½¬ï¼Œå¼ºäºŽå…¶ä»–è¯­è¨€breakï¼Œå¼±äºŽgoto
 import scala.util.control.Breaks._
 import java.io._
 
@@ -217,39 +217,39 @@ breakable {
 	}
 }
 	
- ///////////////////////////////                     Àà¶¨ÒåÏà¹Ø                /////////////////////////////// 
+ ///////////////////////////////                     ç±»å®šä¹‰ç›¸å…³                /////////////////////////////// 
  
- ////////////  ScalaÖÐ½ûÖ¹¶¨ÒåÍ¬ÃûµÄÀà·½·¨ºÍÀà±äÁ¿£¬×ÓÀàÀïÃæÓÐÍ¬Ãû±äÁ¿Ê±£¬ÉõÖÁÄÜ¸²¸Ç¸¸ÀàÀïÍ¬ÃûÎÞ²Î·½·¨
- //////// JavaÀïÃæÓÐ4ÖÖÃû¿Õ¼ä£º±äÁ¿£¬·½·¨£¬ÀàÐÍ£¬°ü    
- ///////  ScalaÀïÃæÖ»ÓÐ2ÖÖÃû¿Õ¼ä£º±äÁ¿ values (fields, methods, packages, and singleton objects)
- ///////                          ÀàÐÍ types (class and trait names)
+ ////////////  Scalaä¸­ç¦æ­¢å®šä¹‰åŒåçš„ç±»æ–¹æ³•å’Œç±»å˜é‡ï¼Œå­ç±»é‡Œé¢æœ‰åŒåå˜é‡æ—¶ï¼Œç”šè‡³èƒ½è¦†ç›–çˆ¶ç±»é‡ŒåŒåæ— å‚æ–¹æ³•
+ //////// Javaé‡Œé¢æœ‰4ç§åç©ºé—´ï¼šå˜é‡ï¼Œæ–¹æ³•ï¼Œç±»åž‹ï¼ŒåŒ…    
+ ///////  Scalaé‡Œé¢åªæœ‰2ç§åç©ºé—´ï¼šå˜é‡ values (fields, methods, packages, and singleton objects)
+ ///////                          ç±»åž‹ types (class and trait names)
  
-//  ÉùÃ÷ IntÀàÐÍµ½ RationalÀàÐÍµÄÄ¬ÈÏ×ª»»£¬ÒÔ×Ô¶¯ÔÚÀàËÆ  2 * rational ÕâÖÖ¼ÆËãÊ±Íê³É 2Ä¬ÈÏ×ª»»³É RationalµÄÐ§¹û 
+//  å£°æ˜Ž Intç±»åž‹åˆ° Rationalç±»åž‹çš„é»˜è®¤è½¬æ¢ï¼Œä»¥è‡ªåŠ¨åœ¨ç±»ä¼¼  2 * rational è¿™ç§è®¡ç®—æ—¶å®Œæˆ 2é»˜è®¤è½¬æ¢æˆ Rationalçš„æ•ˆæžœ 
 implicit def intToRational(x: Int) = new Rational(x) 
  
-//  scalaÇãÏòÓÚÊ¹ÓÃ¾²Ì¬Àà£¨immutable object£©£¬³ýÁË¶à´Î¿½±´ºóÕ¼ÓÃ¸ü¶àÄÚ´æÕâ¸öÈ±µãÍâÓÐ4µãºÃ´¦£º
-//   1¡¢×´Ì¬Ò×Î¬»¤£»2¡¢×÷Îª²ÎÊý´«µÝÏÂÎÞÐèµ£ÐÄÄÚÈÝ±ä¸ü£»3¡¢¶àÏß³Ì°²È«£»4¡¢¿ÉÒÔ×÷Îªhash¼üÊ¹ÓÃ
-//  Àà¶¨Òå£¬ºóÃæÒª½ÓÐÎ²ÎºÍÀàÐÍ£¬ÐÎ²Î¿ÉÒÔÔÚÀà¶¨ÒåÀïÈÎºÎµØ·½Ê¹ÓÃ£¬ÍòÄÜÀàÐÍÓÐ Unit£¬Èç¹ûÀàÃ»ÓÐ¾ßÌåÄÚÈÝ£¬²»ÐèÒªÇ¿ÖÆ¼ÓÉÏ {}
-class Rational(n: Int, d: Int) extends Ordered[Rational] {   // ¼Ì³Ð trait Ê±£¬¸Ã´«²Ù×÷ÊýÀàÐÍÒª´«ÀàÐÍ
-	// Àà¶¨ÒåÀïµÄÈÎºÎ¿ÉÖ´ÐÐ´úÂë¶¼»á±»±àÒëÆ÷·Åµ½¹¹Ôìº¯ÊýÄÚ£¬°´ÕÕÏÔÊ¾µÄÏÈºóË³ÐòÖ´ÐÐ£¬ÈçÏÂ´òÓ¡»áÔÚ¶ÔÏóÉú³ÉÊ±Ö´ÐÐ
+//  scalaå€¾å‘äºŽä½¿ç”¨é™æ€ç±»ï¼ˆimmutable objectï¼‰ï¼Œé™¤äº†å¤šæ¬¡æ‹·è´åŽå ç”¨æ›´å¤šå†…å­˜è¿™ä¸ªç¼ºç‚¹å¤–æœ‰4ç‚¹å¥½å¤„ï¼š
+//   1ã€çŠ¶æ€æ˜“ç»´æŠ¤ï¼›2ã€ä½œä¸ºå‚æ•°ä¼ é€’ä¸‹æ— éœ€æ‹…å¿ƒå†…å®¹å˜æ›´ï¼›3ã€å¤šçº¿ç¨‹å®‰å…¨ï¼›4ã€å¯ä»¥ä½œä¸ºhashé”®ä½¿ç”¨
+//  ç±»å®šä¹‰ï¼ŒåŽé¢è¦æŽ¥å½¢å‚å’Œç±»åž‹ï¼Œå½¢å‚å¯ä»¥åœ¨ç±»å®šä¹‰é‡Œä»»ä½•åœ°æ–¹ä½¿ç”¨ï¼Œä¸‡èƒ½ç±»åž‹æœ‰ Unitï¼Œå¦‚æžœç±»æ²¡æœ‰å…·ä½“å†…å®¹ï¼Œä¸éœ€è¦å¼ºåˆ¶åŠ ä¸Š {}
+class Rational(n: Int, d: Int) extends Ordered[Rational] {   // ç»§æ‰¿ trait æ—¶ï¼Œè¯¥ä¼ æ“ä½œæ•°ç±»åž‹è¦ä¼ ç±»åž‹
+	// ç±»å®šä¹‰é‡Œçš„ä»»ä½•å¯æ‰§è¡Œä»£ç éƒ½ä¼šè¢«ç¼–è¯‘å™¨æ”¾åˆ°æž„é€ å‡½æ•°å†…ï¼ŒæŒ‰ç…§æ˜¾ç¤ºçš„å…ˆåŽé¡ºåºæ‰§è¡Œï¼Œå¦‚ä¸‹æ‰“å°ä¼šåœ¨å¯¹è±¡ç”Ÿæˆæ—¶æ‰§è¡Œ
 	println("Create " + n + "/" + d)
-	// Ç°ÖÃÌõ¼þ£¬ÓÃÓÚÔÚ¹¹Ôìº¯Êýµ÷ÓÃÇ°¼ì²éÈë²Î£¬Èô²»Âú×ãÇ°ÖÃÌõ¼þÒªÇó£¬¶ÔÏó²»ÄÜÉú³É£¬Å×³öIllegalArgumentExceptionÒì³£
+	// å‰ç½®æ¡ä»¶ï¼Œç”¨äºŽåœ¨æž„é€ å‡½æ•°è°ƒç”¨å‰æ£€æŸ¥å…¥å‚ï¼Œè‹¥ä¸æ»¡è¶³å‰ç½®æ¡ä»¶è¦æ±‚ï¼Œå¯¹è±¡ä¸èƒ½ç”Ÿæˆï¼ŒæŠ›å‡ºIllegalArgumentExceptionå¼‚å¸¸
 	require(d != 0)
 	private val g = gcd(n.abs, d.abs)
-// Óò¶¨Òå£¬ÓÉÓÚÐÎ²Î½öÔÚ±¾¶ÔÏóÄÚÓÐÐ§(¿ÉÒÔÀí½âÎªprivate)£¬ÔÚÍâ²¿Ê¹ÓÃÊ±ÐèÒª¶¨ÒåÐÂµÄÓò±äÁ¿£¬ÀýÈçÏÂÃæµÄthat.denomÊ¹ÓÃ³¡¾°
-// ÍêÕûÐ´·¨ÊÇ val numer: Int = n / g
+// åŸŸå®šä¹‰ï¼Œç”±äºŽå½¢å‚ä»…åœ¨æœ¬å¯¹è±¡å†…æœ‰æ•ˆ(å¯ä»¥ç†è§£ä¸ºprivate)ï¼Œåœ¨å¤–éƒ¨ä½¿ç”¨æ—¶éœ€è¦å®šä¹‰æ–°çš„åŸŸå˜é‡ï¼Œä¾‹å¦‚ä¸‹é¢çš„that.denomä½¿ç”¨åœºæ™¯
+// å®Œæ•´å†™æ³•æ˜¯ val numer: Int = n / g
 	val numer = n / g
 	val denom = d / g
 	
-	// ¸¨Öú¹¹Ôìº¯Êý£¬¶àÌ¬µÄ»ù´¡£¬´Ë´¦´¦Àí·ÖÄ¸Îª1µÄÇé¿ö£¬´ËÀà¹¹Ôìº¯Êý±ØÐëµ÷ÓÃÆäËû¸ü»ù´¡µÄ¹¹Ôìº¯Êý£¬
-	// ±¾ÖÊÉÏ¶¼Òª×ßÖ÷¹¹Ôìº¯Êý£¬ÕâÊÇscalaµÄÎªÁË·½±ãÖ÷¹¹Ôìº¯Êý±àÐ´ÒýÈëµÄÕÛÖÐ£¬±¾ÐÐÖ®Ç°µÄ²¿·Ö¶¼ÊÇÖ÷¹¹Ôìº¯ÊýµÄÄÚÈÝ
+	// è¾…åŠ©æž„é€ å‡½æ•°ï¼Œå¤šæ€çš„åŸºç¡€ï¼Œæ­¤å¤„å¤„ç†åˆ†æ¯ä¸º1çš„æƒ…å†µï¼Œæ­¤ç±»æž„é€ å‡½æ•°å¿…é¡»è°ƒç”¨å…¶ä»–æ›´åŸºç¡€çš„æž„é€ å‡½æ•°ï¼Œ
+	// æœ¬è´¨ä¸Šéƒ½è¦èµ°ä¸»æž„é€ å‡½æ•°ï¼Œè¿™æ˜¯scalaçš„ä¸ºäº†æ–¹ä¾¿ä¸»æž„é€ å‡½æ•°ç¼–å†™å¼•å…¥çš„æŠ˜ä¸­ï¼Œæœ¬è¡Œä¹‹å‰çš„éƒ¨åˆ†éƒ½æ˜¯ä¸»æž„é€ å‡½æ•°çš„å†…å®¹
 	def this(n: Int) = this(n, 1)
 	
-	//  this Ö¸ÕëÒÀÈ»¿ÉÓÃ£¬µÈÍ¬ÓÚjavaÀïµÄthis£¬Ö¸´ú±¾¶ÔÏó
+	//  this æŒ‡é’ˆä¾ç„¶å¯ç”¨ï¼Œç­‰åŒäºŽjavaé‡Œçš„thisï¼ŒæŒ‡ä»£æœ¬å¯¹è±¡
 	def lessThan(that: Rational): boolean = numer * that.denom < that.numer * denom
 	def max(that: Rational): Rational = if (lessThan(that)) that else this
 	
-	//   ÔËËã·ûÓÅÏÈ¼¶Ä¬ÈÏ¼Ì³ÐscalaÒÑÊµÏÖµÄ¸ÃÀàÔËËã·ûÓÅÏÈ¼¶£¬´Ë´¦ÊµÏÖÁËÁ½ÖÖÐÎÊ½µÄ¼Ó·¨
+	//   è¿ç®—ç¬¦ä¼˜å…ˆçº§é»˜è®¤ç»§æ‰¿scalaå·²å®žçŽ°çš„è¯¥ç±»è¿ç®—ç¬¦ä¼˜å…ˆçº§ï¼Œæ­¤å¤„å®žçŽ°äº†ä¸¤ç§å½¢å¼çš„åŠ æ³•
 	def + (that: Rational): Rational = new Rational( numer * that.denom + that.numer * denom, denom * that.denom )
 	def + (i: Int): Rational = new Rational( numer + i * denom, denom )
 	
@@ -262,19 +262,19 @@ class Rational(n: Int, d: Int) extends Ordered[Rational] {   // ¼Ì³Ð trait Ê±£¬¸
 	def / (that: Rational): Rational = new Rational( numer * that.denom, denom * that.numer )
 	def / (i: Int): Rational = new Rational( numer, denom * i )
 	
-	// ÖØÔØ toString º¯Êý£¬½»»¥´°¿ÚÀïÉú³É¶ÔÏóÊ±ÈçÎ´ÖØÔØ»áµ÷ÓÃÄ¬ÈÏµÄ java.lang.Object ¶ÔÏóµÄtoString ´òÓ¡½á¹û
+	// é‡è½½ toString å‡½æ•°ï¼Œäº¤äº’çª—å£é‡Œç”Ÿæˆå¯¹è±¡æ—¶å¦‚æœªé‡è½½ä¼šè°ƒç”¨é»˜è®¤çš„ java.lang.Object å¯¹è±¡çš„toString æ‰“å°ç»“æžœ
 	override def toString = numer + "/" + denom
 	
-	// Ë½ÓÐ·½·¨
+	// ç§æœ‰æ–¹æ³•
 	private def gcd(a: Int, b:Int): Int = if (b == 0) a else gcd(b, a%b)
 	
-	// ±¾·½·¨×÷Îª¼Ì³ÐµÄ trait ÐèÒªÊ¹ÓÃµÄ»ù±¾·½·¨£¬ÔÚÀàÀïÃæÊµÏÖÊ±ºò
+	// æœ¬æ–¹æ³•ä½œä¸ºç»§æ‰¿çš„ trait éœ€è¦ä½¿ç”¨çš„åŸºæœ¬æ–¹æ³•ï¼Œåœ¨ç±»é‡Œé¢å®žçŽ°æ—¶å€™
 	def compare(that: Rational) = (this.numer * that.denom) - (that.numer * this.denom)
 }
 
-//  ×¢Òâµ½ÔÚ´Ë´¦²¢Ã»ÓÐÊµÏÖÏàµÈÅÐ¶Ï²Ù×÷£¬ÒòÎªµÈ¼ÛÅÐ¶Ï¸úÀàÐÍÏà¹Ø£¬¶ø´Ë´¦ÊµÏÖÊ±£¬¾ßÌåÀàÐÍÊÇ²»Ã÷µÄ
-trait Ordered[T] {      //  ³éÏó³öÀ´µÄ±È½ÏÌØÐÔ£¬³ýÁË¸ø Rational ÓÃ£¬Ò²¿ÉÒÔ¸øÆäËûÓÐÀàËÆ¹¦ÄÜµÄÀàÓÃ£¬ ¸Ð¾õÉÏÀàËÆ·ºÐÍ
-	def compare£¨that: T): Int  // ´Ë´¦ÐéÄâ·½·¨£¬Ã»ÓÐº¯ÊýÌå£¬ÁôÔÚ¼Ì³Ð±¾ trait µÄÀàÈ¥ÊµÏÖ
+//  æ³¨æ„åˆ°åœ¨æ­¤å¤„å¹¶æ²¡æœ‰å®žçŽ°ç›¸ç­‰åˆ¤æ–­æ“ä½œï¼Œå› ä¸ºç­‰ä»·åˆ¤æ–­è·Ÿç±»åž‹ç›¸å…³ï¼Œè€Œæ­¤å¤„å®žçŽ°æ—¶ï¼Œå…·ä½“ç±»åž‹æ˜¯ä¸æ˜Žçš„
+trait Ordered[T] {      //  æŠ½è±¡å‡ºæ¥çš„æ¯”è¾ƒç‰¹æ€§ï¼Œé™¤äº†ç»™ Rational ç”¨ï¼Œä¹Ÿå¯ä»¥ç»™å…¶ä»–æœ‰ç±»ä¼¼åŠŸèƒ½çš„ç±»ç”¨ï¼Œ æ„Ÿè§‰ä¸Šç±»ä¼¼æ³›åž‹
+	def compareï¼ˆthat: T): Int  // æ­¤å¤„è™šæ‹Ÿæ–¹æ³•ï¼Œæ²¡æœ‰å‡½æ•°ä½“ï¼Œç•™åœ¨ç»§æ‰¿æœ¬ trait çš„ç±»åŽ»å®žçŽ°
 	
 	def <(that: T): Boolean = (this compare that) < 0
 	def >(that: T): Boolean = (this compare that) > 0
@@ -282,137 +282,137 @@ trait Ordered[T] {      //  ³éÏó³öÀ´µÄ±È½ÏÌØÐÔ£¬³ýÁË¸ø Rational ÓÃ£¬Ò²¿ÉÒÔ¸øÆäËû
 	def >=(that: T): Boolean = (this compare that) >= 0
 }
 
-¡¾³éÏóÀà¡¿  abstract class Element ....
+ã€æŠ½è±¡ç±»ã€‘  abstract class Element ....
 abstract class Element {
-	def contents: Array[String]   //  ³éÏóÀàµÄ·½·¨£¬ÕâÀà·½·¨¶¼Ã»ÓÐ¾ßÌåÊµÏÖ£¬scalaÖÐÃ»ÓÐÊµÏÖº¯ÊýÌåµÄÄ¬ÈÏ¾ÍÊÇ abstract
-	def height: Int = contents.length   // ÎÞ²Î Àà·½·¨£¬ÆäÊµºóÃæµÄlengthÒ²ÊÇµ÷ÓÃµÄÀà·½·¨£¬»ñÈ¡ÔªËØ¸öÊý
-	// val height = contents.length  //´ÓÉÏ²ãÐ§¹û¿´ÓëÉÏÒ»ÐÐº¯Êý¶¨ÒåÒ»Ñù£¬µ«ÊÇÒ»¸öÊÇº¯Êýµ÷ÓÃ·µ»Ø½á¹û£¬Ò»¸öÊÇ·µ»Ø±äÁ¿Öµ
-	def width: Int = if (height == 0) 0 else contents(0).length   // È¡Ò»¸öÔªËØµÄ³¤¶È×÷Îª¿í¶È(´Ë´¦ÊÇ×Ö·û¸öÊý)
+	def contents: Array[String]   //  æŠ½è±¡ç±»çš„æ–¹æ³•ï¼Œè¿™ç±»æ–¹æ³•éƒ½æ²¡æœ‰å…·ä½“å®žçŽ°ï¼Œscalaä¸­æ²¡æœ‰å®žçŽ°å‡½æ•°ä½“çš„é»˜è®¤å°±æ˜¯ abstract
+	def height: Int = contents.length   // æ— å‚ ç±»æ–¹æ³•ï¼Œå…¶å®žåŽé¢çš„lengthä¹Ÿæ˜¯è°ƒç”¨çš„ç±»æ–¹æ³•ï¼ŒèŽ·å–å…ƒç´ ä¸ªæ•°
+	// val height = contents.length  //ä»Žä¸Šå±‚æ•ˆæžœçœ‹ä¸Žä¸Šä¸€è¡Œå‡½æ•°å®šä¹‰ä¸€æ ·ï¼Œä½†æ˜¯ä¸€ä¸ªæ˜¯å‡½æ•°è°ƒç”¨è¿”å›žç»“æžœï¼Œä¸€ä¸ªæ˜¯è¿”å›žå˜é‡å€¼
+	def width: Int = if (height == 0) 0 else contents(0).length   // å–ä¸€ä¸ªå…ƒç´ çš„é•¿åº¦ä½œä¸ºå®½åº¦(æ­¤å¤„æ˜¯å­—ç¬¦ä¸ªæ•°)
 }
-ÔÚscalaÖÐ£¬ÍÆ¼öÎÞ¸±×÷ÓÃ(side effects)µÄÎÞ²Î·½·¨¶¨ÒåºÍµ÷ÓÃÊ±²»´ø () £¬ÓÐ¸±×÷ÓÃµÄ·½·¨Òª´ø()£¬ÈÃÈË¿´³öÀ´ÊÇÔÚµ÷ÓÃ·½·¨¶ø²»ÊÇ¶ÁÈ¡±äÁ¿£¨ÈçÇ°ÃæµÄ contents.length ÎÞÉÏÏÂÎÄµÄ»°ÎÞ·¨Çø·Ö£©
-Ò»°ãIO²Ù×÷£¬Ð´var±äÁ¿£¬Ö±½Ó»ò¼ä½ÓÊ¹ÓÃ¿É±ä±äÁ¿ ¶¼ÈÏÎªÊÇÈÝÒ×ÓÐ¸±×÷ÓÃµÄ
+åœ¨scalaä¸­ï¼ŒæŽ¨èæ— å‰¯ä½œç”¨(side effects)çš„æ— å‚æ–¹æ³•å®šä¹‰å’Œè°ƒç”¨æ—¶ä¸å¸¦ () ï¼Œæœ‰å‰¯ä½œç”¨çš„æ–¹æ³•è¦å¸¦()ï¼Œè®©äººçœ‹å‡ºæ¥æ˜¯åœ¨è°ƒç”¨æ–¹æ³•è€Œä¸æ˜¯è¯»å–å˜é‡ï¼ˆå¦‚å‰é¢çš„ contents.length æ— ä¸Šä¸‹æ–‡çš„è¯æ— æ³•åŒºåˆ†ï¼‰
+ä¸€èˆ¬IOæ“ä½œï¼Œå†™varå˜é‡ï¼Œç›´æŽ¥æˆ–é—´æŽ¥ä½¿ç”¨å¯å˜å˜é‡ éƒ½è®¤ä¸ºæ˜¯å®¹æ˜“æœ‰å‰¯ä½œç”¨çš„
 
-¡¾¼Ì³Ð¡¿ ³¬ÀàµÄËùÓÐË½ÓÐ±äÁ¿¶¼²»±»×ÓÀà¼Ì³Ð
+ã€ç»§æ‰¿ã€‘ è¶…ç±»çš„æ‰€æœ‰ç§æœ‰å˜é‡éƒ½ä¸è¢«å­ç±»ç»§æ‰¿
 class ArrayElement(conts: Array[String]) extends Element {
-	//scalaÀïÃæ±äÁ¿ºÍ·½·¨ÔÚÍ¬Ò»¸öÃû¿Õ£¬Òò´ËÈçÏÂÐ´·¨Ò²»áoverride¸¸ÀàÍ¬Ãûº¯Êý£¬ËäÈ»¸¸ÀàÀïÉùÃ÷µÄÊÇ¸ö·½·¨¶ø´Ë´¦ÊÇ±äÁ¿
-	val contents: Array[String] = conts    //  ½öÊÇ½ÓÊÕ´æ´¢±äÁ¿Ê±£¬scala¸üÇãÏò±¾ÐÐµÄÐ´·¨
-	//  def contents: Array[String] = conts   µÈ¼ÛÓÚÉÏÒ»ÐÐ¶¨Òå
+	//scalaé‡Œé¢å˜é‡å’Œæ–¹æ³•åœ¨åŒä¸€ä¸ªåç©ºï¼Œå› æ­¤å¦‚ä¸‹å†™æ³•ä¹Ÿä¼šoverrideçˆ¶ç±»åŒåå‡½æ•°ï¼Œè™½ç„¶çˆ¶ç±»é‡Œå£°æ˜Žçš„æ˜¯ä¸ªæ–¹æ³•è€Œæ­¤å¤„æ˜¯å˜é‡
+	val contents: Array[String] = conts    //  ä»…æ˜¯æŽ¥æ”¶å­˜å‚¨å˜é‡æ—¶ï¼Œscalaæ›´å€¾å‘æœ¬è¡Œçš„å†™æ³•
+	//  def contents: Array[String] = conts   ç­‰ä»·äºŽä¸Šä¸€è¡Œå®šä¹‰
 }
-¸üÓÅ»¯Ð´·¨£¨±ÜÃâÎÞÒâÒåµÄ±äÁ¿ÖØ¸´£©£º
-class ArrayElement(val contents: Array[String]) extends Element // ×¢Òâµ½±äÁ¿ÃûcontentsÒªÓë¸¸ÀàÏàÍ¬£¬´Ë±äÁ¿¿ÉÍâ²¿·ÃÎÊ
+æ›´ä¼˜åŒ–å†™æ³•ï¼ˆé¿å…æ— æ„ä¹‰çš„å˜é‡é‡å¤ï¼‰ï¼š
+class ArrayElement(val contents: Array[String]) extends Element // æ³¨æ„åˆ°å˜é‡åcontentsè¦ä¸Žçˆ¶ç±»ç›¸åŒï¼Œæ­¤å˜é‡å¯å¤–éƒ¨è®¿é—®
 {
-	final override def demo() = {   // Í¨¹ý final À´½ûÖ¹ ArrayElement µÄ×ÓÀà override demo·½·¨
+	final override def demo() = {   // é€šè¿‡ final æ¥ç¦æ­¢ ArrayElement çš„å­ç±» override demoæ–¹æ³•
 		println("ArrayElement's implementation invoked")
 	}
 }
-//  ¼ÌÐø¼Ì³ÐÊ±£¬µ÷ÓÃ¸¸ÀàµÄ¹¹Ôìº¯Êý£¬ÓÉÓÚ¸¸Àà¹¹ÔìÊÇÐèÒª´«²Î£¬ÔÚÉùÃ÷ÖÐ½« Array(s) ´«Èë£¬±íÃ÷µ÷ÓÃÁË¸¸Àà¹¹Ôìº¯Êý
-//  ½«ÀàÉùÃ÷Îª final ºó£¬²»¿É±»ÆäËûÀà¼Ì³Ð
+//  ç»§ç»­ç»§æ‰¿æ—¶ï¼Œè°ƒç”¨çˆ¶ç±»çš„æž„é€ å‡½æ•°ï¼Œç”±äºŽçˆ¶ç±»æž„é€ æ˜¯éœ€è¦ä¼ å‚ï¼Œåœ¨å£°æ˜Žä¸­å°† Array(s) ä¼ å…¥ï¼Œè¡¨æ˜Žè°ƒç”¨äº†çˆ¶ç±»æž„é€ å‡½æ•°
+//  å°†ç±»å£°æ˜Žä¸º final åŽï¼Œä¸å¯è¢«å…¶ä»–ç±»ç»§æ‰¿
 final class LineElement(s: String) extends ArrayElement(Array(s)) {
 	override def width = s.length
 	override def height = 1
 }
-//  ËùÓÐ¸¸ÀàÒÑ¾­ÊµÏÖ¹ýµÄ·½·¨£¬¸²¸ÇÊ±±ØÐë¼Ó override ¹Ø¼ü×Ö£¬Î´ÊµÏÖµÄ³éÏó·½·¨²»Ç¿ÖÆÒªÇó£¬ ±¾Àà·½·¨ÎÞº¯ÊýÊµÏÖÊ±²»ÄÜ¼Ó£¬
-//  Èç´ËÉè¼ÆµÄºÃ´¦ÊÇ£¬1¶ÔNµÄ¸¸×ÓÀà¹ØÏµÊ±£¬ÔÚ¸¸ÀàÐÂÔöÒ»¸ö·½·¨£¬ÈôÄ³¸ö×ÓÀàÊµÏÖÍ¬Ãû·½·¨£¬»á³ö·¢±àÒë¸æ¾¯
+//  æ‰€æœ‰çˆ¶ç±»å·²ç»å®žçŽ°è¿‡çš„æ–¹æ³•ï¼Œè¦†ç›–æ—¶å¿…é¡»åŠ  override å…³é”®å­—ï¼Œæœªå®žçŽ°çš„æŠ½è±¡æ–¹æ³•ä¸å¼ºåˆ¶è¦æ±‚ï¼Œ æœ¬ç±»æ–¹æ³•æ— å‡½æ•°å®žçŽ°æ—¶ä¸èƒ½åŠ ï¼Œ
+//  å¦‚æ­¤è®¾è®¡çš„å¥½å¤„æ˜¯ï¼Œ1å¯¹Nçš„çˆ¶å­ç±»å…³ç³»æ—¶ï¼Œåœ¨çˆ¶ç±»æ–°å¢žä¸€ä¸ªæ–¹æ³•ï¼Œè‹¥æŸä¸ªå­ç±»å®žçŽ°åŒåæ–¹æ³•ï¼Œä¼šå‡ºå‘ç¼–è¯‘å‘Šè­¦
 
-//  ¶¨Òå²ÎÊý»¯Óò±äÁ¿
+//  å®šä¹‰å‚æ•°åŒ–åŸŸå˜é‡
 class Cat { val dangerous = false }
 class Tiger { override val dangerous: Boolean, private var age: Int) extends Cat
-µÈ¼ÛÓÚ
+ç­‰ä»·äºŽ
 class Tiger(param1: Boolean, param2: Int) extends Cat {
 	override val dangerous = param1
 	private var age = param2
 }
 
-¡¾¶àÌ¬¡¿ ÓÃ¸¸ÀàµÄÀàÐÍÉùÃ÷±äÁ¿£¬ÓÃ×ÓÀàµÄÀàÐÍ½øÐÐÊµÀý»¯£¬Ê¹ÓÃÊ±ÀÛ·½·¨µÄÊµÏÖ°´×ÓÀàÀ´£¬´ïµ½Í¬ÃûÀà·½·¨²»Í¬¶¯×÷µÄÄ¿µÄ
+ã€å¤šæ€ã€‘ ç”¨çˆ¶ç±»çš„ç±»åž‹å£°æ˜Žå˜é‡ï¼Œç”¨å­ç±»çš„ç±»åž‹è¿›è¡Œå®žä¾‹åŒ–ï¼Œä½¿ç”¨æ—¶ç´¯æ–¹æ³•çš„å®žçŽ°æŒ‰å­ç±»æ¥ï¼Œè¾¾åˆ°åŒåç±»æ–¹æ³•ä¸åŒåŠ¨ä½œçš„ç›®çš„
 val e1: Element = new ArrayElement(Array("hello", "world"))
 
 
-¡¾Àà²ã´Î¡¿
-ËùÓÐÀàµÄ¸¸Àà£º  Any
-¸ÃÀà¶¨ÒåµÄ»ù±¾·½·¨ÈçÏÂ£º
-final def ==(that: Any): Boolean  // ±¾ÖÊÉÏ¾ÍÊÇ equals £¬Òò´ËËäÈ»ÊÇ final £¬µ«ÊÇ¿ÉÒÔÍ¨¹ý¼Ì³ÐÖØÔØ equals À´¸Ä±äÊµÏÖ
-final def !=(that: Any): Boolean  // ±¾ÖÊÉÏÊÇ equals È¡·´
+ã€ç±»å±‚æ¬¡ã€‘
+æ‰€æœ‰ç±»çš„çˆ¶ç±»ï¼š  Any
+è¯¥ç±»å®šä¹‰çš„åŸºæœ¬æ–¹æ³•å¦‚ä¸‹ï¼š
+final def ==(that: Any): Boolean  // æœ¬è´¨ä¸Šå°±æ˜¯ equals ï¼Œå› æ­¤è™½ç„¶æ˜¯ final ï¼Œä½†æ˜¯å¯ä»¥é€šè¿‡ç»§æ‰¿é‡è½½ equals æ¥æ”¹å˜å®žçŽ°
+final def !=(that: Any): Boolean  // æœ¬è´¨ä¸Šæ˜¯ equals å–å
 def equals(that: Any): Boolean
-def ##: Int    //   ¹þÏ£ÔËËã·û
+def ##: Int    //   å“ˆå¸Œè¿ç®—ç¬¦
 def hashCode: Int
-def toString: String // ¸ñÊ½»¯ÔËËã£¬»ù±¾¾ÍÊÇÊä³ö×Ö·û´®
+def toString: String // æ ¼å¼åŒ–è¿ç®—ï¼ŒåŸºæœ¬å°±æ˜¯è¾“å‡ºå­—ç¬¦ä¸²
 
-µÚ¶þ²ã´Î2´ó¸¸ÀàÖ®Ò»¡¿£º AnyVal  ¼Ì³ÐAnyµÄ×ÓÀà£¬ÊÇByte, Short, Char, Int, Long, Float, Double, Boolean, UnitµÄ¸¸Àà
+ç¬¬äºŒå±‚æ¬¡2å¤§çˆ¶ç±»ä¹‹ä¸€ã€‘ï¼š AnyVal  ç»§æ‰¿Anyçš„å­ç±»ï¼Œæ˜¯Byte, Short, Char, Int, Long, Float, Double, Boolean, Unitçš„çˆ¶ç±»
 
-ÉÏÊöÇ°8¸öÀàÐÍµÄËùÓÐ new Int »ù±¾²Ù×÷¶¼²»¿ÉÐÐ£¬×ÖÃæÁ¿£¨»òÕßËµÊµÀý»¯µÄÊýÖµÀà£©¶¼ÊÇÖ±½Ó±íÊ¾£¬  Èç 42£¬'x', 1.998 µÈ£¬ÒòÎªËùÓÐµÄÖµ¶¼±»¶¨ÒåÎª abstract ºÍ final
+ä¸Šè¿°å‰8ä¸ªç±»åž‹çš„æ‰€æœ‰ new Int åŸºæœ¬æ“ä½œéƒ½ä¸å¯è¡Œï¼Œå­—é¢é‡ï¼ˆæˆ–è€…è¯´å®žä¾‹åŒ–çš„æ•°å€¼ç±»ï¼‰éƒ½æ˜¯ç›´æŽ¥è¡¨ç¤ºï¼Œ  å¦‚ 42ï¼Œ'x', 1.998 ç­‰ï¼Œå› ä¸ºæ‰€æœ‰çš„å€¼éƒ½è¢«å®šä¹‰ä¸º abstract å’Œ final
 
-Unit ´óÖÂµÈÓÚ JavaµÄ void£¬ Î¨Ò»µÄ×ÖÃæÁ¿£¨ÊµÀý»¯Öµ£©ÊÇ ()
+Unit å¤§è‡´ç­‰äºŽ Javaçš„ voidï¼Œ å”¯ä¸€çš„å­—é¢é‡ï¼ˆå®žä¾‹åŒ–å€¼ï¼‰æ˜¯ ()
 
-µÚ¶þ²ã´Î2´ó¸¸ÀàÖ®¶þ¡¿£º AnyRef ¼Ì³ÐAny£¬ÊÇËùÓÐÒýÓÃÀÛµÄ»ùÀà£¬¶ÔÓ¦JavaÖÐµÄ java.lang.Object
-// ·ÇÍêÈ«Ìå OO ÓïÑÔµÄÌØµã
+ç¬¬äºŒå±‚æ¬¡2å¤§çˆ¶ç±»ä¹‹äºŒã€‘ï¼š AnyRef ç»§æ‰¿Anyï¼Œæ˜¯æ‰€æœ‰å¼•ç”¨ç´¯çš„åŸºç±»ï¼Œå¯¹åº”Javaä¸­çš„ java.lang.Object
+// éžå®Œå…¨ä½“ OO è¯­è¨€çš„ç‰¹ç‚¹
 // This is Java
 boolean isEqual(int x, int y) {
 return x == y;
 }
-System.out.println(isEqual(421, 421));  //  µÃµ½ true £¬ÊýÖµ±È½Ï
+System.out.println(isEqual(421, 421));  //  å¾—åˆ° true ï¼Œæ•°å€¼æ¯”è¾ƒ
 boolean isEqual(Integer x, Integer y) {
 	return x == y;
 }
-System.out.println(isEqual(421, 421));    // µÃµ½ false £¬ ¶ÔÏóÒýÓÃ±È½Ï
-//JavaÖÐ¸ÃÓï¾ä·µ»Øfalse£¬ÒòÎª==ÅÐ¶ÏµÄÊÇÁ½¸ö±äÁ¿ÊÇ·ñÒýÓÃÍ¬Ò»¸ö¶ÔÏó£¬¶øÁ½¸ö421·Ö±ð×öÁËÁ½´Î×ª»»³É¶ÔÏóµÄ²Ù×÷£¬Òò´Ë·Ö±ðÖ¸Ïò¸÷×Ô×ª»»µÄ¶ÔÏó
+System.out.println(isEqual(421, 421));    // å¾—åˆ° false ï¼Œ å¯¹è±¡å¼•ç”¨æ¯”è¾ƒ
+//Javaä¸­è¯¥è¯­å¥è¿”å›žfalseï¼Œå› ä¸º==åˆ¤æ–­çš„æ˜¯ä¸¤ä¸ªå˜é‡æ˜¯å¦å¼•ç”¨åŒä¸€ä¸ªå¯¹è±¡ï¼Œè€Œä¸¤ä¸ª421åˆ†åˆ«åšäº†ä¸¤æ¬¡è½¬æ¢æˆå¯¹è±¡çš„æ“ä½œï¼Œå› æ­¤åˆ†åˆ«æŒ‡å‘å„è‡ªè½¬æ¢çš„å¯¹è±¡
 
-// ÍêÈ«ÌåOOÓïÑÔµÄÌØµã£¬¶ÔÓÚÀàÐÍ´ú±íµÄÒâÒå£¬== ²Ù×÷ÊÇÍ¸Ã÷µÄ
+// å®Œå…¨ä½“OOè¯­è¨€çš„ç‰¹ç‚¹ï¼Œå¯¹äºŽç±»åž‹ä»£è¡¨çš„æ„ä¹‰ï¼Œ== æ“ä½œæ˜¯é€æ˜Žçš„
 def isEqual(x: Int, y: Int) = x == y
-isEqual(421, 421)    //   µÃµ½ true ÊýÖµ±È½Ï
+isEqual(421, 421)    //   å¾—åˆ° true æ•°å€¼æ¯”è¾ƒ
 def isEqual(x: Any, y: Any) = x == y
-isEqual(421, 421)   //   µÃµ½ true ¶ÔÏó±È½Ï£¬µ«¶ÔÓÚÊýÖµ£¬¾ßÌåµÄÊýÖµÀàµ×²ã½øÐÐÁËÖØÔØoverride
-//  JavaÀïÃæ×Ö·û´®±È½ÏÏÝÚå²»»á³öÏÖ£¬ÈçÏÂ
+isEqual(421, 421)   //   å¾—åˆ° true å¯¹è±¡æ¯”è¾ƒï¼Œä½†å¯¹äºŽæ•°å€¼ï¼Œå…·ä½“çš„æ•°å€¼ç±»åº•å±‚è¿›è¡Œäº†é‡è½½override
+//  Javaé‡Œé¢å­—ç¬¦ä¸²æ¯”è¾ƒé™·é˜±ä¸ä¼šå‡ºçŽ°ï¼Œå¦‚ä¸‹
 val x = "abcd".substring(2)
 val y = "abcd".substring(2)
-x == y    // µÃµ½ true
+x == y    // å¾—åˆ° true
 
-ÒýÓÃ±È½Ï  eq ºÍ ne
+å¼•ç”¨æ¯”è¾ƒ  eq å’Œ ne
 val x = new String("abc")
 val y = new String("abc")
-x == y  //  µÃµ½ true
-x eq y  //  µÃµ½ false£¬ ÒýÓÃ±È½Ï£¬²»ÊÇÒýÓÃµÄÍ¬Ò»¸ö¶ÔÏó
-x ne y  //  µÃµ½ true
+x == y  //  å¾—åˆ° true
+x eq y  //  å¾—åˆ° falseï¼Œ å¼•ç”¨æ¯”è¾ƒï¼Œä¸æ˜¯å¼•ç”¨çš„åŒä¸€ä¸ªå¯¹è±¡
+x ne y  //  å¾—åˆ° true
 
-µ×²ã2´ó×ÓÀàÖ®Ò»¡¿  scala.Null ËùÓÐÒýÓÃÀà AnyRef×ÓÀàµÄ×ÓÀà£¬ÓëÊýÖµÀà²»¼æÈÝ£¬Òò´ËÈçÏÂÐ´·¨²»³ÉÁ¢
-val i: Int = null   //  ±¨±àÒë¸æ¾¯£¬nullÓëÊýÖµÀà²»¼æÈÝ
+åº•å±‚2å¤§å­ç±»ä¹‹ä¸€ã€‘  scala.Null æ‰€æœ‰å¼•ç”¨ç±» AnyRefå­ç±»çš„å­ç±»ï¼Œä¸Žæ•°å€¼ç±»ä¸å…¼å®¹ï¼Œå› æ­¤å¦‚ä¸‹å†™æ³•ä¸æˆç«‹
+val i: Int = null   //  æŠ¥ç¼–è¯‘å‘Šè­¦ï¼Œnullä¸Žæ•°å€¼ç±»ä¸å…¼å®¹
 
-µ×²ã2´ó×ÓÀàÖ®¶þ¡¿ scala.Nothing Ã»ÓÐÈÎºÎÊµ¼ÊÖµ£¬ÓÃÓÚÒì³£´¦ÀíÊ±£¬±íÃ÷º¯ÊýÎÞ·¨Õý³£·µ»Ø£¬Òò´ËÒ²Ã»ÓÐ±äÁ¿ÄÜÊµ¼Ê½ÓÊÕÁËÕâ¸öÖµ
+åº•å±‚2å¤§å­ç±»ä¹‹äºŒã€‘ scala.Nothing æ²¡æœ‰ä»»ä½•å®žé™…å€¼ï¼Œç”¨äºŽå¼‚å¸¸å¤„ç†æ—¶ï¼Œè¡¨æ˜Žå‡½æ•°æ— æ³•æ­£å¸¸è¿”å›žï¼Œå› æ­¤ä¹Ÿæ²¡æœ‰å˜é‡èƒ½å®žé™…æŽ¥æ”¶äº†è¿™ä¸ªå€¼
 def error(message: String): Nothing =
 	throw new RuntimeException(message)
 
-¡¾µ¥ÀýÄ£Ê½¡¿ factory object ¹¤³§¶ÔÏó£¿   Ïê¼û  162Ò³ 10.13 Õâ¿éÃ»¿´¶®  £¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡
+ã€å•ä¾‹æ¨¡å¼ã€‘ factory object å·¥åŽ‚å¯¹è±¡ï¼Ÿ   è¯¦è§  162é¡µ 10.13 è¿™å—æ²¡çœ‹æ‡‚  ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼
 
  ///////////////////////////////                     trait                /////////////////////////////// 
- trait µÄÏë·¨ÊÇÊÇÔÚJava½Ó¿Ú¶¨ÒåµÄ·½·¨ºÍÀà¶¨ÒåµÄ·½·¨µÄ¶à¹ÑÖ®¼ä½øÐÐÕÛÖÐÆ½ºâ£¬ÓÉÓÚtraitÖÐµÄ·½·¨ÓÐº¯ÊýÌå£¬Òò´ËÔÚ¼Ì³ÐËûµÄÀàÖÐ²»ÓÃ¼ÌÐøÊµÏÖ£¨JAVA interfaceÖÐ¶¨ÒåµÄ¶¼ÊÇ³éÏóº¯Êý£©£¬·½±ãÀ©Õ¹£¬Í¬Ê±±ÜÃâÔÚ×ÓÀàµÄ¸¸ÀàÖÐÐÂÔö·½·¨Ê±ÒýÈëÎÊÌâµÄ¿ÉÄÜ
- £¨µ«ÊÇÈç¹ûÒ»¸ötrait±»¶à¸ö×ÓÀà¼Ì³Ð£¬ÔõÃ´±£Ö¤traitÀïÐÞ¸ÄÄ³¸ö·½·¨µÄÊµÏÖÓ°Ïì×îÐ¡£¿£¿£¿£¿£¿£¿£©
+ trait çš„æƒ³æ³•æ˜¯æ˜¯åœ¨JavaæŽ¥å£å®šä¹‰çš„æ–¹æ³•å’Œç±»å®šä¹‰çš„æ–¹æ³•çš„å¤šå¯¡ä¹‹é—´è¿›è¡ŒæŠ˜ä¸­å¹³è¡¡ï¼Œç”±äºŽtraitä¸­çš„æ–¹æ³•æœ‰å‡½æ•°ä½“ï¼Œå› æ­¤åœ¨ç»§æ‰¿ä»–çš„ç±»ä¸­ä¸ç”¨ç»§ç»­å®žçŽ°ï¼ˆJAVA interfaceä¸­å®šä¹‰çš„éƒ½æ˜¯æŠ½è±¡å‡½æ•°ï¼‰ï¼Œæ–¹ä¾¿æ‰©å±•ï¼ŒåŒæ—¶é¿å…åœ¨å­ç±»çš„çˆ¶ç±»ä¸­æ–°å¢žæ–¹æ³•æ—¶å¼•å…¥é—®é¢˜çš„å¯èƒ½
+ ï¼ˆä½†æ˜¯å¦‚æžœä¸€ä¸ªtraitè¢«å¤šä¸ªå­ç±»ç»§æ‰¿ï¼Œæ€Žä¹ˆä¿è¯traité‡Œä¿®æ”¹æŸä¸ªæ–¹æ³•çš„å®žçŽ°å½±å“æœ€å°ï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼‰
  
-Ë¼¿¼Ò»ÏÂÓëJava ÖÐ½Ó¿ÚµÄÇø±ð: 
-1¡¢Java½Ó¿ÚÖÐ²»ÄÜ¶¨Òå¾ßÌå·½·¨µÄÊµÏÖ£¬scala¿ÉÒÔ£»
-2¡¢traitÖÐ¿ÉÒÔÉùÃ÷±äÁ¿²¢Î¬»¤Æä×´Ì¬£¬»ù±¾ÉÏÓëÒ»¸öÀàÍêÈ«Ò»ÖÂ£¬³ýÁËÒ»ÏÂÁ½ÌìÇø±ð
-   1£©trait ¶¨ÒåÊ±²»ÄÜÓÐ²ÎÊý
-   2£©trait ÖÐËùÓÐ±»¼Ì³ÐµÄ·½·¨ÔÚ×ÓÀàÖÐÊ¹ÓÃÊ±¶¼ÊÇ¶¯Ì¬°ó¶¨µÄ
+æ€è€ƒä¸€ä¸‹ä¸ŽJava ä¸­æŽ¥å£çš„åŒºåˆ«: 
+1ã€JavaæŽ¥å£ä¸­ä¸èƒ½å®šä¹‰å…·ä½“æ–¹æ³•çš„å®žçŽ°ï¼Œscalaå¯ä»¥ï¼›
+2ã€traitä¸­å¯ä»¥å£°æ˜Žå˜é‡å¹¶ç»´æŠ¤å…¶çŠ¶æ€ï¼ŒåŸºæœ¬ä¸Šä¸Žä¸€ä¸ªç±»å®Œå…¨ä¸€è‡´ï¼Œé™¤äº†ä¸€ä¸‹ä¸¤å¤©åŒºåˆ«
+   1ï¼‰trait å®šä¹‰æ—¶ä¸èƒ½æœ‰å‚æ•°
+   2ï¼‰trait ä¸­æ‰€æœ‰è¢«ç»§æ‰¿çš„æ–¹æ³•åœ¨å­ç±»ä¸­ä½¿ç”¨æ—¶éƒ½æ˜¯åŠ¨æ€ç»‘å®šçš„
 
 
- trait ¿ÉÒÔµ±×öÀàÐÍÊ¹ÓÃ£¬ËùÓÐ»ìÈë trait µÄÀà¶¼¿ÉÒÔÓÃÀ´ÊµÀý»¯ trait ÀàÐÍ±äÁ¿
+ trait å¯ä»¥å½“åšç±»åž‹ä½¿ç”¨ï¼Œæ‰€æœ‰æ··å…¥ trait çš„ç±»éƒ½å¯ä»¥ç”¨æ¥å®žä¾‹åŒ– trait ç±»åž‹å˜é‡
  
 val phil: Philosophical = frog
 phil.philosophize()
  
-trait Philosophical { //  Ä¬ÈÏµÄ¸¸ÀàÊÇ AnyRef
+trait Philosophical { //  é»˜è®¤çš„çˆ¶ç±»æ˜¯ AnyRef
 	def philosophize() = {
 		println("I consume memory, therefore I am!")
 	}
 }
-class Frog extends Philosophical {  // mix in Philosophical £¬ ¼Ì³ÐµÄÊÇ trait µÄ³¬Àà
+class Frog extends Philosophical {  // mix in Philosophical ï¼Œ ç»§æ‰¿çš„æ˜¯ trait çš„è¶…ç±»
 	override def toString = "green"
-	override def philosophize() = {   //  ÖØÔØ trait ÖÐµÄ·½·¨
+	override def philosophize() = {   //  é‡è½½ trait ä¸­çš„æ–¹æ³•
 		println("It ain't easy being " + toString + "!")
 	}
 }
 
 class Animal
 trait HasLegs
-class Frog extends Animal with Philosophical with HasLegs {   // ¼Ì³ÐÒ»¸öÀà£¬²¢ÇÒ»ìÈëÁ½¸ö trait
+class Frog extends Animal with Philosophical with HasLegs {   // ç»§æ‰¿ä¸€ä¸ªç±»ï¼Œå¹¶ä¸”æ··å…¥ä¸¤ä¸ª trait
 override def toString = "green"
 }
 
@@ -428,13 +428,13 @@ class BasicIntQueue extends IntQueue {
 	def put(x: Int) = { buf += x }
 }
 
-trait Doubling extends IntQueue {  // ÉùÃ÷ÖÐÓÐ³¬Àà£¬±íÃ÷¸ÃtraitÖ»ÄÜ±»IntQueueµÄ×ÓÀà»ìÈë£¬ÈçBasicIntQueue
-	// ÒªÊ¹ÓÃ super£¬ Ç°ÃæµÄabstract override²»¿ÉÉÙ£¬½öÔÚtraitÖÐ¿ÉÒÔÕâÃ´ÓÃ
-	abstract override def put(x: Int) = { super.put(2 * x) } // µ÷ÓÃÖØÔØ±¾º¯ÊýµÄ×ÓÀàµÄÊµÏÖ
+trait Doubling extends IntQueue {  // å£°æ˜Žä¸­æœ‰è¶…ç±»ï¼Œè¡¨æ˜Žè¯¥traitåªèƒ½è¢«IntQueueçš„å­ç±»æ··å…¥ï¼Œå¦‚BasicIntQueue
+	// è¦ä½¿ç”¨ superï¼Œ å‰é¢çš„abstract overrideä¸å¯å°‘ï¼Œä»…åœ¨traitä¸­å¯ä»¥è¿™ä¹ˆç”¨
+	abstract override def put(x: Int) = { super.put(2 * x) } // è°ƒç”¨é‡è½½æœ¬å‡½æ•°çš„å­ç±»çš„å®žçŽ°
 }
   
-val queue = new BasicIntQueue with Doubling   // ´Ë´¦±È¶¨ÒåÒ»¸öÐÂÀà¼Ì³ÐBasicIntQueueºÍDoubling¸ü¿ì½Ý
-queue.put(10); queue.get()   // µÃµ½ 20
+val queue = new BasicIntQueue with Doubling   // æ­¤å¤„æ¯”å®šä¹‰ä¸€ä¸ªæ–°ç±»ç»§æ‰¿BasicIntQueueå’ŒDoublingæ›´å¿«æ·
+queue.put(10); queue.get()   // å¾—åˆ° 20
 
 trait Incrementing extends IntQueue {
 	abstract override def put(x: Int) = { super.put(x + 1) }
@@ -442,19 +442,19 @@ trait Incrementing extends IntQueue {
 trait Filtering extends IntQueue {
 	abstract override def put(x: Int) = { if (x >= 0) super.put(x) }
 }
-val queue = (new BasicIntQueue with Incrementing with Filtering) //¶ÔÓÚ²»Í¬traitÍ¬ÑùµÄº¯ÊýµÄÐÞ¸Ä£¬ÉúÐ§Ë³Ðò×ñÑ­´Ó×óµ½ÓÒ
+val queue = (new BasicIntQueue with Incrementing with Filtering) //å¯¹äºŽä¸åŒtraitåŒæ ·çš„å‡½æ•°çš„ä¿®æ”¹ï¼Œç”Ÿæ•ˆé¡ºåºéµå¾ªä»Žå·¦åˆ°å³
 queue.put(-1); queue.put(0); queue.put(1)
-queue.get(); queue.get()     // ·Ö±ðµÃµ½1 ºÍ 2
+queue.get(); queue.get()     // åˆ†åˆ«å¾—åˆ°1 å’Œ 2
 
 
- ///////////////////////////////                     º¯ÊýÏà¹Ø                /////////////////////////////// 
+ ///////////////////////////////                     å‡½æ•°ç›¸å…³                /////////////////////////////// 
 
  
  
  import scala.io.Source
  object LongLines {
 	def processFile(filename: String, width: Int) = {
-		// ´Ë´¦ÔÚº¯ÊýÄÚ²¿¶¨ÒåÁËÒ»¸öº¯Êý£¬ÆäËûÓïÑÔµÄÐ´·¨ÊÇ°ÑÕâ¸öº¯Êý·Åµ½ÉÏ²ãÍ¬Ò»¼¶È»ºó¼Óprivate£¬scalaÈÏÎªÕâÑù±©Â¶½Ó¿ÚÌ«¶à²»ÃÀ¹Û
+		// æ­¤å¤„åœ¨å‡½æ•°å†…éƒ¨å®šä¹‰äº†ä¸€ä¸ªå‡½æ•°ï¼Œå…¶ä»–è¯­è¨€çš„å†™æ³•æ˜¯æŠŠè¿™ä¸ªå‡½æ•°æ”¾åˆ°ä¸Šå±‚åŒä¸€çº§ç„¶åŽåŠ privateï¼Œscalaè®¤ä¸ºè¿™æ ·æš´éœ²æŽ¥å£å¤ªå¤šä¸ç¾Žè§‚
 		def processLine(line: String) = {
 			if (line.length > width)
 				println(filename + ": " + line.trim)
@@ -466,109 +466,109 @@ queue.get(); queue.get()     // ·Ö±ðµÃµ½1 ºÍ 2
 	}
 }
  
- function literal£º º¯Êý×ÖÃæÁ¿ °ü×°µÄÎ´ÃüÃûµÄº¯Êý£¬ÕûÌå×÷Îª²ÎÊý´«µÝ¡£ Ô´ÂëÖÐµÄËµ·¨
- function value£º ÔÚfunction literal±àÒë³ÉÀà²¢ÔÚÔËÐÐÊ±ÊµÀý»¯ºó¾ÍÊÇfunction value¡£ ÔËÐÐÊ±ÖÐfunction literal¾ßÌåÄÚÈÝµÄ´úÃû´Ê
- Ê¾Àý£º£¨µ÷ÑÐÒ»ÏÂÓëlambda±í´ïÊ½ÓÐÊ²Ã´Çø±ð£¿£¿£¿£¿£¿£¿£¿£¿£¿£¿£¿£¿£¿£¿£¿£©
+ function literalï¼š å‡½æ•°å­—é¢é‡ åŒ…è£…çš„æœªå‘½åçš„å‡½æ•°ï¼Œæ•´ä½“ä½œä¸ºå‚æ•°ä¼ é€’ã€‚ æºç ä¸­çš„è¯´æ³•
+ function valueï¼š åœ¨function literalç¼–è¯‘æˆç±»å¹¶åœ¨è¿è¡Œæ—¶å®žä¾‹åŒ–åŽå°±æ˜¯function valueã€‚ è¿è¡Œæ—¶ä¸­function literalå…·ä½“å†…å®¹çš„ä»£åè¯
+ ç¤ºä¾‹ï¼šï¼ˆè°ƒç ”ä¸€ä¸‹ä¸Žlambdaè¡¨è¾¾å¼æœ‰ä»€ä¹ˆåŒºåˆ«ï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼‰
  (x: Int) => x + 1
  var increase = (x: Int) => x + 1
  increase(10)
  
- ¼¯ºÏÀà×Ô´øµÄÒ»ÖÖº¯Êý×ÖÃæÁ¿ÓÃ·¨ ×¢Òâµ½ÕâÐ©ÓÃÓÚ¶¼ÒªÅäºÏÀà¶¨ÒåµÄÒ»Ð©·½·¨
+ é›†åˆç±»è‡ªå¸¦çš„ä¸€ç§å‡½æ•°å­—é¢é‡ç”¨æ³• æ³¨æ„åˆ°è¿™äº›ç”¨äºŽéƒ½è¦é…åˆç±»å®šä¹‰çš„ä¸€äº›æ–¹æ³•
  val someNumers = List(-11, -10, -5, 0, 5, 10, 11)
- someNumers.foreach( (x: Int) => println(x) )   //  ½«¼¯ºÏÖÐËùÓÐÔªËØ´òÓ¡£¬±ÈÒ»°ãfor±éÀúÐ´·¨·½±ãÌ«¶à
- someNumers.foreach( println _ )           // Í¬ÉÏ£¬¼òÁ·Ð´·¨£¬ÓÃ _ ´ú±í¼¯ºÏ£¬partially applied function ²¿·Ö²¹Íêº¯Êý
- someNumers.foreach(println)      //  Í¬ÉÏ£¬×î¼òÁ·Ð´·¨£¬Ê¡ÂÔËùÓÐ²ÎÊý£¬²¿·ÖÇé¿öÏÂ¿ÉÓÃ£º½öÔÚÈë²ÎÎªº¯ÊýµÄÇé¿öÏÂÊ¹ÓÃ(foreach)
- someNumers.filter( (x: Int) => x > 0 )   //  ¹ýÂËµôÐ¡ÓÚµÈÓÚ0µÄÔªËØ
- someNumers.filter( x => x > 0 )       //  ¸ü¼òÁ·µÄÐ´·¨£¬ÓïÒåÍ¬ÉÏ
- someNumers.filter( _ > 0 )           // ×î¼òÁ·µÄÐ´·¨£¬ÓïÒåÍ¬ÉÏ£¬×¢Òâ´ËÖÖÐ´·¨½öÔÚÌî³äÈë²ÎÔÚÖ´ÐÐÌåÖÐ½ö³öÏÖÒ»´ÎÊ±¿ÉÓÃ
+ someNumers.foreach( (x: Int) => println(x) )   //  å°†é›†åˆä¸­æ‰€æœ‰å…ƒç´ æ‰“å°ï¼Œæ¯”ä¸€èˆ¬foréåŽ†å†™æ³•æ–¹ä¾¿å¤ªå¤š
+ someNumers.foreach( println _ )           // åŒä¸Šï¼Œç®€ç»ƒå†™æ³•ï¼Œç”¨ _ ä»£è¡¨é›†åˆï¼Œpartially applied function éƒ¨åˆ†è¡¥å®Œå‡½æ•°
+ someNumers.foreach(println)      //  åŒä¸Šï¼Œæœ€ç®€ç»ƒå†™æ³•ï¼Œçœç•¥æ‰€æœ‰å‚æ•°ï¼Œéƒ¨åˆ†æƒ…å†µä¸‹å¯ç”¨ï¼šä»…åœ¨å…¥å‚ä¸ºå‡½æ•°çš„æƒ…å†µä¸‹ä½¿ç”¨(foreach)
+ someNumers.filter( (x: Int) => x > 0 )   //  è¿‡æ»¤æŽ‰å°äºŽç­‰äºŽ0çš„å…ƒç´ 
+ someNumers.filter( x => x > 0 )       //  æ›´ç®€ç»ƒçš„å†™æ³•ï¼Œè¯­ä¹‰åŒä¸Š
+ someNumers.filter( _ > 0 )           // æœ€ç®€ç»ƒçš„å†™æ³•ï¼Œè¯­ä¹‰åŒä¸Šï¼Œæ³¨æ„æ­¤ç§å†™æ³•ä»…åœ¨å¡«å……å…¥å‚åœ¨æ‰§è¡Œä½“ä¸­ä»…å‡ºçŽ°ä¸€æ¬¡æ—¶å¯ç”¨
  
  
- val f = (_: Int) + (_: Int)  // ÓÉÓÚscalaÎÞ·¨ÅÐ¶ÏÀàÐÍ£¬´ËÖÖÐ´·¨Ðè½«ÀàÐÍ´øÉÏ£¬´Ë´¦½ÓÊÕÁ½¸ö²ÎÊý
+ val f = (_: Int) + (_: Int)  // ç”±äºŽscalaæ— æ³•åˆ¤æ–­ç±»åž‹ï¼Œæ­¤ç§å†™æ³•éœ€å°†ç±»åž‹å¸¦ä¸Šï¼Œæ­¤å¤„æŽ¥æ”¶ä¸¤ä¸ªå‚æ•°
  f(5, 10)
  
-def sum(a: Int, b: Int, c: Int) = a + b + c     // ¶¨ÒåÒ»¸öº¯Êý
- val a = sum _   //  ½«º¯Êý¸³Öµ¸øÒ»¸ö±äÁ¿£¬Í¨¹ý _ Ê¡ÂÔÁË²ÎÊý£¬±àÒëÆ÷×Ô¶¯Ê¶±ð£¬ partially applied functionµÄÒ»ÖÖ
-                //  ´Ë´¦sum±¾ÖÊÉÏ±»·â×°³ÉÁËÀà£¬¸ÃÀà¶¨ÒåÒ»¸öapplyº¯ÊýÊµÏÖsumµÄº¯Êý¹¦ÄÜ£¬È»ºóÊµÀý»¯Ò»¸ö¶ÔÏó¸øa
- a(1, 2 ,3)    //   µÈ¼ÛÓÚ a.apply(1, 2, 3) £¬ µÃµ½6
+def sum(a: Int, b: Int, c: Int) = a + b + c     // å®šä¹‰ä¸€ä¸ªå‡½æ•°
+ val a = sum _   //  å°†å‡½æ•°èµ‹å€¼ç»™ä¸€ä¸ªå˜é‡ï¼Œé€šè¿‡ _ çœç•¥äº†å‚æ•°ï¼Œç¼–è¯‘å™¨è‡ªåŠ¨è¯†åˆ«ï¼Œ partially applied functionçš„ä¸€ç§
+                //  æ­¤å¤„sumæœ¬è´¨ä¸Šè¢«å°è£…æˆäº†ç±»ï¼Œè¯¥ç±»å®šä¹‰ä¸€ä¸ªapplyå‡½æ•°å®žçŽ°sumçš„å‡½æ•°åŠŸèƒ½ï¼Œç„¶åŽå®žä¾‹åŒ–ä¸€ä¸ªå¯¹è±¡ç»™a
+ a(1, 2 ,3)    //   ç­‰ä»·äºŽ a.apply(1, 2, 3) ï¼Œ å¾—åˆ°6
  
- val b = sum(1, _: Int, 3)   // Ìá¹©Á½¸ö²ÎÊýµÄ partially applied function£¬Ä¬ÈÏÈ±Ê¡Ò»¸öÊ¹ÓÃÊ±²¹³ä
- b(5)              //  µÃµ½ 9
+ val b = sum(1, _: Int, 3)   // æä¾›ä¸¤ä¸ªå‚æ•°çš„ partially applied functionï¼Œé»˜è®¤ç¼ºçœä¸€ä¸ªä½¿ç”¨æ—¶è¡¥å……
+ b(5)              //  å¾—åˆ° 9
 
- ¡¾±Õ°üµÄ·¶Î§¡¿  ÊéÖÐ½âÊÍÊÇ  º¯Êý×ÖÃæÁ¿ÖÐÊ¹ÓÃµÄÍâ²¿±äÁ¿µÄÖµ£¬È¡Õâ¸öº¯Êý×ÖÃæÁ¿Éú³ÉÊ±¸Ã±äÁ¿µÄÖµ£¬¼ûÊ¾Àý3
- Ê¾Àý1£º
+ ã€é—­åŒ…çš„èŒƒå›´ã€‘  ä¹¦ä¸­è§£é‡Šæ˜¯  å‡½æ•°å­—é¢é‡ä¸­ä½¿ç”¨çš„å¤–éƒ¨å˜é‡çš„å€¼ï¼Œå–è¿™ä¸ªå‡½æ•°å­—é¢é‡ç”Ÿæˆæ—¶è¯¥å˜é‡çš„å€¼ï¼Œè§ç¤ºä¾‹3
+ ç¤ºä¾‹1ï¼š
  var more = 1
  val addMore = (x: Int) => x + more
- addMore(10)   //  µÃµ½Êý×Ö11£¬ÒòÎªmoreµÄÖµÊÇ1
+ addMore(10)   //  å¾—åˆ°æ•°å­—11ï¼Œå› ä¸ºmoreçš„å€¼æ˜¯1
  more = 9999
- addMore(10)   //  µÃµ½10009£¬ÒòÎªmoreµÄÖµ±ä¸üÎª 9999
- // ×¢Òâµ½Èç¹ûº¯Êý×ÖÃæÁ¿ÒýÓÃµ½Íâ²¿±äÁ¿£¬Íâ²¿±äÁ¿µÄ±ä¸ü»áÊ±Ê±Í¬²½µ½ º¯Êý×ÖÃæÁ¿µÄ±äÁ¿ÉÏ
+ addMore(10)   //  å¾—åˆ°10009ï¼Œå› ä¸ºmoreçš„å€¼å˜æ›´ä¸º 9999
+ // æ³¨æ„åˆ°å¦‚æžœå‡½æ•°å­—é¢é‡å¼•ç”¨åˆ°å¤–éƒ¨å˜é‡ï¼Œå¤–éƒ¨å˜é‡çš„å˜æ›´ä¼šæ—¶æ—¶åŒæ­¥åˆ° å‡½æ•°å­—é¢é‡çš„å˜é‡ä¸Š
  
- Ê¾Àý2£º
-  var sum = 0            //  closure ÎÊÌâ£¬Í¬ÉÏ£¬Íâ²¿µÄsum±»Ó°ÏìÁË
-someNumers.foreach(sum += _)   //  ±¾Óï¾äÖ´ÐÐÍê±Ïºó£¬sumµÄÖµÒ²·¢Éú±ä¸ü£¬±ä³É -11£¬×¢ÒâsumµÄ·¶Î§
+ ç¤ºä¾‹2ï¼š
+  var sum = 0            //  closure é—®é¢˜ï¼ŒåŒä¸Šï¼Œå¤–éƒ¨çš„sumè¢«å½±å“äº†
+someNumers.foreach(sum += _)   //  æœ¬è¯­å¥æ‰§è¡Œå®Œæ¯•åŽï¼Œsumçš„å€¼ä¹Ÿå‘ç”Ÿå˜æ›´ï¼Œå˜æˆ -11ï¼Œæ³¨æ„sumçš„èŒƒå›´
 
-Ê¾Àý3£º   ÓëÊ¾Àý1µÄÇø±ðÊÇ£¬Ê¾Àý1ÖÐmoreÊÇÍâ²¿±äÁ¿£¬´Ë´¦moreÊÇ´«ÈëµÄÐÎ²Î
+ç¤ºä¾‹3ï¼š   ä¸Žç¤ºä¾‹1çš„åŒºåˆ«æ˜¯ï¼Œç¤ºä¾‹1ä¸­moreæ˜¯å¤–éƒ¨å˜é‡ï¼Œæ­¤å¤„moreæ˜¯ä¼ å…¥çš„å½¢å‚
 def makeIncreaser(more: Int) = (x: Int) => x + more
-val inc1 = makeIncreaser(1)     //  ÊµÀý»¯Ê±£¬Ê¹ÓÃµÄmoreÊÇ´æ´¢ÔÚÄÚ´æ¶ÑÉÏµÄ£¬Óëµ÷ÓÃÕ»ÎÞ¹Ø
+val inc1 = makeIncreaser(1)     //  å®žä¾‹åŒ–æ—¶ï¼Œä½¿ç”¨çš„moreæ˜¯å­˜å‚¨åœ¨å†…å­˜å †ä¸Šçš„ï¼Œä¸Žè°ƒç”¨æ ˆæ— å…³
 val inc9999 = makeIncreaser(9999)
-inc1(10)      //  µÃµ½11£¬ÒòÎªinc1Éú³ÉÊ±ºòmoreÊÇ1
-inc9999(10)     //  µÃµ½10009£¬ÒòÎªinc9999Éú³ÉÊ±moreÊÇ9999
+inc1(10)      //  å¾—åˆ°11ï¼Œå› ä¸ºinc1ç”Ÿæˆæ—¶å€™moreæ˜¯1
+inc9999(10)     //  å¾—åˆ°10009ï¼Œå› ä¸ºinc9999ç”Ÿæˆæ—¶moreæ˜¯9999
  
- ¡¾¶à²ÎÊýÆ¥Åä¡¿
- def echo(args: String*) = for ( arg <- args ) println(arg)    //  * ±íÊ¾¿ÉÒÔ½Ó¶à¸öÍ¬Àà²ÎÊý£¬´Ë´¦±íÊ¾¶à¸öStringÀàÐÍ×÷Îª²ÎÊý
+ ã€å¤šå‚æ•°åŒ¹é…ã€‘
+ def echo(args: String*) = for ( arg <- args ) println(arg)    //  * è¡¨ç¤ºå¯ä»¥æŽ¥å¤šä¸ªåŒç±»å‚æ•°ï¼Œæ­¤å¤„è¡¨ç¤ºå¤šä¸ªStringç±»åž‹ä½œä¸ºå‚æ•°
  echo("one")
  echo("hello", "world")
  
  val arr = Array("what's", "up", "doc?")
- echo(arr: _*)   //  ±ØÐëÈç´ËÐ´£¬¸æËß±àÒëÆ÷È¡³öarrÖÐÃ¿¸öÔªËØ·Ö±ð×÷Îª²ÎÊý´«¸øecho£¬·ñÔò echo(arr) »áÈÏÎª´«µÄÒ»¸ö²ÎÊý£¬ÀàÐÍÊÇÊý×é
+ echo(arr: _*)   //  å¿…é¡»å¦‚æ­¤å†™ï¼Œå‘Šè¯‰ç¼–è¯‘å™¨å–å‡ºarrä¸­æ¯ä¸ªå…ƒç´ åˆ†åˆ«ä½œä¸ºå‚æ•°ä¼ ç»™echoï¼Œå¦åˆ™ echo(arr) ä¼šè®¤ä¸ºä¼ çš„ä¸€ä¸ªå‚æ•°ï¼Œç±»åž‹æ˜¯æ•°ç»„
  
  
- ¡¾Êµ²ÎÃüÃû¸³Öµ¡¿  ¿ÉÒÔ²»°´ÕÕº¯ÊýÉùÃ÷Ë³Ðò´«²Î£¬Ò»°ã½áºÏÄ¬ÈÏ²ÎÊýµÄ·½·¨Ò»ÆðÓÃ£¬¼´Ä¬ÈÏ²ÎÊý²»Ð´£¬Ê£ÏÂµÄÓÃÃüÃû²ÎÊý´«²Î
+ ã€å®žå‚å‘½åèµ‹å€¼ã€‘  å¯ä»¥ä¸æŒ‰ç…§å‡½æ•°å£°æ˜Žé¡ºåºä¼ å‚ï¼Œä¸€èˆ¬ç»“åˆé»˜è®¤å‚æ•°çš„æ–¹æ³•ä¸€èµ·ç”¨ï¼Œå³é»˜è®¤å‚æ•°ä¸å†™ï¼Œå‰©ä¸‹çš„ç”¨å‘½åå‚æ•°ä¼ å‚
  def speed(distance: Float, time: Float): Float = distance/time
- speed(time = 10, distance == 100)  //  µÈ¼ÛÓÚ  speed(100, 10)
+ speed(time = 10, distance == 100)  //  ç­‰ä»·äºŽ  speed(100, 10)
  
- ¡¾Ä¬ÈÏ²ÎÊý¡¿
- //  outÄ¬ÈÏ²ÎÊýÊÇ¿ØÖÆÌ¨£¬divisorÄ¬ÈÏ¸³Öµ 1
+ ã€é»˜è®¤å‚æ•°ã€‘
+ //  outé»˜è®¤å‚æ•°æ˜¯æŽ§åˆ¶å°ï¼Œdivisoré»˜è®¤èµ‹å€¼ 1
  def printTime2(out: java.io.PrintStream = Console.out, divisor: Int = 1) =
 			out.println("time = " + System.currentTimeMillis()/divisor)
 printTime2(out = Console.err)
 printTime2(divisor = 1000)
  
- Õë¶Ô¼òµ¥µÄµÝ¹éº¯Êý£¬scala½øÐÐÁËÓÅ»¯£¬ËùÓÐº¯Êý¶¼ÔÚÍ¬Ò»²ã¶øÃ»ÓÐÓÃ¶à¸öµ÷ÓÃÕ»£¬ÈçÏÂ£º
+ é’ˆå¯¹ç®€å•çš„é€’å½’å‡½æ•°ï¼Œscalaè¿›è¡Œäº†ä¼˜åŒ–ï¼Œæ‰€æœ‰å‡½æ•°éƒ½åœ¨åŒä¸€å±‚è€Œæ²¡æœ‰ç”¨å¤šä¸ªè°ƒç”¨æ ˆï¼Œå¦‚ä¸‹ï¼š
  def bomm(x: Int): Int = 
 	if (x == 0) throw new Exception("boom!")
 	else boom(x - 1) + 1
-ËùÎ½¼òµ¥µÝ¹éµ÷ÓÃº¯Êý£¬¼´º¯ÊýÌåÖÐ½öµ÷ÓÃ¶¨ÒåµÄº¯Êý±¾Éí²¢ÇÒ¸Ãµ÷ÓÃ×÷ÎªµÝ¹éÖÐµÄ×îºóÒ»ÌõÓï¾äÖ´ÐÐµÄÇé¿ö£¬ÈçÏÂÁ½ÖÖÇé¿ö²»»á½øÐÐÓÅ»¯
+æ‰€è°“ç®€å•é€’å½’è°ƒç”¨å‡½æ•°ï¼Œå³å‡½æ•°ä½“ä¸­ä»…è°ƒç”¨å®šä¹‰çš„å‡½æ•°æœ¬èº«å¹¶ä¸”è¯¥è°ƒç”¨ä½œä¸ºé€’å½’ä¸­çš„æœ€åŽä¸€æ¡è¯­å¥æ‰§è¡Œçš„æƒ…å†µï¼Œå¦‚ä¸‹ä¸¤ç§æƒ…å†µä¸ä¼šè¿›è¡Œä¼˜åŒ–
 
-Ê¾Àý1£ºº¯ÊýÌåÖÐÎ´µ÷ÓÃ×ÔÉí£¬²»ÓÅ»¯
+ç¤ºä¾‹1ï¼šå‡½æ•°ä½“ä¸­æœªè°ƒç”¨è‡ªèº«ï¼Œä¸ä¼˜åŒ–
 def isEven(x: Int): Boolean = if (x == 0) true else isOdd(x - 1)
 def isOdd(x: Int): Boolean = if (x == 0) false else isEven(x - 1)
-Ê¾Àý2£ºº¯ÊýÓÃ±äÁ¿ÖØÐÂ°ü×°¹ý£¬scalaÊ¶±ð²»ÁË£¬²»ÓÅ»¯
+ç¤ºä¾‹2ï¼šå‡½æ•°ç”¨å˜é‡é‡æ–°åŒ…è£…è¿‡ï¼Œscalaè¯†åˆ«ä¸äº†ï¼Œä¸ä¼˜åŒ–
 val funValue = nestedFun _
 def nestedFun(x: Int): Unit = { if (x != 0) { println(x); funValue(x - 1) } }
 
  
-  ///////////////////////////////                     ³£ÓÃº¯ÊýËµÃ÷                ///////////////////////////////
+  ///////////////////////////////                     å¸¸ç”¨å‡½æ•°è¯´æ˜Ž                ///////////////////////////////
   
- ¡¾zip¡¿
- ½«Êý×éÄÚÈÝÅä¶Ô£¬ÒÔÔªËØÉÙµÄÒ»·½Åä¶ÔÍê±Ïºó½áÊø
- Array(1, 2, 3) zip Array("a", "b")   //  µÃµ½  Array((1, "a"), (2, "b"))
+ ã€zipã€‘
+ å°†æ•°ç»„å†…å®¹é…å¯¹ï¼Œä»¥å…ƒç´ å°‘çš„ä¸€æ–¹é…å¯¹å®Œæ¯•åŽç»“æŸ
+ Array(1, 2, 3) zip Array("a", "b")   //  å¾—åˆ°  Array((1, "a"), (2, "b"))
  
- ¡¾mkString¡¿
- ËùÓÐµÄsequenceÈçÊý×é¶¼ÊµÏÖÁË±¾º¯Êý£¬Í¨¹ýµ÷ÓÃÃ¿¸öÔªËØµÄtoString·½·¨½«Ã¿¸öÔªËØ±ä³É×Ö·û´®£¬Ê¹ÓÃseparatorÁ¬½Ó¸÷¸ö×Ö·û´®
+ ã€mkStringã€‘
+ æ‰€æœ‰çš„sequenceå¦‚æ•°ç»„éƒ½å®žçŽ°äº†æœ¬å‡½æ•°ï¼Œé€šè¿‡è°ƒç”¨æ¯ä¸ªå…ƒç´ çš„toStringæ–¹æ³•å°†æ¯ä¸ªå…ƒç´ å˜æˆå­—ç¬¦ä¸²ï¼Œä½¿ç”¨separatorè¿žæŽ¥å„ä¸ªå­—ç¬¦ä¸²
  array mkString separator
  
- ¡¾max¡¿
+ ã€maxã€‘
  42 max 43
  
- ¡¾min¡¿
+ ã€minã€‘
  23 min 43
  
- ¡¾until¡¿
- 1 until 5  // µÃµ½ Range(1, 2, 3, 4)
+ ã€untilã€‘
+ 1 until 5  // å¾—åˆ° Range(1, 2, 3, 4)
  
- ¡¾to¡¿ 
- 1 to 5     //  µÃµ½ Range(1, 2 ,3 ,4 ,5)
+ ã€toã€‘ 
+ 1 to 5     //  å¾—åˆ° Range(1, 2 ,3 ,4 ,5)
  
- ¡¾abs¡¿
+ ã€absã€‘
  (-3).abs

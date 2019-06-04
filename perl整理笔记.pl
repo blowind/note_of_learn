@@ -1,107 +1,107 @@
 
 
 
-###########################   ÒıÈëÃüÁî   ################################
+###########################   å¼•å…¥å‘½ä»¤   ################################
 
-use strict;   ##  ÒªÇó±äÁ¿Ê¹ÓÃÇ°¶¼ÉùÃ÷£¬×Ö·û´®¼ÓÒıºÅ£¬ÒıÓÃÎªÊµÒıÓÃ
+use strict;   ##  è¦æ±‚å˜é‡ä½¿ç”¨å‰éƒ½å£°æ˜ï¼Œå­—ç¬¦ä¸²åŠ å¼•å·ï¼Œå¼•ç”¨ä¸ºå®å¼•ç”¨
 
-no strict 'refs'; ##  È¡ÏûÒıÓÃÏŞÖÆ
+no strict 'refs'; ##  å–æ¶ˆå¼•ç”¨é™åˆ¶
 
-use 5.012  ## Õâ¸ö°æ±¾Ö®ºóµÄperlÄ¬ÈÏ¿ªÆôstrict
+use 5.012  ## è¿™ä¸ªç‰ˆæœ¬ä¹‹åçš„perlé»˜è®¤å¼€å¯strict
 
-use warnings  ##  ¿ªÆô¾¯¸æ Ò²¿ÉÒÔÔÚ#!ÖĞ¼ÓÈë-wÀ´¿ªÆô
+use warnings  ##  å¼€å¯è­¦å‘Š ä¹Ÿå¯ä»¥åœ¨#!ä¸­åŠ å…¥-wæ¥å¼€å¯
 
-use diagnostics ##  ¿ªÆôÕï¶Ï ???????????????
+use diagnostics ##  å¼€å¯è¯Šæ–­ ???????????????
 
-use autodie  ## Óöµ½ÏµÍ³¼¶´íÎóÊ±£¨ÀıÈçÊäÈëÊä³ö´íÎó£©£¬×Ô¶¯die
-
-
+use autodie  ## é‡åˆ°ç³»ç»Ÿçº§é”™è¯¯æ—¶ï¼ˆä¾‹å¦‚è¾“å…¥è¾“å‡ºé”™è¯¯ï¼‰ï¼Œè‡ªåŠ¨die
 
 
-###########################   perlÄ£¿é   ################################
 
-°²×°Ä£¿é£ºÒÑÏÂÔØÄ£¿é
-perl Makefile.PL PREFIX=/Users/home/Ginger  ### °²×°Ä¿Â¼
-»òÕß
+
+###########################   perlæ¨¡å—   ################################
+
+å®‰è£…æ¨¡å—ï¼šå·²ä¸‹è½½æ¨¡å—
+perl Makefile.PL PREFIX=/Users/home/Ginger  ### å®‰è£…ç›®å½•
+æˆ–è€…
 perl Makefile.PL INSTALL_BASE=/User/home/Ginger
 make
 make test
 make install
 
 
-ÒıÈëÄ£¿éÂ·¾¶(shellÃüÁî)£º
+å¼•å…¥æ¨¡å—è·¯å¾„(shellå‘½ä»¤)ï¼š
 export PERL5LIB=/User/home/Ginger
-»òÕß
-use lib qw(/User/home/Ginger) Ê¹ÓÃ /User/home/GingerÂ·¾¶ÏÂµÄÄ£¿é    ### Ò²ÊÇÔÚ±àÒëÊ±Ö´ĞĞ
-»òÕß
-BEGIN { unshift @INC, '/home/gilligan/lib'; }  ###  ¼ÓËÑË÷Ä£¿éµÄÂ·¾¶£¬±ØĞëÓĞBEGIN
-·ÅÈëbeginÄ£¿éÀïÃæµÄÊÇÕı³£µÄperlÓï¾ä£¬»áÔÚ±àÒëÊ±Ö´ĞĞ
+æˆ–è€…
+use lib qw(/User/home/Ginger) ä½¿ç”¨ /User/home/Gingerè·¯å¾„ä¸‹çš„æ¨¡å—    ### ä¹Ÿæ˜¯åœ¨ç¼–è¯‘æ—¶æ‰§è¡Œ
+æˆ–è€…
+BEGIN { unshift @INC, '/home/gilligan/lib'; }  ###  åŠ æœç´¢æ¨¡å—çš„è·¯å¾„ï¼Œå¿…é¡»æœ‰BEGIN
+æ”¾å…¥beginæ¨¡å—é‡Œé¢çš„æ˜¯æ­£å¸¸çš„perlè¯­å¥ï¼Œä¼šåœ¨ç¼–è¯‘æ—¶æ‰§è¡Œ
 
-use  ×÷ÓÃµÄÄÚÈİ¶¼ÊÇÔÚ±àÒëÆÚÖ´ĞĞ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+use  ä½œç”¨çš„å†…å®¹éƒ½æ˜¯åœ¨ç¼–è¯‘æœŸæ‰§è¡Œ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-require List::Util;        ####  require ÓÃÓÚload modules£¬Çø±ğÔÚÓÚÆäÔËĞĞÓÚÖ´ĞĞÆÚ
+require List::Util;        ####  require ç”¨äºload modulesï¼ŒåŒºåˆ«åœ¨äºå…¶è¿è¡Œäºæ‰§è¡ŒæœŸ
 BEGIN {
 	require List::Util;
 	List::Util->import(...);
-}           ###      µÈ¼ÛÓÚ  use List::Util;
+}           ###      ç­‰ä»·äº  use List::Util;
 
-use constant LIB_DIR => '/home/gilligan/lib';   ### ¶¨Òå±àÒëÆÚµÄ³£Á¿
-use lib LIB_DIR;     ###  ±àÒëÆÚÒıÈë
+use constant LIB_DIR => '/home/gilligan/lib';   ### å®šä¹‰ç¼–è¯‘æœŸçš„å¸¸é‡
+use lib LIB_DIR;     ###  ç¼–è¯‘æœŸå¼•å…¥
 
-use FindBin qw($Bin);   ###  ´ËÄ£¿é½«µ±Ç°Ä¿Â¼Â·¾¶·ÅÈë$Bin£¬×Ô´øÄ£¿é£¬¿ÉÔÚ±àÒëÆ÷Ö®ÍâÖ´ĞĞ
-use lib $Bin;       ###  ½«¿â·ÅÈë@INC
+use FindBin qw($Bin);   ###  æ­¤æ¨¡å—å°†å½“å‰ç›®å½•è·¯å¾„æ”¾å…¥$Binï¼Œè‡ªå¸¦æ¨¡å—ï¼Œå¯åœ¨ç¼–è¯‘å™¨ä¹‹å¤–æ‰§è¡Œ
+use lib $Bin;       ###  å°†åº“æ”¾å…¥@INC
 use lib "$Bin/../lib";
 
-### ĞèÒª°²×°µÄlocal::libÄ£¿é£¬ÓÃÓÚÖ¸¶¨CPAN°²×°Ä£¿éµÄÎ»ÖÃ
-% perl -Mlocal::lib  ÏÔÊ¾¸ÃÄ£¿éµÄÉè¶¨±äÁ¿
-% cpan -I Set::Crossproduct    -I±ê¼Ç±íÊ¾ÓÃlocal::libÖ¸¶¨µÄÂ·¾¶°²×°Ä£¿é
+### éœ€è¦å®‰è£…çš„local::libæ¨¡å—ï¼Œç”¨äºæŒ‡å®šCPANå®‰è£…æ¨¡å—çš„ä½ç½®
+% perl -Mlocal::lib  æ˜¾ç¤ºè¯¥æ¨¡å—çš„è®¾å®šå˜é‡
+% cpan -I Set::Crossproduct    -Iæ ‡è®°è¡¨ç¤ºç”¨local::libæŒ‡å®šçš„è·¯å¾„å®‰è£…æ¨¡å—
 
 
-Ê¹ÓÃModule::BuildÄ£¿éÀ´½øĞĞ°²×°¹¤×÷
+ä½¿ç”¨Module::Buildæ¨¡å—æ¥è¿›è¡Œå®‰è£…å·¥ä½œ
 perl Build.PL --install_base /Users/home/Ginger
 perl Build
 perl Build test
 perl Build install
 
-Î´ÏÂÔØÄ£¿é£º
+æœªä¸‹è½½æ¨¡å—ï¼š
 perl -MCPAN -e shell
 cpan>install CGI::Prototype
-»òÕß
+æˆ–è€…
 cpan CGI::Prototype Test::Pod
 
-perl -MCPANPLUS -e shell   ´ËCPANPLUSÄ£¿éÔÚ5.010Ö®ºó×Ô´ø
-CPAN Terminal> i CGI::Prototype          Ä£¿é°²×°
-»òÕß
+perl -MCPANPLUS -e shell   æ­¤CPANPLUSæ¨¡å—åœ¨5.010ä¹‹åè‡ªå¸¦
+CPAN Terminal> i CGI::Prototype          æ¨¡å—å®‰è£…
+æˆ–è€…
 cpanp i CGI::Prototype HTTP::Cookies::Safari Test::Pod
 
 
-perldoc File::Basename  µ÷³öÄ£¿éµÄËµÃ÷ÎÄµµ
+perldoc File::Basename  è°ƒå‡ºæ¨¡å—çš„è¯´æ˜æ–‡æ¡£
 
-######       º¯ÊıÊ½½Ó¿Ú    #####
-use File::Basename;     ### ÒıÈëfileparse, basename, dirnameÈı¸ö×ÓÀı³Ì£¬ÄÜ×Ô¶¯Ê¶±ğËùÔËĞĞµÄÏµÍ³
-use File::Basename  qw/  basename /;   ½ö½öÒıÈëbasenameº¯Êı
-use File::Basename  ('fileparse', 'basename');  ½ö½öÒıÈëfileparseºÍbasename
-use File::Basename  qw/ /;   Ê²Ã´Ò²²»ÌáÈ¡£¬Ò²¿ÉÒÔĞ´³É
-use File::Basename ();   ´ËÊ±ÒÑÈ»¿ÉÒÔÊ¹ÓÃº¯Êı£¬²»¹ıÒª°üº¬ÍêÕû°üÃû
-my  $dirname = File::Basename::dirname($name);    ²»¹ÜÓÃ²»ÓÃuse£¬´Ëµ÷ÓÃ¶¼³ÉÁ¢
+######       å‡½æ•°å¼æ¥å£    #####
+use File::Basename;     ### å¼•å…¥fileparse, basename, dirnameä¸‰ä¸ªå­ä¾‹ç¨‹ï¼Œèƒ½è‡ªåŠ¨è¯†åˆ«æ‰€è¿è¡Œçš„ç³»ç»Ÿ
+use File::Basename  qw/  basename /;   ä»…ä»…å¼•å…¥basenameå‡½æ•°
+use File::Basename  ('fileparse', 'basename');  ä»…ä»…å¼•å…¥fileparseå’Œbasename
+use File::Basename  qw/ /;   ä»€ä¹ˆä¹Ÿä¸æå–ï¼Œä¹Ÿå¯ä»¥å†™æˆ
+use File::Basename ();   æ­¤æ—¶å·²ç„¶å¯ä»¥ä½¿ç”¨å‡½æ•°ï¼Œä¸è¿‡è¦åŒ…å«å®Œæ•´åŒ…å
+my  $dirname = File::Basename::dirname($name);    ä¸ç®¡ç”¨ä¸ç”¨useï¼Œæ­¤è°ƒç”¨éƒ½æˆç«‹
 
-use File::Basename;  ±íÊ¾ÒıÈëÄ¬ÈÏsubroutine
-use File::Basename ()£» ±íÊ¾Ê²Ã´subroutine¶¼²»ÒıÈë
+use File::Basename;  è¡¨ç¤ºå¼•å…¥é»˜è®¤subroutine
+use File::Basename ()ï¼› è¡¨ç¤ºä»€ä¹ˆsubroutineéƒ½ä¸å¼•å…¥
 
-#####       ÃæÏò¶ÔÏó½Ó¿Ú   ######    ´ËÀà½Ó¿Ú²»ÒıÈëÈÎºÎ×ÓÀı³Ì
-use  File::Spec;     ### Ä£¿éÊ²Ã´¶¼Ã»ÒıÈë£¬Õû¸ö½Ó¿ÚÊ¹ÓÃÀà·½·¨
-###   Ìá¹©·½·¨catfile£¨×¢ÒâÓëº¯ÊıµÄÇø±ğ£¬File::SpecÊÇÒ»¸ö¶ÔÏó£¬Ã¿´ÎÊ¹ÓÃ¶¼ÒªÍêÕûĞ´³ö£©
-use  File::Spec::Functions    ###   ±äÃæÏò¶ÔÏó½Ó¿ÚÎªº¯ÊıÊ½½Ó¿Ú
+#####       é¢å‘å¯¹è±¡æ¥å£   ######    æ­¤ç±»æ¥å£ä¸å¼•å…¥ä»»ä½•å­ä¾‹ç¨‹
+use  File::Spec;     ### æ¨¡å—ä»€ä¹ˆéƒ½æ²¡å¼•å…¥ï¼Œæ•´ä¸ªæ¥å£ä½¿ç”¨ç±»æ–¹æ³•
+###   æä¾›æ–¹æ³•catfileï¼ˆæ³¨æ„ä¸å‡½æ•°çš„åŒºåˆ«ï¼ŒFile::Specæ˜¯ä¸€ä¸ªå¯¹è±¡ï¼Œæ¯æ¬¡ä½¿ç”¨éƒ½è¦å®Œæ•´å†™å‡ºï¼‰
+use  File::Spec::Functions    ###   å˜é¢å‘å¯¹è±¡æ¥å£ä¸ºå‡½æ•°å¼æ¥å£
 my $new_name = File::Spec->catfile($dirname1, $dirname2, $dirname3, $basename);  
-###  µ÷ÓÃÀà·½·¨catfileºÏ²¢$dirnameºÍ$basename
+###  è°ƒç”¨ç±»æ–¹æ³•catfileåˆå¹¶$dirnameå’Œ$basename
 
 use File::Path;
-rmtree    É¾³ıÄ¿Â¼ÀïÓĞÄ¿Â¼µÄÇé¿ö
+rmtree    åˆ é™¤ç›®å½•é‡Œæœ‰ç›®å½•çš„æƒ…å†µ
 
-use File::Find;             ###  ²éÑ¯Ä³Ä¿Â¼¼°Æä×ÓÄ¿Â¼ÏÂµÄÄ³ÀàÆ¥ÅäÎÄ¼ş
-##  ¹«¹²²ÎÊı  $File::Find::name   ËùÓĞÄ¿Â¼ºÍÎÄ¼şµÄÃû×Ö£¬°üÀ¨ÍêÕûµÄÏà¶ÔÂ·¾¶ -d -f²âÊÔ²»³É¹¦
-##			  $File::Find::dir    ËùÓĞÄ¿Â¼µÄÃû×Ö   -d²âÊÔ²»³É¹¦
-##            $_                  ËùÓĞÎÄ¼şµÄÃû×Ö   -d -f ²âÊÔ³É¹¦
+use File::Find;             ###  æŸ¥è¯¢æŸç›®å½•åŠå…¶å­ç›®å½•ä¸‹çš„æŸç±»åŒ¹é…æ–‡ä»¶
+##  å…¬å…±å‚æ•°  $File::Find::name   æ‰€æœ‰ç›®å½•å’Œæ–‡ä»¶çš„åå­—ï¼ŒåŒ…æ‹¬å®Œæ•´çš„ç›¸å¯¹è·¯å¾„ -d -fæµ‹è¯•ä¸æˆåŠŸ
+##			  $File::Find::dir    æ‰€æœ‰ç›®å½•çš„åå­—   -dæµ‹è¯•ä¸æˆåŠŸ
+##            $_                  æ‰€æœ‰æ–‡ä»¶çš„åå­—   -d -f æµ‹è¯•æˆåŠŸ
 my @path = 'E:\sharedAll\path_reconstruction\delay\TestNetwork\script\test';
 sub wanted {
     if ( -f $File::Find::name ) {
@@ -113,10 +113,10 @@ sub wanted {
 find(\&wanted, @path);
 
 
-use  Math::BigInt;     ###  ÒıÈëÒ»¸ö¶ÔÏóÀà
-my $value = Math::BigInt->new(2);        ####   ¶ÔÒ»ÀàÊµÀı»¯£¬½«ÆäÒıÓÃ¸³Öµ¸ø$value
-$value->bpow(1000);         ###  µ÷ÓÃ·½·¨bpow()  ¼´ÇóÃİ
-print $value->bstr(), "\n";       ###  µ÷ÓÃ·½·¨Êä³ö
+use  Math::BigInt;     ###  å¼•å…¥ä¸€ä¸ªå¯¹è±¡ç±»
+my $value = Math::BigInt->new(2);        ####   å¯¹ä¸€ç±»å®ä¾‹åŒ–ï¼Œå°†å…¶å¼•ç”¨èµ‹å€¼ç»™$value
+$value->bpow(1000);         ###  è°ƒç”¨æ–¹æ³•bpow()  å³æ±‚å¹‚
+print $value->bstr(), "\n";       ###  è°ƒç”¨æ–¹æ³•è¾“å‡º
 
 
 use  Path::Class;
@@ -125,16 +125,16 @@ my  $subdir  =  $dir->subdir( 'perl5' );  # Users/fred/lib/perl5
 my  $parent  =  $dir->parent;             # Users/fred
 my $windir = $dir->as_foreign( 'Win32' ); # Users\fred\lib
 
-###  ExcelÏà¹Ø
+###  Excelç›¸å…³
 
 use Spreadsheet::WriteExcel;
-my $workbook = Spreadsheet::WriteExcel->new('perl.xls');  ## ´´½¨Ò»¸öexcelÎÄ¼ş
-my $worksheet = $workbook->add_worksheet();   ### Ìí¼ÓÒ»¸ösheet×÷Îª²Ù×÷¶ÔÏó
+my $workbook = Spreadsheet::WriteExcel->new('perl.xls');  ## åˆ›å»ºä¸€ä¸ªexcelæ–‡ä»¶
+my $worksheet = $workbook->add_worksheet();   ### æ·»åŠ ä¸€ä¸ªsheetä½œä¸ºæ“ä½œå¯¹è±¡
 
-$worksheet->write('A1', 'Hello Excel!');   ###  ÔÚA1µÄÎ»ÖÃÌí¼Ó×Ö·û´®
-$worksheet->write(0, 0, 'Hello Excel');    ### ÁíÒ»ÖÖĞ´·¨£¬ÓÃ×ø±ê±êÊ¾Î»ÖÃA1
+$worksheet->write('A1', 'Hello Excel!');   ###  åœ¨A1çš„ä½ç½®æ·»åŠ å­—ç¬¦ä¸²
+$worksheet->write(0, 0, 'Hello Excel');    ### å¦ä¸€ç§å†™æ³•ï¼Œç”¨åæ ‡æ ‡ç¤ºä½ç½®A1
 
-my $red_backgroud = $workbook->add_format(   ### ĞŞ¸ÄexcelµÄ¸ñÊ½
+my $red_backgroud = $workbook->add_format(   ### ä¿®æ”¹excelçš„æ ¼å¼
 	color => 'white',
 	bg_color => 'red',
 	bold => 1,
@@ -148,36 +148,36 @@ $worksheet->write(0, 0, 'Colored cell', $red_backgroud);
 $worksheet->write(0, 1, 'bold cell', $bold);
 
 my $product_code = '01234';
-$worksheet->write_string(0, 2, $product_code);     ###  ¼ÓÈëµÄÊÇstring£¬ËùÒÔ²»»áÈ¥µô¿ªÍ·µÄ0
+$worksheet->write_string(0, 2, $product_code);     ###  åŠ å…¥çš„æ˜¯stringï¼Œæ‰€ä»¥ä¸ä¼šå»æ‰å¼€å¤´çš„0
 
 $worksheet->write('A2', 37);
 $worksheet->write('B2', 42);
-$worksheet->write('C2', '=A2 + B2');       ### ½«A2 ºÍ B2 µÄÄÚÈİÏà¼Ó·ÅÈëC2£¬¾ÍÊÇexcelµÄÓÃ·¨
+$worksheet->write('C2', '=A2 + B2');       ### å°†A2 å’Œ B2 çš„å†…å®¹ç›¸åŠ æ”¾å…¥C2ï¼Œå°±æ˜¯excelçš„ç”¨æ³•
 
 
 use Module::CoreList;
-print $Module::CoreList::version{5.01400}{CPAN};      ## ²é¿´CPANÄ£¿éµÄ°æ±¾ºÅ
-print Module::CoreList->first_release('Module::Build');     ##  ¸ÃÄ£¿éµÚÒ»´Î³öÏÖÊÇÔÚperlµÄÄÄ¸ö°æ±¾
+print $Module::CoreList::version{5.01400}{CPAN};      ## æŸ¥çœ‹CPANæ¨¡å—çš„ç‰ˆæœ¬å·
+print Module::CoreList->first_release('Module::Build');     ##  è¯¥æ¨¡å—ç¬¬ä¸€æ¬¡å‡ºç°æ˜¯åœ¨perlçš„å“ªä¸ªç‰ˆæœ¬
 
 
-use  CGI  qw(:all);         ###       allĞŞÊÎ±êÇ©£¬ÒıÈëÄ£¿éÄÚËùÓĞº¯Êı
+use  CGI  qw(:all);         ###       allä¿®é¥°æ ‡ç­¾ï¼Œå¼•å…¥æ¨¡å—å†…æ‰€æœ‰å‡½æ•°
 use  DBI;
 use  DateTime; 
 
 
 use threads;
 
-my $t1 = threads->create(³ÌĞòÃû, ²ÎÊı£¬²ÎÊı.....);
+my $t1 = threads->create(ç¨‹åºå, å‚æ•°ï¼Œå‚æ•°.....);
 
-my $t2 = async{   say "hello world"; };     ###   ´´½¨Ïß³ÌµÄÁ½ÖÖ·½·¨
+my $t2 = async{   say "hello world"; };     ###   åˆ›å»ºçº¿ç¨‹çš„ä¸¤ç§æ–¹æ³•
 
 
 use IPC::System::Simple qw(system systemx capture capturex);
-±ÈÏµÍ³×Ô´øµÄsystem¸ü¾ß¿ÉÒÆÖ²ĞÔ
-systemx±£Ö¤²»Ê¹ÓÃshell
-captureÀàËÆ·´ÒıºÅ
+æ¯”ç³»ç»Ÿè‡ªå¸¦çš„systemæ›´å…·å¯ç§»æ¤æ€§
+systemxä¿è¯ä¸ä½¿ç”¨shell
+captureç±»ä¼¼åå¼•å·
 
-use Try::Tiny;        ###  ÀàËÆCÓïÑÔµÄÒì³£²¶»ñ£¬Ğè°²×°
+use Try::Tiny;        ###  ç±»ä¼¼Cè¯­è¨€çš„å¼‚å¸¸æ•è·ï¼Œéœ€å®‰è£…
 try {
 	...; # some code that might throw errors
 }
@@ -188,53 +188,53 @@ finally {
 	...;
 }
 
-use List::Util;   ###  perl×Ô´ø¿â£¬CÓïÑÔÊµÏÖµÄ´¦ÀílistµÄ¹¤¾ß
+use List::Util;   ###  perlè‡ªå¸¦åº“ï¼ŒCè¯­è¨€å®ç°çš„å¤„ç†listçš„å·¥å…·
 use List:Util qw(first);
-my $first_match = first {/\bPebbles\b/i} @charaters;     ### ÕÒµ½listÖĞµÚÒ»¸ö³öÏÖPebblesµÄ±êÁ¿
+my $first_match = first {/\bPebbles\b/i} @charaters;     ### æ‰¾åˆ°listä¸­ç¬¬ä¸€ä¸ªå‡ºç°Pebblesçš„æ ‡é‡
 use List::Util qw(sum);
-my $total = sum( 1..1000 ); # 500500  ÇóºÍutility
+my $total = sum( 1..1000 ); # 500500  æ±‚å’Œutility
 use List::Util qw(max);
-my $max = max( 3, 5, 10, 4, 6 );   ###  ÇólistÖĞ×î´óÖµ £¬½öÊÊÓÃÊı×Ö
+my $max = max( 3, 5, 10, 4, 6 );   ###  æ±‚listä¸­æœ€å¤§å€¼ ï¼Œä»…é€‚ç”¨æ•°å­—
 use List::Util qw(maxstr);
-my $max = maxstr( @strings );  ###  ÊÊÓÃstring
+my $max = maxstr( @strings );  ###  é€‚ç”¨string
 use List::Util qw(shuffle);
-my @shuffled = shuffle(1..1000); # randomized order of elements  £¬´òÂÒË³Ğò
+my @shuffled = shuffle(1..1000); # randomized order of elements  ï¼Œæ‰“ä¹±é¡ºåº
 
 
-use List:MoreUtils   ###  ¸üÇ¿´ó£¬Ğè°²×°
+use List:MoreUtils   ###  æ›´å¼ºå¤§ï¼Œéœ€å®‰è£…
 use List::MoreUtils qw(none any all);
-if (none { $_ > 100 } @numbers) {    ##  Ò»¸ö·ûºÏÌõ¼şµÄÒ²Ã»ÓĞ
+if (none { $_ > 100 } @numbers) {    ##  ä¸€ä¸ªç¬¦åˆæ¡ä»¶çš„ä¹Ÿæ²¡æœ‰
 	print "No elements over 100\n"
-} elsif (any { $_ > 50 } @numbers) {   ### Ö»ÒªÓĞÒ»¸ö·ûºÏÌõ¼ş¾Í³ÉÁ¢
+} elsif (any { $_ > 50 } @numbers) {   ### åªè¦æœ‰ä¸€ä¸ªç¬¦åˆæ¡ä»¶å°±æˆç«‹
 	print "Some elements over 50\n";
-} elsif (all { $_ < 10 } @numbers) {   ###  ËùÓĞµÄ¶¼·ûºÏÌõ¼ş
+} elsif (all { $_ < 10 } @numbers) {   ###  æ‰€æœ‰çš„éƒ½ç¬¦åˆæ¡ä»¶
 	print "All elements are less than 10\n";
 }
 
-use List::MoreUtils qw(mesh);      ####  ½»²æºÏ²¢list£¬Ò»´Î´Ó¸÷¸ölistÈ¡Ò»¸öÔªËØ·ÅÈë×îÖÕlist
+use List::MoreUtils qw(mesh);      ####  äº¤å‰åˆå¹¶listï¼Œä¸€æ¬¡ä»å„ä¸ªlistå–ä¸€ä¸ªå…ƒç´ æ”¾å…¥æœ€ç»ˆlist
 my @abc = 'a' .. 'z';
 my @numbers = 1 .. 20;
 my @dinosaurs = qw( dino );
 my @large_array = mesh @abc, @numbers, @dinosaurs;
-####  ½á¹û£ºa 1 dino b 2 c 3 ....
+####  ç»“æœï¼ša 1 dino b 2 c 3 ....
  
-use autodie qw (open system: socket)   ###  ÓëÏµÍ³½»»¥²úÉú´íÎóÊ±×Ô¶¯die£¬´Ë´¦Ö»ÔÚopenÎÄ¼şÊ±die
+use autodie qw (open system: socket)   ###  ä¸ç³»ç»Ÿäº¤äº’äº§ç”Ÿé”™è¯¯æ—¶è‡ªåŠ¨dieï¼Œæ­¤å¤„åªåœ¨openæ–‡ä»¶æ—¶die
 
-use IO::Handle;        ### 5.14Ö®Ç°ÒªÏÔÊ¾ÉùÃ÷£¬ÊäÈëÊä³öµÄ»ù±¾Àà
+use IO::Handle;        ### 5.14ä¹‹å‰è¦æ˜¾ç¤ºå£°æ˜ï¼Œè¾“å…¥è¾“å‡ºçš„åŸºæœ¬ç±»
 open my $fh, '>', $filename or die '..';
 $fh->print('Coconut headphones');
 $fh->close;
 
-use IO::File;       ### ±ê×¼·¢ĞĞ°æ×Ô´ø
+use IO::File;       ### æ ‡å‡†å‘è¡Œç‰ˆè‡ªå¸¦
 my $fh = IO::File->new( '> castaways.log' ) or die "Could not create filehandle:$!";
 my $read_fh = IO::File->new('castaways.log', 'r');
 my $write_fh = IO::File->new('castaways.log', 'w');
 my $append_fh = IO::File->new( 'castaways.log', O_WRONLY|O_APPEND );
 
-my $temp_fh = IO::File->new_tmpfile;    ## ¿ªÁÙÊ±ÎÄ¼ş´æ´¢
+my $temp_fh = IO::File->new_tmpfile;    ## å¼€ä¸´æ—¶æ–‡ä»¶å­˜å‚¨
 $temp_fh->close or die "Could not close file: $!";
 
-use IO::Tee;   ### Í¬Ò»¸öÊäÈëÁ÷¶à¸öÊä³öÁ÷
+use IO::Tee;   ### åŒä¸€ä¸ªè¾“å…¥æµå¤šä¸ªè¾“å‡ºæµ
 open my $log_fh, '>>', 'castaways.log';
 open my $scalar_fh, '>>', \ my $string;
 my $tee_fh = IO::Tee->new($log_fh, $scalar_fh);
@@ -242,7 +242,7 @@ print $tee_fh "The radio works in the middle of the ocean!\n";
 
 use IO::Pipe;
 my $pipe = IO:Pipe->new;
-$pipe->reader("$^X -V");        ### $^XÊÇµ±Ç°perl½Å±¾  ´ÓÍâ²¿ÃüÁî¶ÁÈëÊı¾İ
+$pipe->reader("$^X -V");        ### $^Xæ˜¯å½“å‰perlè„šæœ¬  ä»å¤–éƒ¨å‘½ä»¤è¯»å…¥æ•°æ®
 while(<$pipe>) {
 	print "Read: $_";
 }
@@ -252,74 +252,74 @@ for(1..10) {
 }
 
 use IO::Null;
-my $null_fh = IO::Null->new;    ## ±ÈÌØÍ°£¬ÎŞµ×¶´
+my $null_fh = IO::Null->new;    ## æ¯”ç‰¹æ¡¶ï¼Œæ— åº•æ´
 
-my $debug_fh = $Debug ? *STDOUT : IO::Null->new;     ### Í¨¹ıÉèÖÃdebug flagÀ´¿ØÖÆÊä³ö·½Ïò
+my $debug_fh = $Debug ? *STDOUT : IO::Null->new;     ### é€šè¿‡è®¾ç½®debug flagæ¥æ§åˆ¶è¾“å‡ºæ–¹å‘
 $debug_fh->print("Hey, the radio's not working!");
 
-use Regexp::Common qw(URI);    ### Ìá¹©¸´ÔÓµÄÕıÔò±í´ïÊ½Ä£Ê½£¬Ê¹ÓÃ¹şÏ£$REÓ³Éä¸÷¸öregexpµÄÒıÓÃ
+use Regexp::Common qw(URI);    ### æä¾›å¤æ‚çš„æ­£åˆ™è¡¨è¾¾å¼æ¨¡å¼ï¼Œä½¿ç”¨å“ˆå¸Œ$REæ˜ å°„å„ä¸ªregexpçš„å¼•ç”¨
 while(<>) {
-	print if /$RE{URL}{HTTP}/;     ### Æ¥ÅähttpµÄÍøÖ·
+	print if /$RE{URL}{HTTP}/;     ### åŒ¹é…httpçš„ç½‘å€
 }
 use Regexp::Common qw(net);
 while( <> ) {
-	say if /$RE{net}{IPv4}/;      ### Æ¥Åäipv4µØÖ·
+	say if /$RE{net}{IPv4}/;      ### åŒ¹é…ipv4åœ°å€
 }
 use Regexp::Common qw(number);
 while( <> ) {
-	say if /$RE{num}{int}/;      ####  Æ¥Åä10½øÖÆÕûÊı£¬Êä³öÆ¥ÅäµÄÕûĞĞ
+	say if /$RE{num}{int}/;      ####  åŒ¹é…10è¿›åˆ¶æ•´æ•°ï¼Œè¾“å‡ºåŒ¹é…çš„æ•´è¡Œ
 }
 while( <> ) {
-	say if /$RE{num}{int}{ -base => 16 }/;      ####  Æ¥Åä16½øÖÆÕûÊı£¬Êä³öÆ¥ÅäµÄÕûĞĞ
+	say if /$RE{num}{int}{ -base => 16 }/;      ####  åŒ¹é…16è¿›åˆ¶æ•´æ•°ï¼Œè¾“å‡ºåŒ¹é…çš„æ•´è¡Œ
 }
 while( <> ) {
-	say $1 if /$RE{num}{int}{ -base => 16 }{-keep}/; ####  Æ¥Åä10½øÖÆÕûÊı£¬½öÊä³öÆ¥ÅäµÄÊı×Ö
+	say $1 if /$RE{num}{int}{ -base => 16 }{-keep}/; ####  åŒ¹é…10è¿›åˆ¶æ•´æ•°ï¼Œä»…è¾“å‡ºåŒ¹é…çš„æ•°å­—
 }
 
 use Bloom::Filter;
- ## capacity±íÊ¾Bloom FilterÈİÁ¿   error_rate ÅäÖÃµÄ×î´ó´íÎóÂÊ
+ ## capacityè¡¨ç¤ºBloom Filterå®¹é‡   error_rate é…ç½®çš„æœ€å¤§é”™è¯¯ç‡
 my $bf = Bloom::Filter->new(capacity=>10, error_rate=>0.001); 
-$bf->length  ## ´æ´¢Bloom FilterµÄÎ»³¤¶È
-$bf->on_bits  ## ´æ´¢ÖÃÎ»onµÄbitµÄÊıÄ¿
-$bf->key_count()   ##  ÒÑ¾­´æ´¢µÄÔªËØÊıÄ¿
- ##  ½«¹Ø¼ü×Ö¼ÓÈëBloom Filter ³¬¹ıÆäÅäÖÃÈİÁ¿Ê±»á±¨´í£¬·µ»Øundef 
+$bf->length  ## å­˜å‚¨Bloom Filterçš„ä½é•¿åº¦
+$bf->on_bits  ## å­˜å‚¨ç½®ä½onçš„bitçš„æ•°ç›®
+$bf->key_count()   ##  å·²ç»å­˜å‚¨çš„å…ƒç´ æ•°ç›®
+ ##  å°†å…³é”®å­—åŠ å…¥Bloom Filter è¶…è¿‡å…¶é…ç½®å®¹é‡æ—¶ä¼šæŠ¥é”™ï¼Œè¿”å›undef 
 $bf->add( @keys );
- ##  ¼ì²é¹Ø¼ü×Ö@keyÊÇ·ñÔÚBloom FilterÀïÃæ£¬´æÔÚ·µ»Ø1£¬·ñÔò·µ»Ø0£¬×îÖÕ·µ»ØÒ»¸ö01µÄlist
+ ##  æ£€æŸ¥å…³é”®å­—@keyæ˜¯å¦åœ¨Bloom Filteré‡Œé¢ï¼Œå­˜åœ¨è¿”å›1ï¼Œå¦åˆ™è¿”å›0ï¼Œæœ€ç»ˆè¿”å›ä¸€ä¸ª01çš„list
 $bf->check(@key);
 
 
-###########################   ¹Ø¼ü×Ö   ################################
-my  ÉùÃ÷Ò»¸ö±äÁ¿ÊÇ¾Ö²¿Ë½ÓĞ±äÁ¿
+###########################   å…³é”®å­—   ################################
+my  å£°æ˜ä¸€ä¸ªå˜é‡æ˜¯å±€éƒ¨ç§æœ‰å˜é‡
 
 use 5.010;
-state  ÉùÃ÷Ò»¸ö±äÁ¿ÊÇÈ«¾ÖË½ÓĞ±äÁ¿£¬ÀàËÆCÓïÑÔ¾²Ì¬¾Ö²¿±äÁ¿µÄÒâË¼£¬×¢Òâuse²»¿ÉÉÙ£¬²»È»±¨´í
+state  å£°æ˜ä¸€ä¸ªå˜é‡æ˜¯å…¨å±€ç§æœ‰å˜é‡ï¼Œç±»ä¼¼Cè¯­è¨€é™æ€å±€éƒ¨å˜é‡çš„æ„æ€ï¼Œæ³¨æ„useä¸å¯å°‘ï¼Œä¸ç„¶æŠ¥é”™
 
-sub  ÉùÃ÷Ò»¸ösubroutine×ÓÀı³Ì
-sub marine {}  »òÕß sub marine() {}
-²»´øÔ²À¨ºÅ±íÊ¾ĞÎ²Î¸öÊıÈÎÒâ
-´øÔ²À¨ºÅ±íÊ¾²»ÄÜÓĞĞÎ²Î
-
-
+sub  å£°æ˜ä¸€ä¸ªsubroutineå­ä¾‹ç¨‹
+sub marine {}  æˆ–è€… sub marine() {}
+ä¸å¸¦åœ†æ‹¬å·è¡¨ç¤ºå½¢å‚ä¸ªæ•°ä»»æ„
+å¸¦åœ†æ‹¬å·è¡¨ç¤ºä¸èƒ½æœ‰å½¢å‚
 
 
 
-###########################   ÏµÍ³²ÎÊı   ################################
+
+
+###########################   ç³»ç»Ÿå‚æ•°   ################################
 "
 STDIN,  STDOUT,  STDERR,  DATA,  ARGV,  ARGVOUT
 
-$!  ÏµÍ³´íÎóÏûÏ¢
+$!  ç³»ç»Ÿé”™è¯¯æ¶ˆæ¯
 
-$0  ³ÌĞòÃû  Àı×Ó£º"$0:Not enough arguments\n"
+$0  ç¨‹åºå  ä¾‹å­ï¼š"$0:Not enough arguments\n"
 
-$| = 1  Ê¹µ±Ç°Ñ¡ÖĞµÄÄ¬ÈÏÊä³öÃ¿´ÎÁ¢Âíflush
+$| = 1  ä½¿å½“å‰é€‰ä¸­çš„é»˜è®¤è¾“å‡ºæ¯æ¬¡ç«‹é©¬flush
 
-$/  ÉèÖÃĞĞ½áÊø·û
+$/  è®¾ç½®è¡Œç»“æŸç¬¦
 
-$?  ±£´æ×Ó½ø³ÌµÄÍË³ö×´Ì¬
+$?  ä¿å­˜å­è¿›ç¨‹çš„é€€å‡ºçŠ¶æ€
 
-$@  eval²¶»ñµÄ´íÎóĞÅÏ¢
+$@  evalæ•è·çš„é”™è¯¯ä¿¡æ¯
 
-@INC  perlËÑÑ°Ä£¿éµÄÂ·¾¶¼¯ºÏ
+@INC  perlæœå¯»æ¨¡å—çš„è·¯å¾„é›†åˆ
 
 __FILE__
 
@@ -327,32 +327,32 @@ __LINE__
 
 __WARN__
 
-__END__        ÎÄ¼ş½áÎ²ºê
+__END__        æ–‡ä»¶ç»“å°¾å®
 
-%ENV   ÀıÈç£º$ENV{PATH}
-$ENV{'PATH'} = "/home/rootbeer/bin:$ENV{'PATH'}";    ###   Ìí¼Ó×Ô¼ºµÄ»·¾³±äÁ¿µ½×îÇ°Ãæ
+%ENV   ä¾‹å¦‚ï¼š$ENV{PATH}
+$ENV{'PATH'} = "/home/rootbeer/bin:$ENV{'PATH'}";    ###   æ·»åŠ è‡ªå·±çš„ç¯å¢ƒå˜é‡åˆ°æœ€å‰é¢
 delete $ENV{'IFS'};
 
-$^I = ".bak";   ÉèÖÃÔ´ÎÄ¼ş±¸·İµÄºó×ºÎª.bak
+$^I = ".bak";   è®¾ç½®æºæ–‡ä»¶å¤‡ä»½çš„åç¼€ä¸º.bak
 
-perl -V  ²é¿´perlÏà¹ØĞÅÏ¢
-
-"
-
-
-###########################   µ÷ÊÔÏà¹Ø   ################################
-
-
-perl  debugÏà¹Ø
-ÃüÁîĞĞ% perl -d script.pl
-"
-s  ½øĞĞµ¥²½¸ú×Ù
-x  \%total_bytes  ÏÔÊ¾hashÓ³ÉäµÄÄÚÈİ
-x  sort keys %total_bytes   ÏÔÊ¾key×é³ÉµÄÒ»¸ölist 
+perl -V  æŸ¥çœ‹perlç›¸å…³ä¿¡æ¯
 
 "
 
-use Data::Dumper   ###  ÓÃÓÚ½«¸´ÔÓµÄÊı¾İ½á¹¹µÄÄÚÈİ ÒÔperl´úÂëµÄĞÎÊ½ Êä³ö
+
+###########################   è°ƒè¯•ç›¸å…³   ################################
+
+
+perl  debugç›¸å…³
+å‘½ä»¤è¡Œ% perl -d script.pl
+"
+s  è¿›è¡Œå•æ­¥è·Ÿè¸ª
+x  \%total_bytes  æ˜¾ç¤ºhashæ˜ å°„çš„å†…å®¹
+x  sort keys %total_bytes   æ˜¾ç¤ºkeyç»„æˆçš„ä¸€ä¸ªlist 
+
+"
+
+use Data::Dumper   ###  ç”¨äºå°†å¤æ‚çš„æ•°æ®ç»“æ„çš„å†…å®¹ ä»¥perlä»£ç çš„å½¢å¼ è¾“å‡º
 my %total_bytes;
 while(<>) {
 	my ($source, $destination, $bytes) = split;
@@ -360,7 +360,7 @@ while(<>) {
 }
 print Dumper(\%total_bytes);
 
-ÏÔÊ¾µÄ½á¹û£º
+æ˜¾ç¤ºçš„ç»“æœï¼š
 $VAR1 = {
 		'thurston.howell.hut' => {
 			'lovey.howell.hut' => 1250
@@ -375,15 +375,15 @@ $VAR1 = {
 		}
 };
 
-use Data::Dumper;         ###  Ëæperl°²×°³ÌĞò×Ô´ø
-$Data::Dumper::Purity = 1; #declare possibly self-referencing structures£¬ÕâÑù²ÅÄÜÏÔÊ¾×ÔÒıÓÃ
+use Data::Dumper;         ###  éšperlå®‰è£…ç¨‹åºè‡ªå¸¦
+$Data::Dumper::Purity = 1; #declare possibly self-referencing structuresï¼Œè¿™æ ·æ‰èƒ½æ˜¾ç¤ºè‡ªå¼•ç”¨
 my @data1 = qw(one won);
 my @data2 = qw(two too to);
 push @data2, \@data1;
 push @data1, \@data2;
 print Dumper(\@data1, \@data2);
 
-ÏÔÊ¾µÄ½á¹û£º
+æ˜¾ç¤ºçš„ç»“æœï¼š
 $VAR1 = [
 	'one',
 	'won',
@@ -397,45 +397,45 @@ $VAR1 = [
 $VAR1->[2][3] = $VAR1;
 $VAR2 = $VAR1->[2];
 
-print Data::Dumper->Dump([\@data1, \@data2], [qw(*data1 *data2)]);  ## µÚ¶ş¸öÒıÓÃËµÃ÷±äÁ¿Ãû
-###  ²Î¿¼ typeglobs
+print Data::Dumper->Dump([\@data1, \@data2], [qw(*data1 *data2)]);  ## ç¬¬äºŒä¸ªå¼•ç”¨è¯´æ˜å˜é‡å
+###  å‚è€ƒ typeglobs
 
-#######    ÆäËû¿ÉÒÔÊä³ö¸´ÔÓÊı¾İ½á¹¹µÄmodule
+#######    å…¶ä»–å¯ä»¥è¾“å‡ºå¤æ‚æ•°æ®ç»“æ„çš„module
 
-use Data::Dump  qw(dump);    ##  Ğè¶îÍâ°²×°
+use Data::Dump  qw(dump);    ##  éœ€é¢å¤–å®‰è£…
 dump(\%total_byte);
 
-use Data::Printer;      ##  Ğè¶îÍâ°²×°
+use Data::Printer;      ##  éœ€é¢å¤–å®‰è£…
 p(%total_bytes);
 
 use YAML;
-print Dump(\%total_bytes);     ## Ê¹ÓÃÍ¨¹ıyaml¸ñÊ½Êä³ö¸´ÔÓ½á¹¹£¬rubyºÍpython¿ÉÒÔÖ±½ÓÓÃ
+print Dump(\%total_bytes);     ## ä½¿ç”¨é€šè¿‡yamlæ ¼å¼è¾“å‡ºå¤æ‚ç»“æ„ï¼Œrubyå’Œpythonå¯ä»¥ç›´æ¥ç”¨
 
 use JSON;
-print to_json(\%total_bytes, {pretty => 1});   ### Êä³ö¿ÉÒÔ±»Ö±½Ó×÷Îªjson¶ÔÏóÊ¹ÓÃµÄ¸´ÔÓ½á¹¹
+print to_json(\%total_bytes, {pretty => 1});   ### è¾“å‡ºå¯ä»¥è¢«ç›´æ¥ä½œä¸ºjsonå¯¹è±¡ä½¿ç”¨çš„å¤æ‚ç»“æ„
 my $hash_ref = from_json($json_string);
 
-#####    ´æ´¢¸´ÔÓÊı¾İ½á¹¹µÄmodule
+#####    å­˜å‚¨å¤æ‚æ•°æ®ç»“æ„çš„module
 
-use Storable;        ## ËùÓĞ¶«Î÷±ØĞë·ÅÈëÒıÓÃ
+use Storable;        ## æ‰€æœ‰ä¸œè¥¿å¿…é¡»æ”¾å…¥å¼•ç”¨
 my @data1 = qw(one won);
 my @data2 = qw(two too to);
 push @data2, \@data1;
 push @data1, \@data2;
-my $frozen = freeze [\@data1, \@data2]; ### freeze·µ»ØÒ»¸ö¶ş½øÖÆµÄ×Ö·û´®
-my $data = thaw($frozen);      ###  ¶ÁÈëÉÏÃæ´æ´¢µÄÊı¾İ
-##  ·½·¨2
-nstore [\@data1, \@data2], $filename;  ### ´æ´¢¶ş½øÖÆÄÚÈİµ½ÎÄ¼ş
-###   nstore = network order£¬¸ú´ó¶ËĞòĞ¡¶ËĞòÓĞ¹Ø
-my $array_ref = retrieve $filename;   ### ´ÓÎÄ¼şÖĞ¶ÁÈë¶ş½øÖÆĞÎÊ½µÄ´æ´¢µÄ¸´ÔÓÊı¾İ½á¹¹
+my $frozen = freeze [\@data1, \@data2]; ### freezeè¿”å›ä¸€ä¸ªäºŒè¿›åˆ¶çš„å­—ç¬¦ä¸²
+my $data = thaw($frozen);      ###  è¯»å…¥ä¸Šé¢å­˜å‚¨çš„æ•°æ®
+##  æ–¹æ³•2
+nstore [\@data1, \@data2], $filename;  ### å­˜å‚¨äºŒè¿›åˆ¶å†…å®¹åˆ°æ–‡ä»¶
+###   nstore = network orderï¼Œè·Ÿå¤§ç«¯åºå°ç«¯åºæœ‰å…³
+my $array_ref = retrieve $filename;   ### ä»æ–‡ä»¶ä¸­è¯»å…¥äºŒè¿›åˆ¶å½¢å¼çš„å­˜å‚¨çš„å¤æ‚æ•°æ®ç»“æ„
 
 
 my @a = (a, b ,c, refs);
-my @b = @a;   ## ´Ë´¦¿½±´³ÆÎªshallow copy£¬ËùÓĞÄÚÈİ¶¼¸´ÖÆÒ»·İĞÂµÄ£¬°üÀ¨ÒıÓÃµØÖ·£¬µ«Ö»¿½±´µÚÒ»²ã
-### µ«ÒÔÉÏÖ»¸´ÖÆµ½ÕâÒ»²ã£¬ÒıÓÃÖ¸ÏòµÄÄÚÈİ²»¿½±´£¬ËùÒÔ@aºÍ@bµÄµÚ4¸öÔªËØÖ¸ÏòÍ¬Ò»¸öÄÚ´æµØÖ·
+my @b = @a;   ## æ­¤å¤„æ‹·è´ç§°ä¸ºshallow copyï¼Œæ‰€æœ‰å†…å®¹éƒ½å¤åˆ¶ä¸€ä»½æ–°çš„ï¼ŒåŒ…æ‹¬å¼•ç”¨åœ°å€ï¼Œä½†åªæ‹·è´ç¬¬ä¸€å±‚
+### ä½†ä»¥ä¸Šåªå¤åˆ¶åˆ°è¿™ä¸€å±‚ï¼Œå¼•ç”¨æŒ‡å‘çš„å†…å®¹ä¸æ‹·è´ï¼Œæ‰€ä»¥@aå’Œ@bçš„ç¬¬4ä¸ªå…ƒç´ æŒ‡å‘åŒä¸€ä¸ªå†…å­˜åœ°å€
 
-### µ±ÎÒÃÇĞèÒªÒıÓÃÖ¸ÏòµÄÄÚÈİÒ²¿½±´¶ø²»ÊÇÁ½¸ölistÔªËØ¶¼Ö¸ÏòÍ¬Ò»¸öÄÚÈİÊ±£¬³ÆÎªdeep copy
-### deep copyÒªÊ¹ÓÃStorable
+### å½“æˆ‘ä»¬éœ€è¦å¼•ç”¨æŒ‡å‘çš„å†…å®¹ä¹Ÿæ‹·è´è€Œä¸æ˜¯ä¸¤ä¸ªlistå…ƒç´ éƒ½æŒ‡å‘åŒä¸€ä¸ªå†…å®¹æ—¶ï¼Œç§°ä¸ºdeep copy
+### deep copyè¦ä½¿ç”¨Storable
 
 use Data::Dumper;
 use Storable qw(freeze thaw);
@@ -444,179 +444,179 @@ my @science_kit = qw(microscope radio);
 push @provisions, \@science_kit;
 my $frozen = freeze \@provisions;
 my @packed = @{thaw $frozen};
-### ´ËÊ±packedÀïÃæµÚ¶ş²ãÒıÓÃÒ²ÊÇÒ»·İÍêÈ«¶ÀÁ¢µÄ¿½±´£¬³ıÁËÄÚÈİÏàÍ¬ÆäËûÓë@science_kitÎŞ¹Ø
+### æ­¤æ—¶packedé‡Œé¢ç¬¬äºŒå±‚å¼•ç”¨ä¹Ÿæ˜¯ä¸€ä»½å®Œå…¨ç‹¬ç«‹çš„æ‹·è´ï¼Œé™¤äº†å†…å®¹ç›¸åŒå…¶ä»–ä¸@science_kitæ— å…³
 
-ÉÏÃæ¹ı³Ì¿ÉÒÔÍ¨¹ı Storable ÄÚº¯Êı dclone Ò»²½Íê³É
+ä¸Šé¢è¿‡ç¨‹å¯ä»¥é€šè¿‡ Storable å†…å‡½æ•° dclone ä¸€æ­¥å®Œæˆ
 my @packed = @{ dclone \@provisions };
 
 
-###########################   »ù±¾º¯Êı   ################################
+###########################   åŸºæœ¬å‡½æ•°   ################################
 
-º¯Êı£ºchop  
-Ç¿ÖÆÈ¥µôºó½Ó±äÁ¿µÄ×îºóÒ»¸ö×Ö·û
-
-
-º¯Êı£ºchomp
-È¥µô×Ö·û´®½áÎ²µÄ"\n"£¬Ã»ÓĞµÄ»°²»×ö´¦Àí
-ÓÃÔÚÁĞ±íÖĞ£¬É¾³ıÁĞ±íÖĞÃ¿¸öÔªËØ½áÎ²µÄ»»ĞĞ·û
-chomp("×Ö·û´®"»ò±äÁ¿»òÁĞ±í);
+å‡½æ•°ï¼šchop  
+å¼ºåˆ¶å»æ‰åæ¥å˜é‡çš„æœ€åä¸€ä¸ªå­—ç¬¦
 
 
-º¯Êı£ºscalar
-Ç¿ÖÆ½«list±äÁ¿×ª»»Îªscalar
-scalar @list ÔÚÁĞ±íÉÏÏÂÎÄÖĞ·µ»Ølist²ÎÊı¸öÊı
+å‡½æ•°ï¼šchomp
+å»æ‰å­—ç¬¦ä¸²ç»“å°¾çš„"\n"ï¼Œæ²¡æœ‰çš„è¯ä¸åšå¤„ç†
+ç”¨åœ¨åˆ—è¡¨ä¸­ï¼Œåˆ é™¤åˆ—è¡¨ä¸­æ¯ä¸ªå…ƒç´ ç»“å°¾çš„æ¢è¡Œç¬¦
+chomp("å­—ç¬¦ä¸²"æˆ–å˜é‡æˆ–åˆ—è¡¨);
 
 
-º¯Êı£ºsay
-ÀàËÆprint£¬Çø±ğÔÚÓÚÔÚ½áÎ²×Ô¶¯¼ÓÉÏ"\n"£¬5.010°æ±¾Ö®ºóÖ§³Ö
+å‡½æ•°ï¼šscalar
+å¼ºåˆ¶å°†listå˜é‡è½¬æ¢ä¸ºscalar
+scalar @list åœ¨åˆ—è¡¨ä¸Šä¸‹æ–‡ä¸­è¿”å›listå‚æ•°ä¸ªæ•°
 
 
-º¯Êı£ºsort
-print sort <>  ##  Ä£ÄâshellÖĞsortµÄÔ´´úÂë£¬Ä¬ÈÏ°´asciiÂëË³Ğò±È½Ï´óĞ¡
-my @numbers = sort {$a<=>$b} @some_numbers;   ###  °´´ÓĞ¡µ½´óµÄÉıĞòÅÅÁĞ
-ÓÃsubroutineÏÔÊ¾±È½ÏÊ±£¬-1±íÊ¾°´$a,$b Ô­À´µÄË³Ğò£¬0±íÊ¾Ë³ĞòÎŞËùÎ½£¬1±íÊ¾¸Ä±ä$a,$b µÄË³Ğò
-¼òµ¥ĞÎÊ½ÖĞ{$a<=>$b}±íÊ¾°´Êı×ÖµÄÉıĞòÅÅĞò£¬{$b<=>$a}±íÊ¾°´Êı×ÖµÄ½µĞòÅÅĞò
-Ò²¿ÉÒÔÓÃcmpÌæ»»<=>£¬cmpÔÚ×Ö·û´®±È½ÏÖĞÊ¹ÓÃ
-sub by_score { $score{$b} <=> $score{$a} }  ###  ¸ù¾İhashµÄvaluesÀ´½µĞòÅÅĞòkeys
+å‡½æ•°ï¼šsay
+ç±»ä¼¼printï¼ŒåŒºåˆ«åœ¨äºåœ¨ç»“å°¾è‡ªåŠ¨åŠ ä¸Š"\n"ï¼Œ5.010ç‰ˆæœ¬ä¹‹åæ”¯æŒ
 
-###  µÃµ½ÅÅĞòºóµÄÔªËØÔÚÔ­À´µÄlistÖĞµÄÎ»ÖÃ
+
+å‡½æ•°ï¼šsort
+print sort <>  ##  æ¨¡æ‹Ÿshellä¸­sortçš„æºä»£ç ï¼Œé»˜è®¤æŒ‰asciiç é¡ºåºæ¯”è¾ƒå¤§å°
+my @numbers = sort {$a<=>$b} @some_numbers;   ###  æŒ‰ä»å°åˆ°å¤§çš„å‡åºæ’åˆ—
+ç”¨subroutineæ˜¾ç¤ºæ¯”è¾ƒæ—¶ï¼Œ-1è¡¨ç¤ºæŒ‰$a,$b åŸæ¥çš„é¡ºåºï¼Œ0è¡¨ç¤ºé¡ºåºæ— æ‰€è°“ï¼Œ1è¡¨ç¤ºæ”¹å˜$a,$b çš„é¡ºåº
+ç®€å•å½¢å¼ä¸­{$a<=>$b}è¡¨ç¤ºæŒ‰æ•°å­—çš„å‡åºæ’åºï¼Œ{$b<=>$a}è¡¨ç¤ºæŒ‰æ•°å­—çš„é™åºæ’åº
+ä¹Ÿå¯ä»¥ç”¨cmpæ›¿æ¢<=>ï¼Œcmpåœ¨å­—ç¬¦ä¸²æ¯”è¾ƒä¸­ä½¿ç”¨
+sub by_score { $score{$b} <=> $score{$a} }  ###  æ ¹æ®hashçš„valuesæ¥é™åºæ’åºkeys
+
+###  å¾—åˆ°æ’åºåçš„å…ƒç´ åœ¨åŸæ¥çš„listä¸­çš„ä½ç½®
 my @input = qw(Gilligan Skipper Professor Ginger Mary Ann);
-my @sorted_positions = sort { $input[$a] cmp $input[$b] } 0..$#input;   ### ÄÃË÷Òı×÷ÎªÅÅĞòÄÚÈİ
+my @sorted_positions = sort { $input[$a] cmp $input[$b] } 0..$#input;   ### æ‹¿ç´¢å¼•ä½œä¸ºæ’åºå†…å®¹
 print "@sorted_positions\n";
 
-º¯Êı£ºreverse
+å‡½æ•°ï¼šreverse
 my @a = reverse qw(a b c d e f g);
-·µ»ØÄæĞòµÄ²Ù×÷list
+è¿”å›é€†åºçš„æ“ä½œlist
 
 
-º¯Êı£ºpush
+å‡½æ•°ï¼špush
 push (@array, 0)  or  push (@array, @others)
-ÈëÕ»£¬µÚÒ»¸ö²ÎÊıÎªÕ»list£¬µÚ¶ş¸öÎªÒªÈëµÄÔªËØ£¬¿ÉÒÔÊÇ±êÁ¿»òÕßÁĞ±í
-Ã¿´ÎÈëÕ»µÄÔªËØÌí¼Óµ½ÁĞ±íµÄ×îÓÒ±ß£¡£¡£¡£¡£¡
+å…¥æ ˆï¼Œç¬¬ä¸€ä¸ªå‚æ•°ä¸ºæ ˆlistï¼Œç¬¬äºŒä¸ªä¸ºè¦å…¥çš„å…ƒç´ ï¼Œå¯ä»¥æ˜¯æ ‡é‡æˆ–è€…åˆ—è¡¨
+æ¯æ¬¡å…¥æ ˆçš„å…ƒç´ æ·»åŠ åˆ°åˆ—è¡¨çš„æœ€å³è¾¹ï¼ï¼ï¼ï¼ï¼
 
 
-º¯Êı£ºpop
+å‡½æ•°ï¼špop
 pop(@array)
-Ã¿´Î³öÕ»µÄÔªËØÎªÁĞ±íÖĞ×îÓÒ±ßµÄÔªËØ£¡£¡£¡£¡£¡
+æ¯æ¬¡å‡ºæ ˆçš„å…ƒç´ ä¸ºåˆ—è¡¨ä¸­æœ€å³è¾¹çš„å…ƒç´ ï¼ï¼ï¼ï¼ï¼
 
 
-º¯Êı£ºunshift
+å‡½æ•°ï¼šunshift
 unshift(@array, 0)
-Ìí¼ÓÒ»¸öÖµµ½ÁĞ±íµÄ×î×ó±ß£¡£¡£¡£¡
+æ·»åŠ ä¸€ä¸ªå€¼åˆ°åˆ—è¡¨çš„æœ€å·¦è¾¹ï¼ï¼ï¼ï¼
 
 
-º¯Êı£ºshift
+å‡½æ•°ï¼šshift
 shift(@array)
-É¾³ıÁĞ±í×î×ó±ßµÄÒ»¸öÖµ£¡£¡£¡£¡£¡  
-###   ×¢Òâµ½unshiftºÍshiftºÏÆğÀ´²»ÊÇÏÈ½øÏÈ³öµÄ¶ÓÁĞ£¬unshiftºÍpop   »òÕß  shiftºÍpush  ÁªºÏ²ÅÊÇ
+åˆ é™¤åˆ—è¡¨æœ€å·¦è¾¹çš„ä¸€ä¸ªå€¼ï¼ï¼ï¼ï¼ï¼  
+###   æ³¨æ„åˆ°unshiftå’Œshiftåˆèµ·æ¥ä¸æ˜¯å…ˆè¿›å…ˆå‡ºçš„é˜Ÿåˆ—ï¼Œunshiftå’Œpop   æˆ–è€…  shiftå’Œpush  è”åˆæ‰æ˜¯
 
 
-º¯Êı£ºsplice
+å‡½æ•°ï¼šsplice
 splice(@array, 1, 2, qw(wilma))
-·µ»ØÖµÎª²ÎÊı1ºÍ²ÎÊı2Ö®¼äÉ¾µôµÄÔªËØ
-²ÎÊı1£ºÎªÒª²Ù×÷µÄÁĞ±í
-²ÎÊı2£º²Ù×÷ÆğÊ¼ÏÂ±ê£¨É¾³ıÔªËØ°üº¬ÆğÊ¼ÔªËØ£©
-²ÎÊı3£ºÉ¾³ı³¤¶È£¨¿ÉÊ¡ÂÔ£¬Ê¡ÂÔ±íÊ¾ºóÃæÔªËØÈ«²¿É¾³ı£©£¬Îª0±íÊ¾²åÈë²Ù×÷
-²ÎÊı4£ºÌæ»»ÁĞ±í£¨¿ÉÊ¡ÂÔ£¬Ê¡ÂÔ±íÊ¾Ö»É¾³ı²»Ìæ»»£©
+è¿”å›å€¼ä¸ºå‚æ•°1å’Œå‚æ•°2ä¹‹é—´åˆ æ‰çš„å…ƒç´ 
+å‚æ•°1ï¼šä¸ºè¦æ“ä½œçš„åˆ—è¡¨
+å‚æ•°2ï¼šæ“ä½œèµ·å§‹ä¸‹æ ‡ï¼ˆåˆ é™¤å…ƒç´ åŒ…å«èµ·å§‹å…ƒç´ ï¼‰
+å‚æ•°3ï¼šåˆ é™¤é•¿åº¦ï¼ˆå¯çœç•¥ï¼Œçœç•¥è¡¨ç¤ºåé¢å…ƒç´ å…¨éƒ¨åˆ é™¤ï¼‰ï¼Œä¸º0è¡¨ç¤ºæ’å…¥æ“ä½œ
+å‚æ•°4ï¼šæ›¿æ¢åˆ—è¡¨ï¼ˆå¯çœç•¥ï¼Œçœç•¥è¡¨ç¤ºåªåˆ é™¤ä¸æ›¿æ¢ï¼‰
 
 
-º¯Êı£ºeach
+å‡½æ•°ï¼šeach
 while( my ($index, $value) = each (@array))
-·µ»ØÁĞ±íµÄÏÂ±êºÍ¶ÔÓ¦Öµ
+è¿”å›åˆ—è¡¨çš„ä¸‹æ ‡å’Œå¯¹åº”å€¼
 while( my ($key, $value) = each (%hash))
 
 
-º¯Êı£ºselect
-select OUT  »òÕß  select STDOUT
-¸Ä±äÄ¬ÈÏÊä³ö¾ä±ú
+å‡½æ•°ï¼šselect
+select OUT  æˆ–è€…  select STDOUT
+æ”¹å˜é»˜è®¤è¾“å‡ºå¥æŸ„
 
 
-º¯Êı£ºkeys
+å‡½æ•°ï¼škeys
 my @k = keys %hash;
-»ñÈ¡hashµÄ¹Ø¼ü×Ö×é³ÉÒ»¸öÁĞ±í
+è·å–hashçš„å…³é”®å­—ç»„æˆä¸€ä¸ªåˆ—è¡¨
 
-º¯Êı£ºvalues
+å‡½æ•°ï¼švalues
 my @v = values %hash
-»ñÈ¡hashµÄÖµ×é³ÉÒ»¸öÁĞ±í
+è·å–hashçš„å€¼ç»„æˆä¸€ä¸ªåˆ—è¡¨
 
 
-º¯Êı£ºexists
+å‡½æ•°ï¼šexists
 exists $books{"dino"}
-²é¿´¹şÏ£ÀïÊÇ²»ÊÇÓĞ¹Ø¼ü×Ödino
+æŸ¥çœ‹å“ˆå¸Œé‡Œæ˜¯ä¸æ˜¯æœ‰å…³é”®å­—dino
 
 
-º¯Êı£ºdelete
+å‡½æ•°ï¼šdelete
 delete $books{$person};
-É¾³ı¹Ø¼ü×Ö$person ¼°ÆäÖµ£¬×¢Òâµ½Óë¸³¿ÕÖµÊÇÓĞÇø±ğµÄ
+åˆ é™¤å…³é”®å­—$person åŠå…¶å€¼ï¼Œæ³¨æ„åˆ°ä¸èµ‹ç©ºå€¼æ˜¯æœ‰åŒºåˆ«çš„
 
 
-º¯Êı£ºsplit
+å‡½æ•°ï¼šsplit
 my @fields = split /separater/, $string;
-°Ñ$string ÖĞµÄ×Ö·û´®°´  separaterÕıÔò±í´ïÊ½Æ¥ÅäµÄÄÚÈİ  ¸ô¿ª£¬¸ô¿ªµÄ¸÷¸ö²¿·Ö·ÅÈëÁĞ±í±äÁ¿@fields ÖĞ
-¶ÔsplitÀ´Ëµ£¬Ç°ÃæµÄ¿Õ·Ö¸ô¶¼±£Áô£¬ºóÃæµÄ¶¼Ê¡ÂÔ£¬¼ÓµÚÈı¸ö²ÎÊı-1±£ÁôºóÃæµÄ¿Õ·Ö¸ô
+æŠŠ$string ä¸­çš„å­—ç¬¦ä¸²æŒ‰  separateræ­£åˆ™è¡¨è¾¾å¼åŒ¹é…çš„å†…å®¹  éš”å¼€ï¼Œéš”å¼€çš„å„ä¸ªéƒ¨åˆ†æ”¾å…¥åˆ—è¡¨å˜é‡@fields ä¸­
+å¯¹splitæ¥è¯´ï¼Œå‰é¢çš„ç©ºåˆ†éš”éƒ½ä¿ç•™ï¼Œåé¢çš„éƒ½çœç•¥ï¼ŒåŠ ç¬¬ä¸‰ä¸ªå‚æ•°-1ä¿ç•™åé¢çš„ç©ºåˆ†éš”
 
 
-º¯Êı£ºjoin
+å‡½æ•°ï¼šjoin
 my $result = join $glue, @pieces;
-°ÑÁĞ±í±äÁ¿@pieces ÀïÃæµÄ×Ö·û´®ÓÃ$glue ÀïÃæµÄÄÚÈİÁ¬½Ó³ÉÒ»¸öĞÂ´®
+æŠŠåˆ—è¡¨å˜é‡@pieces é‡Œé¢çš„å­—ç¬¦ä¸²ç”¨$glue é‡Œé¢çš„å†…å®¹è¿æ¥æˆä¸€ä¸ªæ–°ä¸²
 
 
-º¯Êı£ºlocaltime
+å‡½æ•°ï¼šlocaltime
 my $date = localtime;    
-µ÷ÓÃperlº¯Êılocaltime»ñµÃµ±Ç°µÄÊ±¼ä
+è°ƒç”¨perlå‡½æ•°localtimeè·å¾—å½“å‰çš„æ—¶é—´
 my $timestamp  =  1180630098;
-my $date = localtime $timestamp; ## localtimeº¯Êı·µ»Ø¿É¶ÁµÄÊ±¼ä
+my $date = localtime $timestamp; ## localtimeå‡½æ•°è¿”å›å¯è¯»çš„æ—¶é—´
 my($sec, $min, $hour, $day, $mon, $year, $wday, $yday, $isdst) = localtime $timestamp;
-###ÔÚlistÉÏÏÂÎÄÖĞ·µ»ØµÄĞÅÏ¢
+###åœ¨listä¸Šä¸‹æ–‡ä¸­è¿”å›çš„ä¿¡æ¯
 
 
-º¯Êı£ºgmtime
-Greenwich Mean TimeÊ±¼ä
+å‡½æ•°ï¼šgmtime
+Greenwich Mean Timeæ—¶é—´
 
 
-¹Ø¼ü×Ö£ºunless
-ifµÄ·´Òå´Ê£¬²»³ÉÁ¢Ê±Ö´ĞĞ£¬¿ÉÒÔÅäelse£¬×¢ÒâºóÃæÀ¨ºÅÄÚÄÚÈİÖ»Ö´ĞĞÒ»´Î
+å…³é”®å­—ï¼šunless
+ifçš„åä¹‰è¯ï¼Œä¸æˆç«‹æ—¶æ‰§è¡Œï¼Œå¯ä»¥é…elseï¼Œæ³¨æ„åé¢æ‹¬å·å†…å†…å®¹åªæ‰§è¡Œä¸€æ¬¡
 
 
-¹Ø¼ü×Ö£ºuntil
-whileµÄ·´Òå´Ê£¬Ìõ¼ş²»³ÉÁ¢µÄÊ±ºòÒ»Ö±Ö´ĞĞÖ±µ½³ÉÁ¢£¬ÏÈ½øĞĞÌõ¼şÅĞ¶Ï
+å…³é”®å­—ï¼šuntil
+whileçš„åä¹‰è¯ï¼Œæ¡ä»¶ä¸æˆç«‹çš„æ—¶å€™ä¸€ç›´æ‰§è¡Œç›´åˆ°æˆç«‹ï¼Œå…ˆè¿›è¡Œæ¡ä»¶åˆ¤æ–­
 
 
-º¯Êı£ºstat
+å‡½æ•°ï¼šstat
 my($dev, $ino, $mode, $nlink, $uid, $gid, $rdev, $size, $atime, $mtime, $ctime, $blksize, $blocks) = stat($filename);
-·µ»ØÎÄ¼şµÄÏêÏ¸ĞÅÏ¢
+è¿”å›æ–‡ä»¶çš„è¯¦ç»†ä¿¡æ¯
 
 
-º¯Êı£ºlstat
-ĞèÒªÈíÁ´½ÓµÄĞÅÏ¢£¬Ê¹ÓÃlstat£¬ÔÚÈíÁ´½ÓÉÏÊ¹ÓÃstat»á·µ»ØÖ¸ÏòÎÄ¼şµÄĞÅÏ¢
+å‡½æ•°ï¼šlstat
+éœ€è¦è½¯é“¾æ¥çš„ä¿¡æ¯ï¼Œä½¿ç”¨lstatï¼Œåœ¨è½¯é“¾æ¥ä¸Šä½¿ç”¨statä¼šè¿”å›æŒ‡å‘æ–‡ä»¶çš„ä¿¡æ¯
 
 
-º¯Êı£ºchdir
+å‡½æ•°ï¼šchdir
 chdir '/etc'  or die "cannot chdir to /etc:$!"; 
-¸ü¸Ä¹¤×÷Ä¿Â¼£¬²»´ø²ÎÊıÊ±´ò¿ªhomeÄ¿Â¼
+æ›´æ”¹å·¥ä½œç›®å½•ï¼Œä¸å¸¦å‚æ•°æ—¶æ‰“å¼€homeç›®å½•
 
 
-º¯Êı£ºmkdir
-mkdir  'fred', 0755 or warn "Can't make fred directory: $!";   ###   Éú³ÉÄ¿Â¼fred£¬755ÎªÈ¨ÏŞÎ»
-³ÉÄ¿Â¼£¬×¢Òâ±êÖ¾Î»ÓÃ°Ë½øÖÆ±íÊ¾£¬¿ªÍ·ÒªÊÇ0
+å‡½æ•°ï¼šmkdir
+mkdir  'fred', 0755 or warn "Can't make fred directory: $!";   ###   ç”Ÿæˆç›®å½•fredï¼Œ755ä¸ºæƒé™ä½
+æˆç›®å½•ï¼Œæ³¨æ„æ ‡å¿—ä½ç”¨å…«è¿›åˆ¶è¡¨ç¤ºï¼Œå¼€å¤´è¦æ˜¯0
 
 
-º¯Êı£ºrmdir
+å‡½æ•°ï¼šrmdir
 rmdir $dir or warn "cannot rmdir $dir: $!\n";
-É¾³ıÄ¿Â¼£¬Ã¿´ÎÖ»ÄÜÉ¾³ıÒ»¸ö
+åˆ é™¤ç›®å½•ï¼Œæ¯æ¬¡åªèƒ½åˆ é™¤ä¸€ä¸ª
 
 
-º¯Êı£ºopendir
-opendir my $dh, $dir_to_process or die "Cannot open $dir_to_process: $!";  ### ¶ÁÈëÄ¿Â¼¾ä±ú
+å‡½æ•°ï¼šopendir
+opendir my $dh, $dir_to_process or die "Cannot open $dir_to_process: $!";  ### è¯»å…¥ç›®å½•å¥æŸ„
 
 
-º¯Êı£ºreaddir
-readdir $dh;   ###   ¶ÁÈëÄ¿Â¼¾ä±ú$dhÖ¸ÏòµÄÄ¿Â¼ÀïµÄÎÄ¼ş
-¶ÁÈëËùÓĞÎÄ¼ş£¬°üÀ¨.¿ªÍ·µÄÒş²ØÎÄ¼şºÍ..ÄÇ¸ö±íÊ¾ÉÏ¼¶Ä¿Â¼µÄÎÄ¼ş£¬½ö·µ»ØÎÄ¼şÃû£¬²»´øÂ·¾¶
+å‡½æ•°ï¼šreaddir
+readdir $dh;   ###   è¯»å…¥ç›®å½•å¥æŸ„$dhæŒ‡å‘çš„ç›®å½•é‡Œçš„æ–‡ä»¶
+è¯»å…¥æ‰€æœ‰æ–‡ä»¶ï¼ŒåŒ…æ‹¬.å¼€å¤´çš„éšè—æ–‡ä»¶å’Œ..é‚£ä¸ªè¡¨ç¤ºä¸Šçº§ç›®å½•çš„æ–‡ä»¶ï¼Œä»…è¿”å›æ–‡ä»¶åï¼Œä¸å¸¦è·¯å¾„
 
 
-º¯Êı£ºclosedir
-closedir $dh;   ###   ¹Ø±ÕÄ¿Â¼¾ä±ú$dh    Àı×Ó£º
+å‡½æ•°ï¼šclosedir
+closedir $dh;   ###   å…³é—­ç›®å½•å¥æŸ„$dh    ä¾‹å­ï¼š
 my $dir_to_process = '/etc';
 opendir my $dh, $dir_to_process or die "Cannot open $dir_to_process: $!";
 foreach $file (readdir $dh) {
@@ -625,140 +625,140 @@ foreach $file (readdir $dh) {
 closedir $dh;
 
 
-º¯Êı£ºglob
-my  @all_files = glob '*';     ###    µÃµ½µ±Ç°Ä¿Â¼ÏÂËùÓĞÎÄ¼şÃû£¬²»°üÀ¨.¿ªÍ·µÄÒş²ØÎÄ¼ş
-my @all_files = <*>;   ###  ÉÏÃæĞ´·¨µÄÁíÒ»ÖÖ±í´ï
+å‡½æ•°ï¼šglob
+my  @all_files = glob '*';     ###    å¾—åˆ°å½“å‰ç›®å½•ä¸‹æ‰€æœ‰æ–‡ä»¶åï¼Œä¸åŒ…æ‹¬.å¼€å¤´çš„éšè—æ–‡ä»¶
+my @all_files = <*>;   ###  ä¸Šé¢å†™æ³•çš„å¦ä¸€ç§è¡¨è¾¾
 my @all_files_including_dot = glob '.* *';  
-### °üÀ¨ËùÓĞÎÄ¼ş£¬µã¿ªÍ·µÄÒ²°üÀ¨£¬×¢Òâµ½ÖĞ¼äµÄ¿Õ¸ñ£¬´Ë´¦ÊÇÁ½¸öÆ¥Åä
-### Æ¥Åä²»Í¬ÎÄ¼şÊ±£¬ÓÃ¿Õ¸ñ¸ô¿ª£¬×¢Òâµ½Õû¸öÆ¥Åä²¿·ÖÓÃÒıºÅÒıÆğÀ´
+### åŒ…æ‹¬æ‰€æœ‰æ–‡ä»¶ï¼Œç‚¹å¼€å¤´çš„ä¹ŸåŒ…æ‹¬ï¼Œæ³¨æ„åˆ°ä¸­é—´çš„ç©ºæ ¼ï¼Œæ­¤å¤„æ˜¯ä¸¤ä¸ªåŒ¹é…
+### åŒ¹é…ä¸åŒæ–‡ä»¶æ—¶ï¼Œç”¨ç©ºæ ¼éš”å¼€ï¼Œæ³¨æ„åˆ°æ•´ä¸ªåŒ¹é…éƒ¨åˆ†ç”¨å¼•å·å¼•èµ·æ¥
 
 
-º¯Êı£ºreadline
-my @lines = readline FRED;    ### ´ÓÎÄ¼ş¾ä±úFREDÖĞ¶ÁÊı¾İ
-my @lines = readline $name;   ###  ´Ó¼ä½ÓÎÄ¼ş¾ä±úÖĞ¶ÁÈëÊı¾İ
+å‡½æ•°ï¼šreadline
+my @lines = readline FRED;    ### ä»æ–‡ä»¶å¥æŸ„FREDä¸­è¯»æ•°æ®
+my @lines = readline $name;   ###  ä»é—´æ¥æ–‡ä»¶å¥æŸ„ä¸­è¯»å…¥æ•°æ®
 
 
-º¯Êı£ºunlink
-unlink  'slate',  'bedrock',  'lava';    ###  É¾³ıÎÄ¼şslate£¬bedrock£¬lava
-unlink  qw(slate  bedrock  lava);        ###  Í¬ÉÏ
-unlink  glob '*.o';        ### É¾³ıËùÓĞ.oÎÄ¼ş
-¼È¿ÉÒÔÉ¾³ıÓ²Á´½Ó£¬Ò²¿ÉÒÔÉ¾³ıÈíÁ´½Ó
+å‡½æ•°ï¼šunlink
+unlink  'slate',  'bedrock',  'lava';    ###  åˆ é™¤æ–‡ä»¶slateï¼Œbedrockï¼Œlava
+unlink  qw(slate  bedrock  lava);        ###  åŒä¸Š
+unlink  glob '*.o';        ### åˆ é™¤æ‰€æœ‰.oæ–‡ä»¶
+æ—¢å¯ä»¥åˆ é™¤ç¡¬é“¾æ¥ï¼Œä¹Ÿå¯ä»¥åˆ é™¤è½¯é“¾æ¥
 
 
-º¯Êı£ºlink
-link  'chicken', 'egg'  or warn "can't link chicken to egg: $!";  ### ´´½¨chickenµÄÁíÒ»¸ö±ğÃûegg
-´´½¨Ò»¸öÓ²Á´½Ó
+å‡½æ•°ï¼šlink
+link  'chicken', 'egg'  or warn "can't link chicken to egg: $!";  ### åˆ›å»ºchickençš„å¦ä¸€ä¸ªåˆ«åegg
+åˆ›å»ºä¸€ä¸ªç¡¬é“¾æ¥
 
 
-º¯Êı£ºsymlink
-symlink  'dodgson', 'carroll' or warn "can't symlink dodgson to carroll: $!"; ###´´½¨dodgsonµÄÈíÁ´½Ócarroll
-´´½¨Ò»¸öÈíÁ´½Ó
+å‡½æ•°ï¼šsymlink
+symlink  'dodgson', 'carroll' or warn "can't symlink dodgson to carroll: $!"; ###åˆ›å»ºdodgsonçš„è½¯é“¾æ¥carroll
+åˆ›å»ºä¸€ä¸ªè½¯é“¾æ¥
 
 
-º¯Êı£ºreadlink
-my  $where =  readlink 'carroll';   ###¡¡·µ»Ødodgson
-¶ÁÈ¡ÈíÁ´½ÓÖ¸ÏòÄÇ¸öµÄÎÄ¼ş
+å‡½æ•°ï¼šreadlink
+my  $where =  readlink 'carroll';   ###ã€€è¿”å›dodgson
+è¯»å–è½¯é“¾æ¥æŒ‡å‘é‚£ä¸ªçš„æ–‡ä»¶
 
 
-º¯Êı£ºchmod
-chmod 0755,  'fred', 'barney';   ###  ¸ü¸Äfred£¬barneyÁ½¸öÎÄ¼şµÄÈ¨ÏŞ
-¸ÄÈ¨ÏŞ£¬Ö»Ö§³ÖÊı×Ö±íÊ¾µÄÈ¨ÏŞ
-°²×°File::chmodÄ£¿é£¬ÈÃchmodÖ§³Ö·ûºÅÈ¨ÏŞ
+å‡½æ•°ï¼šchmod
+chmod 0755,  'fred', 'barney';   ###  æ›´æ”¹fredï¼Œbarneyä¸¤ä¸ªæ–‡ä»¶çš„æƒé™
+æ”¹æƒé™ï¼Œåªæ”¯æŒæ•°å­—è¡¨ç¤ºçš„æƒé™
+å®‰è£…File::chmodæ¨¡å—ï¼Œè®©chmodæ”¯æŒç¬¦å·æƒé™
 
 
-º¯Êı£ºchown
+å‡½æ•°ï¼šchown
 my  $user  = 1004;
 my  $group  =  100;
 chown  $user, $group, glob '*.o';
-Èı¸ö²ÎÊı£¬¸ÄÓµÓĞÕßºÍ×é£¬×¢ÒâÇ°Á½¸ö²ÎÊı±ØĞëÎªÊı×Ö
+ä¸‰ä¸ªå‚æ•°ï¼Œæ”¹æ‹¥æœ‰è€…å’Œç»„ï¼Œæ³¨æ„å‰ä¸¤ä¸ªå‚æ•°å¿…é¡»ä¸ºæ•°å­—
 
 
-º¯Êı£ºutime
-my  $now  =  time;    ### timeº¯Êı·µ»Øµ±Ç°Ê±¼ä
+å‡½æ•°ï¼šutime
+my  $now  =  time;    ### timeå‡½æ•°è¿”å›å½“å‰æ—¶é—´
 my  $age  = $now - 24*60*60;
-utime  $now,  $ago,  glob '*';   ###   ¸ü¸Äµ±Ç°Ä¿Â¼ÏÂËùÓĞÎÄ¼şµÄ·ÃÎÊÊ±¼äÎªµ±Ç°£¬ĞŞ¸ÄÊ±¼äÎªÒ»ÌìÖ®Ç°
-Èı¸ö²ÎÊı£¬µÚÒ»´Î²ÎÊıÉèÖÃÎÄ¼şµÄ×îºó·ÃÎÊÊ±¼ä£¬µÚ¶ş¸ö²ÎÊıÉèÖÃÎÄ¼şµÄ×îºóĞŞ¸ÄÊ±¼ä£¬µÚÈı¸ö²ÎÊıÉèÖÃÒªĞŞ¸ÄÎÄ¼ş
+utime  $now,  $ago,  glob '*';   ###   æ›´æ”¹å½“å‰ç›®å½•ä¸‹æ‰€æœ‰æ–‡ä»¶çš„è®¿é—®æ—¶é—´ä¸ºå½“å‰ï¼Œä¿®æ”¹æ—¶é—´ä¸ºä¸€å¤©ä¹‹å‰
+ä¸‰ä¸ªå‚æ•°ï¼Œç¬¬ä¸€æ¬¡å‚æ•°è®¾ç½®æ–‡ä»¶çš„æœ€åè®¿é—®æ—¶é—´ï¼Œç¬¬äºŒä¸ªå‚æ•°è®¾ç½®æ–‡ä»¶çš„æœ€åä¿®æ”¹æ—¶é—´ï¼Œç¬¬ä¸‰ä¸ªå‚æ•°è®¾ç½®è¦ä¿®æ”¹æ–‡ä»¶
 
 
-º¯Êı£ºindex
+å‡½æ•°ï¼šindex
 $where = index($big, $small);
-ÔÚÒ»¸ö×Ö·û´®ÖĞÑ°ÕÒ×Ó´®£¬ $big ÎªÔ­×Ö·û´®£¬ $small Îª×Ó´®£¬·µ»ØµÚÒ»¸öÆ¥ÅäµÄ×Ö·ûµÄÏÂ±ê£¬Ê§°Ü·µ»Ø-1
-my $where1 = index($stuff, "w", 3);   ###  ´ÓÏÂ±êÎª3µÄ×Ö·û¿ªÊ¼ÕÒ×Ó´®w
-¿ÉÑ¡µÚÈı¸ö²ÎÊı±íÊ¾¿ªÊ¼²éÕÒÎ»ÖÃ
+åœ¨ä¸€ä¸ªå­—ç¬¦ä¸²ä¸­å¯»æ‰¾å­ä¸²ï¼Œ $big ä¸ºåŸå­—ç¬¦ä¸²ï¼Œ $small ä¸ºå­ä¸²ï¼Œè¿”å›ç¬¬ä¸€ä¸ªåŒ¹é…çš„å­—ç¬¦çš„ä¸‹æ ‡ï¼Œå¤±è´¥è¿”å›-1
+my $where1 = index($stuff, "w", 3);   ###  ä»ä¸‹æ ‡ä¸º3çš„å­—ç¬¦å¼€å§‹æ‰¾å­ä¸²w
+å¯é€‰ç¬¬ä¸‰ä¸ªå‚æ•°è¡¨ç¤ºå¼€å§‹æŸ¥æ‰¾ä½ç½®
 
 
-º¯Êı£ºrindex
-my $last_slash = rindex("/etc/passwd", "/");   ###  ·µ»Ø4
-´ÓºóÍùÇ°ÄæÏòÑ°ÕÒ×Ó´®£¬×¢Òâµ½·µ»ØµÄÖµ»¹ÊÇÕıÏòÊı¹ıÀ´µÄÏÂ±ê
-my $where2 = rindex($fred, "abba", $where1-1);   ### ´Ó$where1-1ÏòÇ°ÕÒ×Ó´®abba
-¿ÉÑ¡µÚÈı¸ö²ÎÊı±íÊ¾¿ªÊ¼ÏòÇ°²éÕÒµÄÏÂ±ê
+å‡½æ•°ï¼šrindex
+my $last_slash = rindex("/etc/passwd", "/");   ###  è¿”å›4
+ä»åå¾€å‰é€†å‘å¯»æ‰¾å­ä¸²ï¼Œæ³¨æ„åˆ°è¿”å›çš„å€¼è¿˜æ˜¯æ­£å‘æ•°è¿‡æ¥çš„ä¸‹æ ‡
+my $where2 = rindex($fred, "abba", $where1-1);   ### ä»$where1-1å‘å‰æ‰¾å­ä¸²abba
+å¯é€‰ç¬¬ä¸‰ä¸ªå‚æ•°è¡¨ç¤ºå¼€å§‹å‘å‰æŸ¥æ‰¾çš„ä¸‹æ ‡
 
 
-º¯Êı£ºsubstr
+å‡½æ•°ï¼šsubstr
 my $part = substr($string, $initial_position, $length);  
-²ÎÊı1ÎªÔ­Ê¼×Ö·û´®£¬²ÎÊı2ÎªÆğÊ¼ÏÂ±êÎ»ÖÃ£¬²ÎÊı3Îª×Ó´®³¤¶È£¬·µ»ØÒ»¸ö·ûºÏÒªÇóµÄ×Ó´®
-Ê¡ÂÔ²ÎÊı3µÃµ½´ÓÆğÊ¼´¦µ½½áÎ²µÄ×Ó´®£¬²ÎÊı2¿ÉÒÔÎª¸ºÊı£¬±íÊ¾´ÓºóÍùÇ°ÊıµÄÎ»ÖÃ
+å‚æ•°1ä¸ºåŸå§‹å­—ç¬¦ä¸²ï¼Œå‚æ•°2ä¸ºèµ·å§‹ä¸‹æ ‡ä½ç½®ï¼Œå‚æ•°3ä¸ºå­ä¸²é•¿åº¦ï¼Œè¿”å›ä¸€ä¸ªç¬¦åˆè¦æ±‚çš„å­ä¸²
+çœç•¥å‚æ•°3å¾—åˆ°ä»èµ·å§‹å¤„åˆ°ç»“å°¾çš„å­ä¸²ï¼Œå‚æ•°2å¯ä»¥ä¸ºè´Ÿæ•°ï¼Œè¡¨ç¤ºä»åå¾€å‰æ•°çš„ä½ç½®
 my $string = "Hello, world!";
-substr($string, 0, 5) = "Goodbye"; # $string is now "Goodbye, world!"  Ìæ»»×Ö·û´®µÄÄÚÈİ
+substr($string, 0, 5) = "Goodbye"; # $string is now "Goodbye, world!"  æ›¿æ¢å­—ç¬¦ä¸²çš„å†…å®¹
 my $previous_value = substr($string, 0 ,5, "Goodbye");  
-### $previous_valueµÃµ½±»É¾³ıµÄ×Ó´®Hello
-### $sting ÖĞµÃµ½¸Ä±äµÄGoodbye,world!
-substr($string, ¨C20) =~ s/fred/barney/g;  ###  Ìæ»»$string×îºó20¸ö×Ö·ûµÄËùÓĞfredÎªbarney
+### $previous_valueå¾—åˆ°è¢«åˆ é™¤çš„å­ä¸²Hello
+### $sting ä¸­å¾—åˆ°æ”¹å˜çš„Goodbye,world!
+substr($string, â€“20) =~ s/fred/barney/g;  ###  æ›¿æ¢$stringæœ€å20ä¸ªå­—ç¬¦çš„æ‰€æœ‰fredä¸ºbarney
 
 
-º¯Êı£ºsprintf
-my $date_tag = sprintf "%4d/%02d/%02d %2d:%02d:%02d", $yr, $mo, $da, $h, $m, $s; ##·µ»ØÖµÀı×Ó£º2038/01/19 3:00:08"
-my $money = sprintf "%.2f", 2.49997;  ###  ·µ»Ø2.50
-·µ»ØÒ»¸ö·ûºÏÒªÇó¸ñÊ½µÄ×Ö·û´®
+å‡½æ•°ï¼šsprintf
+my $date_tag = sprintf "%4d/%02d/%02d %2d:%02d:%02d", $yr, $mo, $da, $h, $m, $s; ##è¿”å›å€¼ä¾‹å­ï¼š2038/01/19 3:00:08"
+my $money = sprintf "%.2f", 2.49997;  ###  è¿”å›2.50
+è¿”å›ä¸€ä¸ªç¬¦åˆè¦æ±‚æ ¼å¼çš„å­—ç¬¦ä¸²
 
 
-º¯Êı£ºhex
+å‡½æ•°ï¼šhex
 hex('DEADBEEF') # 3_735_928_559 decimal
-´Ó16½øÖÆµÃµ½10½øÖÆÊı
+ä»16è¿›åˆ¶å¾—åˆ°10è¿›åˆ¶æ•°
 
 
-º¯Êı£ºoct
+å‡½æ•°ï¼šoct
 oct('0377') # 255 decimal
-ÀïÃæ²ÎÊı¿ÉÒÔÊÇ16½øÖÆ£¬8½øÖÆ£¬2½øÖÆ£¬×ª»¯µÃµ½10½øÖÆÊı
+é‡Œé¢å‚æ•°å¯ä»¥æ˜¯16è¿›åˆ¶ï¼Œ8è¿›åˆ¶ï¼Œ2è¿›åˆ¶ï¼Œè½¬åŒ–å¾—åˆ°10è¿›åˆ¶æ•°
 
 
-º¯Êı£ºgrep
+å‡½æ•°ï¼šgrep
 my @a = grep EXPR, @input_list;
-grep ½ö½öÊÇ¸ù¾İEXPRµÄÅĞ¶Ï°ÑlistÀïÃæµÄÄÚÈİÓĞÑ¡ÔñµÄ·ÅÈë½á¹ûlistÖĞ
-ºóÃæ½ÓµÄµÚÒ»¸ö²ÎÊıEXPRÎªÒ»¸ö²¼¶û±í´ïÊ½£¬trueµÄ»°$_ ÖĞµÄÄÚÈİ»á±»ÌáÈ¡
-grepºóÃæµÚÒ»¸ö²ÎÊıÎªbool±í´ïÊ½µÄÊ±ºòÓÃ¶ººÅ¸ô¿ª£¬ÎªÒ»¸ösubroutineµÄÊ±ºòÓÃ{}À¨ÆğÀ´£¬´ËÊ±²»ÊÇÒ»¸öÕæÕıµÄsubroutine£¬¶øÊÇÒ»¸öÀ¨ÆğÀ´µÄblock¿é£¬ËùÒÔ²»ÄÜÊ¹ÓÃreturn
-my @odd_numbers = grep { $_ % 2 } 1..1000;  ###  ´Ó1µ½1000ÖĞÌáÈ¡ÆæÊı
-µÚÒ»¸ö²ÎÊıÊÇ¸öblock£¬·µ»ØÒ»¸ö²¼¶ûÖµ£¬µÚ¶ş¸ö²ÎÊıÊÇ²Ù×÷list
-my @matching_lines = grep { /\bfred\b/i } <$fh>;   ### Ñ°ÕÒ°üº¬fredµÄĞĞ,subroutineµÄĞ´·¨
-my @matching_lines = grep /\bfred\b/i, <$fh>; ###  bool±í´ïÊ½µÄĞ´·¨µÄĞ´·¨£¬×¢Òâµ½¶ººÅ²»ÄÜÉÙ
-ÁĞ±íÉÏÏÂÎÄÖĞ·µ»Ølist£¬±êÁ¿ÉÏÏÂÎÄÖĞ·µ»ØlistÔªËØ¸öÊı
+grep ä»…ä»…æ˜¯æ ¹æ®EXPRçš„åˆ¤æ–­æŠŠlisté‡Œé¢çš„å†…å®¹æœ‰é€‰æ‹©çš„æ”¾å…¥ç»“æœlistä¸­
+åé¢æ¥çš„ç¬¬ä¸€ä¸ªå‚æ•°EXPRä¸ºä¸€ä¸ªå¸ƒå°”è¡¨è¾¾å¼ï¼Œtrueçš„è¯$_ ä¸­çš„å†…å®¹ä¼šè¢«æå–
+grepåé¢ç¬¬ä¸€ä¸ªå‚æ•°ä¸ºboolè¡¨è¾¾å¼çš„æ—¶å€™ç”¨é€—å·éš”å¼€ï¼Œä¸ºä¸€ä¸ªsubroutineçš„æ—¶å€™ç”¨{}æ‹¬èµ·æ¥ï¼Œæ­¤æ—¶ä¸æ˜¯ä¸€ä¸ªçœŸæ­£çš„subroutineï¼Œè€Œæ˜¯ä¸€ä¸ªæ‹¬èµ·æ¥çš„blockå—ï¼Œæ‰€ä»¥ä¸èƒ½ä½¿ç”¨return
+my @odd_numbers = grep { $_ % 2 } 1..1000;  ###  ä»1åˆ°1000ä¸­æå–å¥‡æ•°
+ç¬¬ä¸€ä¸ªå‚æ•°æ˜¯ä¸ªblockï¼Œè¿”å›ä¸€ä¸ªå¸ƒå°”å€¼ï¼Œç¬¬äºŒä¸ªå‚æ•°æ˜¯æ“ä½œlist
+my @matching_lines = grep { /\bfred\b/i } <$fh>;   ### å¯»æ‰¾åŒ…å«fredçš„è¡Œ,subroutineçš„å†™æ³•
+my @matching_lines = grep /\bfred\b/i, <$fh>; ###  boolè¡¨è¾¾å¼çš„å†™æ³•çš„å†™æ³•ï¼Œæ³¨æ„åˆ°é€—å·ä¸èƒ½å°‘
+åˆ—è¡¨ä¸Šä¸‹æ–‡ä¸­è¿”å›listï¼Œæ ‡é‡ä¸Šä¸‹æ–‡ä¸­è¿”å›listå…ƒç´ ä¸ªæ•°
 my @lunch_choices = grep is_edible($_), @gilligans_possessions;    
-### Ê¹ÓÃÕæÕıµÄsubroutineÊ±£¬Òª¼Ó¶ººÅ
+### ä½¿ç”¨çœŸæ­£çš„subroutineæ—¶ï¼Œè¦åŠ é€—å·
 
-###  »ñµÃ¸÷Î»Êı×ÖºÍÊÇÆæÊıµÄÔªËØµÄË÷ÒıºÅ
+###  è·å¾—å„ä½æ•°å­—å’Œæ˜¯å¥‡æ•°çš„å…ƒç´ çš„ç´¢å¼•å·
 my @input_numbers = (1, 2, 4, 8, 16, 32, 64);
 my @indices_of_odd_digit_sums = grep {
 	my $number = $input_numbers[$_];
 	my $sum;
 	$sum += $_ for split //, $number;
 	$sum%2;
-} 0..$#input_numbers;         ###  $#input_numbers ±íÊ¾¸ÃlistµÄ×î´óË÷ÒıºÅ
+} 0..$#input_numbers;         ###  $#input_numbers è¡¨ç¤ºè¯¥listçš„æœ€å¤§ç´¢å¼•å·
 
-####  »ñµÃ@xÖĞ±È@y¶ÔÓ¦Î»ÖÃ´óµÄÔªËØµÄË÷Òı
+####  è·å¾—@xä¸­æ¯”@yå¯¹åº”ä½ç½®å¤§çš„å…ƒç´ çš„ç´¢å¼•
 my @bigger_indices grep {
-	$_>$#y or $x[$_]>$y[$_];   ## ³¬¹ı@yË÷ÒıµÄ²¿·ÖÄ¬ÈÏ¸ü´ó
+	$_>$#y or $x[$_]>$y[$_];   ## è¶…è¿‡@yç´¢å¼•çš„éƒ¨åˆ†é»˜è®¤æ›´å¤§
 } 0..$#x;
 
 
-º¯Êı£ºmap
-µÚÒ»¸ö²ÎÊıÊÇ¸öblock£¬·µ»Ø²Ù×÷½á¹û£¬µÚ¶ş¸ö²ÎÊıÊÇ²Ù×÷list
-map ÊÇÓÃÓÚ²Ù×÷listÖĞµÄÄÚÈİ£¬·µ»ØÃ¿´Î²Ù×÷½á¹û(¿ÉÄÜ²»Ö»Ò»¸ö)
-print "The money numbers are:\n", map { sprintf("%25s\n", $_) } @formatted_data;  ## listÄÚÈİ°´ÒªÇóÊä³ö
-print "Some powers of two are:\n", map "\t".( 2**$_ )."\n", 0..15;   ### ¼òµ¥Ğ´·¨£¬×¢Òâ¶ººÅ
+å‡½æ•°ï¼šmap
+ç¬¬ä¸€ä¸ªå‚æ•°æ˜¯ä¸ªblockï¼Œè¿”å›æ“ä½œç»“æœï¼Œç¬¬äºŒä¸ªå‚æ•°æ˜¯æ“ä½œlist
+map æ˜¯ç”¨äºæ“ä½œlistä¸­çš„å†…å®¹ï¼Œè¿”å›æ¯æ¬¡æ“ä½œç»“æœ(å¯èƒ½ä¸åªä¸€ä¸ª)
+print "The money numbers are:\n", map { sprintf("%25s\n", $_) } @formatted_data;  ## listå†…å®¹æŒ‰è¦æ±‚è¾“å‡º
+print "Some powers of two are:\n", map "\t".( 2**$_ )."\n", 0..15;   ### ç®€å•å†™æ³•ï¼Œæ³¨æ„é€—å·
 my @result = map { $_, 3*$_ } @numbers;  
-###  Õë¶ÔÃ¿¸öÔªËØ£¬Êä³öÁ½¸ö½á¹û£¬¶¼ÊÇĞÂlistµÄ³ÉÔ±
+###  é’ˆå¯¹æ¯ä¸ªå…ƒç´ ï¼Œè¾“å‡ºä¸¤ä¸ªç»“æœï¼Œéƒ½æ˜¯æ–°listçš„æˆå‘˜
 my @result = map { split //, $_} @numbers;
-###  °Ñ@numberµÄÃ¿¸öÊı×Ö·Ö¿ª£¬´æÈë@resultÖĞ
+###  æŠŠ@numberçš„æ¯ä¸ªæ•°å­—åˆ†å¼€ï¼Œå­˜å…¥@resultä¸­
 my @result = map {
 			my @digits = split //, $_;
 			if($digits[-1] == 4) {
@@ -767,10 +767,10 @@ my @result = map {
 				();
 			}
 } @numbers;
-####    °Ñ@numberµÄÃ¿¸öÊı×Ö·Ö¿ª£¬Ö»·µ»ØÄÇĞ©¸öÎ»ÊıÎª4µÄÊı×ÖµÄ¸÷¸ö²¿·Ö
-my %skipper = map {$_, 1} qw(blue_shirt hat jacket preserver sunscreen);  ### ÀûÓÃmapÉú³Éhash
+####    æŠŠ@numberçš„æ¯ä¸ªæ•°å­—åˆ†å¼€ï¼Œåªè¿”å›é‚£äº›ä¸ªä½æ•°ä¸º4çš„æ•°å­—çš„å„ä¸ªéƒ¨åˆ†
+my %skipper = map {$_, 1} qw(blue_shirt hat jacket preserver sunscreen);  ### åˆ©ç”¨mapç”Ÿæˆhash
 
-####  »ñµÃ@xÖĞ±È@y¶ÔÓ¦Î»ÖÃ´óµÄÔªËØ
+####  è·å¾—@xä¸­æ¯”@yå¯¹åº”ä½ç½®å¤§çš„å…ƒç´ 
 my @bigger = map {
 	if($_>$#y or $x[$_]>$y[$_]) {
 		$x[$_];
@@ -779,9 +779,9 @@ my @bigger = map {
 	}
 } 0..$#x;
 
-####  Éú³ÉÒ»¸ölist£¬ÔªËØÊÇlistÒıÓÃ£¬listÀïÃæµÚÒ»¸öÔªËØÊÇÃû×Ö£¬µÚ¶ş¸öÊÇÄÚÈİlistµÄÒıÓÃ
+####  ç”Ÿæˆä¸€ä¸ªlistï¼Œå…ƒç´ æ˜¯listå¼•ç”¨ï¼Œlisté‡Œé¢ç¬¬ä¸€ä¸ªå…ƒç´ æ˜¯åå­—ï¼Œç¬¬äºŒä¸ªæ˜¯å†…å®¹listçš„å¼•ç”¨
 my @remapped_list = map {
-	[ $_ => $provision{$_} ];  ### µÈ¼ÛÓÚ [ $_, $provision{$_} ];
+	[ $_ => $provision{$_} ];  ### ç­‰ä»·äº [ $_, $provision{$_} ];
 } keys %provision;
 
 
@@ -789,11 +789,11 @@ my @remapped_list = map {
 
 
 
-###########################   ×¢ÒâÏ¸½Ú   ################################
+###########################   æ³¨æ„ç»†èŠ‚   ################################
 
-printf ÖĞÊä³ö % ºÅÓÃ %%
+printf ä¸­è¾“å‡º % å·ç”¨ %%
 
-Ó³ÉäµÄÓÃ·¨
+æ˜ å°„çš„ç”¨æ³•
 my %last_name  =  (
     'fred' => 'flintstone',
     'dino'  => undef,
@@ -801,37 +801,37 @@ my %last_name  =  (
     'betty'  =>  'rubble'
   );
   
-my %hash = @result;   ###  Ö±½Ó×ª»» @resultÀïÃæµÄÔªËØ¸öÊıÒªÊÇÅ¼Êı
-indexÎªÅ¼ÊıµÄ¶¼ÊÇkey£¬ÎªÆæÊıµÄ¶¼ÊÇvalue
+my %hash = @result;   ###  ç›´æ¥è½¬æ¢ @resulté‡Œé¢çš„å…ƒç´ ä¸ªæ•°è¦æ˜¯å¶æ•°
+indexä¸ºå¶æ•°çš„éƒ½æ˜¯keyï¼Œä¸ºå¥‡æ•°çš„éƒ½æ˜¯value
  
-ÈıÔªÔËËã·û?:   Í¬CÓïÑÔ
+ä¸‰å…ƒè¿ç®—ç¬¦?:   åŒCè¯­è¨€
 my  $size  =
      ($width < 10 ) ? "small"      :
     ($width  <  20) ? "medium" :
     ($width  <  50) ? "large"      :
                       "extra-large";
 					  
-Âß¼­Óë&& (»òÕßĞ´³Éand)  Âß¼­»ò|| (»òÕßĞ´³Éor)      ÓĞ¶ÌÂ·(short circuit)Âß¼­£¬¼´²»Ö´ĞĞ²»±ØÒªµÄ²Ù×÷
-ÎÄ×ÖµÄ and ºÍ or ÓÅÏÈ¼¶×îµÍ£¬ not ºÍ xor Ò²ÊÇ´æÔÚµÄ
+é€»è¾‘ä¸&& (æˆ–è€…å†™æˆand)  é€»è¾‘æˆ–|| (æˆ–è€…å†™æˆor)      æœ‰çŸ­è·¯(short circuit)é€»è¾‘ï¼Œå³ä¸æ‰§è¡Œä¸å¿…è¦çš„æ“ä½œ
+æ–‡å­—çš„ and å’Œ or ä¼˜å…ˆçº§æœ€ä½ï¼Œ not å’Œ xor ä¹Ÿæ˜¯å­˜åœ¨çš„
 
 
-//²Ù×÷·û        defined-or ²Ù×÷·û  Èç¹û×ó±ß±äÁ¿Ã»¶¨Òå¾ÍÊ¹ÓÃÓÒ±ßµÄ´úÌæ£¨²»»á¸³Öµ¸ø×ó±ß±äÁ¿£©£¨ĞèÒª5.010£©
+//æ“ä½œç¬¦        defined-or æ“ä½œç¬¦  å¦‚æœå·¦è¾¹å˜é‡æ²¡å®šä¹‰å°±ä½¿ç”¨å³è¾¹çš„ä»£æ›¿ï¼ˆä¸ä¼šèµ‹å€¼ç»™å·¦è¾¹å˜é‡ï¼‰ï¼ˆéœ€è¦5.010ï¼‰
 my $value = $try // 'default';
-µ±$try Îª undef Ê±¸³Öµdefault×Ö·û´®¸ø$value £¬ $try ÈÔÈ»Îª undef
-Ó¦ÓÃ³¡¾°ÎªÎ´³õÊ¼»¯¾Í¸³³õÖµ£¬³õÊ¼»¯ÔÙ½øÒ»²½´¦Àí
+å½“$try ä¸º undef æ—¶èµ‹å€¼defaultå­—ç¬¦ä¸²ç»™$value ï¼Œ $try ä»ç„¶ä¸º undef
+åº”ç”¨åœºæ™¯ä¸ºæœªåˆå§‹åŒ–å°±èµ‹åˆå€¼ï¼Œåˆå§‹åŒ–å†è¿›ä¸€æ­¥å¤„ç†
 
-$#names   ±íÊ¾ÁĞ±ínames×îºóÒ»¸öÔªËØµÄË÷ÒıºÅ
+$#names   è¡¨ç¤ºåˆ—è¡¨namesæœ€åä¸€ä¸ªå…ƒç´ çš„ç´¢å¼•å·
 foreach my $index (0..$#names)
 
-open my $log_fh, ">", 'castaways.log';       ####  ´æ´¢ÎÄ¼ş¾ä±úµÄscalar±ØĞëÎ´³õÊ¼»¯£¬·ñÔò´æ²»½øÈ¥
-print {$log_fh} "We have no bananas today\n";  ### ÓÃ{}Ç¿µ÷ÀïÃæµÄ±äÁ¿ÊÇÎÄ¼ş¾ä±ú
+open my $log_fh, ">", 'castaways.log';       ####  å­˜å‚¨æ–‡ä»¶å¥æŸ„çš„scalarå¿…é¡»æœªåˆå§‹åŒ–ï¼Œå¦åˆ™å­˜ä¸è¿›å»
+print {$log_fh} "We have no bananas today\n";  ### ç”¨{}å¼ºè°ƒé‡Œé¢çš„å˜é‡æ˜¯æ–‡ä»¶å¥æŸ„
 
-µ±Ïë°ÑÄÚÈİ´æÈë±äÁ¿¶ø²»ÊÇ´æÈëÎÄ¼şÊ±£¬¿ÉÒÔÀûÓÃopen´ò¿ªÒ»¸ö±äÁ¿×÷Îª¾ä±ú
+å½“æƒ³æŠŠå†…å®¹å­˜å…¥å˜é‡è€Œä¸æ˜¯å­˜å…¥æ–‡ä»¶æ—¶ï¼Œå¯ä»¥åˆ©ç”¨openæ‰“å¼€ä¸€ä¸ªå˜é‡ä½œä¸ºå¥æŸ„
 use CGI;
-open my $string_fh, '>', \ my $string;  ### ½«ÄÚÈİ´æÈë±äÁ¿¶ø²»ÊÇÎÄ¼ş¾ä±ú£¬ÄÚÈİ¶¼´æÔÚ³ÌĞòÄÚ
-CGI->save($string_fh);    ### ´æÈëCGI×´Ì¬
+open my $string_fh, '>', \ my $string;  ### å°†å†…å®¹å­˜å…¥å˜é‡è€Œä¸æ˜¯æ–‡ä»¶å¥æŸ„ï¼Œå†…å®¹éƒ½å­˜åœ¨ç¨‹åºå†…
+CGI->save($string_fh);    ### å­˜å…¥CGIçŠ¶æ€
 
-###  Í¨¹ıÔÚ¾Ö²¿°Ñ±äÁ¿×÷ÎªSTDOUT´¦Àí£¬ÔÚÍâ²¿Ê±STDOUTÓÖ³ÆÎª±ê×¼±äÁ¿
+###  é€šè¿‡åœ¨å±€éƒ¨æŠŠå˜é‡ä½œä¸ºSTDOUTå¤„ç†ï¼Œåœ¨å¤–éƒ¨æ—¶STDOUTåˆç§°ä¸ºæ ‡å‡†å˜é‡
 print "1. This goes to the real standard output\n";
 my $string;
 {
@@ -844,34 +844,34 @@ print "3. This goes to the real standard output\n";
 
 
 
-###########################   ÒıÓÃÏà¹Ø   ################################
+###########################   å¼•ç”¨ç›¸å…³   ################################
 
 
-my $ref = \@array;  È¡µÃÒıÓÃ
-ÔÚÈÎºÎ±êÁ¿£¬ÁĞ±í£¬Ó³ÉäÇ°Ãæ¼Ó \ ¶¼ÄÜÈ¡µÃ¸Ã±äÁ¿µÄÒıÓÃ
-!!!½âÒıÓÃµÄ¹Ø¼üÊÇ£ºÓÃ{}À¨ÆğÀ´µÄÕû¸ö´ú±íÒıÓÃ²¿·ÖÔ­À´µÄ×ÖÃæÃû×Ö£¬¼ÓÉÏÆäËûÏà¹Ø·ûºÅ¾Í½âÒıÓÃÁË!!!
-@{$ref}   ½âÒıÓÃµÃµ½Êı×é
-${$ref}[1]   ½âÒıÓÃ²¢È¡µÃµÚ2¸öÔªËØ
+my $ref = \@array;  å–å¾—å¼•ç”¨
+åœ¨ä»»ä½•æ ‡é‡ï¼Œåˆ—è¡¨ï¼Œæ˜ å°„å‰é¢åŠ  \ éƒ½èƒ½å–å¾—è¯¥å˜é‡çš„å¼•ç”¨
+!!!è§£å¼•ç”¨çš„å…³é”®æ˜¯ï¼šç”¨{}æ‹¬èµ·æ¥çš„æ•´ä¸ªä»£è¡¨å¼•ç”¨éƒ¨åˆ†åŸæ¥çš„å­—é¢åå­—ï¼ŒåŠ ä¸Šå…¶ä»–ç›¸å…³ç¬¦å·å°±è§£å¼•ç”¨äº†!!!
+@{$ref}   è§£å¼•ç”¨å¾—åˆ°æ•°ç»„
+${$ref}[1]   è§£å¼•ç”¨å¹¶å–å¾—ç¬¬2ä¸ªå…ƒç´ 
 
-µ±ÒıÓÃÊÇ×î¼òµ¥µÄ±êÁ¿ĞÎÊ½£¬Èç£º@{$items}  »òÕß ${$items}[1]£¬ÎÒÃÇ¿ÉÒÔÊ¡ÂÔ»¨À¨ºÅ£¬Ğ´³É
-@$items£¬ $$items[1]
+å½“å¼•ç”¨æ˜¯æœ€ç®€å•çš„æ ‡é‡å½¢å¼ï¼Œå¦‚ï¼š@{$items}  æˆ–è€… ${$items}[1]ï¼Œæˆ‘ä»¬å¯ä»¥çœç•¥èŠ±æ‹¬å·ï¼Œå†™æˆ
+@$itemsï¼Œ $$items[1]
 
-µ±{}ÖĞÊÇ×î¼òµ¥µÄ±êÁ¿Ê±£¬¿ÉÒÔÊ¡ÂÔ{}
+å½“{}ä¸­æ˜¯æœ€ç®€å•çš„æ ‡é‡æ—¶ï¼Œå¯ä»¥çœç•¥{}
 $ref->[1]
-Êı×éÖĞ£¬Ã¿¸öĞ´³É${DUMMY}[$y]µÄ½âÒıÓÃ£¬¶¼¿ÉÒÔĞ´³ÉDUMMY->[$y]£¬¼´listµÄÒıÓÃ¶¼ÓĞ->µÄ¼òĞ´ĞÎÊ½
-${${$all_with_names[2]}[1]}[0]    ¿ÉÒÔĞ´³É   $all_with_names[2]->[1]->[0]
-							½øÒ»²½¿ÉÒÔĞ´³É   $all_with_names[2][1][0]
+æ•°ç»„ä¸­ï¼Œæ¯ä¸ªå†™æˆ${DUMMY}[$y]çš„è§£å¼•ç”¨ï¼Œéƒ½å¯ä»¥å†™æˆDUMMY->[$y]ï¼Œå³listçš„å¼•ç”¨éƒ½æœ‰->çš„ç®€å†™å½¢å¼
+${${$all_with_names[2]}[1]}[0]    å¯ä»¥å†™æˆ   $all_with_names[2]->[1]->[0]
+							è¿›ä¸€æ­¥å¯ä»¥å†™æˆ   $all_with_names[2][1][0]
 							
-×¢ÒâÏÂÃæµÄÇø±ğ£º
-my $ref = @array;         ${${$ref[2]}[1]}[0]  Ğ´³É $ref[2]->[1]->[0]  Ğ´³É   $ref[2][1][0];
-my $ref = \@array;        ${${${$ref}[2]}[1]}[0] Ğ´³É $ref->[2]->[1]->[0]  Ğ´³É $ref->[2][1][0];
+æ³¨æ„ä¸‹é¢çš„åŒºåˆ«ï¼š
+my $ref = @array;         ${${$ref[2]}[1]}[0]  å†™æˆ $ref[2]->[1]->[0]  å†™æˆ   $ref[2][1][0];
+my $ref = \@array;        ${${${$ref}[2]}[1]}[0] å†™æˆ $ref->[2]->[1]->[0]  å†™æˆ $ref->[2][1][0];
 
 my %gilligan_info = ( name => 'Gilligan',);
 my $hash_ref = \%gilligan_info;
 my $name = ${$hash_ref}{'name'};
 my @keys = keys %$hash_ref{'name'};
 my $name = $hash_ref->{'name'};
-->ÓÃÀ´½øĞĞ½âÒıÓÃÊ±£¬Ç°Ãæ¶¼ÊÇÒ»¸öÒıÓÃ£¨±êÁ¿£©
+->ç”¨æ¥è¿›è¡Œè§£å¼•ç”¨æ—¶ï¼Œå‰é¢éƒ½æ˜¯ä¸€ä¸ªå¼•ç”¨ï¼ˆæ ‡é‡ï¼‰
 
 
 my %gilligan_info = (
@@ -891,9 +891,9 @@ my $format = "%?15s %?7s %?7s %?15s\n";
 printf $format, qw(Name Shirt Hat Position);
 
 for my $crewmember (@crew) {
-	printf $format, @$crewmember{qw(name shirt hat position)};  ## Ê¹ÓÃÁËhashµÄslicesÄ£Ê½
+	printf $format, @$crewmember{qw(name shirt hat position)};  ## ä½¿ç”¨äº†hashçš„slicesæ¨¡å¼
 	
-	####  »òÕßÕ¹¿ªµÄĞ´·¨£º
+	####  æˆ–è€…å±•å¼€çš„å†™æ³•ï¼š
 	printf $format,
 	$crewmember->{'name'},
 	$crewmember->{'shirt'},
@@ -901,50 +901,50 @@ for my $crewmember (@crew) {
 	$crewmember->{'position'};
 }
 
-×ÓÀı³ÌµÄÒıÓÃ£º       ###  ×¢Òâµ½ÒıÓÃµÄÄäÃû×ÓÀı³ÌÒ»°ãÊÇÃ»ÓĞ²ÎÊıµÄ
+å­ä¾‹ç¨‹çš„å¼•ç”¨ï¼š       ###  æ³¨æ„åˆ°å¼•ç”¨çš„åŒ¿åå­ä¾‹ç¨‹ä¸€èˆ¬æ˜¯æ²¡æœ‰å‚æ•°çš„
 
 sub skipper_greets {
 }
 my $ref_to_greeter = \&skipper_greets;
-&$ref_to_greeter('Gilligan');  ### »òÕß
+&$ref_to_greeter('Gilligan');  ### æˆ–è€…
 $ref_to_greeter->('Gilligan');
 
-my $ginger = sub {        ### Éú³ÉÄäÃûsubroutineÒıÓÃ
+my $ginger = sub {        ### ç”ŸæˆåŒ¿åsubroutineå¼•ç”¨
 	my $person = shift;
 	print "Ginger: (in a sultry voice) Well hello, $person!\n";
-};            ######   ×¢Òâµ½ÕâÊÇÕı³£¸³ÖµÓï¾ä£¬ËùÒÔ;²»ÄÜÉÙ
+};            ######   æ³¨æ„åˆ°è¿™æ˜¯æ­£å¸¸èµ‹å€¼è¯­å¥ï¼Œæ‰€ä»¥;ä¸èƒ½å°‘
 $ginger->('Skipper');
 
-use File::Find;      ###  ¿ÉÒÆÖ²ĞÔÎÄ¼şºÍÎÄ¼ş¼Ğ²éÕÒ£¬»áµİ¹é²éÕÒÄ¿Â¼ÏÂËùÓĞ×ÓÄ¿Â¼ºÍÎÄ¼ş
+use File::Find;      ###  å¯ç§»æ¤æ€§æ–‡ä»¶å’Œæ–‡ä»¶å¤¹æŸ¥æ‰¾ï¼Œä¼šé€’å½’æŸ¥æ‰¾ç›®å½•ä¸‹æ‰€æœ‰å­ç›®å½•å’Œæ–‡ä»¶
 sub what_to_do {
-	print "$File::Find::name found\n";    ### ±äÁ¿$File::Find::nameÊÇÏà¶ÔÓÚÆğÊ¼Î»ÖÃµÄÏà¶ÔÂ·¾¶
+	print "$File::Find::name found\n";    ### å˜é‡$File::Find::nameæ˜¯ç›¸å¯¹äºèµ·å§‹ä½ç½®çš„ç›¸å¯¹è·¯å¾„
 }
 my @starting_directories = qw(.);
-find(\&what_to_do, @starting_directories);  ### ÕÒµ½µ±Ç°Ä¿Â¼ÏÂËùÓĞÎÄ¼şºÍ×ÓÄ¿Â¼²¢´òÓ¡
+find(\&what_to_do, @starting_directories);  ### æ‰¾åˆ°å½“å‰ç›®å½•ä¸‹æ‰€æœ‰æ–‡ä»¶å’Œå­ç›®å½•å¹¶æ‰“å°
 
 my $total_size = 0;
-find(sub {$total_size += -s if -f}, '.');    ### Í³¼ÆÄ¿Â¼ÏÂËùÓĞÎÄ¼şµÄ´óĞ¡ºÍ
+find(sub {$total_size += -s if -f}, '.');    ### ç»Ÿè®¡ç›®å½•ä¸‹æ‰€æœ‰æ–‡ä»¶çš„å¤§å°å’Œ
 print $total_size, "\n";
 
 
-###  ±Õ°ü±äÁ¿Ïàµ±ÓÚÖ»ÄÜ±»×ÓÀı³ÌÊ¹ÓÃµÄÈ«¾Ö¾²Ì¬±äÁ¿  £¡£¡£¡£¡£¡
-my $callback;  ### ´Ë±äÁ¿ÉùÃ÷±ØĞë·ÅblockÍâÃæ£¬·ÅblockÀïÃæµÄ»°ÔÚfind´¦¸Ã±äÁ¿¾Í²»´æÔÚÁË
+###  é—­åŒ…å˜é‡ç›¸å½“äºåªèƒ½è¢«å­ä¾‹ç¨‹ä½¿ç”¨çš„å…¨å±€é™æ€å˜é‡  ï¼ï¼ï¼ï¼ï¼
+my $callback;  ### æ­¤å˜é‡å£°æ˜å¿…é¡»æ”¾blockå¤–é¢ï¼Œæ”¾blocké‡Œé¢çš„è¯åœ¨findå¤„è¯¥å˜é‡å°±ä¸å­˜åœ¨äº†
 {
-	my $count = 0;      ### ÓÉÓÚ±»ÄäÃû±äÁ¿ÒıÓÃ£¬ÔÚfindµ÷ÓÃÊ±$countÒÀÈ»´æÔÚ£¬³ÉÎª±Õ°ü
-	$callback = sub {print ++$count, ": $File::Find::name\n"};   ##  ;²»ÄÜÉÙ£¬´Ë´¦ÊÇ¸³ÖµÓï¾ä
+	my $count = 0;      ### ç”±äºè¢«åŒ¿åå˜é‡å¼•ç”¨ï¼Œåœ¨findè°ƒç”¨æ—¶$countä¾ç„¶å­˜åœ¨ï¼Œæˆä¸ºé—­åŒ…
+	$callback = sub {print ++$count, ": $File::Find::name\n"};   ##  ;ä¸èƒ½å°‘ï¼Œæ­¤å¤„æ˜¯èµ‹å€¼è¯­å¥
 }
 find($callback, '.');
 
 sub create_find_callback_that_counts {
-	my $count = 0;                      ###  ½«±Õ°ü±äÁ¿·ÅÈë³õÊ¼»¯×ÓÀı³ÌÀïÃæ£¬ÕâÑùÖ»³õÊ¼»¯Ò»´Î
+	my $count = 0;                      ###  å°†é—­åŒ…å˜é‡æ”¾å…¥åˆå§‹åŒ–å­ä¾‹ç¨‹é‡Œé¢ï¼Œè¿™æ ·åªåˆå§‹åŒ–ä¸€æ¬¡
 	return sub { print ++$count, ": $File::Find::name\n"}
 }
 my $callback1 = create_find_callback_that_counts();   
-find($callback1, 'bin');      ##  µ÷ÓÃ$callback1µÄ¹²ÓÃÒ»¸ö$count
+find($callback1, 'bin');      ##  è°ƒç”¨$callback1çš„å…±ç”¨ä¸€ä¸ª$count
 my $callback2 = create_find_callback_that_counts();
-find($callback2, 'lib');      ##  µ÷ÓÃ$callback2µÄ¹²ÓÃÁíÒ»¸ö$count
+find($callback2, 'lib');      ##  è°ƒç”¨$callback2çš„å…±ç”¨å¦ä¸€ä¸ª$count
 
-###  ·Ö±ğĞŞ¸ÄºÍ¶Á³ö±Õ°ü±äÁ¿
+###  åˆ†åˆ«ä¿®æ”¹å’Œè¯»å‡ºé—­åŒ…å˜é‡
 sub create_find_callback_that_sum_the_size {
 	my $total_size = 0;
 	return(sub {$total_size += -s if -f}, sub {return $total_size});
@@ -953,15 +953,15 @@ my ($count_em, $get_results) = create_find_callback_that_sum_the_size();
 find($count_em, 'bin');
 my $total_size = &$get_results();
 
-sub print_bigger_than {       ### ³õÊ¼»¯×ÓÀı³Ì¿ÉÒÔ°üº¬²ÎÊı£¬ÄäÃû×ÓÀı³Ì²»¿ÉÒÔ
+sub print_bigger_than {       ### åˆå§‹åŒ–å­ä¾‹ç¨‹å¯ä»¥åŒ…å«å‚æ•°ï¼ŒåŒ¿åå­ä¾‹ç¨‹ä¸å¯ä»¥
 	my $minimum_size = shift;
 	return sub {print "$File::Find::name\n" if -f and -s >= $minimum_size};
 }
-my $bigger_than_1024 = print_bigger_than(1024);   ### 1024±ä³É¸ÃÒıÓÃ¹Ì¶¨Öµ
+my $bigger_than_1024 = print_bigger_than(1024);   ### 1024å˜æˆè¯¥å¼•ç”¨å›ºå®šå€¼
 find($bigger_than_1024, 'bin');
 
-###  ±Õ°ü±äÁ¿Ò»°ã¿ÉÒÔÓÃ state ÉùÃ÷µÄ¾²Ì¬±äÁ¿Ìæ»»£¬²»¹ıstateÖ»ÄÜ³õÊ¼»¯scalar
-###  stateÉùÃ÷µÄlistºÍhash²»ÄÜ³õÊ¼»¯£¬±¨±àÒë´íÎó
+###  é—­åŒ…å˜é‡ä¸€èˆ¬å¯ä»¥ç”¨ state å£°æ˜çš„é™æ€å˜é‡æ›¿æ¢ï¼Œä¸è¿‡stateåªèƒ½åˆå§‹åŒ–scalar
+###  stateå£°æ˜çš„listå’Œhashä¸èƒ½åˆå§‹åŒ–ï¼ŒæŠ¥ç¼–è¯‘é”™è¯¯
 {
 	my $countdown = 10;
 	sub count_down { $countdown-- }
@@ -969,62 +969,62 @@ find($bigger_than_1024, 'bin');
 }
 count_down();
 print "we're down to ", count_remaining(), " coconuts!\n";
-µÈ¼ÛÓÚ
+ç­‰ä»·äº
 sub countdown {
 	state $countdown = 10;
 	$countdown--;
 }
-###  stateÉùÃ÷µÄlistºÍhash²»ÄÜ³õÊ¼»¯£¬±¨±àÒë´íÎó£¬µ«¿ÉÒÔÓÃÒıÓÃ±äÏàÊµÏÖ³õÊ¼»¯
+###  stateå£°æ˜çš„listå’Œhashä¸èƒ½åˆå§‹åŒ–ï¼ŒæŠ¥ç¼–è¯‘é”™è¯¯ï¼Œä½†å¯ä»¥ç”¨å¼•ç”¨å˜ç›¸å®ç°åˆå§‹åŒ–
 sub add_to_tab {
 	my $castaway = shift;
 	state $castaways = qw(Ginger Mary Ann Gilligan); # works!
 	state %tab = map { $_, 0 } @$castaways; # works!
 	$tab->{$castaway}++;
 }
-####   ÄäÃû×ÓÀı³ÌµÄ×ÔÒıÓÃ
+####   åŒ¿åå­ä¾‹ç¨‹çš„è‡ªå¼•ç”¨
 my $countdown = sub {
 	state $n = 5;
 	return unless $n > -1;
 	say $n--;
-	$countdown->();     ###  µ÷ÓÃ×ÔÉí
+	$countdown->();     ###  è°ƒç”¨è‡ªèº«
 };
 $countdown->();
-»òÕßĞ´³É
+æˆ–è€…å†™æˆ
 my $sub = sub {
 	state $n = 5;
 	return unless $n > -1;
 	say $n--;
-	__SUB__->();    ### v5.16Ö®ºó¼ÓÈëµÄ»·¾³±äÁ¿£¬±íÊ¾ËùÔÚ×ÓÀı³ÌµÄÒıÓÃ
+	__SUB__->();    ### v5.16ä¹‹ååŠ å…¥çš„ç¯å¢ƒå˜é‡ï¼Œè¡¨ç¤ºæ‰€åœ¨å­ä¾‹ç¨‹çš„å¼•ç”¨
 };
 $sub->();
 
-ÎÄ¼ş¾ä±úµÄÒıÓÃ£º    ### ÒÔÏÂÄÚÈİ²»ÍÆ¼ö
+æ–‡ä»¶å¥æŸ„çš„å¼•ç”¨ï¼š    ### ä»¥ä¸‹å†…å®¹ä¸æ¨è
 log_message( \*LOG_FH, 'An astronaut passes overhead' );
 sub log_message {
 	local *FH = shift;
 	print FH @_, "\n";
 }
 
-ÕıÔò±í´ïÊ½µÄÒıÓÃ£º
+æ­£åˆ™è¡¨è¾¾å¼çš„å¼•ç”¨ï¼š
 my $pattern = 'coco.*';
-if(/$pattern/) {           #### ÕıÔò±í´ïÊ½µÄÌæ»»£¬µ«ÊÇÈç¹û´Ë´¦ÕıÔò±í´ïÊ½²»·ûºÏÓï·¨ÒªÇó
-}                          #### ÔòÖ»ÄÜÔÚÔËĞĞÊ±²ÅÄÜ·¢ÏÖ
+if(/$pattern/) {           #### æ­£åˆ™è¡¨è¾¾å¼çš„æ›¿æ¢ï¼Œä½†æ˜¯å¦‚æœæ­¤å¤„æ­£åˆ™è¡¨è¾¾å¼ä¸ç¬¦åˆè¯­æ³•è¦æ±‚
+}                          #### åˆ™åªèƒ½åœ¨è¿è¡Œæ—¶æ‰èƒ½å‘ç°
 
-qr// ²Ù×÷·û
-my $regex = qr/Gilligan|Skipper/;   ### Éú³ÉÒ»¸ö±àÒë¹ıµÄÕıÔò±í´ïÊ½µÄÒıÓÃ
-my $regex = eval { qr/$pattern/ };    ###  ÒÀÈ»ÒªÓÃevalÆÀ¹ÀÕıÔò±í´ïÊ½µÄÊÇ·ñ·ûºÏÓï·¨ÒªÇó
+qr// æ“ä½œç¬¦
+my $regex = qr/Gilligan|Skipper/;   ### ç”Ÿæˆä¸€ä¸ªç¼–è¯‘è¿‡çš„æ­£åˆ™è¡¨è¾¾å¼çš„å¼•ç”¨
+my $regex = eval { qr/$pattern/ };    ###  ä¾ç„¶è¦ç”¨evalè¯„ä¼°æ­£åˆ™è¡¨è¾¾å¼çš„æ˜¯å¦ç¬¦åˆè¯­æ³•è¦æ±‚
 
-m/Gilligan$/migc     ##  migc×÷Îª±êÇ©
-qr/Gilligan$/mi;      ##  qrÓÃ±êÇ©µÄĞ´·¨£¬gc²»¿ÉÓÃ£¬Ö»¿ÉÓÃ×÷ÓÃÔÚpatternÉÏµÄ±êÇ©
-qr/(?mi:Gilligan$)/;   ## µÚ¶şÖÖĞ´·¨  ²ÉÓÃµÄÍ¨ÓÃµÄ(?flags:pattern)Ä£Ê½
-qr/abc(?i:Gilligan)def/;   ## Ö»À¨ºÅÖĞµÄ×ÖÄ¸ºöÂÔ´óĞ¡Ğ´µÄĞ´·¨
-qr/abc(?x-i:G i l l i g a n)def/i;   ###  À¨ºÅÄÚ²¿·ÖÓ¦ÓÃx±êÇ©£¬È¡Ïûi±êÇ©µÄÓ¦ÓÃ
+m/Gilligan$/migc     ##  migcä½œä¸ºæ ‡ç­¾
+qr/Gilligan$/mi;      ##  qrç”¨æ ‡ç­¾çš„å†™æ³•ï¼Œgcä¸å¯ç”¨ï¼Œåªå¯ç”¨ä½œç”¨åœ¨patternä¸Šçš„æ ‡ç­¾
+qr/(?mi:Gilligan$)/;   ## ç¬¬äºŒç§å†™æ³•  é‡‡ç”¨çš„é€šç”¨çš„(?flags:pattern)æ¨¡å¼
+qr/abc(?i:Gilligan)def/;   ## åªæ‹¬å·ä¸­çš„å­—æ¯å¿½ç•¥å¤§å°å†™çš„å†™æ³•
+qr/abc(?x-i:G i l l i g a n)def/i;   ###  æ‹¬å·å†…éƒ¨åˆ†åº”ç”¨xæ ‡ç­¾ï¼Œå–æ¶ˆiæ ‡ç­¾çš„åº”ç”¨
 
 my $regex = qr/Gilligan/;
-$string =~ m/$regex/;         ### ºÏ·¨
-$string =~ s/$regex/Skipper/;      ### ºÏ·¨
-$string =~ $regex;        ### ºÏ·¨
-$string ~~ $regex;        ### Ê¹ÓÃÖÇÄÜÆ¥Åä
+$string =~ m/$regex/;         ### åˆæ³•
+$string =~ s/$regex/Skipper/;      ### åˆæ³•
+$string =~ $regex;        ### åˆæ³•
+$string ~~ $regex;        ### ä½¿ç”¨æ™ºèƒ½åŒ¹é…
 
 my @patterns = (
 	qr/(?:Willie )?Gilligan/,
@@ -1035,7 +1035,7 @@ my @patterns = (
 	qr/Mrs?. Howell/,
 );
 my $name = 'Ginger';
-say "Match!" if $name ~~ @patterns;    ###  ÖÇÄÜÆ¥Åä£¬¶àÄ£Ê½Æ¥Åä
+say "Match!" if $name ~~ @patterns;    ###  æ™ºèƒ½åŒ¹é…ï¼Œå¤šæ¨¡å¼åŒ¹é…
 
 use List::Util qw(first);
 my %patterns = (
@@ -1047,21 +1047,21 @@ my %patterns = (
 	'A Howell' => qr/Mrs?. Howell/,
 );
 my $name = 'Ginger';
-my( $match ) = first { $name =~ $patterns{$_} } keys %patterns;  ### ´ÓËùÓĞÆ¥ÅäµÄ½á¹ûÀïÈ¡µÚÒ»¸ö
+my( $match ) = first { $name =~ $patterns{$_} } keys %patterns;  ### ä»æ‰€æœ‰åŒ¹é…çš„ç»“æœé‡Œå–ç¬¬ä¸€ä¸ª
 say "Matched $match" if $match;
 
-####  ¼ì²éÒıÓÃµÄÀàĞÍÊÇ·ñÏà·û         
-####  Ê¹ÓÃ ref ¹Ø¼ü×ÖÌáÈ¡ÒıÓÃÀàĞÍ½øĞĞÏÔÊ¾¼ì²é
+####  æ£€æŸ¥å¼•ç”¨çš„ç±»å‹æ˜¯å¦ç›¸ç¬¦         
+####  ä½¿ç”¨ ref å…³é”®å­—æå–å¼•ç”¨ç±»å‹è¿›è¡Œæ˜¾ç¤ºæ£€æŸ¥
 use Carp qw(croak);
 sub show_hash {
 	my $hash_ref = shift;
 	my $ref_type = ref $hash_ref;
 	croak "I expected a hash reference!" unless $ref_type eq 'HASH';
-	###  »òÕßĞ´Îª
+	###  æˆ–è€…å†™ä¸º
 	croak "I expected a hash reference!" unless $ref_type eq ref {};
 }
 
-###    ÏÂÃæ´úÂëµ÷ÊÔÎ´Í¨¹ı£¬when¸ÄÎªifºó¿ÉÕı³£ÔËĞĞ
+###    ä¸‹é¢ä»£ç è°ƒè¯•æœªé€šè¿‡ï¼Œwhenæ”¹ä¸ºifåå¯æ­£å¸¸è¿è¡Œ
 my @array = ( \ 'xyz', [qw(a b c)], sub { say STDOUT 'Buster' } );
 foreach ( @array ) {
 	when( ref eq ref \ '' ) { say STDOUT "Scalar $$_" }
@@ -1069,7 +1069,7 @@ foreach ( @array ) {
 	when( ref eq ref sub {} ) { say STDOUT "Sub ???" }
 }
 
-»òÕß
+æˆ–è€…
 
 use Carp qw(croak);
 use Scalar::Util qw(reftype);
@@ -1079,21 +1079,21 @@ sub show_hash {
 	croak "I expected a hash reference!" unless $ref_type eq ref {};
 }
 
-»òÕß
+æˆ–è€…
 
-###  Ê¹ÓÃevalÀ´²âÊÔ£¬ÔÚevalÖ®ÖĞµ±ÒıÓÃÊ¹ÓÃ£¬Èç¹û²úÉú´íÎó¾Í±¨´í£¬·ñÔò·µ»Ø×îºóµÄ1
+###  ä½¿ç”¨evalæ¥æµ‹è¯•ï¼Œåœ¨evalä¹‹ä¸­å½“å¼•ç”¨ä½¿ç”¨ï¼Œå¦‚æœäº§ç”Ÿé”™è¯¯å°±æŠ¥é”™ï¼Œå¦åˆ™è¿”å›æœ€åçš„1
 croak "I expected a hash reference!" unless eval { keys %$ref_type; 1 }  
 
-ÄäÃûÊı×é¹¹ÔìÆ÷£¬·½À¨ºÅµÄÁíÒ»ÖÖÓÃ·¨£¬ÀûÓÃÄÚ²¿ÁĞ±íĞÎÊ½ÁĞ³öµÄÄÚÈİÉú³ÉÒ»¸öÄäÃûÊı×é£¬·µ»Ø¸ÃÊı×éµÄÒıÓÃ
+åŒ¿åæ•°ç»„æ„é€ å™¨ï¼Œæ–¹æ‹¬å·çš„å¦ä¸€ç§ç”¨æ³•ï¼Œåˆ©ç”¨å†…éƒ¨åˆ—è¡¨å½¢å¼åˆ—å‡ºçš„å†…å®¹ç”Ÿæˆä¸€ä¸ªåŒ¿åæ•°ç»„ï¼Œè¿”å›è¯¥æ•°ç»„çš„å¼•ç”¨
 my $ref_to_skipper_provisions = [ qw(blue_shirt hat jacket perserver sunscreen) ]
-µÈ¼ÛÓÚ
+ç­‰ä»·äº
 my $ref_to_skipper_provisions;
 {
 	my @temporary_name = ( qw(blue_shirt hat jacket preserver sunscreen) );
 	$ref_to_skipper_provisions = \@temporary_name;
 }
 
-###  Ó¦ÓÃ¾ÙÀı£ºÏÂÃæÊÇÊäÈë
+###  åº”ç”¨ä¸¾ä¾‹ï¼šä¸‹é¢æ˜¯è¾“å…¥
 The Skipper
 	blue_shirt
 	hat
@@ -1115,7 +1115,7 @@ my $person;
 while (<>) {
 	if (/^(\S.*)/) { # a person's name (no leading whitespace)
 		$person = $1;
-		###  Éú³ÉÒ»¸öÒıÓÃ£¬Í¬Ê±·ÀÖ¹´æÔÚÊ±¸²¸Ç
+		###  ç”Ÿæˆä¸€ä¸ªå¼•ç”¨ï¼ŒåŒæ—¶é˜²æ­¢å­˜åœ¨æ—¶è¦†ç›–
 		$provisions{$person} = [ ] unless $provisions{$person};
 	} elsif (/^\s+(\S.*)/) { # a provision
 		die 'No person yet!' unless defined $person;
@@ -1126,7 +1126,7 @@ while (<>) {
 }
 
 
-ÄäÃûÓ³Éä¹¹ÔìÆ÷ÀàËÆ
+åŒ¿åæ˜ å°„æ„é€ å™¨ç±»ä¼¼
 my $ref_to_gilligan_info = {
 	name => 'Gilligan',
 	hat => 'White',
@@ -1134,133 +1134,133 @@ my $ref_to_gilligan_info = {
 	position => 'First Mate',
 };
 
-ÄäÃûÓ³ÉäÒıÓÃºÍ´úÂëblock±íÏÖĞÎÊ½ÀàËÆ£¬ÎªÒÔÊ¾Çø±ğ£¬¿É²ÉÓÃÈçÏÂ·½·¨
-my $hash_ref = +{...};      ####  »¨À¨ºÅÒÔ¼ÓºÅ¿ªÍ·
+åŒ¿åæ˜ å°„å¼•ç”¨å’Œä»£ç blockè¡¨ç°å½¢å¼ç±»ä¼¼ï¼Œä¸ºä»¥ç¤ºåŒºåˆ«ï¼Œå¯é‡‡ç”¨å¦‚ä¸‹æ–¹æ³•
+my $hash_ref = +{...};      ####  èŠ±æ‹¬å·ä»¥åŠ å·å¼€å¤´
 
 code block:
-{; ... }          ###  ´úÂë¿éÄÚÒÔ;¿ªÍ·
+{; ... }          ###  ä»£ç å—å†…ä»¥;å¼€å¤´
 
 
 
-###########################   ÇÉÃîÓÃ·¨   ################################
+###########################   å·§å¦™ç”¨æ³•   ################################
 
-1¡¢ÀûÓÃprintf¸ù¾İÊı×é´óĞ¡¶¯Ì¬Êä³öÄÚÈİ
+1ã€åˆ©ç”¨printfæ ¹æ®æ•°ç»„å¤§å°åŠ¨æ€è¾“å‡ºå†…å®¹
 
 my @iterms = qw( wilma dino pebbles );
 my $format = "the item are:\n". ("%10s\n" x @iterms);
 printf $format, @items;
 
-ËõĞ´£º
+ç¼©å†™ï¼š
 printf "The items are:\n".("%10s\n" x @items), @items;
 
 
-2¡¢Êä³öµ½ÎÄ¼ş¾ä±ú
+2ã€è¾“å‡ºåˆ°æ–‡ä»¶å¥æŸ„
 
-print $rock;    Êä³ö±äÁ¿µÄÄÚÈİ
-print { $rock_fh };   Êä³ö$_ µ½ÎÄ¼ş¾ä±ú $rock_fh        ÓÃ´óÀ¨ºÅ°Ñ¾ä±ú±äÁ¿À¨ÆğÀ´ÒÔÈÃperlÖªµÀÕâÊÇ¸ö¾ä±ú±äÁ¿£¬·ñÔòperl½«Æäµ±×öÒ»¸öÆÕÍ¨±äÁ¿
+print $rock;    è¾“å‡ºå˜é‡çš„å†…å®¹
+print { $rock_fh };   è¾“å‡º$_ åˆ°æ–‡ä»¶å¥æŸ„ $rock_fh        ç”¨å¤§æ‹¬å·æŠŠå¥æŸ„å˜é‡æ‹¬èµ·æ¥ä»¥è®©perlçŸ¥é“è¿™æ˜¯ä¸ªå¥æŸ„å˜é‡ï¼Œå¦åˆ™perlå°†å…¶å½“åšä¸€ä¸ªæ™®é€šå˜é‡
 
 
-3¡¢Ò»¾ä»°perl³ÌĞò
+3ã€ä¸€å¥è¯perlç¨‹åº
 
 perl -p -i.bak -w -e 's/Randall/Randal/g' fred*.dat
 
-½âÊÍ£º
-	-p  ÈÃperl×Ô¼ºÍêÉÆ³ÉÎªÒ»¸öĞ¡³ÌĞò£¬´óÖÂÏàµ±ÓÚ
+è§£é‡Šï¼š
+	-p  è®©perlè‡ªå·±å®Œå–„æˆä¸ºä¸€ä¸ªå°ç¨‹åºï¼Œå¤§è‡´ç›¸å½“äº
 		while(<>) {
 			print ;
 		}
 
-	-n  Í¬ -p£¬µ«ÊÇÃ»ÓĞprint£¬Òâ¼´²»Êä³ö
+	-n  åŒ -pï¼Œä½†æ˜¯æ²¡æœ‰printï¼Œæ„å³ä¸è¾“å‡º
 
-	-i.bak   ÉèÖÃ$^I Îª.bak
+	-i.bak   è®¾ç½®$^I ä¸º.bak
 
-	-w   ´ò¿ªwarnings
+	-w   æ‰“å¼€warnings
 	
-	-e  ±íÊ¾Ö´ĞĞ´úÂëÈçÏÂ£¬ºó½ÓÖ´ĞĞ´úÂë£¬Ö´ĞĞ´úÂëÓÃµ¥ÒıºÅÒıÆğÀ´£¨unixÃüÁîĞĞÏ°¹ß£©
+	-e  è¡¨ç¤ºæ‰§è¡Œä»£ç å¦‚ä¸‹ï¼Œåæ¥æ‰§è¡Œä»£ç ï¼Œæ‰§è¡Œä»£ç ç”¨å•å¼•å·å¼•èµ·æ¥ï¼ˆunixå‘½ä»¤è¡Œä¹ æƒ¯ï¼‰
 	
-perl -le "print for @INC"  Ò»¾ä»°perl£¬²é¿´@INC ÀïÃæµÄÄÚÈİ
+perl -le "print for @INC"  ä¸€å¥è¯perlï¼ŒæŸ¥çœ‹@INC é‡Œé¢çš„å†…å®¹
 	
 	
-4¡¢±í´ïÊ½ĞŞÊÎ·û
+4ã€è¡¨è¾¾å¼ä¿®é¥°ç¬¦
 
-¼´·ÅÔÚºóÃæµÄ²»´øÔ²À¨ºÅµÄ if  while  unless until  foreach
-ÊÊºÏÒ»¾ä»°Ä£¿é
+å³æ”¾åœ¨åé¢çš„ä¸å¸¦åœ†æ‹¬å·çš„ if  while  unless until  foreach
+é€‚åˆä¸€å¥è¯æ¨¡å—
 $sum += $_ for @digits;
 
 
-5¡¢perlÖĞµÄÎå¸öÑ­»·¿é£º
-for,   foreach,  while,   until,   ÂãÀ¨ºÅ{}
-last;    Ìø³öÑ­»·
+5ã€perlä¸­çš„äº”ä¸ªå¾ªç¯å—ï¼š
+for,   foreach,  while,   until,   è£¸æ‹¬å·{}
+last;    è·³å‡ºå¾ªç¯
 
-next;    Ìø³ö±¾´ÎÑ­»·
-next²»ÄÜÓÃÓÚÓĞ·µ»ØÖµµÄÈç eval {} , sub {} or do {}ÕâÑùµÄ´úÂë¿éÖĞ£¬Ò²²»ÄÜÓÃÓÚ grep() or map()µü´ú
+next;    è·³å‡ºæœ¬æ¬¡å¾ªç¯
+nextä¸èƒ½ç”¨äºæœ‰è¿”å›å€¼çš„å¦‚ eval {} , sub {} or do {}è¿™æ ·çš„ä»£ç å—ä¸­ï¼Œä¹Ÿä¸èƒ½ç”¨äº grep() or map()è¿­ä»£
 
-redo;   ÖØĞÂÖ´ĞĞ¿éÄÚ´úÂë£¬²»½øĞĞÌõ¼şÅĞ¶ÏºÍµü´ú´¦Àí²Ù×÷
+redo;   é‡æ–°æ‰§è¡Œå—å†…ä»£ç ï¼Œä¸è¿›è¡Œæ¡ä»¶åˆ¤æ–­å’Œè¿­ä»£å¤„ç†æ“ä½œ
 
 
-6¡¢±ê¼Ç£¨label£©¿é:
+6ã€æ ‡è®°ï¼ˆlabelï¼‰å—:
 LINE:   while(<>) {
 			......
-			last   LINE  if  /__END__/;   ###  µ½´ïÎÄ¼şÎ²Ê±Ìø³öwhile¿é
+			last   LINE  if  /__END__/;   ###  åˆ°è¾¾æ–‡ä»¶å°¾æ—¶è·³å‡ºwhileå—
 	    }
   
-  ¿ÉÒÔÓÃ last   next   redo ÈıÕßÖ®Ò»Ìø³öLINE±ê¼ÇµÄÕû¸ö¿é£¬×¢Òâµ½labelÓëgotoµÄÒâÒå²»Í¬£¬label±ê¼ÇÕû¸ö¿é£¬ÊÇÓÃÀ´Ìø³öloopµÄ
+  å¯ä»¥ç”¨ last   next   redo ä¸‰è€…ä¹‹ä¸€è·³å‡ºLINEæ ‡è®°çš„æ•´ä¸ªå—ï¼Œæ³¨æ„åˆ°labelä¸gotoçš„æ„ä¹‰ä¸åŒï¼Œlabelæ ‡è®°æ•´ä¸ªå—ï¼Œæ˜¯ç”¨æ¥è·³å‡ºloopçš„
   
   
-7¡¢Ö´ĞĞÍâ²¿³ÌĞò
+7ã€æ‰§è¡Œå¤–éƒ¨ç¨‹åº
 
-``Ö´ĞĞ·´ÒıºÅÀïÃæµÄÍâ²¿ÃüÁî£¬ÓÃÓÚ²¶»ñÍâ²¿ÃüÁîµÄÔËĞĞ½á¹û
-·´ÒıºÅÄÚ³ÌĞòµÄ·µ»Ø½á¹û»á±»perl°ü×°³ÉÒ»¸östring·µ»Ø£¬×¢Òâµ½Õâ¸östring×Ô´ø»»ĞĞ·û\n
-Èç¹û·µ»ØµÄstringÀïÃæÓĞ¶à¸ö»»ĞĞ·û£¬ÔòÔÚÁĞ±íÉÏÏÂÎÄÖĞµÃµ½»»ĞĞ·û·Ö¸îµÄÒ»¸öÁĞ±í
-·´ÒıºÅÀ¨ÆğÀ´µÄÄÚÈİµÄ´¦ÀíÀàËÆË«ÒıºÅµÄĞ§¹û
+``æ‰§è¡Œåå¼•å·é‡Œé¢çš„å¤–éƒ¨å‘½ä»¤ï¼Œç”¨äºæ•è·å¤–éƒ¨å‘½ä»¤çš„è¿è¡Œç»“æœ
+åå¼•å·å†…ç¨‹åºçš„è¿”å›ç»“æœä¼šè¢«perlåŒ…è£…æˆä¸€ä¸ªstringè¿”å›ï¼Œæ³¨æ„åˆ°è¿™ä¸ªstringè‡ªå¸¦æ¢è¡Œç¬¦\n
+å¦‚æœè¿”å›çš„stringé‡Œé¢æœ‰å¤šä¸ªæ¢è¡Œç¬¦ï¼Œåˆ™åœ¨åˆ—è¡¨ä¸Šä¸‹æ–‡ä¸­å¾—åˆ°æ¢è¡Œç¬¦åˆ†å‰²çš„ä¸€ä¸ªåˆ—è¡¨
+åå¼•å·æ‹¬èµ·æ¥çš„å†…å®¹çš„å¤„ç†ç±»ä¼¼åŒå¼•å·çš„æ•ˆæœ
 chomp(my $no_newline_now = `date`);
-qx/ /  ¹¦ÄÜÍ¬ÉÏ£¬Òâ¼´ÉÏÃæ·ûºÅµÄÎÄ×Ö±íÊ¾£¬Çø±ğÊÇÒıÓÃÄÚÈİµÄ·­ÒëÀàËÆµ¥ÒıºÅ£¬delimiterµÄÑ¡ÔñÀàËÆqw//
-·´ÒıºÅ²»ÒªÊ¹ÓÃÔÚĞèÒªÓĞÊäÈëµÄÃüÁîÉÏ£¬Èç¹û²»È·¶¨ÃüÁîÊÇ·ñĞèÒªÊäÈë£¬ÓÃÈçÏÂ·½Ê½£º
-my $result = `some_questionable_command arg arg argh </dev/null`;   ### ÓÃbitÍ°×÷ÎªÊäÈë
+qx/ /  åŠŸèƒ½åŒä¸Šï¼Œæ„å³ä¸Šé¢ç¬¦å·çš„æ–‡å­—è¡¨ç¤ºï¼ŒåŒºåˆ«æ˜¯å¼•ç”¨å†…å®¹çš„ç¿»è¯‘ç±»ä¼¼å•å¼•å·ï¼Œdelimiterçš„é€‰æ‹©ç±»ä¼¼qw//
+åå¼•å·ä¸è¦ä½¿ç”¨åœ¨éœ€è¦æœ‰è¾“å…¥çš„å‘½ä»¤ä¸Šï¼Œå¦‚æœä¸ç¡®å®šå‘½ä»¤æ˜¯å¦éœ€è¦è¾“å…¥ï¼Œç”¨å¦‚ä¸‹æ–¹å¼ï¼š
+my $result = `some_questionable_command arg arg argh </dev/null`;   ### ç”¨bitæ¡¶ä½œä¸ºè¾“å…¥
 
 
 
 system('$cmd')
-system·µ»Ø³ÌĞòÔËĞĞ×´Ì¬£¬systemÏÈ×öÒ»¸öforkÔÚexec£¬¼´ÔÚ×Ó½ø³ÌÀïÃæÔËĞĞ$cmd ³ÌĞò
+systemè¿”å›ç¨‹åºè¿è¡ŒçŠ¶æ€ï¼Œsystemå…ˆåšä¸€ä¸ªforkåœ¨execï¼Œå³åœ¨å­è¿›ç¨‹é‡Œé¢è¿è¡Œ$cmd ç¨‹åº
 @args = ("command", "arg1", "arg2")
 system(@args) == 0 or die "system @args failed:$?"
 system "long_running-command with parameters &";
-shell½ÓÊÕµ½long_running-commandºó·ÅºóÌ¨ÔËĞĞ£¬Êµ¼ÊÉÏlong_running-commandÏàµ±ÓÚËï½ø³Ì£¬¸úperl½Å±¾Ã»Ö±½Ó½»»¥
+shellæ¥æ”¶åˆ°long_running-commandåæ”¾åå°è¿è¡Œï¼Œå®é™…ä¸Šlong_running-commandç›¸å½“äºå­™è¿›ç¨‹ï¼Œè·Ÿperlè„šæœ¬æ²¡ç›´æ¥äº¤äº’
 my $tarfile = 'something*wicked.tar';
 my @dirs = qw(fred|flintstone <barney&rubble> betty );
 system 'tar', 'cvf', $tarfile, @dirs;
-ÓÃÕâÖÖ²ÎÊı·Ö¿ªµÄ·½·¨µ÷ÓÃ£¬²»»áÆô¶¯shell£¬´«¸øshellµÄ*£¬|ºÍ>ÕâÀàÔª×Ö·û¾ÍÊ§È¥ÁËÒâÒå£¬Í¬Ê±ÊÇÈ¥shellÉèÖÃµÄIOÖØ¶¨Ïò£¬ºóÌ¨³ÌĞòµÈ¹¦ÄÜ
+ç”¨è¿™ç§å‚æ•°åˆ†å¼€çš„æ–¹æ³•è°ƒç”¨ï¼Œä¸ä¼šå¯åŠ¨shellï¼Œä¼ ç»™shellçš„*ï¼Œ|å’Œ>è¿™ç±»å…ƒå­—ç¬¦å°±å¤±å»äº†æ„ä¹‰ï¼ŒåŒæ—¶æ˜¯å»shellè®¾ç½®çš„IOé‡å®šå‘ï¼Œåå°ç¨‹åºç­‰åŠŸèƒ½
 !system 'rm -rf files_to_delete' or die 'something went wrong';
-³£¼ûÓÃ·¨£¬ÒòÎªshellÔÚ³É¹¦ºó·µ»Ø0
+å¸¸è§ç”¨æ³•ï¼Œå› ä¸ºshellåœ¨æˆåŠŸåè¿”å›0
 
-exec º¯Êı½áÊøµ±Ç°³ÌĞòµÄÔËĞĞ²¢ÇÒÖ´ĞĞÒ»ÌõÍâ²¿ÃüÁî²¢ÇÒ¾ö²»·µ»Ø£¨ÕâÖÖµ÷ÓÃÍâ²¿º¯ÊıµÄ°ì·¨ÓÃµÄ²»¶à£©
-µ±Ç°ÔËĞĞµÄperl½ø³ÌÖ´ĞĞexecºóÃæµÄÃüÁî£¬´ËÊ±ÒÑ¾­Ìø³öÔËĞĞµÄperl½Å±¾£¬ËùÒÔÃ»ÓĞperlµÄ·µ»ØÁË
-ÓÃÓÚ¸øÒªÖ´ĞĞµÄÕæÕı³ÌĞòÉèÖÃ»·¾³±äÁ¿£¬IO½Ó¿ÚµÈ
+exec å‡½æ•°ç»“æŸå½“å‰ç¨‹åºçš„è¿è¡Œå¹¶ä¸”æ‰§è¡Œä¸€æ¡å¤–éƒ¨å‘½ä»¤å¹¶ä¸”å†³ä¸è¿”å›ï¼ˆè¿™ç§è°ƒç”¨å¤–éƒ¨å‡½æ•°çš„åŠæ³•ç”¨çš„ä¸å¤šï¼‰
+å½“å‰è¿è¡Œçš„perlè¿›ç¨‹æ‰§è¡Œexecåé¢çš„å‘½ä»¤ï¼Œæ­¤æ—¶å·²ç»è·³å‡ºè¿è¡Œçš„perlè„šæœ¬ï¼Œæ‰€ä»¥æ²¡æœ‰perlçš„è¿”å›äº†
+ç”¨äºç»™è¦æ‰§è¡Œçš„çœŸæ­£ç¨‹åºè®¾ç½®ç¯å¢ƒå˜é‡ï¼ŒIOæ¥å£ç­‰
 exec 'bedrock', '-o', 'args1', @ARGV;
 
-8¡¢°´¶ººÅ¸ñÊ½ÏÔÊ¾Ç®Êı
+8ã€æŒ‰é€—å·æ ¼å¼æ˜¾ç¤ºé’±æ•°
 
 sub big_money {
-	my $number = sprintf "%.2f", shift @_;  ### Ö»½ÓÊÜÒ»¸ö²ÎÊı£¬¾«È·µ½·Ö£¨Ğ¡ÊıµãºóµÚ¶şÎ»£©
+	my $number = sprintf "%.2f", shift @_;  ### åªæ¥å—ä¸€ä¸ªå‚æ•°ï¼Œç²¾ç¡®åˆ°åˆ†ï¼ˆå°æ•°ç‚¹åç¬¬äºŒä½ï¼‰
 	# Add one comma each time through the do-nothing loop
-	1 while $number =~ s/^(-?\d+)(\d\d\d)/$1,$2/;  ###  Ã¿´Î´ÓºóÃæÈ¡Èı¸öÊı×Ö£¬¼ÓÉÏÒ»¸ö¶ººÅ
+	1 while $number =~ s/^(-?\d+)(\d\d\d)/$1,$2/;  ###  æ¯æ¬¡ä»åé¢å–ä¸‰ä¸ªæ•°å­—ï¼ŒåŠ ä¸Šä¸€ä¸ªé€—å·
 	# Put the dollar sign in the right place
-	$number =~ s/^(-?)/$1\$/;       ####  ÔÚ·ûºÅÖ®ºó¼ÓÒ»¸ö$
+	$number =~ s/^(-?)/$1\$/;       ####  åœ¨ç¬¦å·ä¹‹ååŠ ä¸€ä¸ª$
 	$number;
 }
-###  ÒòÎªÊÇ´ÓºóÍùÇ°ÕÒ£¬ËùÒÔÓÃwhile¶ø²»ÄÜÓÃ/g½øĞĞÈ«¾ÖÌæ»»
+###  å› ä¸ºæ˜¯ä»åå¾€å‰æ‰¾ï¼Œæ‰€ä»¥ç”¨whileè€Œä¸èƒ½ç”¨/gè¿›è¡Œå…¨å±€æ›¿æ¢
 
-my @a = $str =~ /\w{2}/g;   ### ½«$str·Ö²ğ³ÉÁ½¸ö×ÖÄ¸ÎªÒ»¸öµ¥Î»µÄlist
-
-
+my @a = $str =~ /\w{2}/g;   ### å°†$stråˆ†æ‹†æˆä¸¤ä¸ªå­—æ¯ä¸ºä¸€ä¸ªå•ä½çš„list
 
 
-9¡¢ÖÇÄÜÆ¥Åä:   ~~
-use 5.010001;  ### °æ±¾ÒÔÉÏ
 
-say "I found a key matching 'Fred'" if %names ~~ /Fred/;   ####  Ñ°ÕÒhashÖĞÊÇ·ñÓĞkeyÎªFred
-say "I found a key matching 'Fred'" if /Fred/ ~~ %names;   ###  ÁíÒ»ÖÖĞ´·¨
-µÈÍ¬ÓÚ
+
+9ã€æ™ºèƒ½åŒ¹é…:   ~~
+use 5.010001;  ### ç‰ˆæœ¬ä»¥ä¸Š
+
+say "I found a key matching 'Fred'" if %names ~~ /Fred/;   ####  å¯»æ‰¾hashä¸­æ˜¯å¦æœ‰keyä¸ºFred
+say "I found a key matching 'Fred'" if /Fred/ ~~ %names;   ###  å¦ä¸€ç§å†™æ³•
+ç­‰åŒäº
 my $flag = 0;
 foreach my $key ( keys %names ) {
 	next unless $key =~ /Fred/;
@@ -1269,8 +1269,8 @@ foreach my $key ( keys %names ) {
 }
 print "I found a key matching 'Fred'. It was $flag\n" if $flag;
 
-say "The arrays have the same elements!" if @names1 ~~ @names2;   ###  ¶Ô±ÈÁ½¸öÁĞ±íÊÇ·ñÍêÈ«ÏàÍ¬
-µÈÍ¬ÓÚ
+say "The arrays have the same elements!" if @names1 ~~ @names2;   ###  å¯¹æ¯”ä¸¤ä¸ªåˆ—è¡¨æ˜¯å¦å®Œå…¨ç›¸åŒ
+ç­‰åŒäº
 my $equal = 0;
 foreach my $index ( 0 .. $#names1 ) {
 	last unless $names1[$index] eq $names2[$index];
@@ -1280,24 +1280,24 @@ print "The arrays have the same elements!\n"
 if $equal == @names1;
 
 say "The result [$result] is one of the input values (@nums)" if $result ~~ @nums;  
-###  ¼ì²éÊÇ·ñÎªÁĞ±íÖĞÒ»¸öÔªËØ
-ÖÇÄÜÆ¥ÅäµÄ³£¼ûÓÃ·¨
+###  æ£€æŸ¥æ˜¯å¦ä¸ºåˆ—è¡¨ä¸­ä¸€ä¸ªå…ƒç´ 
+æ™ºèƒ½åŒ¹é…çš„å¸¸è§ç”¨æ³•
 Example							Type of match
 %a ~~ %b			 			hash keys identical
 %a ~~ @b or @a ~~ %b 			at least one key in %a is in @b
-%a ~~ /Fred/ or /Fred/ ~~ %b 	at least one key matches pattern  ### ÒıºÅ×Ö·û´®Æ¥ÅäÊ±£¬×Ö·û´®±ØĞëÔÚÇ°Ãæ
+%a ~~ /Fred/ or /Fred/ ~~ %b 	at least one key matches pattern  ### å¼•å·å­—ç¬¦ä¸²åŒ¹é…æ—¶ï¼Œå­—ç¬¦ä¸²å¿…é¡»åœ¨å‰é¢
 'Fred' ~~ %a 					exists $a{Fred}
 @a ~~ @b 						arrays are the same
 @a ~~ /Fred/ 					at least one element in @a matches pattern  
-### µÚ¶şÏî¸ÄÎªÒıºÅ×Ö·û´®Ôò²»³É¹¦Æ¥Åä
+### ç¬¬äºŒé¡¹æ”¹ä¸ºå¼•å·å­—ç¬¦ä¸²åˆ™ä¸æˆåŠŸåŒ¹é…
 $name ~~ undef 					$name is not defined
 $name ~~ /Fred/ 				pattern match
-123 ~~ ¡¯123.0¡¯					numeric equality with ¡°numish¡± string ###  Êı×ÖÀà±È½Ï£¬Êı×Ö±ØĞëÔÚÇ°
-¡¯Fred¡¯ ~~ ¡¯Fred¡¯ 				string equality
+123 ~~ â€™123.0â€™					numeric equality with â€œnumishâ€ string ###  æ•°å­—ç±»æ¯”è¾ƒï¼Œæ•°å­—å¿…é¡»åœ¨å‰
+â€™Fredâ€™ ~~ â€™Fredâ€™ 				string equality
 123 ~~ 456 						numeric equality
 
 
-10¡¢givenÓï¾ä
+10ã€givenè¯­å¥
 use 5.010001;
 given ( $ARGV[0] ) {
 	when ( 'Fred' ) { say 'Name is Fred' }
@@ -1305,10 +1305,10 @@ given ( $ARGV[0] ) {
 	when ( /\AFred/ ) { say 'Name starts with Fred' }
 	default { say "I don't see a Fred" }
 }
-ÀàËÆCÓïÑÔµÄswitchÓï¾ä£¬²»¹ıÖĞ¼äµÄÄ¬ÈÏÆ¥ÅäÊÇÖÇÄÜÆ¥Åä£¬Ä¬ÈÏ×Ô´øbreak£¬Æ¥ÅäÒ»¸ö¾Í²»Ö´ĞĞÊ£ÏÂµÄÆ¥Åä
+ç±»ä¼¼Cè¯­è¨€çš„switchè¯­å¥ï¼Œä¸è¿‡ä¸­é—´çš„é»˜è®¤åŒ¹é…æ˜¯æ™ºèƒ½åŒ¹é…ï¼Œé»˜è®¤è‡ªå¸¦breakï¼ŒåŒ¹é…ä¸€ä¸ªå°±ä¸æ‰§è¡Œå‰©ä¸‹çš„åŒ¹é…
 when ( $_ ~~ /fred/i ) { say 'Name has fred in it'; continue }
-¼ÓÒ»¸öcontinue¿ÉÒÔÔÚÆ¥Åä³É¹¦ºó¼ÌĞøÆ¥ÅäÖ´ĞĞ½ÓÏÂÀ´µÄwhen
-whenÀïÃæ¿ÉÒÔÓÃdumb comparison£¬¼´Õı³£µÄ==£¬>£¬<£¬!»òÕß=~£¬Ò²¿ÉÒÔ·ÅÈësubroutineµÄ·µ»Ø½á¹û
+åŠ ä¸€ä¸ªcontinueå¯ä»¥åœ¨åŒ¹é…æˆåŠŸåç»§ç»­åŒ¹é…æ‰§è¡Œæ¥ä¸‹æ¥çš„when
+whené‡Œé¢å¯ä»¥ç”¨dumb comparisonï¼Œå³æ­£å¸¸çš„==ï¼Œ>ï¼Œ<ï¼Œ!æˆ–è€…=~ï¼Œä¹Ÿå¯ä»¥æ”¾å…¥subroutineçš„è¿”å›ç»“æœ
 
 use 5.010001;
 foreach ( @names ) { # don't use a named variable!
@@ -1318,68 +1318,68 @@ foreach ( @names ) { # don't use a named variable!
 	when ( 'Fred' ) { say 'Name is Fred'; }
 	default { say "I don't see a Fred" }
 }
-¶ÔÓÚ¶à¸ö±äÁ¿µÄÅĞ¶Ï£¬Ê¡ÂÔµôgiven£¬Ö±½ÓÓÃforeach½«ÅĞ¶Ï±äÁ¿·ÅÈë$_
+å¯¹äºå¤šä¸ªå˜é‡çš„åˆ¤æ–­ï¼Œçœç•¥æ‰givenï¼Œç›´æ¥ç”¨foreachå°†åˆ¤æ–­å˜é‡æ”¾å…¥$_
 
 
-11¡¢perlÀïÃæµÄ¶à½ø³Ì²¢·¢£¬Ê¹ÓÃopen£¬²¢ÔÚÎÄ¼şÃûÇ°Ãæ»òÕßºóÃæ¼Ó¹ÜµÀ·û|
-open DATE, 'date|' or die "cannot pipe from date: $!";       ####    dateµÄ½á¹ûÁ´½Óµ½perlµÄ±ê×¼ÊäÈë
-open MAIL, '|mail merlyn' or die "cannot pipe to mail: $!";   ####   perlµÄÄÚÈİÊä³öµ½mail
-Õ¼Î»·û±íÃ÷ºóÃæÃüÁîËùÔÚµÄÎ»ÖÃ
+11ã€perlé‡Œé¢çš„å¤šè¿›ç¨‹å¹¶å‘ï¼Œä½¿ç”¨openï¼Œå¹¶åœ¨æ–‡ä»¶åå‰é¢æˆ–è€…åé¢åŠ ç®¡é“ç¬¦|
+open DATE, 'date|' or die "cannot pipe from date: $!";       ####    dateçš„ç»“æœé“¾æ¥åˆ°perlçš„æ ‡å‡†è¾“å…¥
+open MAIL, '|mail merlyn' or die "cannot pipe to mail: $!";   ####   perlçš„å†…å®¹è¾“å‡ºåˆ°mail
+å ä½ç¬¦è¡¨æ˜åé¢å‘½ä»¤æ‰€åœ¨çš„ä½ç½®
 open my $date_fh, '-|', 'date' or die "cannot pipe from date: $!";    
-###  Ïë¶ÁÈëÎÄ¼ş¾ä±ú£¬¼´°ÑdateµÄ½á¹û×÷ÎªÊäÈë
+###  æƒ³è¯»å…¥æ–‡ä»¶å¥æŸ„ï¼Œå³æŠŠdateçš„ç»“æœä½œä¸ºè¾“å…¥
 open my $mail_fh, '|-', 'mail merlyn' or die "cannot pipe to mail: $!"; 
- ### ÏëĞ´ÈëÎÄ¼ş¾ä±ú£¬¼´°ÑperlµÄÄÚÈİÊä³öµ½mail
+ ### æƒ³å†™å…¥æ–‡ä»¶å¥æŸ„ï¼Œå³æŠŠperlçš„å†…å®¹è¾“å‡ºåˆ°mail
  
- open my $pipe, '-|', $command or die "cannot open filehandle: $!";  ### ´ÓÒ»¸öÍâ²¿ÃüÁîÀïÊäÈë
+ open my $pipe, '-|', $command or die "cannot open filehandle: $!";  ### ä»ä¸€ä¸ªå¤–éƒ¨å‘½ä»¤é‡Œè¾“å…¥
  while(<$pipe>) {
 	print "Read: $_";
  }
- ÓÃopen²¢·¢µÄºÃ´¦ÊÇ×Ó½ø³ÌÒª´¦ÀíºÜ¾ÃÊ±£¬¿ÉÒÔµÃµ½Ò»¸ö½á¹û¾ÍÁ¢¼´ÓÃÊ£ÏÂµÄperl½Å±¾´¦Àí£¬¶øÏë·´ÒıºÅÄÇÖÖÖ»ÄÜµÈ×Ó½ø³Ì½áÊø´¦Àí²ÅÄÜÔËĞĞÊ£ÏÂµÄperl½Å±¾
+ ç”¨openå¹¶å‘çš„å¥½å¤„æ˜¯å­è¿›ç¨‹è¦å¤„ç†å¾ˆä¹…æ—¶ï¼Œå¯ä»¥å¾—åˆ°ä¸€ä¸ªç»“æœå°±ç«‹å³ç”¨å‰©ä¸‹çš„perlè„šæœ¬å¤„ç†ï¼Œè€Œæƒ³åå¼•å·é‚£ç§åªèƒ½ç­‰å­è¿›ç¨‹ç»“æŸå¤„ç†æ‰èƒ½è¿è¡Œå‰©ä¸‹çš„perlè„šæœ¬
  
  
  
-12¡¢slices£ºÏëµÃµ½ÁĞ±íÖĞ¼«¸ö±ğÔªËØ£¬ÆäËûÔªËØ¶¼²»Ê¹ÓÃµÄÊ±ºò
-Ê¹ÓÃ·½·¨£ºÔÚÁĞ±íÍâÎ§¼ÓÉÏĞ¡À¨ºÅ£¬²¢ÓÃÏÂ±êË÷Òı
+12ã€slicesï¼šæƒ³å¾—åˆ°åˆ—è¡¨ä¸­æä¸ªåˆ«å…ƒç´ ï¼Œå…¶ä»–å…ƒç´ éƒ½ä¸ä½¿ç”¨çš„æ—¶å€™
+ä½¿ç”¨æ–¹æ³•ï¼šåœ¨åˆ—è¡¨å¤–å›´åŠ ä¸Šå°æ‹¬å·ï¼Œå¹¶ç”¨ä¸‹æ ‡ç´¢å¼•
 my $mtime = (stat $some_file)[9];    
-###  µÃµ½stat·µ»ØµÄ¹ØÓÚÄ³¸öÎÄ¼şµÄĞŞ¸ÄÊ±¼äµÄÄÚÈİ£¬ĞŞ¸ÄÊ±¼äÔÚ·µ»Ø½á¹ûlistµÄµÚ¾ÅÏî
+###  å¾—åˆ°statè¿”å›çš„å…³äºæŸä¸ªæ–‡ä»¶çš„ä¿®æ”¹æ—¶é—´çš„å†…å®¹ï¼Œä¿®æ”¹æ—¶é—´åœ¨è¿”å›ç»“æœlistçš„ç¬¬ä¹é¡¹
 while(<IN>) {
-	my $num_5 = (split /:/)[4];    ###  »ñµÃsplit³öÀ´ÔªËØµÄµÚËÄÏî
+	my $num_5 = (split /:/)[4];    ###  è·å¾—splitå‡ºæ¥å…ƒç´ çš„ç¬¬å››é¡¹
 }
-my ($num_3, $num5) = (split /:/)[2, 4];       ### ÁĞ±íÉÏÏÂÎÄÖĞ»ñµÃÁ½¸öÔªËØ
-my($first, $last) = (sort @names)[0, -1];     ###  »ñµÃµÚÒ»¸öºÍ×îºóÒ»¸öÔªËØ
-my @numbers = ( @names )[ 9, 0, 2, 1, 0 ];   ###  ÏÂ±ê¿ÉÒÔÊÇÈÎÒâË³Ğò£¬Ò²¿ÉÒÔÖØ¸´£¬ÓÃarray slice¸ü·½±ã
+my ($num_3, $num5) = (split /:/)[2, 4];       ### åˆ—è¡¨ä¸Šä¸‹æ–‡ä¸­è·å¾—ä¸¤ä¸ªå…ƒç´ 
+my($first, $last) = (sort @names)[0, -1];     ###  è·å¾—ç¬¬ä¸€ä¸ªå’Œæœ€åä¸€ä¸ªå…ƒç´ 
+my @numbers = ( @names )[ 9, 0, 2, 1, 0 ];   ###  ä¸‹æ ‡å¯ä»¥æ˜¯ä»»æ„é¡ºåºï¼Œä¹Ÿå¯ä»¥é‡å¤ï¼Œç”¨array sliceæ›´æ–¹ä¾¿
 
-array slice£ºÓëÊı×éÖĞ»ñµÃ¸ö±ğÔªËØ£¬ÓëÉÏÃæÄÇ¸ö´ÓÁĞ±íÖĞ»ñµÃÄÚÈİÔÚÓï·¨ÒâË¼ÉÏÓĞ±¾ÖÊÇø±ğ£¬Êµ¼Ê½á¹ûÃ»Çø±ğ
+array sliceï¼šä¸æ•°ç»„ä¸­è·å¾—ä¸ªåˆ«å…ƒç´ ï¼Œä¸ä¸Šé¢é‚£ä¸ªä»åˆ—è¡¨ä¸­è·å¾—å†…å®¹åœ¨è¯­æ³•æ„æ€ä¸Šæœ‰æœ¬è´¨åŒºåˆ«ï¼Œå®é™…ç»“æœæ²¡åŒºåˆ«
 my @names = qw{ zero one two three four five six seven eight nine };
-print "Bedrock @names[ 9, 0, 2, 1, 0 ]\n";    ####  ·µ»ØlistÀï¶ÔÓ¦µÄÓ¢ÎÄ×Ö·û´®£¬¿Õ¸ñ·Ö¿ª
-@items[2, 3] = ($new_address, $new_home_phone);   ###   ¸Ä±älistÀïÃæµÄÁ½¸öÔªËØ
+print "Bedrock @names[ 9, 0, 2, 1, 0 ]\n";    ####  è¿”å›listé‡Œå¯¹åº”çš„è‹±æ–‡å­—ç¬¦ä¸²ï¼Œç©ºæ ¼åˆ†å¼€
+@items[2, 3] = ($new_address, $new_home_phone);   ###   æ”¹å˜listé‡Œé¢çš„ä¸¤ä¸ªå…ƒç´ 
 
-hash slice£ºµÃµ½hashÖĞ¸ö±ğÔªËØµÄÖµ£¬ÆäËû¶¼²»ĞèÒª
-my @three_scores = ($score{"barney"}, $score{"fred"}, $score{"dino"});  ####  Ö±½ÓÀûÓÃkeyµÃµ½Öµ
-my @three_scores = @score{ qw/ barney fred dino/ };   ###  hash slice ×¢Òâµ½Ç°Ãæ»¹ÊÇ@·ûºÅ
+hash sliceï¼šå¾—åˆ°hashä¸­ä¸ªåˆ«å…ƒç´ çš„å€¼ï¼Œå…¶ä»–éƒ½ä¸éœ€è¦
+my @three_scores = ($score{"barney"}, $score{"fred"}, $score{"dino"});  ####  ç›´æ¥åˆ©ç”¨keyå¾—åˆ°å€¼
+my @three_scores = @score{ qw/ barney fred dino/ };   ###  hash slice æ³¨æ„åˆ°å‰é¢è¿˜æ˜¯@ç¬¦å·
 my @players = qw/ barney fred dino /;
 my @bowling_scores = (195, 205, 30);
-@score{ @players } = @bowling_scores;        ###   ¸ù¾İhashÀïÃæµÄ¼ü¸Ä±äÆäÖĞ¼¸¸öÔªËØµÄÖµ
+@score{ @players } = @bowling_scores;        ###   æ ¹æ®hashé‡Œé¢çš„é”®æ”¹å˜å…¶ä¸­å‡ ä¸ªå…ƒç´ çš„å€¼
 print "Tonight's players were: @players\n";
-print "Their scores were: @score{@players}\n";   ###  Ã¿¸öÖµÓÃ¿Õ¸ñ·Ö¿ª
+print "Their scores were: @score{@players}\n";   ###  æ¯ä¸ªå€¼ç”¨ç©ºæ ¼åˆ†å¼€
 
 
-13¡¢Òì³£´¦Àíeval£º·¢ÏÖÒ»¸öfatal errorÊ±·µ»Øundef²¢ÔÚ$@ ÖĞÉèÖÃ´íÎóĞÅÏ¢£¬Ã»ÓĞ´íÎóÊ±$@ Îªundef£¬eval·µ»ØÕı³£Ö´ĞĞµÄ×îºóÒ»¾ä½á¹û¡£±ØĞëÓÃ»¨À¨ºÅÀ¨ÆğÀ´£¬ÒòÎªÊÇÒ»¸öÍêÕûµÄexpression£¬ËùÒÔÔÚµ¥¶À³É¾äµÄÊ±ºòÒª¼Ó·ÖºÅ;
-eval { $barney = $fred / $dino };   ###  µ±Óöµ½$dinoÎª0µÄÒì³£Ê±£¬Ìø¹ıeval°üÎ§µÄ´úÂë¿é£¬¼ÌĞøÖ´ĞĞºóÃæµÄ´úÂë
-my $barney = eval { $fred / $dino } // 'NaN';  ###  ¸üÓĞĞ§µÄĞ´·¨£¬µ±$dinoÎª0Ê±£¬eval·µ»Øundef
+13ã€å¼‚å¸¸å¤„ç†evalï¼šå‘ç°ä¸€ä¸ªfatal erroræ—¶è¿”å›undefå¹¶åœ¨$@ ä¸­è®¾ç½®é”™è¯¯ä¿¡æ¯ï¼Œæ²¡æœ‰é”™è¯¯æ—¶$@ ä¸ºundefï¼Œevalè¿”å›æ­£å¸¸æ‰§è¡Œçš„æœ€åä¸€å¥ç»“æœã€‚å¿…é¡»ç”¨èŠ±æ‹¬å·æ‹¬èµ·æ¥ï¼Œå› ä¸ºæ˜¯ä¸€ä¸ªå®Œæ•´çš„expressionï¼Œæ‰€ä»¥åœ¨å•ç‹¬æˆå¥çš„æ—¶å€™è¦åŠ åˆ†å·;
+eval { $barney = $fred / $dino };   ###  å½“é‡åˆ°$dinoä¸º0çš„å¼‚å¸¸æ—¶ï¼Œè·³è¿‡evalåŒ…å›´çš„ä»£ç å—ï¼Œç»§ç»­æ‰§è¡Œåé¢çš„ä»£ç 
+my $barney = eval { $fred / $dino } // 'NaN';  ###  æ›´æœ‰æ•ˆçš„å†™æ³•ï¼Œå½“$dinoä¸º0æ—¶ï¼Œevalè¿”å›undef
 print "I couldn't divide by \$dino: $@" if $@;
-unless( eval { $fred / $dino } ) {         ###  ÏÖÊµÖĞ¸üÒ»°ãµÄÓÃ·¨
+unless( eval { $fred / $dino } ) {         ###  ç°å®ä¸­æ›´ä¸€èˆ¬çš„ç”¨æ³•
 	print "I couldn't divide by \$dino: $@" if $@;
 }
 
-eval²»ÄÜ´¦ÀíËÄÖÖ´íÎó£º
-1¡¢perl´úÂëÓï·¨´íÎó
-2¡¢ÄÚ´æĞ¹Â¶µÈ´íÎó£¬ÕâÖÖ´íÎóÖ±½Ó¹Øµôperl½âÊÍÆ÷
-3¡¢¾¯¸æ£¬-w»òÕßuse warningsÉèÖÃµÄ
-4¡¢exitÍË³öÕû¸öperl³ÌĞò
+evalä¸èƒ½å¤„ç†å››ç§é”™è¯¯ï¼š
+1ã€perlä»£ç è¯­æ³•é”™è¯¯
+2ã€å†…å­˜æ³„éœ²ç­‰é”™è¯¯ï¼Œè¿™ç§é”™è¯¯ç›´æ¥å…³æ‰perlè§£é‡Šå™¨
+3ã€è­¦å‘Šï¼Œ-wæˆ–è€…use warningsè®¾ç½®çš„
+4ã€exité€€å‡ºæ•´ä¸ªperlç¨‹åº
 
 {
-local $@; # don't stomp on higher level errors  ÏŞÖÆ$@µÄ·¶Î§ÔÚÕâ¸öblockÄÚ£¬²»Ó°ÏìÉÏ²ãµÄeval
+local $@; # don't stomp on higher level errors  é™åˆ¶$@çš„èŒƒå›´åœ¨è¿™ä¸ªblockå†…ï¼Œä¸å½±å“ä¸Šå±‚çš„eval
 	eval {
 		...;
 		die "An unexpected exception message" if $unexpected;
@@ -1394,11 +1394,11 @@ local $@; # don't stomp on higher level errors  ÏŞÖÆ$@µÄ·¶Î§ÔÚÕâ¸öblockÄÚ£¬²»Ó°Ï
 	}
 }
 
-###    Á½¸ö eval ºÃÇø·ÖµÄ²î±ğÊÇÒ»¸ö½Ó{}block¿é£¬Ò»¸ö½Ó×Ö·û´®±í´ïÊ½
+###    ä¸¤ä¸ª eval å¥½åŒºåˆ†çš„å·®åˆ«æ˜¯ä¸€ä¸ªæ¥{}blockå—ï¼Œä¸€ä¸ªæ¥å­—ç¬¦ä¸²è¡¨è¾¾å¼
 
 
-14¡¢ eval £ºÖ´ĞĞÒ»¸östring expressionÄÚÈİ£¬¶ø²»ÊÇÒ»¸ö{}block¿éÀïÃæµÄ¾ä×Ó£¬·µ»Ø×îºóÒ»¸öÖµ
-´ËevalµÄ²ÎÊıÊÇÒ»¸ö×Ö·û´®±í´ïÊ½£¬±í´ïÊ½ÄÚÈİÔÚÔËĞĞÊ±ÏÈ±àÒëÔÙÖ´ĞĞ
+14ã€ eval ï¼šæ‰§è¡Œä¸€ä¸ªstring expressionå†…å®¹ï¼Œè€Œä¸æ˜¯ä¸€ä¸ª{}blockå—é‡Œé¢çš„å¥å­ï¼Œè¿”å›æœ€åä¸€ä¸ªå€¼
+æ­¤evalçš„å‚æ•°æ˜¯ä¸€ä¸ªå­—ç¬¦ä¸²è¡¨è¾¾å¼ï¼Œè¡¨è¾¾å¼å†…å®¹åœ¨è¿è¡Œæ—¶å…ˆç¼–è¯‘å†æ‰§è¡Œ
 eval '$sum = 2 + 2';
 print "The sum is $sum\n";
 
@@ -1406,20 +1406,20 @@ for my $operator ( qw(+ - * /)) {
 	my $result = eval "2 $operator 2";
 	print "2 $operator 2 is $result\n";
 }
-####  ·µ»ØÇ°×º¼ÓËÄ¸öÔËËãµÄ½á¹û
-Èç¹û¸øµÄÄÇ¸ö¾ä×Ó²»ÄÜÖ´ĞĞ£¬ÔÚ$@ ÖĞÌî³ä´íÎóĞÅÏ¢
+####  è¿”å›å‰ç¼€åŠ å››ä¸ªè¿ç®—çš„ç»“æœ
+å¦‚æœç»™çš„é‚£ä¸ªå¥å­ä¸èƒ½æ‰§è¡Œï¼Œåœ¨$@ ä¸­å¡«å……é”™è¯¯ä¿¡æ¯
 
 print 'The quotient is ', eval '5 /', "\n";
 warn $@ if $@;
-evalµÄ½á¹ûÓĞ´íÎó£¬ÂíÉÏÊä³ö¾¯¸æ
+evalçš„ç»“æœæœ‰é”™è¯¯ï¼Œé©¬ä¸Šè¾“å‡ºè­¦å‘Š
 
-15¡¢ do µÄÓÃ·¨: °ÑËùÓĞÅĞ¶Ï·Åµ½Ò»Æğ
+15ã€ do çš„ç”¨æ³•: æŠŠæ‰€æœ‰åˆ¤æ–­æ”¾åˆ°ä¸€èµ·
 my $bowler = do {
 	if(... some condition ...) {'Mary Ann'}
 	elsif(... some condition ...) {'Ginger'}
 	else {'The Professor'}
-};              ###  ×¢Òâ´Ë´¦µÄ·ÖºÅ£¬ÀíÓÉÍ¬eval
-µÈ¼ÛÓÚ
+};              ###  æ³¨æ„æ­¤å¤„çš„åˆ†å·ï¼Œç†ç”±åŒeval
+ç­‰ä»·äº
 my $bowler;
 if(...some condition...) {
 	$bowler = 'Mary Ann';
@@ -1429,35 +1429,35 @@ if(...some condition...) {
 	$bowler = 'The Professor';
 }
 
-my $file_contents = do {            ####  °ÑÒ»¸öÎÄ¼şµÄËùÓĞÄÚÈİ¶ÁÈëµ½Ò»¸ö±äÁ¿ÄÚ
+my $file_contents = do {            ####  æŠŠä¸€ä¸ªæ–‡ä»¶çš„æ‰€æœ‰å†…å®¹è¯»å…¥åˆ°ä¸€ä¸ªå˜é‡å†…
 	local $/;
 	local @ARGV = ($filename);
 	<>
 };
 
 
-16¡¢The Schwartzian Transform
+16ã€The Schwartzian Transform
 my @output_data =
-	map { EXTRACTION },      ###  ³éÈ¡±È½Ï½á¹ûÖĞĞèÒªµÄ²¿·Ö
-	sort { COMPARISON }      ###  ÌáÈ¡ÒıÓÃÖĞµÄ±È½Ï²¿·Ö½øĞĞ±È½Ï
-	map [ CONSTRUCTION ],     ### ¹¹ÔìĞÂÒıÓÃ
+	map { EXTRACTION },      ###  æŠ½å–æ¯”è¾ƒç»“æœä¸­éœ€è¦çš„éƒ¨åˆ†
+	sort { COMPARISON }      ###  æå–å¼•ç”¨ä¸­çš„æ¯”è¾ƒéƒ¨åˆ†è¿›è¡Œæ¯”è¾ƒ
+	map [ CONSTRUCTION ],     ### æ„é€ æ–°å¼•ç”¨
 	@input_data;
 	
-####  Àı×Ó£º²»Çø·Ö´óĞ¡Ğ´µÄ×Ö·û´®ÅÅĞò
+####  ä¾‹å­ï¼šä¸åŒºåˆ†å¤§å°å†™çš„å­—ç¬¦ä¸²æ’åº
 my @output_data =
 	map $_->[0],
 	sort { $a->[1] cmp $b->[1] }
-	map [ $_, "\F$_" ], ### \F ÓÃÓÚ°ÑºóÃæËùÓĞ×Ö·ûÈ«²¿´óĞ´
+	map [ $_, "\F$_" ], ### \F ç”¨äºæŠŠåé¢æ‰€æœ‰å­—ç¬¦å…¨éƒ¨å¤§å†™
 	@input_data;
 
-###  ÓÃhash´úÌælist	
+###  ç”¨hashä»£æ›¿list	
 my @output_data =
 	map $_->{ORGINAL},
 	sort { $a->{FOLDED} cmp $b->{FOLDED} }
-	map { ORIGINAL => $_, FOLDED => "\F$_" },      ### Ê¹ÓÃhash´úÌæ£¬¹Ø¼ü×Ö´úÌæÏÂ±ê½øĞĞË÷Òı
+	map { ORIGINAL => $_, FOLDED => "\F$_" },      ### ä½¿ç”¨hashä»£æ›¿ï¼Œå…³é”®å­—ä»£æ›¿ä¸‹æ ‡è¿›è¡Œç´¢å¼•
 	@input_data;
 
-###  ¶à¸öÔªËØÅÅĞò
+###  å¤šä¸ªå…ƒç´ æ’åº
 my @output_data =
 	map $_->[0],
 	sort {
@@ -1467,7 +1467,7 @@ my @output_data =
 	map [ $_, lc, get_id($_), get_name($_) ],
 	@input_data;
 	
-map $_->{VALUE},      ### Ê¹ÓÃhashµÄĞ´·¨
+map $_->{VALUE},      ### ä½¿ç”¨hashçš„å†™æ³•
 	sort {
 		$a->{LOWER} cmp $b->{LOWER} or
 		$a->{ID} <=> $b->{ID} or

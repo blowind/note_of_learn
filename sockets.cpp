@@ -1,125 +1,125 @@
-int sockfd;          //  ÓÃÓÚ¼ÇÂ¼socket·µ»ØµÄ¶ÌID
-int listenfd, connfd;      // Í¬ÉÏ
+int sockfd;          //  ç”¨äºè®°å½•socketè¿”å›çš„çŸ­ID
+int listenfd, connfd;      // åŒä¸Š
 
-//Í¨ÓÃÌ×½Ó×ÖµØÖ·½á¹¹ 
+//é€šç”¨å¥—æ¥å­—åœ°å€ç»“æ„ 
 struct sockaddr {
 	uint8_t sa_len;
 	sa_family_t sa_family;   //  AF_XXX 
 	char sa_data[14];
 };
-// Ö÷ÒªÓÃÓÚÇ¿ÖÆµØÖ·×ª»»£¬ÀıÈç´«¸øbindº¯ÊıµÄµÚ¶ş¸ö²ÎÊı£¬¾ÍÒªÇ¿ÖÆ×ª»»³ÉÉÏÊöÀàĞÍ£¬·ñÔò±àÒëÆ÷»á¾¯¸æ
+// ä¸»è¦ç”¨äºå¼ºåˆ¶åœ°å€è½¬æ¢ï¼Œä¾‹å¦‚ä¼ ç»™bindå‡½æ•°çš„ç¬¬äºŒä¸ªå‚æ•°ï¼Œå°±è¦å¼ºåˆ¶è½¬æ¢æˆä¸Šè¿°ç±»å‹ï¼Œå¦åˆ™ç¼–è¯‘å™¨ä¼šè­¦å‘Š
 int bind(int, struct sockaddr *, socklen_t);
 
 struct in_addr {
 	in_addr_t s_addr;
 };
-struct sockaddr_in {  // ipv4Ì×½Ó×ÖµØÖ·½á¹¹
-	uint8_t sin_len;           // ½á¹¹Ìå³¤¶È£¬ÖµÎª16£¬²Î¼ûºóÃæ×Ö½Ú´óĞ¡  1×Ö½Ú
-	sa_family_t sin_family;         //  1×Ö½Ú
-	in_port_t sin_port;      // ¶Ë¿ÚºÅ   2×Ö½Ú
-	struct in_addr sin_addr;   //  ipv4µØÖ·  4×Ö½Ú
-	char sin_zero[8];     // ²»Ê¹ÓÃ        8×Ö½Ú
+struct sockaddr_in {  // ipv4å¥—æ¥å­—åœ°å€ç»“æ„
+	uint8_t sin_len;           // ç»“æ„ä½“é•¿åº¦ï¼Œå€¼ä¸º16ï¼Œå‚è§åé¢å­—èŠ‚å¤§å°  1å­—èŠ‚
+	sa_family_t sin_family;         //  1å­—èŠ‚
+	in_port_t sin_port;      // ç«¯å£å·   2å­—èŠ‚
+	struct in_addr sin_addr;   //  ipv4åœ°å€  4å­—èŠ‚
+	char sin_zero[8];     // ä¸ä½¿ç”¨        8å­—èŠ‚
 };
-struct sockaddr_in servaddr;     //  socketµØÖ·½á¹¹Ìå
+struct sockaddr_in servaddr;     //  socketåœ°å€ç»“æ„ä½“
 servaddr.sin_family = AF_INET;
-servaddr.sin_port = htons(13);        // ÉèÖÃ¶Ë¿ÚºÅ£¬×¢ÒâÒª°Ñ¶Ë¿ÚºÅ×ª»»³Ésocket¶ÔÓ¦¸ñÊ½
+servaddr.sin_port = htons(13);        // è®¾ç½®ç«¯å£å·ï¼Œæ³¨æ„è¦æŠŠç«¯å£å·è½¬æ¢æˆsocketå¯¹åº”æ ¼å¼
 
-// ÔÚ¿Í»§¶Ëargv[1]ÖĞ´æ´¢µÄµã·ÖÊ®½øÖÆÊıÍ¨¹ıinet_pton×ª»»ºó·ÅÈësin_addr£¬argv[1]ÀïÃæ´æ´¢µÄÊÇ·şÎñÆ÷µØÖ·
+// åœ¨å®¢æˆ·ç«¯argv[1]ä¸­å­˜å‚¨çš„ç‚¹åˆ†åè¿›åˆ¶æ•°é€šè¿‡inet_ptonè½¬æ¢åæ”¾å…¥sin_addrï¼Œargv[1]é‡Œé¢å­˜å‚¨çš„æ˜¯æœåŠ¡å™¨åœ°å€
 inet_pton(AF_INET, argv[1], &servaddr.sin_addr);   
-// ÔÚ·şÎñÆ÷¶Ë°Ñ×Ô¼ºµÄ½ÓÊÕµØÖ·ÉèÎªÈÎÒâµØÖ·£¬Ò»°ãÔÚ·şÎñÆ÷ÉÏÓĞ¶à¸öIPµØÖ·Ê±ÓĞÓÃ
+// åœ¨æœåŠ¡å™¨ç«¯æŠŠè‡ªå·±çš„æ¥æ”¶åœ°å€è®¾ä¸ºä»»æ„åœ°å€ï¼Œä¸€èˆ¬åœ¨æœåŠ¡å™¨ä¸Šæœ‰å¤šä¸ªIPåœ°å€æ—¶æœ‰ç”¨
 servaddr.sin_addr.s_addr = htonl(INADDR_ANY);       
 
 
-///      ¿Í»§¶ËÁ¬½Ó·şÎñÆ÷µÄÊµÀı
-//  AF_INETÖ¸Ã÷Ğ­Òé×å£¬SOCK_STREAMÖ¸Ã÷ÊÇ×Ö½ÚÁ÷
+///      å®¢æˆ·ç«¯è¿æ¥æœåŠ¡å™¨çš„å®ä¾‹
+//  AF_INETæŒ‡æ˜åè®®æ—ï¼ŒSOCK_STREAMæŒ‡æ˜æ˜¯å­—èŠ‚æµ
 if(sockfd = socket(AF_INET, SOCK_STREAM, 0) < 0) err_sys("socket error");
-// ¿Í»§¶ËÍ¨¹ıservaddrÖ¸Ã÷µÄÍêÕûIPºÍ¶Ë¿ÚºÅ½øĞĞÁ¬½Ó£¬µ×²ãÓĞÒ»¸öconnect×èÈûÔÙ»Ö¸´µÄ¹ı³Ì£¬»Ö¸´ºósockfdÒÑ¾­½¨Á¢Á¬½Ó
+// å®¢æˆ·ç«¯é€šè¿‡servaddræŒ‡æ˜çš„å®Œæ•´IPå’Œç«¯å£å·è¿›è¡Œè¿æ¥ï¼Œåº•å±‚æœ‰ä¸€ä¸ªconnecté˜»å¡å†æ¢å¤çš„è¿‡ç¨‹ï¼Œæ¢å¤åsockfdå·²ç»å»ºç«‹è¿æ¥
 connect(sockfd, (SA *)&servaddr, sizeof(servaddr));          
-n = read(sockfd, recvline, MAXLINE);    // ½«sockfdÄÚµÄÄÚÈİ¶ÁÈërecvline×Ö·ûÊı×é£¬·µ»ØÖµ±íÊ¾¶ÁÈëµÄ×Ö½Ú³¤¶È
-recvline[0] = 0;          // µÈ¼ÛÓÚÉèÖÃ'\0'Êı×é½áÊø·û
-fputs(recvline, stdout);   // ÔÚÆÁÄ»Êä³ö½á¹û
+n = read(sockfd, recvline, MAXLINE);    // å°†sockfdå†…çš„å†…å®¹è¯»å…¥recvlineå­—ç¬¦æ•°ç»„ï¼Œè¿”å›å€¼è¡¨ç¤ºè¯»å…¥çš„å­—èŠ‚é•¿åº¦
+recvline[0] = 0;          // ç­‰ä»·äºè®¾ç½®'\0'æ•°ç»„ç»“æŸç¬¦
+fputs(recvline, stdout);   // åœ¨å±å¹•è¾“å‡ºç»“æœ
 
 
-///   ·şÎñÆ÷¶Ë½øĞĞ³õÊ¼»¯µÈ´ıÁ¬½ÓµÄÊµÀı
+///   æœåŠ¡å™¨ç«¯è¿›è¡Œåˆå§‹åŒ–ç­‰å¾…è¿æ¥çš„å®ä¾‹
 listenfd = socket(AF_INET, SOCK_STREAM, 0);
 bind(listenfd, (SA *)&servaddr, sizeof(servaddr));  
 listen(listenfd, LISTENQ);
 while(true) {
 	connfd = accept(listenfd, (SA *)NULL, NULL);
-	ticks = time(NULL);   //  »ñµÃÒÔÃëÎªµ¥Î»µÄÊ±¼äÀÛ¼ÆÖµ
-	snprintf(buff, sizeof(buff), "%.24s\r\n", ctime(&ticks));  // ½øĞĞÒ»¶¨×ª»»ºó·ÅÈëbuffÊı×é
-	write(connfd, buff, strlen(buff));     // Í¨¹ısocket½øĞĞ·¢ËÍ
+	ticks = time(NULL);   //  è·å¾—ä»¥ç§’ä¸ºå•ä½çš„æ—¶é—´ç´¯è®¡å€¼
+	snprintf(buff, sizeof(buff), "%.24s\r\n", ctime(&ticks));  // è¿›è¡Œä¸€å®šè½¬æ¢åæ”¾å…¥buffæ•°ç»„
+	write(connfd, buff, strlen(buff));     // é€šè¿‡socketè¿›è¡Œå‘é€
 	close(connfd);
 }
 
-///   ¿Í»§¶Ë/·şÎñÆ÷Ä£Ê½³£ÓÃ»ù±¾º¯Êı
+///   å®¢æˆ·ç«¯/æœåŠ¡å™¨æ¨¡å¼å¸¸ç”¨åŸºæœ¬å‡½æ•°
 #include <sys/socket.h>
-int socket(int family, int type, int protocol);    //  ³É¹¦·µ»Ø·Ç¸ºÃèÊö·û£¬Ê§°Ü·µ»Ø-1
+int socket(int family, int type, int protocol);    //  æˆåŠŸè¿”å›éè´Ÿæè¿°ç¬¦ï¼Œå¤±è´¥è¿”å›-1
 
-// TCPÌ×½Ó×ÖÖĞ£¬µ÷ÓÃconnect»á¼¤»îTCPµÄÈıÂ·ÎÕÊÖ¹ı³Ì
+// TCPå¥—æ¥å­—ä¸­ï¼Œè°ƒç”¨connectä¼šæ¿€æ´»TCPçš„ä¸‰è·¯æ¡æ‰‹è¿‡ç¨‹
 int connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen);
 
-// °Ñ±¾µØĞ­ÒéµØÖ·¸³Óè¸øÒ»¸öÌ×½Ó×Ö
+// æŠŠæœ¬åœ°åè®®åœ°å€èµ‹äºˆç»™ä¸€ä¸ªå¥—æ¥å­—
 int bind(int sockfd, const struct sockaddr &myaddr, socklen_t addrlen);
 
-// ±äÖ÷¶¯Ì×½Ó×ÖÎª±»¶¯Ì×½Ó×Ö£¬Í¨³£µÄ¼àÌıÌ×½Ó×ÖÃèÊö·û
-int listen(int sockfd, int backlog);       // backlog±íÊ¾ÄÚºËÎªÏàÓ¦Ì×½Ó×ÖÅÅ¶ÓµÄ×î´óÁ¬½Ó¸öÊı
-// ÄÚºË¸øÃ¿Ò»¸ö¼àÌıµÄÌ×½Ó×ÖÎ¬»¤Á½¸ö¶ÓÁĞ£ºÎ´Íê³ÉÁ¬½Ó¶ÓÁĞ(ÊÕµ½¿Í»§¶ËSYN) ºÍ ÒÑÍê³ÉÁ¬½Ó¶ÓÁĞ(Íê³ÉÈı´ÎÎÕÊÖ)
+// å˜ä¸»åŠ¨å¥—æ¥å­—ä¸ºè¢«åŠ¨å¥—æ¥å­—ï¼Œé€šå¸¸çš„ç›‘å¬å¥—æ¥å­—æè¿°ç¬¦
+int listen(int sockfd, int backlog);       // backlogè¡¨ç¤ºå†…æ ¸ä¸ºç›¸åº”å¥—æ¥å­—æ’é˜Ÿçš„æœ€å¤§è¿æ¥ä¸ªæ•°
+// å†…æ ¸ç»™æ¯ä¸€ä¸ªç›‘å¬çš„å¥—æ¥å­—ç»´æŠ¤ä¸¤ä¸ªé˜Ÿåˆ—ï¼šæœªå®Œæˆè¿æ¥é˜Ÿåˆ—(æ”¶åˆ°å®¢æˆ·ç«¯SYN) å’Œ å·²å®Œæˆè¿æ¥é˜Ÿåˆ—(å®Œæˆä¸‰æ¬¡æ¡æ‰‹)
 
-//  TCP·şÎñÆ÷µ÷ÓÃ£¬´ÓÒÑÍê³É¶ÓÁĞ¶ÓÍ··µ»ØÏÂÒ»¸öÒÑÍê³ÉÁ¬½Ó
-//  Èç¹û³É¹¦·µ»Ø£¬ÆäÖµÎªÄÚºË×Ô¶¯Éú³ÉµÄÒ»¸öÈ«ĞÂµÄÃèÊö·û£¬´ú±íÓëËù·µ»Ø¿Í»§µÄTCPÁ¬½Ó£¬³ÉÎªÁ¬½ÓÌ×½Ó×ÖÃèÊö·û
-int accept(int sockfd, struct sockaddr *cliaddr, socklen_t *addrlen);//ºóÁ½¸ö²ÎÊıÓÃÓÚµÃµ½·µ»ØÖµ(¼´¿Í»§¶ËµÄsocket)
+//  TCPæœåŠ¡å™¨è°ƒç”¨ï¼Œä»å·²å®Œæˆé˜Ÿåˆ—é˜Ÿå¤´è¿”å›ä¸‹ä¸€ä¸ªå·²å®Œæˆè¿æ¥
+//  å¦‚æœæˆåŠŸè¿”å›ï¼Œå…¶å€¼ä¸ºå†…æ ¸è‡ªåŠ¨ç”Ÿæˆçš„ä¸€ä¸ªå…¨æ–°çš„æè¿°ç¬¦ï¼Œä»£è¡¨ä¸æ‰€è¿”å›å®¢æˆ·çš„TCPè¿æ¥ï¼Œæˆä¸ºè¿æ¥å¥—æ¥å­—æè¿°ç¬¦
+int accept(int sockfd, struct sockaddr *cliaddr, socklen_t *addrlen);//åä¸¤ä¸ªå‚æ•°ç”¨äºå¾—åˆ°è¿”å›å€¼(å³å®¢æˆ·ç«¯çš„socket)
 
-//  Ã»ÓĞbind»òÕßÉèÖÃ±¾µØ¶Ë¿ÚºÅÊ±£¬Í¨¹ı´Ëº¯ÊıµÃµ½ÄÚºË¸³ÓèµÄ±¾µØIPµØÖ·ºÍ¶Ë¿ÚºÅ
-int getsockname(int sockfd, struct sockaddr *localaddr, socklen_t *addrlen);   //ºóÁ½¸ö²ÎÊıÓÃÓÚµÃµ½·µ»ØÖµ
+//  æ²¡æœ‰bindæˆ–è€…è®¾ç½®æœ¬åœ°ç«¯å£å·æ—¶ï¼Œé€šè¿‡æ­¤å‡½æ•°å¾—åˆ°å†…æ ¸èµ‹äºˆçš„æœ¬åœ°IPåœ°å€å’Œç«¯å£å·
+int getsockname(int sockfd, struct sockaddr *localaddr, socklen_t *addrlen);   //åä¸¤ä¸ªå‚æ•°ç”¨äºå¾—åˆ°è¿”å›å€¼
 
-//  ·şÎñÆ÷execµÄÄ³¸öĞÂ³ÌĞò£¬»ñµÃ¿Í»§Éí·İµÄ·½Ê½
-int getpeername(int sockfd, struct sockaddr *peeraddr, socklen_t *addrlen);   //ºóÁ½¸ö²ÎÊıÓÃÓÚµÃµ½·µ»ØÖµ
+//  æœåŠ¡å™¨execçš„æŸä¸ªæ–°ç¨‹åºï¼Œè·å¾—å®¢æˆ·èº«ä»½çš„æ–¹å¼
+int getpeername(int sockfd, struct sockaddr *peeraddr, socklen_t *addrlen);   //åä¸¤ä¸ªå‚æ•°ç”¨äºå¾—åˆ°è¿”å›å€¼
 
-//  ´¦ÀíĞÅºÅµÄº¯Êı£¬µÚÒ»¸ö²ÎÊıÊÇĞÅºÅ£¬µÚ¶ş¸öÊÇÖ¸Ïòº¯ÊıµÄÖ¸Õë£¬·µ»ØÒ»¸öÖ¸Ïòº¯ÊıµÄÖ¸Õë
+//  å¤„ç†ä¿¡å·çš„å‡½æ•°ï¼Œç¬¬ä¸€ä¸ªå‚æ•°æ˜¯ä¿¡å·ï¼Œç¬¬äºŒä¸ªæ˜¯æŒ‡å‘å‡½æ•°çš„æŒ‡é’ˆï¼Œè¿”å›ä¸€ä¸ªæŒ‡å‘å‡½æ•°çš„æŒ‡é’ˆ
 void (*signal(int signo, void (*func)(int)))(int);
-//  ¼ò»¯ÉÏÃæº¯ÊıµÄÉùÃ÷
+//  ç®€åŒ–ä¸Šé¢å‡½æ•°çš„å£°æ˜
 typedef void Sigfunc(int);
 Sigfunc *signal(int signo, Sigfunc *func);
 
-//  waitÓÃÓÚ´¦Àí½©Ê¬½ø³Ì£¬¶¼·µ»ØÁ½¸öÖµ£»Èç¹ûµ÷ÓÃwaitÊ±Ã»ÓĞÒÑÖÕÖ¹µÄ×Ó½ø³Ìµ«ÓĞÔËĞĞµÄ×Ó½ø³Ì£¬Ôò×èÈûµÈ´ıµÚÒ»¸öÖÕÖ¹µÄ×Ó½ø³Ì
+//  waitç”¨äºå¤„ç†åƒµå°¸è¿›ç¨‹ï¼Œéƒ½è¿”å›ä¸¤ä¸ªå€¼ï¼›å¦‚æœè°ƒç”¨waitæ—¶æ²¡æœ‰å·²ç»ˆæ­¢çš„å­è¿›ç¨‹ä½†æœ‰è¿è¡Œçš„å­è¿›ç¨‹ï¼Œåˆ™é˜»å¡ç­‰å¾…ç¬¬ä¸€ä¸ªç»ˆæ­¢çš„å­è¿›ç¨‹
 #include <sys/wait.h>
-// statloc´æ´¢·µ»ØµÄ×Ó½ø³ÌÖÕÖ¹×´Ì¬
+// statlocå­˜å‚¨è¿”å›çš„å­è¿›ç¨‹ç»ˆæ­¢çŠ¶æ€
 pid_t wait(int *statloc);
-// waitpidµÄpid²ÎÊıÔÊĞíÎÒÃÇÖ¸¶¨ÏëµÈ´ıµÄ½ø³ÌID£¬Öµ-1±íÊ¾µÚÒ»¸öÖÕÖ¹µÄ×Ó½ø³Ì£¬·ÅÔÚwhileÑ­»·ÖĞÔòÑ­»·ÖÕÖ¹ËùÓĞµÄ×Ó½ø³Ì
+// waitpidçš„pidå‚æ•°å…è®¸æˆ‘ä»¬æŒ‡å®šæƒ³ç­‰å¾…çš„è¿›ç¨‹IDï¼Œå€¼-1è¡¨ç¤ºç¬¬ä¸€ä¸ªç»ˆæ­¢çš„å­è¿›ç¨‹ï¼Œæ”¾åœ¨whileå¾ªç¯ä¸­åˆ™å¾ªç¯ç»ˆæ­¢æ‰€æœ‰çš„å­è¿›ç¨‹
 pid_t waitpid(pid_t pid, int *statloc, int options);
 
 #include <unistd.h>
-int close(int sockfd);        //  ¹Ø±ÕÌ×½Ó×Ö£¬³É¹¦·µ»Ø0£¬³ö´í·µ»Ø-1
+int close(int sockfd);        //  å…³é—­å¥—æ¥å­—ï¼ŒæˆåŠŸè¿”å›0ï¼Œå‡ºé”™è¿”å›-1
 
 
-///   ×Ö½ÚĞò ´¦Àíº¯Êı
+///   å­—èŠ‚åº å¤„ç†å‡½æ•°
 #include <netinet/in.h>
 uint16_t htons(uint16_t host16bitvalue);
-uint32_t htonl(uint32_t host32bitvalue);         //  ¾ù·µ»Ø£ºÍøÂç×Ö½ÚĞòµÄÖµ(¼´´ó¶ËĞòÁĞ)
+uint32_t htonl(uint32_t host32bitvalue);         //  å‡è¿”å›ï¼šç½‘ç»œå­—èŠ‚åºçš„å€¼(å³å¤§ç«¯åºåˆ—)
 
 uint16_t ntohs(uint16_t net16bitvalue);      
-uint32_t ntohl(uint32_t net32bitvalue);          //  ¾ù·µ»Ø£ºÖ÷»ú×Ö½ÚĞòµÄÖµ(ÊÓÖ÷»úÊ¹ÓÃµÄ×Ö½ÚĞò¶ø¶¨)
+uint32_t ntohl(uint32_t net32bitvalue);          //  å‡è¿”å›ï¼šä¸»æœºå­—èŠ‚åºçš„å€¼(è§†ä¸»æœºä½¿ç”¨çš„å­—èŠ‚åºè€Œå®š)
 
 
-///   ascii×Ö·û´®ºÍÍøÂç×Ö½ÚĞòµÄ¶ş½øÖÆÖµÖ®¼äµÄ×ª»»
+///   asciiå­—ç¬¦ä¸²å’Œç½‘ç»œå­—èŠ‚åºçš„äºŒè¿›åˆ¶å€¼ä¹‹é—´çš„è½¬æ¢
 #include <arpa/inet.h>
-//   ÒÔÏÂÈı¸ö¶¼²»ÍÆ¼öÊ¹ÓÃ
-int inet_aton(const char *strptr, struct in_addr *addptr);   // ½«c´®×ª»»³ÉÒ»¸ö32Î»µÄÍøÂç×Ö½ÚĞò¶ş½øÖÆÖµ£¬·ÅÈëaddptr
-in_addr_t inet_addr(const char *strptr);   //  ×Ö·û´®ÓĞĞ§Ôò·µ»Ø32Î»¶ş½øÖÆÍøÂç×Ö½ÚĞòµÄIPv4µØÖ·£¬·ñÔòÎªINADDR_NONE
-char *inet_ntoa(struct in_addr inaddr);    //  ·µ»ØÒ»¸öÖ¸Ïòµã·ÖÊ®½øÖÆÊı´®µÄÖ¸Õë
+//   ä»¥ä¸‹ä¸‰ä¸ªéƒ½ä¸æ¨èä½¿ç”¨
+int inet_aton(const char *strptr, struct in_addr *addptr);   // å°†cä¸²è½¬æ¢æˆä¸€ä¸ª32ä½çš„ç½‘ç»œå­—èŠ‚åºäºŒè¿›åˆ¶å€¼ï¼Œæ”¾å…¥addptr
+in_addr_t inet_addr(const char *strptr);   //  å­—ç¬¦ä¸²æœ‰æ•ˆåˆ™è¿”å›32ä½äºŒè¿›åˆ¶ç½‘ç»œå­—èŠ‚åºçš„IPv4åœ°å€ï¼Œå¦åˆ™ä¸ºINADDR_NONE
+char *inet_ntoa(struct in_addr inaddr);    //  è¿”å›ä¸€ä¸ªæŒ‡å‘ç‚¹åˆ†åè¿›åˆ¶æ•°ä¸²çš„æŒ‡é’ˆ
 
-// ½«strptrÖ¸ÏòµÄ×Ö·û´®×ª»»ºó·ÅÈëaddrptr£¬³É¹¦Ôò·µ»Ø1£¬·ñÔò·µ»Ø0£¬¼ÇÒä·½·¨£º strptr -> addrptr
-int inet_pton(int family, const char *strptr, void *addrptr);     // pÎªpresentation£¬nÎªnumeric
-// ´ÓÊıÖµ¸ñÊ½×ª»»µ½±í´ï¸ñÊ½£¬len²ÎÊıÊÇÄ¿±ê´æ´¢µ¥ÔªµÄ´óĞ¡£¬µ÷ÓÃ³É¹¦·µ»Østrptr
+// å°†strptræŒ‡å‘çš„å­—ç¬¦ä¸²è½¬æ¢åæ”¾å…¥addrptrï¼ŒæˆåŠŸåˆ™è¿”å›1ï¼Œå¦åˆ™è¿”å›0ï¼Œè®°å¿†æ–¹æ³•ï¼š strptr -> addrptr
+int inet_pton(int family, const char *strptr, void *addrptr);     // pä¸ºpresentationï¼Œnä¸ºnumeric
+// ä»æ•°å€¼æ ¼å¼è½¬æ¢åˆ°è¡¨è¾¾æ ¼å¼ï¼Œlenå‚æ•°æ˜¯ç›®æ ‡å­˜å‚¨å•å…ƒçš„å¤§å°ï¼Œè°ƒç”¨æˆåŠŸè¿”å›strptr
 const char *inet_ntop(int family, const void *addrptr, char *strptr, size_t len);
 
-///  ÄÚ´æÄÚÈİµÄ´¦Àí
+///  å†…å­˜å†…å®¹çš„å¤„ç†
 #include <strings.h>
 void bzero(void *dest, size_t nbytes);
 void bcopy(const void *src, void *dest, size_t nbytes);
 void bcmp(const void *ptr1, const void *ptr2, size_t nbytes);
 
-void *memset(void *dest, int c, size_t len);       // ËùÓĞµÄmemXXXº¯Êı¶¼ĞèÒªÒ»¸ö³¤¶È²ÎÊı£¬Õâ¸ö²ÎÊı×ÜÊÇ×îºóÒ»¸ö
-void *memcpy(void *dest, const void *src, size_t nbytes);  // dest = src ÓÃÀ´¼ÇÂ¼²Ù×÷µÄÏÈºóË³Ğò
+void *memset(void *dest, int c, size_t len);       // æ‰€æœ‰çš„memXXXå‡½æ•°éƒ½éœ€è¦ä¸€ä¸ªé•¿åº¦å‚æ•°ï¼Œè¿™ä¸ªå‚æ•°æ€»æ˜¯æœ€åä¸€ä¸ª
+void *memcpy(void *dest, const void *src, size_t nbytes);  // dest = src ç”¨æ¥è®°å½•æ“ä½œçš„å…ˆåé¡ºåº
 int memcpy(const void *ptr1, const void *ptr2, size_t nbytes);
