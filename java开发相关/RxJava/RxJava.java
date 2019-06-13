@@ -343,3 +343,16 @@ Observable<Rating> rate(UUID id) {}
 upload(id).flatMap(bytes -> Observable.empty(),
 					e -> Observable.error(e),
 					() -> rate(id));
+
+// 延时操作的操作符delay，会对每个流中元素延时
+just(x, y, z).delay(1, TimeUnit.SECONDS);
+// 大体等价的写法如下，差异是下面操作等待1秒后重新发送x, y, z信息，timer触发了延时空事件，i值为0
+Observable.timer(1, TimeUnit.SECONDS).flatMap(i -> Observable.just(x, y, z)); 
+
+// 实际应用场景
+Observable.just("Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit")
+        .delay(word -> timer(word.length(), SECONDS))
+        .subscribe(System.out::println);
+// timer()加flatMap()的等价改造
+Observable.just("Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit")
+        .flatMap(word -> timer(word.length(), SECONDS).map(x -> word))
