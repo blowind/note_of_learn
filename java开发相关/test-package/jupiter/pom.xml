@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.simple</groupId>
+    <groupId>org.simple.test.jupiter</groupId>
     <artifactId>jupiter</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -24,7 +24,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- 使用params路径下的各种参数化注解 -->
+        <!-- 使用params路径下的各种参数化注解，用于生成 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
@@ -32,6 +32,22 @@
             <scope>test</scope>
         </dependency>
 
+
+        <!-- 第三方断言库hamcrest，结合junit用于补强junit自带assertion功能 -->
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>2.1</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.2</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -41,10 +57,13 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
+                    <!-- 编译时warning使用了未经检查或不安全的操作异常（使用 -Xlint:unchecked 重新编译）时，使用此配置开启告警详情 -->
+                    <compilerArgument>-Xlint:unchecked</compilerArgument>
                     <!-- 指定源码和目标文件使用的JDK版本，有此配置后，不用在IDEA的setting中每次设置相关版本 -->
                     <source>1.8</source>
                     <target>1.8</target>
                     <encoding>UTF-8</encoding><!-- 字符集编码 -->
+                    <compilerArgument>-parameters</compilerArgument>
                 </configuration>
             </plugin>
 
@@ -56,8 +75,15 @@
                     <testFailureIgnore>false</testFailureIgnore>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <!-- 查看依赖包的依赖树的插件 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
         </plugins>
     </build>
 
-
+    
 </project>
