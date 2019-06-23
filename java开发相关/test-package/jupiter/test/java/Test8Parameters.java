@@ -11,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @ClassName: Test8Parameters
  * @Description: 给测试类构造函数或者测试方法传入参数
+ *               此处的TestInfo，RepetitionInfo，TestReporter都是框架封装好的特例
+ *               更一般的使用参考Test10Parameterized
  * @Author: zhangxuefeng
  * @Date: 2019/6/21 下午9:43
  * @Version: 1.0
