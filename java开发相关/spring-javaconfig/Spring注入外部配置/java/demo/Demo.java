@@ -3,12 +3,12 @@ package com.zxf.spring.demo;
 import com.zxf.spring.config1.CustomProperties;
 import com.zxf.spring.config2.Custom2Properties;
 import com.zxf.spring.config3.Custom3Properties;
+import com.zxf.spring.config4.Custom4Properties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -70,6 +70,9 @@ public class Demo implements ApplicationListener<ContextRefreshedEvent> {
     @Autowired
     public Custom3Properties custom3Properties;
 
+    @Autowired
+    private Custom4Properties custom4Properties;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         log.info("使用实现方式一加载的配置类 : {}", customProperties);
@@ -89,6 +92,8 @@ public class Demo implements ApplicationListener<ContextRefreshedEvent> {
         }catch (IOException e) {
             e.printStackTrace();
         }
+
+        log.info("{}", custom4Properties.getServers().toString());
 
     }
 }

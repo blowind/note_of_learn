@@ -6,8 +6,8 @@ import org.springframework.context.annotation.PropertySource;
 
 /**
  * @ClassName: SpringMain
- * @Description:  resources目录下的application.properties文件是主动识别并加载，
- *                其他名字的要使用@PropertySource指定
+ * @Description:  resources目录下的application.properties和application.yml文件是主动识别并加载，
+ *                @@@ 其他名字的要使用@PropertySource指定，并且@PropertySource注解只能加载properties文件，不能识别yml文件
  *
  *                对比项     @ConfigurationProperties               @Value
  *                注解功能   将配置文件中的属性值批量注入类的各个属性     为类中的各个属性逐个赋值
@@ -20,7 +20,7 @@ import org.springframework.context.annotation.PropertySource;
  * @Version: 1.0
  **/
 @SpringBootApplication(scanBasePackages = "com.zxf.spring")
-@PropertySource("classpath:config/custom.properties")
+@PropertySource("classpath:config/custom.properties")  // 本注解仅config1场景需要
 public class SpringMain {
 
     public static void main(String[] args) {

@@ -9,7 +9,8 @@ import org.springframework.core.io.FileSystemResource;
 
 /**
  * @ClassName: Custom3Config
- * @Description:
+ * @Description: 不在application.yml文件里yml配置，没法通过@PropertySource直接引入
+ *                  application.yml文件的路径层次无所谓
  * @Author: zhangxuefeng
  * @Date: 2019/7/15 下午4:06
  * @Version: 1.0

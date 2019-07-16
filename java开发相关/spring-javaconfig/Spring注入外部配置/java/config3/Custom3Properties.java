@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- **/
+ * 验证通过PropertySourcesPlaceholderConfigurer进入配置
+ *
+ * */
 @Component
 @ConfigurationProperties(prefix = "myyml")
 @Data
