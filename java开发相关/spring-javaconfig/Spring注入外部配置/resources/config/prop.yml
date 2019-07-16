@@ -1,0 +1,23 @@
+
+
+myyml:
+  simpleProp: hello
+  number: 2
+  arrayProps: 1, 2, 3, 4, 5
+  listMapProp:
+  ### list元素使用 - 开头
+    - name: abc
+      value: abcValue
+    - name: efg
+      value: efgValue
+  listProp:
+    - config2Value1
+    - config2Value2
+  mapProp:
+    key1: value1
+    key2: value2
+
+---
+
+mine:
+  username: testUsername

@@ -169,6 +169,10 @@ for line in fileinput.input("./mobile.txt"):
 
 2**3  ### 幂运算   -2**3 = -9
 
+## 浮点数的计算
+import decimal      #or from decimal import Decimal
+print decimal.Decimal('3')-decimal.Decimal('1.3')      #output 1.7
+
 x, y, z = 1, 2, 4   ###　多个变量同时赋值
 
 x, y = y, x   #### 交换两个变量的值
@@ -893,6 +897,13 @@ for index, string in enumerate(strings):
 	if 'xxx' in string:
 		strings[index] = '[censored]'
 
+函数：cmp
+比较字符串
+python2中不能用==。用cmp()方法来比较两个对象，相等返回 0 ，前大于后，返回 1，小于返回 -1
+python3中可以使用==比较两个字符串。cmp()已经被移除，不能使用
+if not cmp(a, b):
+	print "equal"
+
 函数：sorted
 sorted(seq[, cmp][, key][, reverse])  ###  可选的cmp用于比较，reverse进行反转
 作用于序列或可迭代对象上，返回排序后的版本，返回列表
@@ -998,3 +1009,18 @@ for byteStr in binList:
 	print byte
 	data = pack("B", byte)
 	f.write(data)
+
+浮点数相等比较：
+d1=0.1+0.1+0.1
+d2=0.3
+
+python2中写法
+def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
+    return abs(a-b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
+print(d1==d2)           #false
+print(isclose(d1,d2))   #true
+
+python3中写法
+import math
+print(math.isclose(d1,d2))
+
