@@ -669,6 +669,22 @@ public class GenericVarargs {
 		return result;
 	}
 }
+/* 泛型与不定参数 */ 
+public <T> void printMsg(T... args) {
+	for(T t : args) {
+	    System.out.println("t = " + t);
+	}
+}
+printMsg("111", 222, "aaaa", "2323.4", 55.55);  // 此处可正常运行并输出结果
+
+// 类中的泛型方法
+class GenerateTest<T>{
+	//在泛型类中声明了一个泛型方法，使用泛型T，注意这个T是一种全新的类型，可以与泛型类中声明的T不是同一种类型。
+    public <T> void show_2(T t){
+        System.out.println(t.toString());
+    }
+}
+
 
 /****                                               通配符（向上/向下转型）                                        ****/
 class Fruit {}

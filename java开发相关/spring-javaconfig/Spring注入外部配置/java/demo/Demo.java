@@ -15,10 +15,28 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * @ClassName: Demo
  * @Description:
+ *
+ * el最常用的几种使用场景：
+ *    1、从配置文件中读取属性
+ *    2、缺失值情况下，配置默认值
+ *    3、el内部字符串使用String的方法
+ *    4、三目运算符
+ *    5、正则表达式
+ *    6、注入系统属性（system properties）
+ *    7、调用系统原有函数
+ *    8、直接注入文件进行操作
+ *    9、读取另一个bean的函数的返回值
+ *
+ *        记住下边三句话
+ *       ${}不支持表达式（三目表达式不算表达式）；#{}支持
+ *       ${}读取属性文件的值
+ *       ${}读取最后一个满足条件的值；#{}读取所有满足条件的值
+ *
  * @Author: zhangxuefeng
  * @Date: 2019/7/12 下午4:34
  * @Version: 1.0
@@ -33,6 +51,12 @@ public class Demo implements ApplicationListener<ContextRefreshedEvent> {
     @Autowired
     private Custom2Properties custom2Properties;
 
+    @Autowired
+    public Custom3Properties custom3Properties;
+
+    @Autowired
+    private Custom4Properties custom4Properties;
+
     /* 注入配置文件的值 */
     @Value("${hello.see.one}")
     private String one;
@@ -41,10 +65,21 @@ public class Demo implements ApplicationListener<ContextRefreshedEvent> {
     private Integer two;
 
 
+    /* 缺失值情况下，配置默认值 */
+    @Value("${nameDefault: '刚子'}")
+    private String defaultName;
 
     /* 注入普通字符串 */
     @Value("I love you!")
     private String normal;
+
+    /*el内部字符串使用String的方法*/
+    @Value("#{'${name.list}'.split(',')}")
+    private List<String> namelist;
+
+    /*三目运算符*/
+    @Value("${name.three!='杨过'?'黄蓉':'小龙女'}")
+    private String nameThree;
 
     /* 注入操作系统属性 */
     @Value("#{systemProperties['os.name']}")
@@ -53,6 +88,10 @@ public class Demo implements ApplicationListener<ContextRefreshedEvent> {
     /* 注入表达式结果 */
     @Value("#{T(java.lang.Math).random() * 100.0}")
     private double randomNumber;
+
+    /*正则表达式*/
+    @Value("#{'100' matches '\\d+'}")//这里必须使用#，使用$是不行的
+    private boolean isDigital;
 
     /* 注入其他bean属性 */
     @Value("#{custom2Properties.hello}")
@@ -67,20 +106,19 @@ public class Demo implements ApplicationListener<ContextRefreshedEvent> {
     private Resource testUrl;
 
 
-    @Autowired
-    public Custom3Properties custom3Properties;
-
-    @Autowired
-    private Custom4Properties custom4Properties;
-
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         log.info("使用实现方式一加载的配置类 : {}", customProperties);
         log.info("使用实现方式二加载的配置类 : {}", custom2Properties);
         log.info("使用实现方式三加载yml配置 : {}", custom3Properties);
+        log.info("使用实现方式四加载默认命名的application.yml : {}", custom4Properties.getServers().toString());
 
 
         log.info("直接配置属性 : one is {}, two is {}", one, two);
+        log.info("{}", defaultName);
+        log.info(namelist.toString());
+        log.info(nameThree);
+        log.info(String.valueOf(isDigital));
         log.info(normal);
         log.info(osName);
         log.info("{}", randomNumber);
@@ -93,7 +131,7 @@ public class Demo implements ApplicationListener<ContextRefreshedEvent> {
             e.printStackTrace();
         }
 
-        log.info("{}", custom4Properties.getServers().toString());
+
 
     }
 }

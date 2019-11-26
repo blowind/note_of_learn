@@ -11,6 +11,8 @@ git push
 
 git status  ##  查看当前未commit的文件的状态
 
+git remote -v  ## 查看远程服务器git地址
+
 git diff  filename  ##   查看"修改未添加" 与 "修改已添加" 之间的差异，带文件名时查看当前未commit的文件与库上文件的差异
 
 git diff --cached   ##  查看"修改已添加" 与 "提交" 之间的差异

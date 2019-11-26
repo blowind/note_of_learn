@@ -1,6 +1,12 @@
 
 1、查看内存使用相关命令：
-free  监控内存使用情况         free -m   将内存使用情况以M为单位显示
+free  监控内存使用情况         
+free -m   将内存使用情况以M为单位显示
+free -mh  将内存使用情况以M或者G作为单位显示
+              total        used        free      shared  buff/cache   available
+Mem:            31G         26G        266M        103M        4.8G        4.4G
+Swap:            0B          0B          0B
+
 输出各字段含义：
 total:总计物理内存的大小。
 used:已使用多大。
@@ -10,7 +16,20 @@ Buffers/cached:磁盘缓存的大小。
 
 watch -n 2 -d free   每两秒执行free一次，执行前清除屏幕，在同样位置显示数据。 -n 控制刷新 -d 每次显示不同的地方
 
-/proc/meminfo            比较复杂的看内存使用的方法
+cat /proc/meminfo            比较复杂的看内存使用的方法
+
+MemTotal:     16438852 kB  #所有可用RAM大小 （即物理内存减去一些预留位和内核的二进制代码大小）
+MemFree:      10980184 kB  #LowFree与HighFree的总和，被系统留着未使用的内存
+Buffers:         95884 kB  #用来给文件做缓冲大小 
+Cached:         224108 kB  #被高速缓冲存储器（cache memory）用的内存的大小(等于 diskcache minus SwapCache)
+SwapCached:          0 kB  #被高速缓冲存储器（cache memory）用的交换空间的大小 已经被交换出来的内存，但仍然被存放在swapfile中。用来在需要的时候很快的被替换而不需要再次打开I/O端口。
+Active:        5161616 kB  #在活跃使用中的缓冲或高速缓冲存储器页面文件的大小，除非非常必要否则不会被移作他用. 
+Inactive:       217660 kB  #在不经常使用中的缓冲或高速缓冲存储器页面文件的大小，可能被用于其他途径. 
+HighTotal:           0 kB
+HighFree:            0 kB
+.....
+
+
 
 top  动态显示系统各个进程的资源占用情况，包括task情况，CPU使用率，Mem使用率，swap交换区使用情况
 第一个行是  

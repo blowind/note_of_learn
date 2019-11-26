@@ -163,6 +163,28 @@
                 </configuration>
             </plugin>
 
+            <!-- 将源代码打包成jar包供调用方下载 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>false</skip>
+                </configuration>
+            </plugin>
+
 
             <!-- 通过本插件执行单元测试，是JUnit，TestNG测试框架的依赖 -->
             <plugin>
