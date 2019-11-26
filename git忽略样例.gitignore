@@ -1,0 +1,12 @@
+/target/*
+/data/*
+/bindir/*
+.idea
+*.jar
+*.jar.original
+*.log
+*.iml
+*.zip
+*.exe
+*.bin
+*.uwb
