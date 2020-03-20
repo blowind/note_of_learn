@@ -1,49 +1,285 @@
 <?xml version="1.0" encoding="utf-8" ?>
+
+<!-- 
+可选配置如下:
+scan:  配置文件如果发生改变，将会被重新加载，默认值为true
+scanPeriod 设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。
+           当scan为true时，此属性生效。默认的时间间隔为1分钟
+debug  当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false
+-->
+<!-- <configuration scan="true" scanPeriod="60 seconds" debug="false">  -->
 <configuration>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoders are assigned the type
-             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-        <encoder>
-            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
-        </encoder>
-    </appender>
+<!---------------------------- 可选配置 ------------------------------------------>
 
-    <!-- Insert the current time formatted as "yyyyMMdd'T'HHmmss" under
-         the key "bySecond" into the logger context. This value will be
-         available to all subsequent configuration elements. -->
-    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+	<!-- 每个logger都关联到logger上下文，默认上下文名称为“default”。
+		 可以使用<contextName>设置成其他名字，一旦设置，不能修改。 -->
+	<contextName>myAppName</contextName>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>testFile-${bySecond}.log</file>
-        <append>true</append>
-        <!-- encoders are assigned the type
-             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-        <encoder>
-            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
-        </encoder>
-    </appender>
 
-    <appender name="DAYFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logFile.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- daily rollover -->
-            <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+	<!-- 用来定义变量值的标签，<property> 有两个属性，name和value； -->
+	<!-- 其中name的值是变量的名称，value的值时变量定义的值。 -->
+	<!-- 通过<property>定义的值会被插入到logger上下文中。 -->
+	<!-- 定义变量后，可以使“${}”来使用变量。 -->
+	<property name="APP_Name" value="myAppName" />  
+	<property name="LOG_PATH" value="/var/log/info-merge" />
+	
+	<!-- 输出格式 -->
+	
+	<!--
+	layout简写       含义
+	c{length}        日志事件中原始logger的名称
+	lo{length}       日志事件中原始logger的名称
+	logger{length}   日志事件中原始logger的名称
 
-            <!-- keep 30 days' worth of history capped at 3GB total size -->
-            <maxHistory>30</maxHistory>
-            <totalSizeCap>3GB</totalSizeCap>
+	d{pattern}                    时间
+	date{pattern}                 时间
+	d{pattern, tomezone}          时间
+	date{pattern, timezone}       时间
 
-        </rollingPolicy>
+	L/line    行号
 
-        <encoder>
-            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
-        </encoder>
-    </appender>
+	m/msg/message  日志内容
 
+	M/method  方法名称
+
+	n  换行
+
+	p/le/level  日志级别
+
+	t/thread  线程
+
+	ex{depth}        异常堆栈，三个可选值short/full/any
+	exception(depth} 异常堆栈，三个可选值short/full/any
+	throwable(depth} 异常堆栈，三个可选值short/full/any
+	-->
+    <property name="out.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5p] [%t] [%c][%L] - %m%n" />
+	<!-- 活动文件的大小 -->
+    <property name="max.file.size" value="500MB"/>
+    <!-- 保留的归档文件的最大数量 -->
+    <property name="max.history" value="30"/>
+    <!-- 控制所有归档日志文件的总大小 -->
+    <property name="total.size.cap" value="30GB"/>
+	
+	
+	<!-- 引用spring的配置 -->
+	<springProperty scope="context" name="logLevel" source="log.level"/>
+    <springProperty scope="context" name="logPath" source="log.path"/>
+	
+
+
+	<!-- 获取时间戳字符串 -->
+	<!-- key:标识此<timestamp> 的名字；datePattern： -->
+	<!-- 设置将当前时间（解析配置文件的时间）转换为字符串的模式 -->
+	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+	
+	
+	<!--0. 日志格式和颜色渲染 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+    <!-- 彩色日志格式，将${CONSOLE_LOG_PATTERN}放入后面appender里encoder的pattern处指定格式即生效 -->
+    <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+<!---------------------------- 常用配置 ------------------------------------------>
+
+	<!-- logger 一般没有特殊指定也不配置
+	     用来设置某一个包或者具体的某一个类的日志打印级别、以及指定<appender> 
+	     仅有一个name属性，一个可选的level和一个可选的addtivity属性。
+	     标签下只有一种元素，那就是 <appender-ref>，
+		 可以有0个或多个，意味着绑定到这个 logger 上的 Appender
+	
+		 name指定本项目下具体包路径或者类，控制该包及旗下类的打印
+	
+	     level 的取值可以是 TRACE, DEBUG, INFO, WARN, ERROR, ALL, OFF, INHERITED, NULL， 
+	      其中 INHERITED 和 NULL 的作用是一样的，并不是不打印任何日志，
+		  而是强制这个 logger 必须从其父辈继承一个日志级别
+		  level不配置时，默认从上级继承日志级别，全部不配置时最终可以追述到root的级别
+		  
+		 additivity 用于阻断本级控制的日志向上级传递并打印
+		 取值是一个布尔值，true 或者 false，默认是true，将此loger的打印信息向上级传递
+	-->
+	
+	<!-- 注意！！！！！！！！！！！！！！！
+	     一般来说配置logger并指定appender-ref后，都要配置additivity="false"
+	     因为日志信息会一层层向上传递病根据打印级别过滤输出，为true会打印两次 -->
+	
+	<!-- 此处指定com.zxf.project路径下所有类的打印级别是error
+          project下面所有打印操作输出到STDOU和FILE，不输出到DAYFILE，
+		  因为additivity指明日志不向上传播   -->
+	<logger name="com.zxf.project" level="error" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger>
+	
+	<!-- root本质就是根logger，只有一个level属性，因为已经是根所以additivity没有必要 
+         level 的取值大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，默认是debug
+	-->
     <root level="debug">
         <appender-ref ref="STDOUT"/>
+		<appender-ref ref="FILE"/>
         <appender-ref ref="DAYFILE"/>
-        <appender-ref ref="FILE"/>
     </root>
+
+	<!-- 指定输出到控制台的配置 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<withJansi>true</withJansi>
+	
+		<!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>debug</level>
+        </filter>
+	
+        <!-- class默认指定PatternLayoutEncoder，所以一般可以不填
+		PatternLayout识别以下颜色：
+		"%black", "%red", "%green","%yellow","%blue", 
+		"%magenta","%cyan", "%white", "%gray", "%boldRed",
+		"%boldGreen", "%boldYellow", "%boldBlue", "%boldMagenta",
+		"%boldCyan", "%boldWhite"，"%highlight"  
+		颜色在Console下设置才有意义 -->
+		<!-- <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">  -->
+		<encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%highlight(%-5p)] [%t] [%cyan(%c)][%L] - %m%n</pattern>
+			<charset>UTF-8</charset> <!-- 设置字符集，可选 -->
+        </encoder>
+    </appender>
+
+    
+	<!-- 基本的输出到日志，实际很少使用，仅做展示 -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<!-- 指定文件存储路径 -->
+        <file>testFile-${bySecond}.log</file>
+		<!-- 按追加方式写入文件 -->
+        <append>true</append>
+		<!-- 设置为false可以提高日志记录吞吐量 -->
+		<immediateFlush>true</immediateFlush>
+		
+		<!-- 输出格式 -->
+        <encoder>
+			<!-- 配置可读时间戳而不是相对时间relative的写法 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+	
+	
+	
+	
+	<!-- DEBUG日志  RollingFileAppender 继承自FileAppender，有滚动日志自动归档功能
+		RollingFileAppender有两个重要的组件。第一个组件是RollingPolicy，它决定怎样滚动；
+		第二个组件是TriggeringPolicy，它决定什么时候执行滚动。    -->
+    <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 指定文件存储路径 -->
+        <file>${LOG_PATH}/debug.log</file>
+		
+		<!-- TimeBasedRollingPolicy 是基于时间的归档策略，按天或者按月 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 按天的文件命名模式 -->
+			<fileNamePattern>${LOG_PATH}/debug.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- 日志最多保留的天数 -->
+			<maxHistory>${max.history}</maxHistory>
+			<!-- 保留的日志总大小上限 -->
+            <totalSizeCap>${total.size.cap}</totalSizeCap>
+		</rollingPolicy>
+		
+		或者
+		
+		<!-- SizeAndTimeBasedRollingPolicy 按时间或者文件大小共同限制的归档策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- 按天和大小的文件命名模式，注意通过%i给一天内超过大小的文件数字递增命名
+				 %i和%d是强制的，从0开始index -->
+            <fileNamePattern>${LOG_PATH}/debug.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<!-- 单个文件最多100MB -->
+            <maxFileSize>100MB</maxFileSize>
+			<!-- 最多保留60天的日志 -->
+            <maxHistory>60</maxHistory>
+			<!-- 所有归档文件总大小 -->
+            <totalSizeCap>20G</totalSizeCap>
+        </rollingPolicy>
+		
+		或者
+		
+		<!-- SizeBasedTriggeringPolicy 只接受一个参数，参数的名字是maxFileSize，它的默认值是10MB -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<!-- 按文件大小归档的命名模式 -->
+			<fileNamePattern>${LOG_PATH}/debug.%i.log.zip</fileNamePattern>
+			<minIndex>1</minIndex>
+			<maxIndex>3</maxIndex>
+		</rollingPolicy>
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<!-- maxFileSize的单位可以是字节，KB，MB，GB -->
+			<maxFileSize>5MB</maxFileSize>
+		</triggeringPolicy>
+		
+		
+		
+		<!-- Filter 用于过滤本appender输出哪些msg，丢弃哪些msg
+		    取值范围分别是ACCEPT（接受）、NEUTRAL（不接受也不拒绝，本质上还是接受）、DENY（拒绝） -->
+		
+		<!-- LevelFilter是基于事件的级别来过滤的，
+			 如果事件的级别与配置的级别相等，
+			 接受或者拒绝这个事件取决于onMatch和onMismatch配置  -->
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<!-- 只接受DEBUG级别的日志 -->
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>  <!-- 匹配的接受 -->
+            <onMismatch>DENY</onMismatch>  <!-- 不匹配的拒绝 -->
+        </filter>
+		
+		或者
+		
+		<!-- ThresholdFilter过滤器是基于threshold（阈值）过滤的。
+		对于级别等于或者高于threshold的事件，当它的decide()方法被调用的时候ThresholdFilter过滤器将回复NEUTRAL。
+		级别低于threshold的事件将被拒绝。 -->
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<!-- 只接受INFO及以上级别的日志 -->
+            <level>INFO</level>
+        </filter>
+		
+		或者
+		
+		
+		<!--  EvaluatorFilter 是 EventEvaluator的一个自带实现。
+		EventEvaluator会计算给定的事件是否满足指定的条件。
+		通过指定onMatch和onMismatch属性，EvaluatorFilter将返回匹配还是不匹配。  -->
+		<filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+			<!-- 丢弃所有message中包含billing的日志记录事件 -->
+            <evaluator>
+				<expression>return message.contains("billing");</expression>
+				<!-- <expression>logger.contains("billing")</expression>  等价的写法 -->
+			</evaluator>
+			<onMatch>DENY</onMatch>  <!-- 匹配的拒绝 -->
+            <onMismatch>NEUTRAL</onMismatch>  <!-- 不匹配的接受 -->
+        </filter>
+		
+		或者
+		
+		<!--  JaninoEventEvaluator 是 EventEvaluator 的一个第三方实现
+		JaninoEventEvaluator用任意的Java代码块返回的一个boolean值作为条件计算的结果。
+		我们把这种Java语音的boolean表达式称之为“计算表达式”。计算表达式在计算过程中非常灵活。
+		需要引入Janino库
+		<dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>3.0.8</version>
+        </dependency>   
+		-->
+		<filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+			<!-- 丢弃所有message中包含billing的日志记录事件 -->
+            <evaluator class="ch.qos.logback.classic.boolex.JaninoEventEvaluator>
+				<expression>logger.contains("Mapper")</expression>
+				<!-- <expression>logger.contains("billing")</expression>  等价的写法 -->
+			</evaluator>
+			<onMatch>ACCEPT</onMatch>  <!-- 匹配的拒绝 -->
+            <onMismatch>DENY</onMismatch>  <!-- 不匹配的接受 -->
+        </filter>
+	
+		
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${out.pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+	
 </configuration>

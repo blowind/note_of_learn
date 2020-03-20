@@ -167,10 +167,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-				<version>3.2.1</version>
+		<version>3.2.1</version>
+		<configuration>  
+                  <attach>true</attach>  
+		</configuration> 
                 <executions>
                     <execution>
                         <id>attach-sources</id>
+			    <phase>compile</phase>  <!-- 制定在有编译动作时将源码打包，还可以指定package、install等 -->
                         <goals>
                             <goal>jar</goal>
                         </goals>
