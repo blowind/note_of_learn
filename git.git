@@ -51,21 +51,86 @@ git pull origin dev          ##  从远程获取origin/dev最新版本并merge�
 
 
 
-设置用户名和邮箱
-git config --global user.name "username"
-git config --global user.email "email"
+【git全局设置】
 
-查看设置结果
-git config user.name
-git config user.email
+1、查看当前git的全局配置(windows下是C:\Users\PICC\.gitconfig文件，linux下是~/.gitconfig文件)
+	# git config --global -l
+	http.proxy=http://xx.xx.xx.xx:7070
+	user.name=fengxing581
+	user.email=fengxing581@gmail.com
+	
+	在某个具体项目下查看配置
+	# git config -l
+	diff.astextplain.textconv=astextplain
+	filter.lfs.clean=git-lfs clean -- %f
+	filter.lfs.smudge=git-lfs smudge -- %f
+	filter.lfs.process=git-lfs filter-process
+	filter.lfs.required=true
+	http.sslbackend=openssl
+	http.sslcainfo=C:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt
+	core.autocrlf=true
+	core.fscache=true
+	core.symlinks=false
+	http.proxy=http://34.1.32.251:7070
+	user.name=root
+	user.email=fengxing581@gmail.com
+	core.repositoryformatversion=0
+	core.filemode=false
+	core.bare=false
+	core.logallrefupdates=true
+	core.symlinks=false
+	core.ignorecase=true
+	remote.origin.url=https://github.com/blowind/note_of_learn.git
+	remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+	branch.master.remote=origin
+	branch.master.merge=refs/heads/master
+	
 
-修改git显示编码格式
- git config --global gui.encoding utf-8
- git config --global i18n.logoutputencoding utf-8
+2、设置用户名、邮箱、代理
+	# git config --global user.name "username"
+	# git config --global user.email "email"
+	# git config --global http.proxy http://127.0.0.1:1080   ## 配置http代理，此处ip和端口明显是配置shadowsocks代理
+	# git config --global https.proxy http://127.0.0.1:1080  ## 配置https代理，此外还支持sockets5，格式为sockets5://
+	
+	取消代理
+	# git config --global --unset http.proxy
+	# git config --global --unset https.proxy 
 
-忽略某个文件，不检查冲突和更新
-git update-index --assume-unchanged /master/text.txt(指定文件路径)       #强制忽略跟踪
-git update-index --no-assume-unchanged /master/text.txt(指定文件路径)    #恢复强制忽略跟踪
+3、查看设置结果
+	# git config user.name
+	# git config user.email
+
+4、修改git显示编码格式
+	# git config --global gui.encoding utf-8
+	# git config --global i18n.logoutputencoding utf-8
+
+5、忽略某个文件，不检查冲突和更新
+	# git update-index --assume-unchanged /master/text.txt(指定文件路径)       #强制忽略跟踪
+	# git update-index --no-assume-unchanged /master/text.txt(指定文件路径)    #恢复强制忽略跟踪
+
+
+拉取一个需要用户名密码的新仓库
+
+git clone http://'root':'paswxxx'@47.101.135.231/root/picc-one.git
+
+git clone http://root:1qaz2wsx#$picc@47.101.135.231/root/picc-one.git
+git clone http://'root':'1qaz2wsx#$picc'@47.101.135.231/root/picc-one.git
+git clone http://47.101.135.231/root/picc-one.git
+
+
+【git每次操作免输入用户名密码的方法】
+1、在%HOME%目录中，一般为C:\users\Administrator，也可以是你自己创建的系统用户名目录，反正都在C:\users\中。文件名为.git-credentials,由于在Window中不允许直接创建以"."开头的文件，所以需要借助git bash进行，打开git bash客户端，进行%HOME%目录，然后用touch创建文件 .git-credentials, 用vim编辑此文件，具体操作如下，其中第三步是.git-credentials文件内存放内容：
+touch .git-credentials
+vim .git-credentials
+https://{username}:{password}@github.com
+
+2、进入git bash终端， 输入如下命令：
+git config --global credential.helper store
+执行完后查看%HOME%目录下的.gitconfig文件，会多了一项：
+[credential]
+	helper = store
+
+3、重新开启git bash会发现git push时不用再输入用户名和密码
 
 
 【从命令行创建一个新的仓库】

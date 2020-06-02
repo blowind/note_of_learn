@@ -1,13 +1,44 @@
 
 常见的content type, Internet media typ和MIME type是可以互换的
 
-内容类型(contentType)：
-text/html;charset=UTF-8    //  类型是text，子类型是html，字符编码是UTF-8
 
-application/x-www-form-urlencoded    // post请求的常见媒体类型之一，是键值对集合的简单编码
+###############         请求和响应都有              ################
+
+
+【Content-type 内容类型】
+示例： Content-type: application/json;charset=UTF-8
+
+
+text/html;charset=UTF-8            //  类型是text，子类型是html，字符编码是UTF-8
+
+application/x-www-form-urlencoded  // post请求的常见媒体类型之一，是键值对集合的简单编码
 multipart/form-data                // post请求的常见媒体类型之二，是带图片等多媒体格式的编码
 
-application/json         //  ajax请求的媒体类型
+application/json                   // ajax请求的媒体类型
 
 application/vnd.ms-excel                                            //  excel 2003格式
 application/vnd.openxmlformats-officedocument.spreadsheetml.sheet   //  excel 2007格式
+
+
+
+
+###############            仅请求             ################
+
+【Accept-Encoding 客户端接受的压缩类型】
+示例： Accept-Encoding: gzip, deflate
+
+【Connection     客户端请求建立TCP长连接用于多次HTTP请求应答】
+Connection: keep-alive
+
+【Content-Length 客户端本次请求的报文长度，HTTP/1.0开始支持】
+Content-Length: 76
+
+
+
+###############            仅响应             ################
+
+【Content-Encoding 服务器本次应答使用的压缩算法】
+Content-Encoding: gzip
+
+【Transfer-Encoding 指定长连接中用于判断多个HTTP报文结束位置的方式】
+Transfer-Encoding: chunked            ##  使用分块传输机制
