@@ -1,7 +1,10 @@
+/.idea/
+.settings/
 /target/*
 /data/*
 /bindir/*
 .idea
+*.classpath
 *.jar
 *.jar.original
 *.log

@@ -240,7 +240,87 @@ git fetch         // 从远程分支获取最新版本到本地本分支，不�
  env GIT_SSL_NO_VERIFY=true git clone https://<host_name>/git/project.git  
  
  
+【永久删除大文件】
+1、提交本地的所有修改，本地库最新时可省略
+git commit -am "commit all"     
+
+2、对仓库进行gc操作
+git gc                     
+
+3、运行count-objects 查看空间使用，size-pack 是以千字节为单位表示的 packfiles 的大小，因此已经使用了大约150MB 。
+git count-objects -v 
+    显示：     
+    Enumerating objects: 392, done.
+	Counting objects: 100% (392/392), done.
+	Delta compression using up to 4 threads
+	Compressing objects: 100% (183/183), done.
+	Writing objects: 100% (392/392), done.
+	Total 392 (delta 146), reused 392 (delta 146)
+
+4、运行底层命令 git verify-pack 以识别出大对象，对输出的第三列信息即文件大小进行排序.可以看到大文件有31MB
+git verify-pack -v .git/objects/pack/pack-91bc54c185ae88f25acd1d65fb042d693baab0a4.idx | sort -k 3 -n | tail -3
+	其中idx文件名使用tab键自动匹配出来，显示结果如下：
+	4e69967a6623183d8ceb3b3dae58490f9f8bd880 blob   59487 52501 28518551
+	5e6cd53eae29b3aa8739549564dc3505ddb50c5a blob   94111 8816 11834
+	bb44cdaf4dbd51b18c86885168b816ab1cb02d7f blob   31462292 28298316 220235
+	
+5、使用 rev-list 命令，传入 - -objects 选项，它会列出所有 commit SHA 值，blob SHA 值及相应的文件路径，这样查看 blob 的文件名。
+git rev-list --objects --all | grep bb44cdaf4dbd51b18c86885168b816ab1cb02d7f
+	显示：
+	bb44cdaf4dbd51b18c86885168b816ab1cb02d7f weixin-service/target/weixin-service-1.0.0-SNAPSHOT.jar
+	
+6、查看该文件的所有历史记录
+git log --pretty=oneline --branches -- weixin-service/target/weixin-service-1.0.0-SNAPSHOT.jar
+	显示：
+	7522bc872f290c810b4d3f8021c55ca1bd07733f 去掉target目录及其下文件
+	72b6d1ce61c2cf5ee53e4b4a003373eba167e8be 第一次合入
+
+7、用 filter-branch 命令重写从 72b6d1ce61c 开始的所有 commit 才能将文件从 Git 历史中完全移除
+git filter-branch --force --index-filter 'git rm -rf --cached --ignore-unmatch weixin-service/target/weixin-service-1.0.0-SNAPSHOT.jar' --prune-empty --tag-name-filter cat -- --all
+	其中：
+	filter-branch命令可以用来重写Git仓库中的提交
+	-rf命令表示如果想要删除的是文件夹，将会强制并迭代查找文件夹下所有文件并删除。
+	--index-filter参数用来指定一条Bash命令，然后Git会检出（checkout）所有的提交， 执行该命令，然后重新提交。
+	–all参数表示我们需要重写所有分支（或引用）。
+
+	显示：
+	WARNING: git-filter-branch has a glut of gotchas generating mangled history
+         rewrites.  Hit Ctrl-C before proceeding to abort, then use an
+         alternative filtering tool such as 'git filter-repo'
+         (https://github.com/newren/git-filter-repo/) instead.  See the
+         filter-branch manual page for more details; to squelch this warning,
+         set FILTER_BRANCH_SQUELCH_WARNING=1.
+	Proceeding with filter-branch...
+
+	Rewrite 72b6d1ce61c2cf5ee53e4b4a003373eba167e8be (1/5) (0 seconds passed, remaining 0 predicted)    rm 'weixin-service/target/weixin-service-1.0.0-SNAPSHOT.jar'
+	Rewrite db953450755d0d0fa6d8a4c35ece50f2b3e5de66 (3/5) (1 seconds passed, remaining 0 predicted)
+	Ref 'refs/heads/master' was rewritten
+	Ref 'refs/remotes/origin/master' was rewritten
+	WARNING: Ref 'refs/remotes/origin/master' is unchanged
+
+
+
+指定具体提交hash的写法
+git filter-branch --env-filter 'export GIT_AUTHOR_EMAIL="fengxing581@gmail.com" export GIT_AUTHOR_NAME="fengxing581"' -- 72b6d1ce61c2cf5ee53e4b4a003373eba167e8be..7522bc872f290c810b4d3f8021c55ca1bd07733f
+
+使用all的写法
+git filter-branch --env-filter 'export GIT_AUTHOR_EMAIL="fengxing581@gmail.com" export GIT_AUTHOR_NAME="fengxing581"' -- --all
+
+使用其他过滤器的写法，此处通过索引filter查找匹配的git rm语句来匹配（未执行成功，后续研究）
+git filter-branch --index-filter 'git rm --cached --ignore-unmatch weixin-service/target/weixin-service-1.0.0-SNAPSHOT.jar' -- 72b6d1ce61c2cf5ee53e4b4a003373eba167e8be..7522bc872f290c810b4d3f8021c55ca1bd07733f
+
+8、现在历史记录中已经不包含对那个文件的引用了。不过 reflog 以及运行 filter-branch 时 Git 往.git/refs/original 添加的一些 refs 中仍有对它的引用，因此需要将这些引用删除并对仓库进行 repack 操作。在进行 repack 前需要将所有对这些 commits 的引用去除。
+rm -Rf .git/refs/original
+rm -Rf .git/logs/
+git gc
+git prune
+
+9、查看空间使用
+git count-objects -v
  
+ 
+ git filter-branch --force --index-filter 'git rm -rf --cached --ignore-unmatch weixin-service/target/weixin-service-1.0.0-SNAPSHOT.jar' --prune-empty --tag-name-filter cat -- --all
+
  
 ================================================ git flow使用 ================================================
 git flow init   ## 按照git flow的流程初始化相关分支
