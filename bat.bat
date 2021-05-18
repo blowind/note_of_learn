@@ -47,3 +47,17 @@ REM 脚本内容
 echo %date:~0,10% %time:~0,-3% 检查当前事项...
 ping 127.0.0.1 -n 10>nul
 goto one
+
+
+查看内存cpu详细信息
+REM 进入命令行扩展视图
+wmic   
+REM 查看内存详情
+memorychip
+REM 查看cpu详情
+cpu
+
+
+REM 生成软连接，处理一些路径中带空格的文件夹名时非常有用
+示例为Java的home目录生成java_link软链接
+mklink /J D:\DbVisualizer-8.0.1\java_link  "C:\Program Files\Java\jdk1.8.0_241"

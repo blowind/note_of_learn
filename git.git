@@ -92,6 +92,8 @@ git pull origin dev          ##  从远程获取origin/dev最新版本并merge�
 	# git config --global http.proxy http://127.0.0.1:1080   ## 配置http代理，此处ip和端口明显是配置shadowsocks代理
 	# git config --global https.proxy http://127.0.0.1:1080  ## 配置https代理，此外还支持sockets5，格式为sockets5://
 	
+	设置单个项目的用户名密码邮箱的时候，同上面命令（去掉--global），可以查看项目的.git/config文件确认修改是否成功
+	
 	取消代理
 	# git config --global --unset http.proxy
 	# git config --global --unset https.proxy 
@@ -239,6 +241,17 @@ git fetch         // 从远程分支获取最新版本到本地本分支，不�
 【fatal: unable to access ‘https://github.com/xingbuxing/TA-Lib-in-chinese.git/‘: OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443】 env命令设置GIT_SSL_NO_VERIFY环境变量为”ture”，并同时调用正常的git clone命令
  env GIT_SSL_NO_VERIFY=true git clone https://<host_name>/git/project.git  
  
+ 
+【git bash命令行下测试ssh配置是否连通的命令】
+ ssh -T git@35.1.32.235
+ ssh -T git@github.com
+ 
+ 输入yes后若显示
+Hi xxx! You’ve successfully authenticated, but GitHub does not provide shell access.
+则代表成功
+ 
+ 本地实测gitlab是显示
+ Welcome to GitLab, @user.name!
  
 【永久删除大文件】
 1、提交本地的所有修改，本地库最新时可省略

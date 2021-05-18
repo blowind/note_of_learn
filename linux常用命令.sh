@@ -421,6 +421,37 @@ comm [-123] file1 file2
 2、file1中无重复行而file2中有重复行，则-3去重复内容只会过滤掉一行共同的内容，即一一相消
 
 
+33、内容去重
+由于uniq命令只能对相邻行进行去重复操作，所以在进行去重前，先要对文本行进行排序，使重复行集中到一起
+cat abc.txt | sort | uniq           ##  排序后去重
+cat abc.txt | sort | uniq -c        ##  排序去重后统计重复行的数据
+
+sort -n可以识别每行开头的数字，并按其大小对文本行进行排序。默认是按升序排列，如果想要按降序要加-r选项(sort -rn)
+cat abc.txt | sort | uniq -c | sort -rn   ## 去重并统计重复数后，按重复数从大到小排列（不加-r就是从小到大排列）
+
+cut命令可以按列操作文本行。可以看出前面的重复次数占8个字符，因此，可以用命令cut -c 9- 取出每行第9个及其以后的字符。
+cat abc.txt | sort | uniq -c | sort -rn | cut -c 9-
+
+
+34、nohup不生成nohup.put的方法
+nohup java -jar /xxx/xxx/xxx.jar >/dev/null 2>&1 &
+关键在于最后的 >/dev/null 2>&1 部分，/dev/null是一个虚拟的空设备（类似物理中的黑洞），任何输出信息被重定向到该设备后，将会石沉大海
+>/dev/null 表示将标准输出信息重定向到"黑洞"
+2>&1 表示将标准错误重定向到标准输出(由于标准输出已经定向到“黑洞”了，即：标准输出此时也是"黑洞"，再将标准错误输出定向到标准输出，相当于错误输出也被定向至“黑洞”)
+
+
+
+35、centos 7管理防火墙
+firewall-cmd --query-port=80/tcp     ###  查询端口号80 是否开启
+firewall-cmd --zone=public --add-port=80/tcp --permanent    ### 开启80端口  
+###   其中--zone #作用域  --add-port=80/tcp #添加端口，格式为：端口/通讯协议  --permanent #永久生效，没有此参数重启后失效
+firewall-cmd --reload            ##  重启防火墙
+firewall-cmd --list-port           ##   查询有哪些端口是开启的
+
+systemctl stop firewalld.service     #停止firewall
+systemctl disable firewalld.service   #禁止firewall开机启动
+
+
                    ##################    例子shell小程序           #############
 循环杀死进程的小程序：	
 合并成一个句的版本：
@@ -457,3 +488,5 @@ cp src dest
 /etc/shadow     ## 账号管理的文件
 /etc/group      ## 用户组组名，使用chgrp修改文件所述用户组时，必须是本文件里存在的组名
 /etc/passwd     ## 用户信息，使用chown修改文件所有者时，必须是本文件里存在的用户名
+
+
